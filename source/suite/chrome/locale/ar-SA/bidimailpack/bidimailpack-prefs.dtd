@@ -6,7 +6,7 @@
 <!ENTITY always-reply-in-default-dir             "الرّد دائماً بالاتّجاه التّلقائي">
 <!ENTITY more-info                               "لمزيد من المعلومات:">
 <!ENTITY guide-link-text                         "دليل المستخدم لـ BiDi Mail UI">
-<!ENTITY guide-url                          "http://bidiui.mozdev.org/mail/guide.html">
+<!ENTITY guide-url                               "http://bidiui.mozdev.org/mail/guide.html">
 <!ENTITY bidimailpack-preftree-label             "BiDi Mail UI">
 <!ENTITY display-buttons                         "عرض أزرار إعداد الاتّجاه">
 
