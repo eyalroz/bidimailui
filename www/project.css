@@ -145,7 +145,7 @@ div#hebrew-navbar #project-navigation {
 
 
 .hebrew-news {
-  float: left;
+  float: right;
   direction: rtl;
 }
 
@@ -161,6 +161,10 @@ div#hebrew-navbar #project-navigation {
 }
 
 .hebrew-news .infoTab ul {
+  direction: rtl;
+}
+
+.hebrew-news .infoTab ul li {
   direction: rtl;
 }
 
