@@ -21,115 +21,115 @@
 
 /* Main Toolbar - small icons for mac */
 
-[classictheme="pinstripe"] toolbar[iconsize="small"] #button-direction-ltr-main-bar {
+[system="mac"] toolbar[iconsize="small"] #button-direction-ltr-main-bar {
   list-style-image: url("chrome://bidimailpack/skin/pinstripe-ltr-main-bar-24x24.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
-[classictheme="pinstripe"] toolbar[iconsize="small"] #button-direction-ltr-main-bar[disabled="true"] {
+[system="mac"] toolbar[iconsize="small"] #button-direction-ltr-main-bar[disabled="true"] {
   -moz-image-region: rect(0px 48px 24px 24px) !important;
 }
 
-[classictheme="pinstripe"] toolbar[iconsize="small"] #button-direction-rtl-main-bar {
+[system="mac"] toolbar[iconsize="small"] #button-direction-rtl-main-bar {
   list-style-image: url("chrome://bidimailpack/skin/pinstripe-rtl-main-bar-24x24.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
-[classictheme="pinstripe"] toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
+[system="mac"] toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
   -moz-image-region: rect(0px 48px 24px 24px) !important;
 }
 
 
 /* Main Toolbar - large icons for mac */
 
-[classictheme="pinstripe"] #button-direction-ltr-main-bar {
+[system="mac"] #button-direction-ltr-main-bar {
   list-style-image: url("chrome://bidimailpack/skin/pinstripe-ltr-main-bar-32x32.png");
   -moz-image-region: rect(0px 32px 32px 0px);
 }
 
-[classictheme="pinstripe"] #button-direction-ltr-main-bar[disabled="true"] {
+[system="mac"] #button-direction-ltr-main-bar[disabled="true"] {
   -moz-image-region: rect(0px 64px 32px 32px) !important;
 }
 
-[classictheme="pinstripe"] #button-direction-rtl-main-bar {
+[system="mac"] #button-direction-rtl-main-bar {
   list-style-image: url("chrome://bidimailpack/skin/pinstripe-rtl-main-bar-32x32.png");
   -moz-image-region: rect(0px 32px 32px 0px);
 }
 
-[classictheme="pinstripe"] #button-direction-rtl-main-bar[disabled="true"] {
+[system="mac"] #button-direction-rtl-main-bar[disabled="true"] {
   -moz-image-region: rect(0px 64px 32px 32px) !important;
 }
 
 /* Main Toolbar: small icons for winstripe */
 
-[classictheme="winstripe"] toolbar[iconsize="small"] #button-direction-ltr-main-bar {
+[system="not_mac"] toolbar[iconsize="small"] #button-direction-ltr-main-bar {
   list-style-image: url("chrome://bidimailpack/skin/winstripe-ltr-main-bar-16x16.png");
   -moz-image-region: rect(0px 16px 16px 0px);
 }
 
-[classictheme="winstripe"] toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover {
+[system="not_mac"] toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover {
   -moz-image-region: rect(0px 32px 16px 16px);
 }
 
-[classictheme="winstripe"] toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover:active {
+[system="not_mac"] toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover:active {
   -moz-image-region: rect(0px 48px 16px 32px);
 }
 
-[classictheme="winstripe"] toolbar[iconsize="small"] #button-direction-ltr-main-bar[disabled="true"] {
+[system="not_mac"] toolbar[iconsize="small"] #button-direction-ltr-main-bar[disabled="true"] {
   -moz-image-region: rect(0px 64px 16px 48px) !important;
 }
 
-[classictheme="winstripe"] toolbar[iconsize="small"] #button-direction-rtl-main-bar {
+[system="not_mac"] toolbar[iconsize="small"] #button-direction-rtl-main-bar {
   list-style-image: url("chrome://bidimailpack/skin/winstripe-rtl-main-bar-16x16.png");
   -moz-image-region: rect(0px 16px 16px 0px);
 }
 
-[classictheme="winstripe"] toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover {
+[system="not_mac"] toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover {
   -moz-image-region: rect(0px 32px 16px 16px);
 }
 
-[classictheme="winstripe"] toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover:active {
+[system="not_mac"] toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover:active {
   -moz-image-region: rect(0px 48px 16px 32px);
 }
 
-[classictheme="winstripe"] toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
+[system="not_mac"] toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
   -moz-image-region: rect(0px 64px 16px 48px) !important;
 }
 
 
 /* Main Toolbar Buttons - large icons for winstripe */
 
-[classictheme="winstripe"] #button-direction-ltr-main-bar {
+[system="not_mac"] #button-direction-ltr-main-bar {
   list-style-image: url("chrome://bidimailpack/skin/winstripe-ltr-main-bar-24x24.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
-[classictheme="winstripe"] #button-direction-ltr-main-bar:hover {
+[system="not_mac"] #button-direction-ltr-main-bar:hover {
   -moz-image-region: rect(0px 48px 24px 24px);
 }
 
-[classictheme="winstripe"] #button-direction-ltr-main-bar:hover:active {
+[system="not_mac"] #button-direction-ltr-main-bar:hover:active {
   -moz-image-region: rect(0px 72px 24px 48px);
 }
 
-[classictheme="winstripe"] #button-direction-ltr-main-bar[disabled="true"] {
+[system="not_mac"] #button-direction-ltr-main-bar[disabled="true"] {
   -moz-image-region: rect(0px 96px 24px 72px) !important;
 }
 
-[classictheme="winstripe"] #button-direction-rtl-main-bar {
+[system="not_mac"] #button-direction-rtl-main-bar {
   list-style-image: url("chrome://bidimailpack/skin/winstripe-rtl-main-bar-24x24.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
-[classictheme="winstripe"] #button-direction-rtl-main-bar:hover {
+[system="not_mac"] #button-direction-rtl-main-bar:hover {
   -moz-image-region: rect(0px 48px 24px 24px);
 }
 
-[classictheme="winstripe"] #button-direction-rtl-main-bar:hover:active {
+[system="not_mac"] #button-direction-rtl-main-bar:hover:active {
   -moz-image-region: rect(0px 72px 24px 48px);
 }
 
-[classictheme="winstripe"] #button-direction-rtl-main-bar[disabled="true"] {
+[system="not_mac"] #button-direction-rtl-main-bar[disabled="true"] {
   -moz-image-region: rect(0px 96px 24px 72px) !important;
 }
 
@@ -155,19 +155,18 @@
 
 /* Options Panel */
 
-
-#margintop[classictheme="winstripe"] > hbox,
-#marginbottom[classictheme="winstripe"] > hbox {
+#margintop[system="not_mac"] > hbox,
+#marginbottom[system="not_mac"] > hbox {
   visibility: hidden;
 }
 
-#margintop[classictheme="pinstripe"] > hbox,
-#marginbottom[classictheme="pinstripe"] > hbox {
+#margintop[system="mac"] > hbox,
+#marginbottom[system="mac"] > hbox {
   -moz-appearance: textfield;
 }
 
-#margintop[classictheme="pinstripe"] > hbox > textbox,
-#marginbottom[classictheme="pinstripe"] > hbox > textbox {
+#margintop[system="mac"] > hbox > textbox,
+#marginbottom[system="mac"] > hbox > textbox {
   -moz-appearance: none;
   margin: 0px !important;
   padding: 0px !important; 
@@ -181,12 +180,15 @@
   width: 5em;
 }
 
-[classictheme="winstripe"] [status="non_valid_value"] *,
-[classictheme="pinstripe"] [status="non_valid_value"] > hbox > textbox {
+#margintop[system="not_mac"][status="non_valid_value"] *,
+#marginbottom[system="not_mac"][status="non_valid_value"] *,
+#margintop[system="mac"][status="non_valid_value"] > hbox > textbox,
+#marginbottom[system="mac"][status="non_valid_value"] > hbox > textbox {
   background-color: #FF6666;
   color: #FFFFFF;
 }
 
-[status="non_valid_value"] > hbox > textbox {
+#margintop[status="non_valid_value"] > hbox > textbox,
+#marginbottom[status="non_valid_value"] > hbox > textbox {
   font-weight: bold;
 }
