@@ -61,10 +61,11 @@
   <menuitem id="contextBodyDirectionItem" label="&menu-bidimail-switch-document-direction:label;"
     accesskey="&menu-bidimail-switch-document-direction:accesskey;" 
     command="cmd_switch_document" />
+  <menuseparator id="contextMarkInsertionsSeparator" hidden="true" />
   <menuitem id="contextInsertLRM" label="&menu-bidimail-insert-lrm:label;"
-    oncommand="InsertEntity('&amp;lrm;')" />
+    oncommand="InsertEntity('&amp;lrm;')" hidden="true" />
   <menuitem id="contextInsertRLM" label="&menu-bidimail-insert-rlm:label;"
-    oncommand="InsertEntity('&amp;rlm;')" />
+    oncommand="InsertEntity('&amp;rlm;')" hidden="true"/>
 </popup>
 
 <menu id="menu_View">
