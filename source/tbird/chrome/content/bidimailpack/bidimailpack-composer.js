@@ -18,8 +18,7 @@ var gParagraphMarginTop;
 var gParagraphMarginBottom;
 var gBug262497Workaround;
 
-function GetCurrentSelectionDirection()
-{
+function GetCurrentSelectionDirection() {
 
   // jsConsoleService.logStringMessage('----- in GetCurrentSelectionDirection() -----');
 
@@ -120,8 +119,7 @@ function GetCurrentSelectionDirection()
     // check all nodes from startContainer to endContainer
 
     node = range.startContainer;
-    do
-    {
+    do {
       // jsConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
 
       // check the current node's direction
@@ -130,8 +128,7 @@ function GetCurrentSelectionDirection()
       //       nor will it trigger the use of the cac's direction!
 
 
-      if (node.nodeType == Node.ELEMENT_NODE)
-      {
+      if (node.nodeType == Node.ELEMENT_NODE) {
         var nodeStyle = view.getComputedStyle(node, "");
         var display = nodeStyle.getPropertyValue('display');
         if (display == 'block' || display == 'table-cell' || display == 'table-caption' || display == 'list-item' || (node.nodeType == Node.DOCUMENT_NODE)) {
@@ -253,15 +250,12 @@ function composeWindowEditorOnLoadHandler() {
   setTimeout('composeWindowEditorDelayedOnLoadHandler();', 125);
 }
 
-function HandleComposeReplyCSS()
-{
+function HandleComposeReplyCSS() {
   var editorType = GetCurrentEditorType();
 
-  if (editorType == 'htmlmail')
-  {
+  if (editorType == 'htmlmail') {
     var editor = GetCurrentEditor();
-    if (!editor)
-    {
+    if (!editor) {
       alert("Could not acquire editor object.");
       return;
     }
@@ -271,12 +265,10 @@ function HandleComposeReplyCSS()
   }
 }
 
-function HandleDirectionButtons()
-{
+function HandleDirectionButtons() {
   var editorType = GetCurrentEditorType();
 
-  if (editorType == 'htmlmail')
-  {
+  if (editorType == 'htmlmail') {
     var hiddenbuttons = false;
     try {
       if (!gPrefService.getBoolPref('mail.compose.show_direction_buttons'))
@@ -390,13 +382,10 @@ function composeWindowEditorDelayedOnLoadHandler() {
   if (messageIsAReply)
     originalMessageDisplayDirection = GetMessageDisplayDirection(gMsgCompose.originalMsgURI);
 
-  try
-  {
+  try {
     // New message OR "Always reply in default direction" is checked
-    if (!messageIsAReply || gPrefService.getBoolPref("mailnews.reply_in_default_direction") )
-    {
-      try
-      {
+    if (!messageIsAReply || gPrefService.getBoolPref("mailnews.reply_in_default_direction") ) {
+      try {
         var defaultDirection = gPrefService.getCharPref("mailnews.send_default_direction");
         // aligning to default direction
         if ((defaultDirection == 'rtl') || (defaultDirection == 'RTL'))
@@ -451,16 +440,14 @@ function InstallComposeWindowEditorHandler() {
   document.addEventListener('keypress', onKeyPress, true);
 }
 
-function findClosestBlockElement(node)
-{
+function findClosestBlockElement(node) {
   // Try to locate the closest ancestor with display:block
   var v = node.ownerDocument.defaultView;
-  while (node)
-  {
-    if (node.nodeType == node.ELEMENT_NODE)
-    {
+  while (node) {
+    if (node.nodeType == node.ELEMENT_NODE) {
       var display = v.getComputedStyle(node, "").getPropertyValue('display');
-      if (display == 'block' || display == 'table-cell' || display == 'table-caption' || display == 'list-item')
+      if (display == 'block' || display == 'table-cell' || 
+             display == 'table-caption' || display == 'list-item')
         return node;
     }
     node = node.parentNode;
@@ -468,84 +455,72 @@ function findClosestBlockElement(node)
   return node;
 }
 
-function ApplyToSelectionBlockElements(evalStr)
-{
+function ApplyToSelectionBlockElements(evalStr) {
   var editor = GetCurrentEditor();
-  if (!editor)
-  {
+  if (!editor) {
     alert("Could not acquire editor object.");
     return;
   }
 
-  if (editor.selection.rangeCount > 0)
-  {
+  if (editor.selection.rangeCount > 0) {
     editor.beginTransaction();
     try {
-    for (i=0; i<editor.selection.rangeCount; ++i)
-    {
-      var range = editor.selection.getRangeAt(i);
-      var node = range.startContainer;
-      // walk the tree till we find the endContainer of the selection range,
-      // giving our directionality style to everything on our way
-      do
-      {
-        var closestBlockElement = findClosestBlockElement(node);
-        if (closestBlockElement)
-        {
-          eval(evalStr);
-        }
-        else
-          break;
-
-        // This check should be placed here, not as the 'while'
-        // condition, to handle cases where begin == end
-        if (node == range.endContainer)
-          break;
-
-        // Traverse through the tree in order
-        if (node.firstChild)
-          node = node.firstChild;
-        else if (node.nextSibling)
-          node = node.nextSibling;
-        else
-          // find a parent node which has anything after
-          while (node = node.parentNode)
-          {
-            if (node.nextSibling)
-            {
-              node = node.nextSibling;
-              break;
-            }
+      for (i=0; i<editor.selection.rangeCount; ++i) {
+        var range = editor.selection.getRangeAt(i);
+        var node = range.startContainer;
+        // walk the tree till we find the endContainer of the selection range,
+        // giving our directionality style to everything on our way
+        do {
+          var closestBlockElement = findClosestBlockElement(node);
+          if (closestBlockElement) {
+            eval(evalStr);
           }
+          else
+            break;
+
+          // This check should be placed here, not as the 'while'
+          // condition, to handle cases where begin == end
+          if (node == range.endContainer)
+            break;
+
+          // Traverse through the tree in order
+          if (node.firstChild)
+            node = node.firstChild;
+          else if (node.nextSibling)
+            node = node.nextSibling;
+          else
+            // find a parent node which has anything after
+            while (node = node.parentNode) {
+              if (node.nextSibling) {
+                node = node.nextSibling;
+                break;
+              }
+            }
+        }
+        while(node);
       }
-      while(node);
-    }
     } finally { editor.endTransaction(); }
   }
 }
 
-function ClearParagraphDirection()
-{
+function ClearParagraphDirection() {
   var evalStr = 'editor.removeAttribute(closestBlockElement, \'dir\');';
   ApplyToSelectionBlockElements(evalStr);
 }
 
-function SetParagraphDirection(dir)
-{
+function SetParagraphDirection(dir) {
   var evalStr = 'editor.setAttribute(closestBlockElement, \'dir\', \'' + dir + '\');';
   ApplyToSelectionBlockElements(evalStr);
 }
 
-function SwitchParagraphDirection()
-{
+function SwitchParagraphDirection() {
   var evalStr =
     'var dir = (closestBlockElement.ownerDocument.defaultView.getComputedStyle(closestBlockElement, "").getPropertyValue("direction") == "rtl"? "ltr" : "rtl");' +
     'editor.setAttribute(closestBlockElement, \'dir\', dir);';
   ApplyToSelectionBlockElements(evalStr);
 }
 
-function onKeyPress(ev)
-{
+function onKeyPress(ev) {
   // Don't change the behavior for text-plain messages
   var editorType = GetCurrentEditorType();
   if (editorType != 'htmlmail')
@@ -558,7 +533,7 @@ function onKeyPress(ev)
   // workaround for Mozilla bug 262497 - let's make Ctrl+Home and Ctrl+End
   // behave properly...
   
-  if (gBug262497Workaround && ev.ctrlKey){
+  if (gBug262497Workaround && ev.ctrlKey) {
 
     // move the caret ourselves if need be
 
@@ -605,8 +580,7 @@ function onKeyPress(ev)
     // behaivor of Shift+Enter which inserts a <br>, Ctrl+Enter which
     // sends the message etc.)
     if ( (ev.keyCode == KeyEvent.DOM_VK_ENTER || ev.keyCode == KeyEvent.DOM_VK_RETURN) 
-         && !ev.shiftKey && !ev.altKey && !ev.ctrlKey && !ev.metaKey && !isInList()    )
-    {
+         && !ev.shiftKey && !ev.altKey && !ev.ctrlKey && !ev.metaKey && !isInList()    ) {
       // Do whatever it takes to prevent the editor from inserting a BR
       ev.preventDefault();
       ev.stopPropagation();
@@ -618,8 +592,7 @@ function onKeyPress(ev)
   }
 }
 
-function isInList()
-{
+function isInList() {
   var editor = GetCurrentEditor();
   editor.beginTransaction();
 
@@ -636,8 +609,7 @@ function isInList()
     return false;
 }
 
-function getParagraphMarginFromPref(basePrefName)
-{
+function getParagraphMarginFromPref(basePrefName) {
   var aValue, aScale;
   try {
     aValue = gPrefService.getCharPref(basePrefName + ".value");
@@ -652,11 +624,9 @@ function getParagraphMarginFromPref(basePrefName)
 }
 
 // Will attempt to break the current line into two paragraphs (unless we're in a list).
-function InsertParagraph()
-{
+function InsertParagraph() {
   var editor = GetCurrentEditor();
-  if (!editor)
-  {
+  if (!editor) {
     alert("Could not acquire editor object.");
     return;
   }
@@ -691,8 +661,7 @@ function InsertParagraph()
   // its block element. If it is different, we'll apply font-size
   var isStyleFontSize = { value: false };
   var styleFontSize;
-  try
-  {
+  try {
     styleFontSize = document.defaultView.getComputedStyle(editor.getSelectionContainer(), "").getPropertyValue("font-size");
     isStyleFontSize.value = (styleFontSize != document.defaultView.getComputedStyle(findClosestBlockElement(editor.getSelectionContainer()), "").getPropertyValue("font-size"));
   }
@@ -724,12 +693,11 @@ function InsertParagraph()
   // 2. It's not the special case of the BR being an only child (thus
   //    not a candidate for removal -- we need it to keep the P
   //    from becoming empty)
-  if (node && (node.nodeType == node.ELEMENT_NODE) && (node.tagName.toLowerCase() == "br") && prevPar.firstChild != node)
-  {
+  if (node && (node.nodeType == node.ELEMENT_NODE) &&
+          (node.tagName.toLowerCase() == "br") && prevPar.firstChild != node)
    editor.deleteNode(node);
-  }
-  
 
+  // Set Paragraph Margins
   par.style.marginTop    = gParagraphMarginTop;
   par.style.marginBottom = gParagraphMarginBottom;
   
@@ -761,12 +729,9 @@ function InsertParagraph()
   // ------------------------------- "set old style" ------
 }
 
-var directionSwitchController =
-{
-  supportsCommand: function(command)
-  {
-    switch (command)
-    {
+var directionSwitchController = {
+  supportsCommand: function(command) {
+    switch (command) {
       case "cmd_rtl_paragraph":
       case "cmd_ltr_paragraph":
       case "cmd_rtl_document":
@@ -780,12 +745,10 @@ var directionSwitchController =
     }
   },
 
-  isCommandEnabled: function(command)
-  {
+  isCommandEnabled: function(command) {
     var rv = true;
     // and now for what this function is actually supposed to do...
-    switch (command)
-    {
+    switch (command) {
       case "cmd_switch_paragraph":
       case "cmd_clear_paragraph_dir":
       case "cmd_rtl_paragraph":
@@ -809,12 +772,10 @@ var directionSwitchController =
     return rv;
   },
 
-  getState: function(command)
-  {
+  getState: function(command) {
     var dir;
 
-    switch (command)
-    {
+    switch (command) {
       case "cmd_rtl_paragraph":
         dir = GetCurrentSelectionDirection();
         if (dir == 'rtl')
@@ -836,10 +797,8 @@ var directionSwitchController =
     return null;
   },
 
-  setCaster: function(command)
-  {
-    switch (command)
-    {
+  setCaster: function(command) {
+    switch (command) {
       case "cmd_rtl_paragraph":
         caster = 'rtl-paragraph-direction-broadcaster';
         break;
@@ -861,18 +820,15 @@ var directionSwitchController =
     document.getElementById(caster).setAttribute('disabled', (content != top.document.commandDispatcher.focusedWindow) );
   },
 
-  setAllCasters: function()
-  {
+  setAllCasters: function() {
     this.setCaster("cmd_ltr_document");
     this.setCaster("cmd_rtl_document");
     this.setCaster("cmd_ltr_paragraph");
     this.setCaster("cmd_rtl_paragraph");
   },
 
-  doCommand: function(command)
-  {
-    switch (command)
-    {
+  doCommand: function(command) {
+    switch (command) {
       case "cmd_rtl_paragraph":
         SetParagraphDirection('rtl');
         break;
@@ -901,8 +857,7 @@ var directionSwitchController =
   }
 }
 
-function CommandUpdate_MsgComposeDirection()
-{
+function CommandUpdate_MsgComposeDirection() {
   var focusedWindow = top.document.commandDispatcher.focusedWindow;
   // we're just setting focus to where it was before
   if (focusedWindow == gLastWindowToHaveFocus) {
