@@ -65,7 +65,7 @@ function SetDocumentDirection(dir) {
   body.setAttribute('dir', dir);
 }
 
-function switchComposerDirectionality() {
+function SwitchDocumentDirection() {
   var currentDir;
 
   var body = document.getElementById('content-frame').contentDocument.body;
@@ -75,34 +75,6 @@ function switchComposerDirectionality() {
     directionSwitchController.doCommand("cmd_ltr_document");
   else 
     directionSwitchController.doCommand("cmd_rtl_document");
-}
-
-// TODO: fix code duplication of this next function with bidimailpack-messenger.js
-
-function hasRTLWord(element) {
-
-  // we check whether there exists a full word in the element text
-  // consisting solely of characters of an RTL script
-
-  // 0x0591 to 0x05F4 is the range of Hebrew characters (basic letters are 0x05D0 - 0x5EA),
-  // 0x060C to 0x06F9 is the range of Arabic characters
-  var re = /(^|\s)([\u0591-\u05F4]+|[\u060C-\u06F9]+)($|\s)/;
-
-  try {
-    var iterator = new XPathEvaluator();
-    var path = iterator.evaluate("//text()", element, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
-    for (var node = path.iterateNext(); node; node = path.iterateNext())
-    {
-      if (re.test(node.data))
-      return true;
-    }
-  } catch (e) {
-    // 'new XPathEvaluator()' doesn't work in Thunderbird for some reason,
-    // so we do:
-    if (re.test(element.innerHTML))
-      return true;
-  }
-  return false;
 }
 
 function composeWindowEditorOnLoadHandler() {
@@ -157,7 +129,7 @@ function composeWindowEditorOnLoadHandler2() {
         // aligning to default direction
         if ((defaultDirection == 'rtl') || (defaultDirection == 'RTL'))
           SetDocumentDirection('rtl');
-        else // ltr
+        else
           SetDocumentDirection('ltr');
 
         directionSwitchController.setAllCasters();
@@ -195,7 +167,7 @@ function InstallComposeWindowEditorHandler() {
 
   document.addEventListener('load', composeWindowEditorOnLoadHandler, true);
   document.addEventListener('compose-window-reopen', composeWindowEditorOnLoadHandler2, true);
-  // document.addEventListener('keypress', onKeyPress, true);
+  //document.addEventListener('keypress', onKeyPress, true);
 }
 
 function findClosestBlockElement(node)
@@ -216,120 +188,83 @@ function findClosestBlockElement(node)
 }
 
 
+function ApplyToSelectionBlockElements(evalStr)
+{
+  var editor = GetCurrentEditor();
+  if (!editor)
+  {
+    alert("Could not acquire editor object.");
+    return;
+  }
+
+  if (editor.selection.rangeCount > 0)
+  {
+    editor.beginTransaction();
+    try {
+    for (i=0; i<editor.selection.rangeCount; ++i)
+    {
+      var range = editor.selection.getRangeAt(i);
+      var node = range.startContainer;
+      // walk the tree till we find the endContainer of the selection range,
+      // giving our directionality style to everything on our way
+      do
+      {
+        var closestBlockElement = findClosestBlockElement(node);
+        if (closestBlockElement)
+        {
+          eval(evalStr);
+        }
+        else
+          break;
+
+        // This check should be placed here, not as the 'while'
+        // condition, to handle cases where begin == end
+        if (node == range.endContainer)
+          break;
+        
+        // Traverse through the tree in order
+        if (node.firstChild)
+          node = node.firstChild;
+        else if (node.nextSibling)
+          node = node.nextSibling;
+        else
+          // find a parent node which has anything after 
+          while (node = node.parentNode)
+          {
+            if (node.nextSibling)
+            {
+              node = node.nextSibling;
+              break;
+            }
+          }
+      }
+      while(node);
+    }
+    } finally { editor.endTransaction(); }
+  }
+}
+
+function ClearParagraphDirection()
+{
+  var evalStr = 'editor.setAttribute(closestBlockElement, \'dir\', \'\');';
+  ApplyToSelectionBlockElements(evalStr);
+}
+  
+
 function SetParagraphDirection(dir)
 {
-  var editor = GetCurrentEditor();
-  if (!editor)
-  {
-    alert("Could not acquire editor object.");
-    return;
-  }
-
-  if (editor.selection.rangeCount > 0)
-  {
-    editor.beginTransaction();
-    try {
-    for (i=0; i<editor.selection.rangeCount; ++i)
-    {
-      var range = editor.selection.getRangeAt(i);
-      var node = range.startContainer;
-      // walk the tree till we find the endContainer of the selection range,
-      // giving our directionality style to everything on our way
-      do
-      {
-        var closestBlockElement = findClosestBlockElement(node);
-        if (closestBlockElement)
-        {
-          editor.setAttribute(closestBlockElement, 'dir', dir);
-        }
-        else
-          break;
-
-        // This check should be placed here, not as the 'while'
-        // condition, to handle cases where begin == end
-        if (node == range.endContainer)
-          break;
-        
-        // Traverse through the tree in order
-        if (node.firstChild)
-          node = node.firstChild;
-        else if (node.nextSibling)
-          node = node.nextSibling;
-        else
-          // find a parent node which has anything after 
-          while (node = node.parentNode)
-          {
-            if (node.nextSibling)
-            {
-              node = node.nextSibling;
-              break;
-            }
-          }
-      }
-      while(node);
-    }
-    } finally { editor.endTransaction(); }
-  }
+  var evalStr = 'editor.setAttribute(closestBlockElement, \'dir\', \'' + dir + '\');';
+  ApplyToSelectionBlockElements(evalStr);
 }
-
-// TODO: fix code duplication
-
+  
 function SwitchParagraphDirection()
 {
-  var editor = GetCurrentEditor();
-  if (!editor)
-  {
-    alert("Could not acquire editor object.");
-    return;
-  }
-
-  if (editor.selection.rangeCount > 0)
-  {
-    editor.beginTransaction();
-    try {
-    for (i=0; i<editor.selection.rangeCount; ++i)
-    {
-      var range = editor.selection.getRangeAt(i);
-      var node = range.startContainer;
-      // walk the tree till we find the endContainer of the selection range,
-      // giving our directionality style to everything on our way
-      do
-      {
-        var closestBlockElement = findClosestBlockElement(node);
-        if (closestBlockElement)
-        {
-          dir = (closestBlockElement.ownerDocument.defaultView.getComputedStyle(closestBlockElement, "").getPropertyValue("direction") == "rtl"? "ltr" : "rtl");
-          editor.setAttribute(closestBlockElement, 'dir', dir);
-        }
-        else
-          break;
-
-        // This check should be placed here, not as the 'while'
-        // condition, to handle cases where begin == end
-        if (node == range.endContainer)
-          break;
-        
-        // Traverse through the tree in order
-        if (node.firstChild)
-          node = node.firstChild;
-        else if (node.nextSibling)
-          node = node.nextSibling;
-        else
-          // find a parent node which has anything after 
-          while (node = node.parentNode)
-          {
-            if (node.nextSibling)
-            {
-              node = node.nextSibling;
-              break;
-            }
-          }
-      }
-      while(node);
-    }
-    } finally { editor.endTransaction(); }
-  }
+  var evalStr = 
+    'var dir = (closestBlockElement.ownerDocument.defaultView.getComputedStyle(closestBlockElement, "").getPropertyValue("direction") == "rtl"? "ltr" : "rtl");' + 
+    'editor.setAttribute(closestBlockElement, \'dir\', dir);';
+  ApplyToSelectionBlockElements(evalStr);
 }
+
 
 function onKeyPress(ev)
 {
@@ -361,7 +296,7 @@ function InsertParagraph()
 
  var selection = editor.selection;
  if (!selection.isCollapsed)
-  editor.deleteSelection(0);
+   editor.deleteSelection(0);
  var range = selection.getRangeAt(0);
  var cursorNode = range.startContainer;
  var cursorOffset = range.startOffset;
@@ -478,6 +413,7 @@ var directionSwitchController =
       case "cmd_ltr_document":
       case "cmd_switch_document":
       case "cmd_switch_paragraph":
+      case "cmd_clear_paragraph_dir":
         // due to the ridiculous design of the controller interface,
         // the isCommandEnabled function has side-effects! and we
         // must use it to update button states because no other
@@ -568,7 +504,10 @@ var directionSwitchController =
         SwitchParagraphDirection();
         break;
       case "cmd_switch_document":
-        switchComposerDirectionality();
+        SwitchDocumentDirection();
+        break;
+      case "cmd_clear_paragraph_dir":
+        ClearParagraphDirection();
         break;
       default:
         return false;
