@@ -32,6 +32,9 @@ function UpdateDirectionButtons(direction) {
 }
 
 function browserOnLoadHandler() {
+  // just in case, load attributes on elements after the dom tree is ready
+  setTimeout('LoadOSAttributeOnWindow();', 0);
+  
   var body = this.docShell.contentViewer.DOMDocument.body;
   var bodyIsPlainText = body.childNodes.length > 1
     && body.childNodes[1].className != 'moz-text-html'; // either '*-plain' or '*-flowed'
