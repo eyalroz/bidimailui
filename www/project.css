@@ -8,12 +8,6 @@ Mozilla resource:///res/html.css
 
 */
 
-div#hebrew-navbar #project-navigation-hebrew a{
-  border-left: 1px solid black;
-  padding-left: 6px;
-  padding-right: 5px;
-}
-
 div#english-navbar #project-navigation a{
   border-left: 1px solid black;
   padding-left: 6px;
