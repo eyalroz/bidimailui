@@ -114,17 +114,15 @@ The following instructions only apply to Mozilla, not to Thunderbird.</p>
 <ol>
 
   <li>Close Mozilla.</li>
-  <li>Open your profile's chrome folder - the files mentioned
+  <li>Open your profile's <code>chrome</code> folder - the files mentioned
   below are all located there.</li>
   <li>Delete the file <code>bidimailpack.jar</code>.</li>
-  <li>Edit the various <code>overlay.rdf</code> files that
-appear under the <code>overlayinfo</code> sub-directory. In each of these files,
-delete the tags beginning with <code>RDF:Seq</code> or <code>RDF:about</code>
-that include refences to <code>bidimailpack</code> (note these may be multi-line tags!).</li>
-  <li>Edit the file <code>chrome.rdf</code> of the chrome folder and delete
-the lines that begin with RDF:li and contain references to
-<code>bidimailpack</code>, as well as tags that begin with RDF:Description RDF:about
-and contain references to bidimailpack (these too may be multi-line).</li>
+  <li>In the <code>chrome</code> directory there is a subdirectory named <code>overlayinfo</code>,
+  which in turn has several sub-directories of its own. Some of these contain a file named <code>overlay.rdf</code>. Edit this file in all subdirectories of <code>overlayinfo</code>:
+delete the tags beginning with <code>&gt;RDF:Seq RDF:about</code>
+that contain the word <code>bidimailpack</code> (note these may be multi-line tags!).</li>
+  <li>Edit the file <code>chrome.rdf</code> in the chrome folder: Delete
+the lines that begin with <code>RDF:li</code> and contain the word <code>bidimailpack</code> (not the tags containing them, just the lines themselves); also, delete the tags that begin with <code>&gt;RDF:Seq RDF:about</code> and contain the word <code>bidimailpack</code> (these too may be multi-line).</li>
   <li>Start Mozilla again.</li>
 </ol>
 
