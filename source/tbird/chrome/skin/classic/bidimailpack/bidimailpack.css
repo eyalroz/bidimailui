@@ -16,151 +16,122 @@
 
 */				  
 
-/* Main Toolbar Buttons - Small Icons for Mac Theme */
+/* Main Toolbar: small icons for windows */
 
-toolbar[classictheme="pinstripe"][iconsize="small"] #button-direction-ltr-main-bar {
+toolbar[iconsize="small"] #button-direction-ltr-main-bar[classictheme="winstripe"] {
   list-style-image: url("chrome://bidimailpack/skin/ltr-main-bar-16x16.png");
   -moz-image-region: rect(0px 16px 16px 0px);
 }
 
-toolbar[classictheme="pinstripe"][iconsize="small"] #button-direction-ltr-main-bar:hover {
+toolbar[iconsize="small"] #button-direction-ltr-main-bar[classictheme="winstripe"]:hover {
   -moz-image-region: rect(0px 32px 16px 16px);
 }
 
-toolbar[classictheme="pinstripe"][iconsize="small"] #button-direction-ltr-main-bar:hover:active {
+toolbar[iconsize="small"] #button-direction-ltr-main-bar[classictheme="winstripe"]:hover:active {
   -moz-image-region: rect(0px 48px 16px 32px);
 }
 
-toolbar[classictheme="pinstripe"][iconsize="small"] #button-direction-ltr-main-bar[disabled="true"] {
+toolbar[iconsize="small"] #button-direction-ltr-main-bar[classictheme="winstripe"][disabled="true"] {
   -moz-image-region: rect(0px 64px 16px 48px) !important;
 }
 
-toolbar[classictheme="pinstripe"][iconsize="small"] #button-direction-rtl-main-bar {
+toolbar[iconsize="small"] #button-direction-rtl-main-bar[classictheme="winstripe"] {
   list-style-image: url("chrome://bidimailpack/skin/rtl-main-bar-16x16.png");
   -moz-image-region: rect(0px 16px 16px 0px);
 }
 
-toolbar[classictheme="pinstripe"][iconsize="small"] #button-direction-rtl-main-bar:hover {
+toolbar[iconsize="small"] #button-direction-rtl-main-bar[classictheme="winstripe"]:hover {
   -moz-image-region: rect(0px 32px 16px 16px);
 }
 
-toolbar[classictheme="pinstripe"][iconsize="small"] #button-direction-rtl-main-bar:hover:active {
+toolbar[iconsize="small"] #button-direction-rtl-main-bar[classictheme="winstripe"]:hover:active {
   -moz-image-region: rect(0px 48px 16px 32px);
 }
 
-toolbar[classictheme="pinstripe"][iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
+toolbar[iconsize="small"] #button-direction-rtl-main-bar[classictheme="winstripe"][disabled="true"] {
   -moz-image-region: rect(0px 64px 16px 48px) !important;
 }
 
 
 
-/* Main Toolbar Buttons - Large Icons for Mac Theme */
+/* Main Toolbar - large icons for mac */
 
-toolbar[classictheme="pinstripe"] #button-direction-ltr-main-bar {
+toolbar #button-direction-ltr-main-bar[classictheme="pinstripe"] {
   list-style-image: url("chrome://bidimailpack/skin/ltr-main-bar-32x32.png");
   -moz-image-region: rect(0px 32px 32px 0px);
 }
 
-toolbar[classictheme="pinstripe"] #button-direction-ltr-main-bar:hover {
+toolbar #button-direction-ltr-main-bar:hover[classictheme="pinstripe"] {
   -moz-image-region: rect(0px 64px 32px 32px);
 }
 
-toolbar[classictheme="pinstripe"] #button-direction-ltr-main-bar:hover:active {
+toolbar #button-direction-ltr-main-bar:hover:active[classictheme="pinstripe"] {
   -moz-image-region: rect(0px 96px 32px 64px);
 }
 
-toolbar[classictheme="pinstripe"] #button-direction-ltr-main-bar[disabled="true"] {
+toolbar #button-direction-ltr-main-bar[classictheme="pinstripe"][disabled="true"] {
   -moz-image-region: rect(0px 128px 32px 96px) !important;
 }
 
-toolbar[classictheme="pinstripe"] #button-direction-rtl-main-bar {
+toolbar #button-direction-rtl-main-bar[classictheme="pinstripe"] {
   list-style-image: url("chrome://bidimailpack/skin/rtl-main-bar-32x32.png");
   -moz-image-region: rect(0px 32px 32px 0px);
 }
 
-toolbar[classictheme="pinstripe"] #button-direction-rtl-main-bar:hover {
+toolbar #button-direction-rtl-main-bar:hover[classictheme="pinstripe"] {
   -moz-image-region: rect(0px 64px 32px 32px);
 }
 
-toolbar[classictheme="pinstripe"] #button-direction-rtl-main-bar:hover:active {
+toolbar #button-direction-rtl-main-bar:hover:active[classictheme="pinstripe"] {
   -moz-image-region: rect(0px 96px 32px 64px);
 }
 
-toolbar[classictheme="pinstripe"] #button-direction-rtl-main-bar[disabled="true"] {
+toolbar #button-direction-rtl-main-bar[classictheme="pinstripe"][disabled="true"] {
   -moz-image-region: rect(0px 128px 32px 96px) !important;
 }
 
+/* Main Toolbar Buttons - large icons for windows,
+                          small buttons for mac    */
 
-/* Main Toolbar Buttons - Small Icons */
-
-toolbar[classictheme="pinstripe"][iconsize="small"] #button-direction-ltr-main-bar {
-  list-style-image: url("chrome://bidimailpack/skin/ltr-main-bar-16x16.png");
-  -moz-image-region: rect(0px 16px 16px 0px);
-}
-
-toolbar[classictheme="pinstripe"][iconsize="small"] #button-direction-ltr-main-bar:hover {
-  -moz-image-region: rect(0px 32px 16px 16px);
-}
-
-toolbar[classictheme="pinstripe"][iconsize="small"] #button-direction-ltr-main-bar:hover:active {
-  -moz-image-region: rect(0px 48px 16px 32px);
-}
-
-toolbar[classictheme="pinstripe"][iconsize="small"] #button-direction-ltr-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 64px 16px 48px) !important;
-}
-
-toolbar[classictheme="pinstripe"][iconsize="small"] #button-direction-rtl-main-bar {
-  list-style-image: url("chrome://bidimailpack/skin/rtl-main-bar-16x16.png");
-  -moz-image-region: rect(0px 16px 16px 0px);
-}
-
-toolbar[classictheme="pinstripe"][iconsize="small"] #button-direction-rtl-main-bar:hover {
-  -moz-image-region: rect(0px 32px 16px 16px);
-}
-
-toolbar[classictheme="pinstripe"][iconsize="small"] #button-direction-rtl-main-bar:hover:active {
-  -moz-image-region: rect(0px 48px 16px 32px);
-}
-
-toolbar[classictheme="pinstripe"][iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 64px 16px 48px) !important;
-}
-
-
-/* Main Toolbar Buttons - Large Icons */
-
-#button-direction-ltr-main-bar {
+toolbar #button-direction-ltr-main-bar[classictheme="winstripe"],
+toolbar[iconsize="small"] #button-direction-ltr-main-bar[classictheme="pinstripe"] {
   list-style-image: url("chrome://bidimailpack/skin/ltr-main-bar-24x24.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
-#button-direction-ltr-main-bar:hover {
+toolbar #button-direction-ltr-main-bar[classictheme="winstripe"]:hover,
+toolbar[iconsize="small"] #button-direction-ltr-main-bar[classictheme="pinstripe"]:hover {
   -moz-image-region: rect(0px 48px 24px 24px);
 }
 
-#button-direction-ltr-main-bar:hover:active {
+toolbar #button-direction-ltr-main-bar[classictheme="winstripe"]:hover:active,
+toolbar[iconsize="small"] #button-direction-ltr-main-bar[classictheme="pinstripe"]:hover:active {
   -moz-image-region: rect(0px 72px 24px 48px);
 }
 
-#button-direction-ltr-main-bar[disabled="true"] {
+toolbar #button-direction-ltr-main-bar[classictheme="winstripe"][disabled="true"],
+toolbar[iconsize="small"] #button-direction-ltr-main-bar[classictheme="pinstripe"][disabled="true"] {
   -moz-image-region: rect(0px 96px 24px 72px) !important;
 }
 
-#button-direction-rtl-main-bar {
+toolbar #button-direction-rtl-main-bar[classictheme="winstripe"],
+toolbar[iconsize="small"] #button-direction-rtl-main-bar[classictheme="pinstripe"] {
   list-style-image: url("chrome://bidimailpack/skin/rtl-main-bar-24x24.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
-#button-direction-rtl-main-bar:hover {
+toolbar #button-direction-rtl-main-bar[classictheme="winstripe"]:hover,
+toolbar[iconsize="small"] #button-direction-rtl-main-bar[classictheme="pinstripe"]:hover {
   -moz-image-region: rect(0px 48px 24px 24px);
 }
 
-#button-direction-rtl-main-bar:hover:active {
+toolbar #button-direction-rtl-main-bar[classictheme="winstripe"]:hover:active,
+toolbar[iconsize="small"] #button-direction-rtl-main-bar[classictheme="pinstripe"]:hover:active {
   -moz-image-region: rect(0px 72px 24px 48px);
 }
 
-#button-direction-rtl-main-bar[disabled="true"] {
+toolbar #button-direction-rtl-main-bar[classictheme="winstripe"][disabled="true"],
+toolbar[iconsize="small"] #button-direction-rtl-main-bar[classictheme="pinstripe"][disabled="true"] {
   -moz-image-region: rect(0px 96px 24px 72px) !important;
 }
 
