@@ -39,7 +39,6 @@
       <spacer />
       <checkbox id="bidimailpack-reply-in-default-dir" checked="false" label="&always-reply-in-default-dir;" autostretch="never" />
       <checkbox id="bidimailpack-display-buttons" checked="false" label="&display-buttons;" autostretch="never" />
-      <checkbox id="bidimailpack-display-message-buttons-for-htmlmail" checked="false" label="&display-message-buttons-for-htmlmail;" autostretch="never" />
   </groupbox>
 
   <spacer style="height: 2em" />
