@@ -4,17 +4,19 @@
    1. The syntax for -moz-image-region is
 
          rect(first row coordinate of the image,
-			     first column coordinate after the image,
-				  first row coordinate after the image,
-			     first column coordinate of the image);
+              first column coordinate after the image,
+              first row coordinate after the image,
+              first column coordinate of the image);
 	
 	2. Currently, the size of Mozilla FF/TB toolbar icons is:
 	  
-	      main toolbar        	         24px width x 24px height
+	      main toolbar                  24px width x 24px height
 	      main toolbar small mode       16px width x 16px height
-			formatting/styling toolbar    ??px width x ??px height
+              formatting/styling toolbar    ??px width x ??px height
 
 */				  
+
+/* Main Toolbar Buttons - Large Icons */
 
 #button-direction-ltr-main-bar {
   list-style-image: url("chrome://bidimailpack/skin/ltr-main-bar.png");
@@ -50,6 +52,44 @@
   -moz-image-region: rect(0px 96px 24px 72px) !important;
 }
 
+/* Main Toolbar Buttons - Small Icons */
+
+toolbar[iconsize="small"] #button-direction-ltr-main-bar {
+  list-style-image: url("chrome://bidimailpack/skin/ltr-main-bar-small.png");
+  -moz-image-region: rect(0px 16px 16px 0px);
+}
+
+toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover {
+  -moz-image-region: rect(0px 32px 16px 16px);
+}
+
+toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover:active {
+  -moz-image-region: rect(0px 48px 16px 32px);
+}
+
+toolbar[iconsize="small"] #button-direction-ltr-main-bar[disabled="true"] {
+  -moz-image-region: rect(0px 64px 16px 48px) !important;
+}
+
+toolbar[iconsize="small"] #button-direction-rtl-main-bar {
+  list-style-image: url("chrome://bidimailpack/skin/rtl-main-bar-small.png");
+  -moz-image-region: rect(0px 16px 16px 0px);
+}
+
+toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover {
+  -moz-image-region: rect(0px 32px 16px 16px);
+}
+
+toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover:active {
+  -moz-image-region: rect(0px 48px 16px 32px);
+}
+
+toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
+  -moz-image-region: rect(0px 64px 16px 48px) !important;
+}
+
+/* Formatting Bar Buttons */
+
 #button-direction-ltr-formatting-bar {
   list-style-image: url("chrome://bidimailpack/skin/ltr-formatting-bar.png");
   -moz-image-region: rect(0px 19px 18px 0px);
@@ -83,6 +123,9 @@
 #button-direction-rtl-formatting-bar[disabled="true"] {
   -moz-image-region: rect(0px 76px 18px 57px) !important;
 }
+
+/* Options Panel */
+
 
 #margintop[classictheme="winstripe"] > hbox,
 #marginbottom[classictheme="winstripe"] > hbox {
