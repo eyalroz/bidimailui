@@ -486,6 +486,20 @@ function InsertParagraph()
   if (!editor.selection.isCollapsed)
    editor.deleteSelection(editor.eNone);
 
+  // ------------------------------- "remember old style"
+  // will be ignord
+  var allHas = { value: false };
+  var anyHas = { value: false };
+  
+  var isStyleBold = { value: false };
+  EditorGetTextProperty("b", "", "", isStyleBold, anyHas, allHas);
+  var isStyleItalic = { value: false };
+  EditorGetTextProperty("i", "", "", isStyleItalic, anyHas, allHas);
+  var isStyleUnderline = { value: false };
+  EditorGetTextProperty("u", "", "", isStyleItalic, anyHas, allHas);  
+
+  // ------------------------------- "remember old style"
+
   // getParagraphState returns the paragraph state for the selection.
   // A "new line" operation nukes the current selection.
   // We want 'getParagraphState' to test the paragraph which the
@@ -507,6 +521,27 @@ function InsertParagraph()
     editor.deleteNode(node);
 
   editor.endTransaction();
+
+  // ------------------------------- "set old style"
+  if (isStyleBold.value)
+  {
+    editor.beginTransaction();
+    EditorSetTextProperty("b", "", "");
+    editor.endTransaction();
+  }
+  if (isStyleItalic.value)
+  {
+    editor.beginTransaction();
+    EditorSetTextProperty("i", "", "");
+    editor.endTransaction();
+  }
+  if (isStyleUnderline.value)
+  {
+    editor.beginTransaction();
+    EditorSetTextProperty("u", "", "");
+    editor.endTransaction();
+  }
+  // ------------------------------- "set old style"
 }
 
 var directionSwitchController =
