@@ -639,7 +639,7 @@ function onKeyPress(ev) {
     // behaivor of Shift+Enter which inserts a <br>, Ctrl+Enter which
     // sends the message etc.)
     if ( (ev.keyCode == KeyEvent.DOM_VK_ENTER || ev.keyCode == KeyEvent.DOM_VK_RETURN) 
-         && !ev.shiftKey && !ev.altKey && !ev.ctrlKey && !ev.metaKey && !isInList() ) {
+         && !ev.shiftKey && !ev.altKey && !ev.ctrlKey && !ev.metaKey && !isInList()    ) {
       // Do whatever it takes to prevent the editor from inserting a BR
       ev.preventDefault();
       ev.stopPropagation();
@@ -647,6 +647,75 @@ function onKeyPress(ev) {
   
       // ... and insert a paragraph break instead
       InsertParagraph();
+    }
+    // If the backspace key has been pressed at this state:
+    // <p>[p1 content]</p><p><caret />[p2 content]</p>
+    // The expected result is
+    // <p>[p1 content][p2 content]</p>
+    // (NOT: <p>[p1 content]<br>[p2 content]</p> as nsIHTMLEditor's impl')
+    else if (ev.keyCode == KeyEvent.DOM_VK_BACK_SPACE) {
+      var editor = GetCurrentEditor();
+      if (editor.selection.isCollapsed) {
+        var par = findClosestBlockElement(editor.selection.focusNode);
+        var prevPar = par.previousSibling;
+        if ( (par) && (prevPar) &&
+             (prevPar.tagName.toLowerCase() == "p") &&
+             (par.tagName.toLowerCase() == "p") &&
+             (par.firstChild == editor.selection.focusNode) &&
+             (editor.selection.focusOffset == 0) ) {
+
+          // combine the two paragraphs into a single paragraph
+
+          //netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+          //var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
+          //jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
+
+          //jsConsoleService.logStringMessage('unifying paragraphs\n------------------------');
+          //jsConsoleService.logStringMessage('prevPar is:' + prevPar + "\ntype: " + prevPar.nodeType + "\nname: " + prevPar.nodeName + "\nHTML:\n" + prevPar.innerHTML + "\nOuter HTML:\n" + prevPar.innerHTML + "\nvalue:\n" + prevPar.nodeValue);
+          //jsConsoleService.logStringMessage('par is:' + par + "\ntype: " + par.nodeType + "\nname: " + par.nodeName + "\nHTML:\n" + par.innerHTML + "\nOuter HTML:\n" + par.innerHTML + "\nvalue:\n" + par.nodeValue);
+
+          editor.beginTransaction();
+ 
+          var newPar = prevPar.cloneNode(true);
+          var pChild = par.firstChild;
+  
+          // if nextPar is an 'empty' par in the sense of only having a <br> (editor idiosyncracy),
+          // we won't add the extra <br>
+          if ((par.childNodes.length == 1) && (pChild.nodeName == "BR")) {
+            //jsConsoleService.logStringMessage('just removing an empty paragraph');
+            prevPar.parentNode.removeChild(par);
+          }
+          
+          // if the last node of the first par and the first node of the next par are both
+          // text nodes, we'll unify them (DISABLED for now, since the editor is behaving weirdly;
+          // this means we can now have consequent text nodes after the unification)
+          //if (npChild && par.lastChild) {
+          //  if ((npChild.nodeType == Node.TEXT_NODE) && (par.lastChild.nodeType == Node.TEXT_NODE)) {
+          //    par.lastChild.nodeValue = par.lastChild.nodeValue + npChild.nodeValue;
+          //    //jsConsoleService.logStringMessage('par.lastChild.nodeValue = \"' + par.lastChild.nodeValue + '\"');
+          //    npChild = npChild.nextSibling;
+          //  }
+          //}
+          else {
+            var nc = prevPar.childNodes.length;
+            while (pChild) {
+              var pc2 = pChild;
+              pChild = pChild.nextSibling;
+              //jsConsoleService.logStringMessage('copying pcClone:' + pcClone + "\ntype: " + pcClone.nodeType + "\nname: " + pcClone.nodeName + "\nHTML:\n" + pcClone.innerHTML + "\nOuter HTML:\n" + pcClone.innerHTML + "\nvalue:\n" + pcClone.nodeValue);
+              newPar.appendChild(pc2);
+            }
+            prevPar.parentNode.removeChild(par);
+            prevPar.parentNode.replaceChild(newPar,prevPar);
+            editor.selection.collapse(newPar, nc);
+          }
+          editor.endTransaction();
+          //jsConsoleService.logStringMessage('done');
+             
+          ev.preventDefault();
+          ev.stopPropagation();
+          ev.initKeyEvent("keypress", false, true, null, false, false, false, false, 0, 0);
+        }
+      }  
     }
   }
 }
