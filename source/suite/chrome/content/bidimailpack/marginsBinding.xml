@@ -128,8 +128,8 @@
         </implementation>
 
         <handlers>
-          <handler event="keyup"  action="this.validateData();" />
-          <handler event="change" action="this.validateData();" />
+          <handler event="keyup" action="this.validateData();" />
+          <handler event="click" action="this.validateData();" />
         </handlers>
     </binding>
 </bindings>
