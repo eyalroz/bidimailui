@@ -8,7 +8,7 @@
     <em:version>0.6b</em:version>
     
     <!-- Target Application this extension can install into, 
-        with minimum and maximum supported versions. --> 
+         with minimum and maximum supported versions. --> 
 
     <!-- Thunderbird -->
     <em:targetApplication>
