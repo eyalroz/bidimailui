@@ -274,9 +274,7 @@ div#langauge-selection {
   padding: 5px;
   border: 1px solid black;
   text-align: center;
-  margin-left: 40px;
-  margin-right: 40px;
-  width: 94px;
+  width: 9%;
 }
 
 div#english-navbar div#langauge-selection {
