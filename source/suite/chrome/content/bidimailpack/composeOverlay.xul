@@ -75,9 +75,9 @@ main toolbar buttons are whole-document direction controls -->
     accesskey="&menu-bidimail-insert-contol-character:accesskey;">
     <menupopup id="menu_Context_ControlCharacters_Popup">
       <menuitem id="contextInsertRLM" label="&menu-bidimail-rlm:label;"
-        oncommand="InsertEntity('&amp;rlm;')" />
+        oncommand="InsertControlCharacter('\u200f');" />
       <menuitem id="contextInsertLRM" label="&menu-bidimail-lrm:label;"
-        oncommand="InsertEntity('&amp;lrm;')" />
+        oncommand="InsertControlCharacter('\u200e');" />
     </menupopup>
   </menu>
 </popup>
