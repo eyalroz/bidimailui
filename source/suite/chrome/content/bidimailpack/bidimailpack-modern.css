@@ -3,7 +3,7 @@
 #button-direction-ltr-main-bar {
   list-style-image: url("chrome://bidimailpack/content/images/ltr-main-bar-modern.png");
   -moz-image-region: rect(0px 50px 33px 0);
-  background-color: transparent !important;
+  background-color: transparent !important; /* no ugly gray frame */
 }
 
 #button-direction-ltr-main-bar:hover {
@@ -27,13 +27,10 @@
   -moz-image-region: rect(0px 250px 33px 200px);
 }
 
-
-
 #button-direction-rtl-main-bar {
   list-style-image: url("chrome://bidimailpack/content/images/rtl-main-bar-modern.png");
   -moz-image-region: rect(0px 50px 33px 0);
-/*  background-color: #AAB6C4 !important;*/
-  background-color: transparent !important;
+  background-color: transparent !important; /* no ugly gray frame */
 }
 
 #button-direction-rtl-main-bar:hover {
@@ -57,8 +54,6 @@
   -moz-image-region: rect(0px 250px 33px 200px);
 }
 
-
-
 #button-direction-ltr-formatting-bar {
   list-style-image: url("chrome://bidimailpack/content/images/ltr-formatting-bar.png");
   -moz-image-region: rect(0px 19px 18px 0px);
@@ -80,7 +75,6 @@
   list-style-image: url("chrome://bidimailpack/content/images/rtl-formatting-bar.png");
   -moz-image-region: rect(0px 19px 18px 0px);
 }
-
 
 #button-direction-rtl-formatting-bar:hover {
   -moz-image-region: rect(0px 38px 18px 19px);
