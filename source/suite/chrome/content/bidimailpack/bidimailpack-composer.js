@@ -269,13 +269,13 @@ function HandleDirectionButtons()
   }
   catch(e) { } // preference is not set.
 
-  // Note: the document direction casters default to being hidden
-
   if (editorType == 'htmlmail')
   {
     document.getElementById('ltr-paragraph-direction-broadcaster').setAttribute('hidden',hiddenButtons);
     document.getElementById('rtl-paragraph-direction-broadcaster').setAttribute('hidden',hiddenButtons);
     document.getElementById('directionality-separator-formatting-bar').setAttribute('hidden',hiddenButtons);
+    document.getElementById('ltr-document-direction-broadcaster').setAttribute('hidden',true);
+    document.getElementById('rtl-document-direction-broadcaster').setAttribute('hidden',true);
   }
   else {
     // plain text mail

@@ -263,7 +263,6 @@ function HandleDirectionButtons()
     }
     catch(e) { } // preference is not set.
 
-    // Note: the hidden attribute defaults to being set false
     // Note: the main toolbar buttons are never hidden, since that toolbar
     //       is customizable in tbird anyway
     document.getElementById('ltr-paragraph-direction-broadcaster').setAttribute('hidden',hiddenbuttons);
