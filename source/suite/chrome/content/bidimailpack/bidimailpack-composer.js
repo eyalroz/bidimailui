@@ -661,7 +661,7 @@ function onKeyPress(ev) {
         if ( (par) && (prevPar) &&
              (prevPar.tagName.toLowerCase() == "p") &&
              (par.tagName.toLowerCase() == "p") &&
-             (par.firstChild == editor.selection.focusNode) &&
+             (isFirstTextNode(par, editor.selection.focusNode, false)) &&
              (editor.selection.focusOffset == 0) ) {
 
           // combine the two paragraphs into a single paragraph
@@ -718,6 +718,22 @@ function onKeyPress(ev) {
       }  
     }
   }
+}
+
+/* Comment Me! */
+function isFirstTextNode(blockElement, node, found) {
+  if (node == blockElement)
+    return found;
+
+  var parentNode = node.parentNode;
+  for (; node != parentNode.fisrtChild ; node=node.previousSibling)
+    if (node.nodeType == node.TEXT_NODE)
+      if (found)
+        return false;
+      else
+        found = true;
+
+  return (isFirstTextNode(blockElement, parentNode, found)); 
 }
 
 function isInList() {
