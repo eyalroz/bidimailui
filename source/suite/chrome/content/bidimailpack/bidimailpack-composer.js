@@ -7,63 +7,220 @@
 // Globals
 var gLastWindowToHaveFocus;
 
-function GetCurrentParagraphDirection()
+function GetCurrentSelectionDirection()
 {
+  // the following 3 lines enable logging messages to the javascript console
+  // by doing jsConsoleService.logStringMessage('blah') 
+
+  // netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+  // var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
+  // jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
+
+  // jsConsoleService.logStringMessage('----- in GetCurrentSelectionDirection() -----');
+
+  // The current selection is a forest of DOM nodes,
+  // each of which is contained in a block HTML 
+  // element (which is also a DOM node in the document
+  // node tree), which has a direction. The most
+  // intuitive and code-succinct method would be
+  // to check the direction of all block elements
+  // containing nodes in the selection, by traversing
+  // the entire selection forest; we cannot accept such
+  // complexity at the moment (although you are welcome
+  // to debate this code simplicity vs. complexity tradeoff,
+  // contact us), so we shall arbitrarily limit the scan
+  // depth to:
+
+  var maxDFSDepth = 3; // (i.e. traverse levels 0,1,2,...maxDFSDepth, inclusive)
+
+  // ... to be scanned from each selection range's
+  // common ancestor element. Since we do not know
+  // the range of children to be scanned for each
+  // node, we will have to build the range's
+  // contour by climbing from its start and end
+  // to the common ancestor element
+
+  // Note that it is also possible to prune the scan
+  // whenever a block element is reached (i.e. not
+  // scan within it), but at the moment we do not do so.
+  
   var hasLTR = false, hasRTL = false;
   var editor = GetCurrentEditor();
   try {
-    if (editor.selection.rangeCount > 0)
-    {
-      view = document.defaultView;
-      for (i=0; i<editor.selection.rangeCount; ++i)
-      {
-        var range = editor.selection.getRangeAt(i);
-        var node = range.startContainer;
-        // walk the tree till we find the endContainer of the selection range,
-        // giving our directionality style to everything on our way
-        do
-        {
-          var closestBlockElement = findClosestBlockElement(node);
-          if (closestBlockElement)
-          {
-            var computedDir = view.getComputedStyle(closestBlockElement, "").getPropertyValue("direction");
-            switch (computedDir)
-            {
-              case 'ltr':
-                hasLTR = true;
-                break;
-              case 'rtl':
-                hasRTL = true;
-                break;
-            }
-          }
-          // This check should be placed here, not as the 'while'
-          // condition, to handle cases where begin == end
-          if (node == range.endContainer)
-            break;
-          if (node.firstChild)
-            node = node.firstChild;
-          else if (node.nextSibling)
-            node = node.nextSibling;
-          else
-            // find a parent node which has anything after
-            while (node = node.parentNode)
-            {
-              if (node.nextSibling)
-              {
-                node = node.nextSibling;
-                break;
-              }
-            }
-        }
-        while (node)
-      }
-    }
-  } catch(e) {
-    // perhaps editor is not available? No idea why...
+    if (editor.selection.rangeCount == 0)
+      return null;
   }
+  catch(e) {
+    // the editor is apparently unavailable... although it should be available!
+    return null;
+  }
+      
+  view = document.defaultView;
+  for (i=0; i<editor.selection.rangeCount; ++i ) {
+    var range = editor.selection.getRangeAt(i);
+    var node = range.startContainer;
+    var cacIsLTR = false;
+    var cacIsRTL = false;
 
-  if ((hasLTR && hasRTL) || (!hasLTR && !hasRTL))
+    // first check the block level element which contains
+    // the entire range (but don't use its direction just yet)
+
+    cac = range.commonAncestorContainer;
+    
+    cbe = findClosestBlockElement(cac);
+    switch (view.getComputedStyle(cbe, "").getPropertyValue("direction")) {
+      case 'ltr': cacIsLTR = true; break;
+      case 'rtl': cacIsRTL = true; break;
+    }
+
+    // jsConsoleService.logStringMessage('commonAncestorContainer:' + cac + "\ntype:" + cac.nodeType + "\nHTML:\n" + cac.innerHTML);
+    // jsConsoleService.logStringMessage('commonAncestorContainer:' + cac + "\ntype:" + cac.nodeType + "\nvalue:\n" + cac.nodeValue + "\nis LTR = " + cacIsLTR + "; is RTL = " + cacIsRTL);
+
+    if (cac.nodeType == Node.TEXT_NODE) {
+      // the range is some text within a single DOM leaf node 
+      // so there's no need for any traversal
+      // jsConsoleService.logStringMessage('just a text node, continuing');
+      hasLTR = hasLTR || cacIsLTR;
+      hasRTL = hasRTL || cacIsRTL;
+      if (hasLTR && hasRTL)
+        return 'complex';
+      continue; // ... to the next range
+    }
+    
+    // at this point we assume the cac nodeType is ELEMENT_NODE or something close to that...
+    
+    // create the sequence of nodes on the range start slope:
+    //
+    //                           
+    //      *                   
+    //     /                     
+    //    / #                     
+    //   / ###                     
+    //  / #####                      
+    //                           
+
+    node = range.startContainer;
+
+    startSlope = Components.classes["@mozilla.org/supports-array;1"].createInstance(Components.interfaces.nsISupportsArray);
+    while (node != cac) {
+      // jsConsoleService.logStringMessage('start slope ' + startSlope.Count() + ':' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
+      startSlope.AppendElement(node);
+      node = node.parentNode;
+    } 
+    var startContainerDepth = startSlope.Count();
+    // jsConsoleService.logStringMessage('startContainerDepth =' + startContainerDepth);
+    startSlope.AppendElement(cac);
+
+    // create the sequence of nodes on the range end slope:
+    //
+    //                           
+    //      *                        
+    //       \                       
+    //      # \                      
+    //     ### \                      
+    //    ##### \                     
+    //                           
+
+    node = range.endContainer;
+
+    endSlope = Components.classes["@mozilla.org/supports-array;1"].createInstance(Components.interfaces.nsISupportsArray);
+    while (node != cac) {
+      // jsConsoleService.logStringMessage('end slope ' + endSlope.Count() + ':' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
+      endSlope.AppendElement(node);
+      node = node.parentNode;
+    }
+    var endContainerDepth = endSlope.Count();
+    // jsConsoleService.logStringMessage('endContainerDepth =' + endContainerDepth);
+    endSlope.AppendElement(cac);
+
+    if (startContainerDepth == 0) {
+      // we assume that in this case both containers are equal to cac
+      // jsConsoleService.logStringMessage('zero-depth selection, using cac direction');
+      hasLTR = hasLTR || cacIsLTR;
+      hasRTL = hasRTL || cacIsRTL;
+      if (hasLTR && hasRTL)
+        return 'complex';
+      continue;
+    }
+
+    node = startSlope.GetElementAt(startContainerDepth-1);
+    var depth = 1;
+      
+    do
+    {
+      // jsConsoleService.logStringMessage('visiting node:' + node + " at depth " + depth + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
+    
+      // check the current node's direction
+       
+      // Note: a node of type TEXT_NODE will not be checked for direction,
+      //       nor will it trigger the use of the cac's direction!
+      
+       
+      if (node.nodeType == Node.ELEMENT_NODE)
+      {
+        var nodeStyle = view.getComputedStyle(node, "");
+        var display = nodeStyle.getPropertyValue('display');
+        if (display == 'block' || display == 'table-cell' || display == 'table-caption' || display == 'list-item' || (node.nodeType == Node.DOCUMENT_NODE)) {
+          switch (nodeStyle.getPropertyValue("direction")) {
+            case 'ltr': hasLTR = true; /*jsConsoleService.logStringMessage('found LTR');*/ if (hasRTL) return 'complex'; break;
+            case 'rtl': hasRTL = true; /*jsConsoleService.logStringMessage('found RTL');*/ if (hasLTR) return 'complex'; break;
+          }
+        }
+        else if (node.parentNode == cac) {
+          // there is a non-block child of cac, so we use cac's data
+          // jsConsoleService.logStringMessage('using cac direction');
+          hasLTR = hasLTR || cacIsLTR;
+          hasRTL = hasRTL || cacIsRTL;
+          if (hasLTR && hasRTL) {
+            // jsConsoleService.logStringMessage('returning complex');
+            return 'complex';
+          }
+        }
+      }
+      
+      // is there is a child node which need be traversed?
+       
+      if ((depth < maxDFSDepth) && node.firstChild ) {
+        if (depth < startContainerDepth) {
+          if (node == startSlope.GetElementAt(startContainerDepth-depth)) {
+            // jsConsoleService.logStringMessage('descending to edge child');
+            node = startSlope.GetElementAt(startContainerDepth-depth-1);
+            depth++;
+            continue;
+          }
+        }
+        // jsConsoleService.logStringMessage('descending to first child');
+        node = node.firstChild; depth++;
+        continue;
+      }
+
+      // is there a node on the ancestry path from this node
+      // to the common range ancestor which has a sibling node
+      // which need be traversed?
+
+      do {
+         if (node.nextSibling) {
+           // jsConsoleService.logStringMessage('next sibling of node is:' + node.nextSibling);
+           if (depth >= endContainerDepth) {
+             // jsConsoleService.logStringMessage('moving to next sibling');
+             node = node.nextSibling;
+             break;
+           }
+           if (node != endSlope.GetElementAt(endContainerDepth-depth)) {
+             // jsConsoleService.logStringMessage('moving to next sibling');
+             node = node.nextSibling;
+             break;
+           }
+           // jsConsoleService.logStringMessage('node == endSlope.GetElementAt(endContainerDepth-depth)\nhowever node.innerHTML =\n' + node.innerHTML + '\nwhile endSlope.GetElementAt(endContainerDepth-depth).innerHTML = \n' + endSlope.GetElementAt(endContainerDepth-depth).innerHTML);
+         }
+         depth--; node = node.parentNode;
+         // jsConsoleService.logStringMessage('moving back up to depth ' + depth);
+       } while (node != cac);
+       
+     } while (node != cac);
+   }
+
+  if (hasLTR && hasRTL)
     return 'complex';
 
   if (hasRTL)
@@ -454,13 +611,13 @@ var directionSwitchController =
     switch (command)
     {
       case "cmd_rtl_paragraph":
-        dir = GetCurrentParagraphDirection();
+        dir = GetCurrentSelectionDirection();
         if (dir == 'rtl')
           return 'checked';
         else
           return 'unchecked';
       case "cmd_ltr_paragraph":
-        dir = GetCurrentParagraphDirection();
+        dir = GetCurrentSelectionDirection();
         if (dir == 'ltr')
           return 'checked';
         else
