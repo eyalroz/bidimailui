@@ -218,26 +218,7 @@ function composeWindowEditorOnLoadHandler() {
   // intl' globals
   gLastWindowToHaveFocus = null;
 
-  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
   var editorType = GetCurrentEditorType();
-
-  // show direction buttons?
-  if (editorType == 'htmlmail')
-  {
-    var hiddenbuttons = false;
-    try {
-      if (!prefs.getBoolPref('mail.compose.show_direction_buttons'))
-        hiddenbuttons = true;
-    }
-    catch(e) { } // preference is not set.
-
-    // Note: the hidden attribute defaults to being set false
-    // Note: the main toolbar buttons are never hidden, since that toolbar
-    //       is customizable in tbird anyway
-    document.getElementById('ltr-paragraph-direction-broadcaster').setAttribute('hidden',hiddenbuttons);
-    document.getElementById('rtl-paragraph-direction-broadcaster').setAttribute('hidden',hiddenbuttons);
-    document.getElementById('directionality-separator-formatting-bar').setAttribute('hidden',hiddenbuttons);   
-  }
 
   // Direction Controller
   top.controllers.insertControllerAt(1, directionSwitchController);
@@ -262,16 +243,37 @@ function composeWindowEditorOnLoadHandler() {
   // the reason for it is that without a timeout, it seems
   // that gMsgCompose does often not yet exist when
   // the OnLoad handler runs...
-  setTimeout('composeWindowEditorDelayedOnLoadHandler();', 75);
+  setTimeout('composeWindowEditorDelayedOnLoadHandler();', 125);
 }
 
 
 function composeWindowEditorOnReopenHandler() {
+  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+  var editorType = GetCurrentEditorType();
+
+  // show direction buttons?
+  if (editorType == 'htmlmail')
+  {
+    var hiddenbuttons = false;
+    try {
+      if (!prefs.getBoolPref('mail.compose.show_direction_buttons'))
+        hiddenbuttons = true;
+    }
+    catch(e) { } // preference is not set.
+
+    // Note: the hidden attribute defaults to being set false
+    // Note: the main toolbar buttons are never hidden, since that toolbar
+    //       is customizable in tbird anyway
+    document.getElementById('ltr-paragraph-direction-broadcaster').setAttribute('hidden',hiddenbuttons);
+    document.getElementById('rtl-paragraph-direction-broadcaster').setAttribute('hidden',hiddenbuttons);
+    document.getElementById('directionality-separator-formatting-bar').setAttribute('hidden',hiddenbuttons);   
+  }
+
   // another ugly hack (see composeWindowEditorOnLoadHandler):
   // if we don't delay before running the other handler, the
   // message text will not be available so we will not know
   // whether or not this is a reply
-  setTimeout('composeWindowEditorDelayedOnLoadHandler();', 75);
+  setTimeout('composeWindowEditorDelayedOnLoadHandler();', 125);
 }
 
 function composeWindowEditorDelayedOnLoadHandler() {
