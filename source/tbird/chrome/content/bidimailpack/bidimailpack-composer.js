@@ -524,23 +524,11 @@ function InsertParagraph()
 
   // ------------------------------- "set old style"
   if (isStyleBold.value)
-  {
-    editor.beginTransaction();
     EditorSetTextProperty("b", "", "");
-    editor.endTransaction();
-  }
   if (isStyleItalic.value)
-  {
-    editor.beginTransaction();
     EditorSetTextProperty("i", "", "");
-    editor.endTransaction();
-  }
   if (isStyleUnderline.value)
-  {
-    editor.beginTransaction();
     EditorSetTextProperty("u", "", "");
-    editor.endTransaction();
-  }
   // ------------------------------- "set old style"
 }
 
