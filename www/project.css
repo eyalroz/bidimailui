@@ -135,7 +135,6 @@ div#hebrew-content {
 
 div#english-content {
   direction: ltr;
-  font-family: verdana, arial, sans-serif;
   padding-right: 10px;
   padding-left: 10px;
   text-align: justify;
