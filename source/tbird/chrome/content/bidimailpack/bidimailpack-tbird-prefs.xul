@@ -14,14 +14,7 @@
 
   <script type="application/x-javascript" src="chrome://bidimailpack/content/bidimailpack-prefs.js"/>
   <script type="application/x-javascript" src="chrome://mozapps/content/extensions/extensions.js"/>
-  
-  <groupbox>
-    <caption label="&message-display-groupbox-caption;"/>
-    <vbox>
-      <checkbox id="bidimailpack-autodetect" label="&autodetect;" checked="true" autostretch="never" />
-    </vbox>
-  </groupbox>
-     
+
   <groupbox>
     <caption label="&message-composition-groupbox-caption;"/>
     <description>&default-dir;</description>
