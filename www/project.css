@@ -86,11 +86,12 @@ div#english-navbar #project-navigation th {
   background-position: left;
 }
 
+/*
 div#hebrew-navbar #project-navigation th {
   padding-right: 18px;
   background-position: right;
 }
-
+*/
 
 #infoTabs {
   float: right;
