@@ -7,7 +7,7 @@
 
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         onload="initValues();"
-        ondialogaccept="saveValues();"
+        ondialogaccept="return dialogAccept();"
         buttons="accept,cancel"
         persist="screenX screenY"
         title="&bidimailpack-settings;">
