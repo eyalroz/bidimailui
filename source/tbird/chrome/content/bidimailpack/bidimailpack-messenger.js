@@ -81,6 +81,7 @@ function OnLoadHandler() {
   // the timer isn't always fired. at least on the aviary1.0 branch
   try {
     LoadOSAttributeOnWindow();
+  }
   catch (e) {
     setTimeout(LoadOSAttributeOnWindow, 0);
   }
