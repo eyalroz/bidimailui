@@ -56,20 +56,8 @@
 <div class="faq-item">
 <div class="question">כשאני עונה להודעה הכתובה מימין לשמאל, קו ציון הציטוט ממשיך להופיע משמאל לתוכן ההודעה המקורית, ולא עובר לצד ימין. האם אפשר לגרום לו להתנהג אחרת?</div>
 <div class="answer">
-<p>הוסיף/י את הכללי הבאים לקובץ <code>userChrome.css</code> שבספריית ה-<code>chrome</code> שלך:</p>
-<div class="code-segment">blockquote[type=cite] {
-  border-color: inherit !important;
-  border-width: 3px !important;
-}
-
-body[dir=rtl] blockquote[type=cite] {
-  padding-right: 1em !important;
-  padding-left: 0 !important;
-  border-right: 3px solid !important;
-  border-left: 0 !important;
-}
-</div>
-<p>אם תרצה/י, הנה עוד כמה חוקים להוספה ל-<code>userContent.css</code> אשר ישנו את צבע קו הציטוט בהתאם לעומק הציטוט:</p>
+<p>בעייה זו נפתרה בגירסה 0.5.1 של התוסף.</p>
+<p>אם תרצה/י, הנה כמה חוקים להוספה ל-<code>userContent.css</code> אשר ישנו את צבע קו הציטוט בהתאם לעומק הציטוט:</p>
 <div class="code-segment">blockquote[type=cite] {
   color: #660066 !important;
 }
@@ -85,8 +73,7 @@ blockquote[type=cite] blockquote blockquote blockquote {
 blockquote[type=cite] blockquote blockquote blockquote blockquote {
   color: #bb6600 !important;
 }
-</div>
-<p>לחילופין, ניתן למנוע את הופעת קו הציטוט לחלוטין ולראות את סימני הציטוט הרגילים (סימני '&gt;'), באמצעות קביעת ערך <code>false</code> להעדפה <code>mail.quoted_graphical</code>; כדי לעשות זאת ניתן להשתמש ב-URL <code>about:config</code> במוזילה, או להוסיף את השורה הבאה לקובץ <code>user.js</code> שלך:
+<p>כמו-כן זכור כי ניתן למנוע את הופעת קו הציטוט לחלוטין ולראות את סימני הציטוט הרגילים (סימני '&gt;'), באמצעות קביעת ערך <code>false</code> להעדפה <code>mail.quoted_graphical</code>; כדי לעשות זאת ניתן להשתמש ב-URL <code>about:config</code> במוזילה, או להוסיף את השורה הבאה לקובץ <code>user.js</code> שלך:
 <div class="code-segment">pref("mail.quoted_graphical", false);
 </div>
 <p>תשובה זו הועתקה ללא בושה ממופי :-) נשקול לנסות להוסיף חלק מן ה-CSS הנ&quot;ל לתוך התוסף שלנו עצמו.</p>
