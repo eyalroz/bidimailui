@@ -12,11 +12,17 @@
 
 // Globals
 var gPrefService = null;
-var gLastWindowToHaveFocus;
+var gLastWindowToHaveFocus; // used to prevent doing unncessary work when a focus
+                            // 'changes' to the same window which is already in focus
 var gAlternativeEnterBehavior = true;
-var gParagraphMarginTop;
-var gParagraphMarginBottom;
-var gBug262497Workaround;
+                            // the default behavior of the Enter key in HTML mail messages
+                            // is to insert a <br>; the alternative behavior we implement
+                            // is to close a paragraph and begin a new one
+var gParagraphMarginTop;    // these two settings determine how much space 
+var gParagraphMarginBottom; // to add to paragraphs in HTML mail messages
+var gBug262497Workaround;   // a boolean value which is true if we need to be applying
+                            // our workaround for bugzilla bug 262497 (the behaviour 
+                            // of Ctrl+Home and Ctrl+End)
 
 function GetCurrentSelectionDirection() {
 
