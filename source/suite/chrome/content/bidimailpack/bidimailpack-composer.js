@@ -111,7 +111,11 @@ function composeWindowEditorOnLoadHandler() {
 }
 
 function composeWindowEditorOnLoadHandler2() {
-  var messageIsAReply = (gMsgCompose.originalMsgURI.length > 0);
+  var messageIsAReply = false;
+  try {
+    messageIsAReply = (gMsgCompose.originalMsgURI.length > 0);
+  }
+  catch(e) {};
   var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
   var body = document.getElementById('content-frame').contentDocument.body;
   var editorType = GetCurrentEditorType();
