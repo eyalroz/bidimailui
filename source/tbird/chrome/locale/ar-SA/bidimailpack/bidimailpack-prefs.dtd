@@ -1,4 +1,4 @@
-<!ENTITY bidimailpack-settings                   "BiDi Mail UI إعدادات">
+﻿<!ENTITY bidimailpack-settings                   "BiDi Mail UI إعدادات">
 
 <!ENTITY message-display-groupbox-caption        "عرض الرّسالة">
 
@@ -22,3 +22,12 @@
 
 <!ENTITY display-buttons                         "عرض أزرار إعداد الاتّجاه">
 
+
+ <!ENTITY marginTopTitle.label      "الفراغ فوق الفقرة:">
+ <!ENTITY marginBottomTitle.label   "الفراغ تحت الفقرة:">
+ <!ENTITY cmScale.label             "سم">
+ <!ENTITY cmScale.accesskey         "س">
+ <!ENTITY pixelScale.label          "بكسل">
+ <!ENTITY pixelScale.accesskey      "ب">
+ <!ENTITY ptScale.label             "نقطة">
+ <!ENTITY ptScale.accesskey         "ن">
