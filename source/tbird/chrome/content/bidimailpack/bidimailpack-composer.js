@@ -341,6 +341,18 @@ function GetMessageDisplayDirection(messageURI) {
 function composeWindowEditorDelayedOnLoadHandler() {
   var editorType = GetCurrentEditorType();
   var body = document.getElementById('content-frame').contentDocument.body;
+  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+
+  if (editorType == 'htmlmail') {
+    // Determine Enter key behavior
+    try {
+      gAlternativeEnterBehavior = prefs.getBoolPref("mailnews.alternative_enter_behavior");
+    }
+    catch(e) {
+      // pref probably not set
+      gAlternativeEnterBehavior = false;
+    }
+  }
 
   // Handle message direction
   var messageIsAReply = false;
@@ -355,8 +367,6 @@ function composeWindowEditorDelayedOnLoadHandler() {
 
   try
   {
-    var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-
     // New message OR "Always reply in default direction" is checked
     if (!messageIsAReply || prefs.getBoolPref("mailnews.reply_in_default_direction") )
     {
@@ -429,7 +439,6 @@ function findClosestBlockElement(node)
   }
   return node;
 }
-
 
 function ApplyToSelectionBlockElements(evalStr)
 {
@@ -560,18 +569,21 @@ function onKeyPress(ev)
     }
   }
 
-  // Steal all plain enters without modifiers (e.g. do not change
-  // behaivor of Shift+Enter which inserts a <br>, Ctrl+Enter which
-  // sends the message etc.)
-  if ((ev.keyCode == KeyEvent.DOM_VK_ENTER || ev.keyCode == KeyEvent.DOM_VK_RETURN) && !ev.shiftKey && !ev.altKey && !ev.ctrlKey && !ev.metaKey && !isInList())
-  {
-    // Do whatever it takes to prevent the editor from inserting a BR
-    ev.preventDefault();
-    ev.stopPropagation();
-    ev.initKeyEvent("keypress", false, true, null, false, false, false, false, 0, 0);
-
-    // ... and insert a paragraph break instead
-    InsertParagraph();
+  if (gAlternativeEnterBehavior) {
+    // Steal all plain enters without modifiers (e.g. do not change
+    // behaivor of Shift+Enter which inserts a <br>, Ctrl+Enter which
+    // sends the message etc.)
+    if ( (ev.keyCode == KeyEvent.DOM_VK_ENTER || ev.keyCode == KeyEvent.DOM_VK_RETURN) 
+         && !ev.shiftKey && !ev.altKey && !ev.ctrlKey && !ev.metaKey && !isInList()    )
+    {
+      // Do whatever it takes to prevent the editor from inserting a BR
+      ev.preventDefault();
+      ev.stopPropagation();
+      ev.initKeyEvent("keypress", false, true, null, false, false, false, false, 0, 0);
+  
+      // ... and insert a paragraph break instead
+      InsertParagraph();
+    }
   }
 }
 
