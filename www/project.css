@@ -175,7 +175,10 @@ img.screenshot {
 }
 
 .infotab .infoheader {
-  background: rgb(255, 153, 0) no-repeat url("http://www.mozdev.org/sharedimages/infotab_top.png") ;
+  background-color: rgb(255, 153, 0);
+  background-image: url("http://www.mozdev.org/sharedimages/infotab_top.png") ;
+  background-position: top;
+  background-repeat: no-repeat ;
   color: rgb(255, 255, 255);
   font-family: Helvetica, Arial,san-serif, serif;
   font-weight: bold;
@@ -210,7 +213,6 @@ img.screenshot {
   font-size: smaller;
   margin-bottom: 2em;
 }
-
 #content,
 .page-header {
   background: inherit;
