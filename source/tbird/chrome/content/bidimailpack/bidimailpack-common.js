@@ -1,11 +1,12 @@
 function hasRTLWord(element) {
 
-  // we check whether there exists a full word in the element text
+  // we check whether there exists a complete word in the element text
   // consisting solely of characters of an RTL script
 
-  // 0x0591 to 0x05F4 is the range of Hebrew characters (basic letters are 0x05D0 - 0x5EA),
-  // 0x060C to 0x06F9 is the range of Arabic characters
-  var re = /(^|\s|[<>])([\u0591-\u05F4]+|[\u060C-\u06F9]+)($|\s|[<>])/;
+  // we use definitions from nsBiDiUtils.h as the criteria for BiDi text;
+  // cf. the macros IS_IN_BMP_RTL_BLOCK and IS_RTL_PRESENTATION_FORM
+  
+  var re = /(^|\s|[<>])([\u0590-\u08FF]|[\uFB1D-\uFDFF]|[\uFE70-\uFEFC])+($|\s|[<>])/;
 
   try {
     var iterator = new XPathEvaluator();
@@ -16,8 +17,7 @@ function hasRTLWord(element) {
       return true;
     }
   } catch (e) {
-    // 'new XPathEvaluator()' doesn't work in Thunderbird for some reason,
-    // so we do:
+    // 'new XPathEvaluator()' doesn't work for some reason, so we do:
     if (re.test(element.innerHTML))
       return true;
   }
