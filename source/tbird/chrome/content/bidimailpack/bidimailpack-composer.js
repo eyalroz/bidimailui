@@ -8,6 +8,7 @@ function GetCurrentParagraphDirection()
   try {
     if (editor.selection.rangeCount > 0)
     {
+      view = document.defaultView;
       for (i=0; i<editor.selection.rangeCount; ++i)
       {
         var range = editor.selection.getRangeAt(i);
@@ -19,7 +20,7 @@ function GetCurrentParagraphDirection()
           var closestBlockElement = findClosestBlockElement(node);
           if (closestBlockElement)
           {
-            var computedDir = closestBlockElement.ownerDocument.defaultView.getComputedStyle(closestBlockElement, "").getPropertyValue("direction");
+            var computedDir = view.getComputedStyle(closestBlockElement, "").getPropertyValue("direction");
             switch (computedDir)
             {
               case 'ltr':
