@@ -6,7 +6,7 @@
 <!ENTITY always-reply-in-default-dir             "ענה להודעות תמיד בכיוון ברירת-המחדל">
 <!ENTITY more-info                               "למידע נוסף:">
 <!ENTITY guide-link-text                         "המדריך למשתמש ב-BiDi Mail UI">
-<!ENTITY guide-url                          "http://bidiui.mozdev.org/mail/hebrew/guide.html">
+<!ENTITY guide-url                               "http://bidiui.mozdev.org/mail/hebrew/guide.html">
 <!ENTITY bidimailpack-preftree-label             "BiDi Mail UI">
 <!ENTITY display-buttons                         "הצג כפתורי כיווניות">
 
