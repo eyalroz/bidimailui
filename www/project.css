@@ -88,7 +88,7 @@ div#english-navbar {
   font-size: smaller;
 }
 
-div#hebrew-navbar .project-navigations {
+div#hebrew-navbar #project-navigation {
   margin-right: 20px;
 }
 
