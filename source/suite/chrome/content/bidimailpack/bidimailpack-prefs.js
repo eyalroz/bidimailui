@@ -47,18 +47,15 @@ function saveValues()
   element = document.getElementById('bidimailpack-display-buttons');
   prefs.setBoolPref('mail.compose.show_direction_buttons', element.checked);
 
-  document.getElementById('margintop').saveToPrefs();
-  document.getElementById('marginbottom').saveToPrefs();
+  document.getElementById('paragraph_vertical_margin').saveToPrefs();
 }
 
 function dialogAccept()
 {
   var rv = false;
 
-  if (!document.getElementById('margintop').validateData())
-    document.getElementById('margintop').focus();
-  else if (!document.getElementById('marginbottom').validateData())
-    document.getElementById('marginbottom').focus();
+  if (!document.getElementById('paragraph_vertical_margin').validateData())
+    document.getElementById('paragraph_vertical_margin').focus();
   else {
     saveValues();
     rv = true;
