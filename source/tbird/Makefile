@@ -1,10 +1,11 @@
 SUBDIRS = chrome
+XPI_FILENAME = bidiui_tbird.xpi
 .PHONY: all clean subdirs ${SUBDIRS}
 
-all: subdirs bidiui_tbird.xpi
+all: subdirs ${XPI_FILENAME}
 
 clean:
-	rm bidiui_tbird.xpi 2>/dev/null; true
+	rm ${XPI_FILENAME} 2>/dev/null; true
 	for DIR in ${SUBDIRS}; do \
 		${MAKE} -C $$DIR $@; \
 	done
@@ -14,7 +15,7 @@ subdirs: ${SUBDIRS}
 ${SUBDIRS}:
 	${MAKE} -C $@
 
-bidiui_tbird.xpi: subdirs
+${XPI_FILENAME}: subdirs
 	rm -rf $@; \
 	zip $@ \
 		chrome/bidimailpack.jar \
