@@ -11,11 +11,11 @@
 <!ENTITY bidimailpack-preftree-label             "BiDi UI">
 <!ENTITY display-buttons                         "Display Direction Setting Buttons">
 
-<!ENTITY marginTopTitle.label                    "Paragraphs' top margin:">
-<!ENTITY marginBottomTitle.label                 "Paragraphs' bottom margin:">
+<!ENTITY marginTopTitle.label                    "Paragraph top margin:">
+<!ENTITY marginBottomTitle.label                 "Paragraph bottom margin:">
 <!ENTITY cmScale.label                           "cm">
 <!ENTITY cmScale.accesskey                       "c">
 <!ENTITY pixelScale.label                        "pixels">
 <!ENTITY pixelScale.accesskey                    "p">
-<!ENTITY ptScale.label                           "pt">
-<!ENTITY ptScale.accesskey                       "t">
+<!ENTITY precentScale.label                      "precents">
+<!ENTITY precentScale.accesskey                  "r">
