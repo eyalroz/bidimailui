@@ -506,7 +506,18 @@ function InsertParagraph()
   var isStyleFontColor = { value: false };
   EditorGetTextProperty("font", "color", "", isStyleFontColor, anyHas, allHas);
   var styleFontColor = editor.getFontColorState(allHas);
-  // ------------------------------- "remember old style"
+  // solution for <big>, <small> and font-face tags:
+  // we compare the computed font-size of the selction to the font-size of
+  // its block element. If it is different, we'll apply font-size
+  var isStyleFontSize = { value: false };
+  var styleFontSize;
+  try
+  {
+    styleFontSize = document.defaultView.getComputedStyle(editor.getSelectionContainer(), "").getPropertyValue("font-size");
+    isStyleFontSize.value = (styleFontSize != document.defaultView.getComputedStyle(findClosestBlockElement(editor.getSelectionContainer()), "").getPropertyValue("font-size"));
+  }
+  catch (e) {}
+  // ------------------------------- "remember old style" ------
 
 
   // getParagraphState returns the paragraph state for the selection.
@@ -540,7 +551,7 @@ function InsertParagraph()
 
   editor.endTransaction();
 
-  // ------------------------------- "set old style"
+  // ------------------------------- "set old style" ------
   if (isStyleBold.value)
     EditorSetTextProperty("b", "", "");
   if (isStyleItalic.value)
@@ -553,7 +564,10 @@ function InsertParagraph()
     EditorSetTextProperty("font", "face", styleFontFace);
   if (isStyleFontColor.value) // same as above
     EditorSetTextProperty("font", "color", styleFontColor);
-  // ------------------------------- "set old style"
+  if (isStyleFontSize.value)
+    // we have css value, set it as a span
+    EditorSetTextProperty("span", "style", "font-size: " + styleFontSize);
+  // ------------------------------- "set old style" ------
 }
 
 var directionSwitchController =
@@ -695,7 +709,6 @@ var directionSwitchController =
     this.setAllCasters();
   }
 }
-
 
 function CommandUpdate_MsgComposeDirection()
 {
