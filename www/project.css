@@ -184,10 +184,6 @@ div#hebrew-navbar #project-navigation {
   padding-bottom: 5px;
 }
 
-.hebrew-news .infoTab .infoItems div {
-  background-position: right;
-}
-
 .infoTab .infoHeader {
   background: #f90 no-repeat url("http://www.mozdev.org/sharedimages/infotab_top.png");
   color: #fff;
@@ -195,6 +191,11 @@ div#hebrew-navbar #project-navigation {
   font-family: Helvetica, Arial,san-serif, serif;
   font-weight: bold;
 }
+
+.hebrew-news .infoTab .infoHeader {
+  background: #f90 no-repeat url("http://www.mozdev.org/sharedimages/infotab_top_rtl.png");
+}
+
 
 #main-content-no-nav ul,
 #main-content ul {
