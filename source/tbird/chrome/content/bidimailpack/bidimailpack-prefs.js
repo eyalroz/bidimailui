@@ -7,7 +7,9 @@ function initValues()
   try {
     element = document.getElementById('bidimailpack-autodetect');
     element.checked = prefs.getBoolPref('mailnews.message_display.autodetect_direction');
-  } catch(e) {};
+  } catch(e) {
+    element.checked = true;
+  };
 
   // Default composing direction for a new message. Default: ltr.
   try {
@@ -17,7 +19,9 @@ function initValues()
       element.selectedItem = element.childNodes[0];
     else
       element.selectedItem = element.childNodes[1];
-  } catch(e) {};
+  } catch(e) {
+    element.selectedItem = element.childNodes[0];
+  };
 
   // Reply direction options: 
   //   - same direction as the orginal message, or
@@ -26,7 +30,9 @@ function initValues()
   try {
     element = document.getElementById('bidimailpack-reply-in-default-dir');
     element.checked = prefs.getBoolPref('mailnews.reply_in_default_direction');
-  } catch(e) {};
+  } catch(e) {
+    element.checked = false;
+  };
 
   // Show direction control button when composing a message? Default: True
   try {
