@@ -23,8 +23,6 @@ div#hebrew-navbar #project-navigation a{
   background: rgb(255,220,128);
 }
 
-
- class="selected_section"
 div#english-navbar #project-navigation a.first-item{
   border-left: none;
 }
