@@ -4,7 +4,7 @@
 <script type="application/x-javascript" src="chrome://bidiext/content/bidiext.js"/>
 
 <keyset id="navKeys">
-  <key id="invert_textbox_dir_key" modifiers="accel" key="9" oncommand="bidiext.invert_textbox_dir();"/>
+  <key id="invert_textbox_dir_key" modifiers="accel,shift" key="G" oncommand="bidiext.invert_textbox_dir();"/>
 </keyset>
 
 <popup id="contentAreaContextMenu">
