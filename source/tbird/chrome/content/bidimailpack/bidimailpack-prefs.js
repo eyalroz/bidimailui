@@ -35,6 +35,13 @@ function initValues()
   };
 }
 
+function initPane()
+{
+  var dialog = document.documentElement;
+  dialog.getButton("help").hidden = false;
+  initValues();
+}
+
 function saveValues()
 {
     var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
@@ -49,22 +56,30 @@ function saveValues()
     element = document.getElementById('bidimailpack-display-buttons');
     prefs.setBoolPref('mail.compose.show_direction_buttons', element.checked);
     
-    document.getElementById('margintop').saveToPrefs();
-    document.getElementById('marginbottom').saveToPrefs();
+    document.getElementById('paragraph_vertical_margin').saveToPrefs();
 }
 
 function dialogAccept()
 {
   var rv = false;
 
-  if (!document.getElementById('margintop').validateData())
-    document.getElementById('margintop').focus();
-  else if (!document.getElementById('marginbottom').validateData())
-    document.getElementById('marginbottom').focus();
+  if (!document.getElementById('paragraph_vertical_margin').validateData())
+    document.getElementById('paragraph_vertical_margin').focus();
   else {
     saveValues();
     rv = true;
   }
   
   return rv;
+}
+
+function openURL(aURL)
+{
+  var uri = Components.classes["@mozilla.org/network/standard-url;1"]
+                      .createInstance(Components.interfaces.nsIURI);
+  uri.spec = aURL;
+
+  var protocolSvc = Components.classes["@mozilla.org/uriloader/external-protocol-service;1"]
+                              .getService(Components.interfaces.nsIExternalProtocolService);
+  protocolSvc.loadUrl(uri);
 }

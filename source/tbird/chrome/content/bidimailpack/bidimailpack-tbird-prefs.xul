@@ -6,48 +6,43 @@
 <!DOCTYPE page SYSTEM "chrome://bidimailpack/locale/bidimailpack-prefs.dtd">
 
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-        onload="initValues();"
-        ondialogaccept="return dialogAccept();"
-        buttons="accept,cancel"
+        onload="initPane();"
         persist="screenX screenY"
-        title="&bidimailpack-settings;">
+        title="&bidimailpack-settings;"
+        buttons="accept,cancel,help"
+        helplink="&guide-url;"
+        ondialogaccept="return dialogAccept();"
+        ondialoghelp="openURL(document.documentElement.getAttribute('helplink'));">
 
   <script type="application/x-javascript" src="chrome://bidimailpack/content/bidimailpack-prefs.js"/>
   <script type="application/x-javascript" src="chrome://mozapps/content/extensions/extensions.js"/>
 
-  <groupbox>
-    <caption label="&message-composition-groupbox-caption;"/>
-    <description>&default-dir;</description>
-      <hbox class="indent">
-        <radiogroup id="bidimailpack-default-dir">
-          <radio id="bidimailpack-default-dir-ltr" value="ltr" label="&ltr;" selected="true" />
-          <radio id="bidimailpack-default-dir-rtl" value="rtl" label="&rtl;" />
-        </radiogroup>
-      </hbox>
-    <spacer />
-    <checkbox id="bidimailpack-reply-in-default-dir" checked="false" label="&always-reply-in-default-dir;" autostretch="never" />
-    <checkbox id="bidimailpack-display-buttons" checked="true" label="&display-buttons;" autostretch="never" />
-    <spacer style="height: 1em;" />
-    <vbox>
-      <description>&marginTopTitle.label;</description>
-      <hbox id="margintop"
-            style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
-            class="indent"
-            prefbase="mailnews.paragraph.margin_top"/>
-      <spacer style="height: 0.5em;" />
-      <description>&marginBottomTitle.label;</description>
-      <hbox id="marginbottom"
-            style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
-            class="indent"
-            prefbase="mailnews.paragraph.margin_bottom"/>
-    </vbox>
-  </groupbox>
+  <description>&default-dir;</description>
+  <hbox class="indent">
+    <radiogroup id="bidimailpack-default-dir">
+      <radio id="bidimailpack-default-dir-ltr" value="ltr" label="&ltr;" selected="true" />
+      <radio id="bidimailpack-default-dir-rtl" value="rtl" label="&rtl;" />
+    </radiogroup>
+  </hbox>
 
-  <description>
-    <hbox>
-      <label value="&more-info;" />
-      <label href="http://bidiui.mozdev.org" onclick="openURL('http://bidiui.mozdev.org/mail/');" style="cursor: pointer; color: blue;">&link-text;</label>
-    </hbox>
-  </description>
+  <spacer style="height: 0.75em;" />
 
+  <checkbox id="bidimailpack-reply-in-default-dir" 
+            checked="false" label="&always-reply-in-default-dir;"
+            autostretch="never" />
+  <checkbox id="bidimailpack-display-buttons"
+            checked="true" label="&display-buttons;"
+            autostretch="never" />
+
+  <spacer style="height: 0.75em;" />
+
+  <hbox align="center">
+    <description>&verticalParagraphMargins.label;</description>
+    <hbox id="paragraph_vertical_margin"
+          style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
+          class="indent"
+          prefbase="mailnews.paragraph.vertical_margin"/>
+  </hbox>
+
+  <spacer style="height: 0.5em;" />
 </dialog>

@@ -12,9 +12,7 @@
           <stylesheet src="chrome://bidimailpack/skin/bidimailpack.css"/>
         </resources>
         <content>
-            <xul:hbox>
-              <xul:textbox />
-            </xul:hbox>
+            <xul:textbox size="4" />
             <xul:menulist>
                 <xul:menupopup>
                     <xul:menuitem label="&cmScale.label;"
@@ -38,7 +36,7 @@
             ]]></constructor>
 
             <field name="valueField">
-              document.getAnonymousNodes(this)[0].firstChild
+              document.getAnonymousNodes(this)[0]
             </field>
             <field name="scaleField">
               document.getAnonymousNodes(this)[1]

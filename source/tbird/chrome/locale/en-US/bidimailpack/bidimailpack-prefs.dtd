@@ -1,16 +1,13 @@
 <!ENTITY bidimailpack-settings                   "BiDi Mail UI Options">
-<!ENTITY message-composition-groupbox-caption    "Message Composition">
 <!ENTITY default-dir                             "Default Direction:">
 <!ENTITY rtl                                     "Right to Left">
 <!ENTITY ltr                                     "Left to Right">
 <!ENTITY always-reply-in-default-dir             "Always reply in default direction">
-<!ENTITY more-info                               "For more information:">
-<!ENTITY link-text                               "The BiDi UI Project Homepage">
+<!ENTITY guide-url                               "http://bidiui.mozdev.org/mail/guide.html">
 <!ENTITY bidimailpack-preftree-label             "BiDi Mail UI">
 <!ENTITY display-buttons                         "Display direction setting buttons">
 
-<!ENTITY marginTopTitle.label                    "Space Above Paragarph:">
-<!ENTITY marginBottomTitle.label                 "Space Below Paragraph:">
+<!ENTITY verticalParagraphMargins.label          "Paragarph vertical margins:">
 <!ENTITY cmScale.label                           "cm">
 <!ENTITY cmScale.accesskey                       "c">
 <!ENTITY pixelScale.label                        "pixels">

@@ -18,8 +18,7 @@ var gAlternativeEnterBehavior = true;
                             // the default behavior of the Enter key in HTML mail messages
                             // is to insert a <br>; the alternative behavior we implement
                             // is to close a paragraph and begin a new one
-var gParagraphMarginTop;    // these two settings determine how much space 
-var gParagraphMarginBottom; // to add to paragraphs in HTML mail messages
+var gParagraphVerticalMargin; // how much space to add to paragraphs in HTML mail messages
 var gBug262497Workaround;   // a boolean value which is true if we need to be applying
                             // our workaround for bugzilla bug 262497 (the behaviour 
                             // of Ctrl+Home and Ctrl+End)
@@ -306,10 +305,9 @@ function LoadParagraphMode() {
   if (!gAlternativeEnterBehavior)
     return;
 
-  // Get margin-top and margin-bottom prefs for paragraphs we add
+  // Get the vertical margin pref for paragraphs we add
   // We use global variables in order to avoid different margins in the same document
-  gParagraphMarginTop    = getParagraphMarginFromPref("mailnews.paragraph.margin_top");
-  gParagraphMarginBottom = getParagraphMarginFromPref("mailnews.paragraph.margin_bottom");
+  gParagraphVerticalMargin = getParagraphMarginFromPref("mailnews.paragraph.vertical_margin");
 
   // our extension likes paragraph text entry, not 'body text' - since
   // paragraph are block elements, with a direction setting
@@ -321,8 +319,8 @@ function LoadParagraphMode() {
       document.getElementById('cmd_paragraphState').setAttribute("state", "p");
       var par = findClosestBlockElement(editor.selection.focusNode);
       // Set Paragraph Margins
-      par.style.marginTop    = gParagraphMarginTop;
-      par.style.marginBottom = gParagraphMarginBottom;
+      par.style.marginTop    = gParagraphVerticalMargin;
+      par.style.marginBottom = gParagraphVerticalMargin;
     }
   } catch(e) {
     // since the window is not 'ready', something might throw
@@ -802,8 +800,8 @@ function InsertParagraph() {
    editor.deleteNode(node);
 
   // Set Paragraph Margins
-  par.style.marginTop    = gParagraphMarginTop;
-  par.style.marginBottom = gParagraphMarginBottom;
+  par.style.marginTop    = gParagraphVerticalMargin;
+  par.style.marginBottom = gParagraphVerticalMargin;
   
   editor.endTransaction();
 
