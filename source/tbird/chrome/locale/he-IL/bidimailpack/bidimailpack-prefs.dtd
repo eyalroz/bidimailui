@@ -1,16 +1,13 @@
 <!ENTITY bidimailpack-settings                   "אפשרויות BiDi Mail UI">
-<!ENTITY message-composition-groupbox-caption    "חיבור הודעות">
 <!ENTITY default-dir                             "כיוון ברירת-מחדל:">
 <!ENTITY rtl                                     "מימין לשמאל">
 <!ENTITY ltr                                     "משמאל לימין">
 <!ENTITY always-reply-in-default-dir             "ענה להודעות תמיד בכיוון ברירת-המחדל">
-<!ENTITY more-info                               "למידע נוסף:">
-<!ENTITY link-text                               "דף-הבית של פרויקט BiDi UI">
+<!ENTITY guide-url                               "http://bidiui.mozdev.org/mail/hebrew/guide.html">
 <!ENTITY bidimailpack-preftree-label             "BiDi Mail UI">
 <!ENTITY display-buttons                         "הצג כפתורי כיווניות">
 
-<!ENTITY marginTopTitle.label                    "רווח מעל הפסקה:">
-<!ENTITY marginBottomTitle.label                 "רווח מתחת הפסקה:">
+<!ENTITY verticalParagraphMargins.label          "שולי פסקה אנכיים:">
 <!ENTITY cmScale.label                           "סנטימטר">
 <!ENTITY cmScale.accesskey                       "ס">
 <!ENTITY pixelScale.label                        "פיקסלים">
