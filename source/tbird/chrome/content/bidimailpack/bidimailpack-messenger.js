@@ -72,8 +72,16 @@ function browserOnLoadHandler() {
     UpdateDirectionButtons('ltr');
 }
 
-function InstallBrowserHandler() {
+function OnLoadHandler() {
   var browser = getMessageBrowser();
   if (browser)
     browser.addEventListener('load', browserOnLoadHandler, true);
+
+  // XXXmano: something _must_ be wrong here, but from whatever reason,
+  // the timer isn't always fired. at least on the aviary1.0 branch
+  try {
+    LoadOSAttributeOnWindow();
+  catch (e) {
+    setTimeout(LoadOSAttributeOnWindow, 0);
+  }
 }

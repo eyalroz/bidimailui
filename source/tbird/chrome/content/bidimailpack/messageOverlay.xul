@@ -11,8 +11,7 @@
   <script type="application/x-javascript" src="bidimailpack-common.js"/>
   <script type="application/x-javascript" src="bidimailpack-messenger.js"/>
   <script type="application/x-javascript">
-    setTimeout(LoadOSAttributeOnWindow, 0);
-    InstallBrowserHandler();
+    OnLoadHandler();
   </script>
 
   <keyset id="mailKeys">
