@@ -21,7 +21,9 @@ function initValues()
   try {
     element = document.getElementById('bidimailpack-display-buttons');
     element.checked = prefs.getBoolPref('mail.compose.show_direction_buttons');
-  } catch(e) {};
+  } catch(e) {
+    element.checked = true;
+  };
 }
 
 function saveValues()
