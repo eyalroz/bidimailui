@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "chrome://bidiext/locale/bidiext.dtd">
+<overlay id="bidiextOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<script type="application/x-javascript" src="chrome://bidiext/content/bidiext.js"/>
+
+<keyset id="mainKeyset">
+  <key id="invert_textbox_dir_key" modifiers="accel,shift" key="E" oncommand="bidiext.invert_textbox_dir();"/>
+</keyset>
+
+<popup id="contentAreaContextMenu">
+    <menuseparator id="context-bidi-sep" />
+	<menuitem id="context_invertdir" label="&Switch_Text_Direction.label;" oncommand="bidiext.invert_textbox_dir();" accesskey="W" key="invert_textbox_dir_key"/>
+    <menuitem id="context_page_dir" label="&Switch_Page_Direction.label;" oncommand="bidiext.invert_page_dir();" accesskey="g"/>	
+</popup>
+
+<popup id="menu_EditPopup">
+    <menuseparator/>
+	<menuitem id="edit_invertdir" label="&Switch_Text_Direction.label;" oncommand="bidiext.invert_textbox_dir();" accesskey="W"  key="invert_textbox_dir_key"/>
+</popup>
+
+<menupopup id="menu_viewPopup">
+    <menuitem id="invert_page_dir" label="&Switch_Page_Direction.label;" oncommand="bidiext.invert_page_dir();" position="11" accesskey="g"/>
+</menupopup>
+
+</overlay>
