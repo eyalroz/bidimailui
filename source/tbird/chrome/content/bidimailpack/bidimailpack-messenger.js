@@ -13,18 +13,20 @@ function SwitchMessageDirection() {
   var body = brwsr.docShell.contentViewer.DOMDocument.body;
   var currentDir = window.getComputedStyle(body, null).direction;
 
-  if (currentDir == 'rtl')
+  if (currentDir == 'rtl') {
     body.setAttribute('dir', 'ltr');
-  else
+    UpdateDirectionBroadcasters('ltr');
+  } 
+  else {
     body.setAttribute('dir', 'rtl');
-
-  // TB only
-  UpdateDirectionBroadcasters(dir);
+    UpdateDirectionBroadcasters('ltr');
+  }
 }
 
 // TB only - update optional direction buttons status
 function UpdateDirectionBroadcasters(direction) {
   var caster = document.getElementById("ltr-document-direction-broadcaster");
+  alert(caster);
   caster.setAttribute("checked", direction == "ltr");
   caster = document.getElementById("rtl-document-direction-broadcaster");
   caster.setAttribute("checked", direction == "rtl");
