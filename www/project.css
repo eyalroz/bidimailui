@@ -143,6 +143,7 @@ div#hebrew-navbar #project-navigation {
   font-size: smaller;
   list-style-type: square;
   list-style-image: url("http://www.mozdev.org/sharedimages/bullet.gif");
+  list-style-position: inside;
   padding-left: 5px;
   margin-left: 5px;
   padding-right: 5px;
@@ -156,6 +157,7 @@ div#hebrew-navbar #project-navigation {
   padding-right: 5px;
   margin-right: 5px;
   padding-bottom: 15px;
+  text-indent: 5px;
 }
 
 #main-content ol li {
