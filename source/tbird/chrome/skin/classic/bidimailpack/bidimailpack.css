@@ -86,5 +86,12 @@
 
 #margintop[status="non_valid_value"] > *
 {
-  background-color: red !important;
+  background-color: #FF6666;
+  color: #FFFFFF;
+}
+
+#marginbottom[status="non_valid_value"] > *
+{
+  background-color: #FF6666;
+  color: #FFFFFF;
 }
