@@ -55,7 +55,7 @@ function browserOnLoadHandler() {
          
   if (bodyIsPlainText && hasRTLWord(body))
   {
-    dirAlignMessage('rtl');
+    SetMessageDirection('rtl');
   }
 }
 
