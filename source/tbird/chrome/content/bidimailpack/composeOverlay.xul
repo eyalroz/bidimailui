@@ -22,13 +22,13 @@
 </broadcasterset>
 
 <commandset id="composerStyleMenuItems">
-  <command id="cmd_rtl_paragraph" oncommand="goDoCommand('cmd_rtl_paragraph');" />
-  <command id="cmd_ltr_paragraph" oncommand="goDoCommand('cmd_ltr_paragraph');" />
-  <command id="cmd_switch_paragraph" oncommand="goDoCommand('cmd_switch_paragraph');" />  
+  <command id="cmd_rtl_paragraph" oncommand="goDoCommand('cmd_rtl_paragraph');"  commandupdater="true" events="focus" oncommandupdate="CommandUpdate_MsgComposeDirection()" />
+  <command id="cmd_ltr_paragraph" oncommand="goDoCommand('cmd_ltr_paragraph');"  commandupdater="true" events="focus" oncommandupdate="CommandUpdate_MsgComposeDirection()" />
+  <command id="cmd_switch_paragraph" oncommand="goDoCommand('cmd_switch_paragraph');"  commandupdater="true" events="focus" oncommandupdate="CommandUpdate_MsgComposeDirection()" />
   <command id="cmd_rtl_document" oncommand="goDoCommand('cmd_rtl_document');" />
   <command id="cmd_ltr_document" oncommand="goDoCommand('cmd_ltr_document');" />
   <command id="cmd_switch_document" oncommand="goDoCommand('cmd_switch_document');" />
-  <command id="cmd_clear_paragraph_dir" oncommand="goDoCommand('cmd_clear_paragraph_dir');" />
+  <command id="cmd_clear_paragraph_dir" oncommand="goDoCommand('cmd_clear_paragraph_dir');"  commandupdater="true" events="focus" oncommandupdate="CommandUpdate_MsgComposeDirection()" />
 </commandset>
 
 <toolbarpalette id="MsgComposeToolbarPalette">
