@@ -275,6 +275,7 @@ function HandleDirectionButtons()
   {
     document.getElementById('ltr-paragraph-direction-broadcaster').setAttribute('hidden',hiddenButtons);
     document.getElementById('rtl-paragraph-direction-broadcaster').setAttribute('hidden',hiddenButtons);
+    document.getElementById('directionality-separator-formatting-bar').setAttribute('hidden',hiddenButtons);
   }
   else {
     // plain text mail
