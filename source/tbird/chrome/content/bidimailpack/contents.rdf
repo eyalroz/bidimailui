@@ -25,7 +25,7 @@
   </RDF:Seq>
 
   <RDF:Seq about="chrome://messenger/content/mailWindowOverlay.xul">
-    <RDF:li>chrome://bidimailpack/contents/messageOverlay.xul</RDF:li>
+    <RDF:li>chrome://bidimailpack/content/messageOverlay.xul</RDF:li>
   </RDF:Seq>
 
   <RDF:Seq about="chrome://messenger/content/messengercompose/messengercompose.xul">
@@ -40,6 +40,6 @@
   </RDF:Seq>
   
   <RDF:Seq about="chrome://global/content/customizeToolbar.xul">
-    <RDF:li>chrome://bidimailpack/contents/custOverlay.xul</RDF:li>
+    <RDF:li>chrome://bidimailpack/content/custOverlay.xul</RDF:li>
   </RDF:Seq>
 </RDF:RDF>
