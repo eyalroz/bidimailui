@@ -104,7 +104,6 @@ function composeWindowEditorOnLoadHandler() {
 
   // Decide what to show in the contextual menu
   document.getElementById('contextSwitchParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');
-  document.getElementById('contextClearParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');
   document.getElementById('contextBodyDirectionItem').setAttribute('hidden', editorType == 'htmlmail');
 
   // the following is a very ugly hack!
