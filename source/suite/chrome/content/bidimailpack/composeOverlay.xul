@@ -70,11 +70,16 @@ main toolbar buttons are whole-document direction controls -->
   <menuitem id="contextBodyDirectionItem" label="&menu-bidimail-switch-document-direction:label;"
     accesskey="&menu-bidimail-switch-document-direction:accesskey;" 
     command="cmd_switch_document" />
-  <menuseparator observes="rlm-lrm-broadcaster" />
-  <menuitem id="contextInsertLRM" label="&menu-bidimail-insert-lrm:label;"
-    oncommand="InsertEntity('&amp;lrm;')" observes="rlm-lrm-broadcaster" />
-  <menuitem id="contextInsertRLM" label="&menu-bidimail-insert-rlm:label;"
-    oncommand="InsertEntity('&amp;rlm;')" observes="rlm-lrm-broadcaster" />
+  <menu id="menu_Context_ControlCharacters"
+    label="&menu-bidimail-insert-contol-character:label;"
+    accesskey="&menu-bidimail-insert-contol-character:accesskey;">
+    <menupopup id="menu_Context_ControlCharacters_Popup">
+      <menuitem id="contextInsertRLM" label="&menu-bidimail-rlm:label;"
+        oncommand="InsertEntity('&amp;rlm;')" />
+      <menuitem id="contextInsertLRM" label="&menu-bidimail-lrm:label;"
+        oncommand="InsertEntity('&amp;lrm;')" />
+    </menupopup>
+  </menu>
 </popup>
 
 <menu id="menu_View">

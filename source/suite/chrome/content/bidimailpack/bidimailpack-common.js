@@ -2,9 +2,7 @@
 //
 // none, for now!
 
-
 function hasRTLWord(element) {
-
   // we check whether there exists a full word in the element text
   // consisting solely of characters of an RTL script
 
