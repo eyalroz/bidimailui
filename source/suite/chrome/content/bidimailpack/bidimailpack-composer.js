@@ -381,10 +381,11 @@ function composeWindowEditorDelayedOnLoadHandler() {
     catch(e) {}
   }
 
-  var re = /Gecko\/([0-9]+)/;
+  var re = /rv:([0-9.]+).*Gecko\/([0-9]+)/;
   var arr = re.exec(navigator.userAgent);
-  var build = arr[1];
-  gBug262497Workaround = (build < "20041202");
+  var revision = arr[1];
+  var build = arr[2];
+  gBug262497Workaround = (build < "20041202") || (revision < "1.8a6");
 
   // Handle message direction
   var messageIsAReply = false;
