@@ -3,9 +3,14 @@
 <!ENTITY key-bidimail-switch-document-direction:keycode               "X">
 <!ENTITY key-bidimail-switch-document-direction:modifiers             "accel,shift">
 
-<!ENTITY menu-bidimail-switch-paragraph-direction:label        "تحويل اتّجاه الparagraph">
+<!ENTITY menu-bidimail-switch-paragraph-direction:label        "تحويل اتّجاه الفقرة
+
+">
 <!ENTITY menu-bidimail-switch-paragraph-direction:accesskey    "w">
-<!ENTITY menu-bidimail-clear-paragraph-direction:label      "Clear Paragraph Direction">
+<!ENTITY menu-bidimail-clear-paragraph-direction:label      "
+مسح اتّجاه الفقرة
+
+">
 <!ENTITY menu-bidimail-clear-paragraph-direction:accesskey   "a">
 
 <!ENTITY bidimail-ltr-button:label                      "يسار إلى يمين">
