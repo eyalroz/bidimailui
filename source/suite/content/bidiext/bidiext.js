@@ -12,12 +12,26 @@ function get_Frames (frame, documentList) {
 
 var bidiext = {
 	init: function() {
-		var menu = document.getElementById('contentAreaContextMenu');
-		menu.addEventListener('popupshowing', bidiext.showHide, false);
+        var menu = document.getElementById('contentAreaContextMenu');
+        menu.addEventListener('popupshowing', bidiext.showHideContext, false);
+        var menuEdit = document.getElementById('menu_Edit_Popup');
+        menuEdit.addEventListener('popupshowing', bidiext.showHideEdit, false);
 	},
-	showHide: function() {
-		document.getElementById('context_invertdir').hidden = document.getElementById('context-undo').hidden;
-	},
+    showHideContext: function() {
+        document.getElementById('context_invertdir').hidden = document.getElementById('context-undo').hidden;
+    },
+    showHideEdit: function() {
+        if (document.commandDispatcher.focusedElement)
+        {    
+            var whatTag = document.commandDispatcher.focusedElement.tagName;
+            if ((whatTag == 'INPUT' || whatTag == 'TEXTAREA') || whatTag == 'html:input') 
+            {
+                document.getElementById('edit_invertdir').setAttribute("disabled", "false");
+                return;
+            }
+        }       
+        document.getElementById('edit_invertdir').setAttribute("disabled", "true");
+    },
     invert_textbox_dir: function() {
 		var theBox = document.commandDispatcher.focusedElement;
 		if (window.getComputedStyle(theBox,'').direction == 'rtl')
