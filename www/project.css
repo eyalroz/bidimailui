@@ -17,22 +17,20 @@ Mozilla resource:///res/html.css
   background: rgb(255,220,128);
 }
 
-/*
 div#english-navbar #project-navigation a{
-  border-left: 1px solid black;
+/*  border-left: 1px solid black;
   padding-left: 6px;
-  padding-right: 5px;
+  padding-right: 5px;*/
 }
 
 div#hebrew-navbar #project-navigation a{
-  border: none;
-  padding: 0;
+/*  border: none;
+  padding: 0;*/
 }
 
 div#english-navbar #project-navigation a.first-item{
-  border-left: none;
+/*  border-left: none;*/
 }
-*/
 
 div#english-navbar #project-navigation th{
   margin-right: 3px;
