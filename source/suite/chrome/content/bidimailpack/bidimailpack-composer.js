@@ -634,19 +634,18 @@ function onKeyPress(ev) {
   if (top.document.commandDispatcher.focusedWindow != content)
     return;
 
+  // Get the current editor
+  var editor = GetCurrentEditor();
+
   // workaround for Mozilla bug 262497 - let's make Ctrl+Home and Ctrl+End
-  // behave properly...
-  
+  // behave properly...  
   if (gBug262497Workaround && ev.ctrlKey) {
-
     // move the caret ourselves if need be
-
     if (ev.keyCode == KeyEvent.DOM_VK_HOME) {
       var node = document.getElementById('content-frame').contentDocument.body;;
       do {
         node = node.firstChild;
       } while (node.hasChildNodes());
-      var editor = GetCurrentEditor();
       editor.selection.collapse(node, 0);
     }
     else if (ev.keyCode == KeyEvent.DOM_VK_END) {
@@ -658,11 +657,9 @@ function onKeyPress(ev) {
       // XXX TODO: following is a special-case for dummy nodes at the
       //           end of a document, but there may be more possibilites
       //           for such dummy nodes which need to be taken into account
-
       if (node.nodeName == "BR")
         node = node.previousSibling;
 
-      var editor = GetCurrentEditor();
       // if this is a node with text, go to the end of it
       if (node.length)
         editor.selection.collapse(node, node.length);
@@ -670,7 +667,6 @@ function onKeyPress(ev) {
     }
 
     // and prevent the default behavior
-
     if ((ev.keyCode == KeyEvent.DOM_VK_HOME) || (ev.keyCode == KeyEvent.DOM_VK_END)) {
       // prevent default behavior
       ev.preventDefault();
@@ -707,7 +703,6 @@ function onKeyPress(ev) {
     // <p>[p1 content][p2 content]</p>
     // (NOT: <p>[p1 content]<br>[p2 content]</p> as nsIHTMLEditor's impl')
     else if (ev.keyCode == KeyEvent.DOM_VK_BACK_SPACE) {
-      var editor = GetCurrentEditor();
       if (editor.selection.isCollapsed) {
         var par = findClosestBlockElement(editor.selection.focusNode);
         var prevPar = par.previousSibling;
@@ -1014,7 +1009,8 @@ var directionSwitchController = {
         ClearParagraphDirection();
         break;
       default:
-        return false;
+        dump("The command " + command " isn't supported by the direction switch controller\n");
+        return;
     }
     this.setAllCasters();
   }
