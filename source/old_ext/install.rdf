@@ -13,7 +13,7 @@
       </Description>
     </em:targetApplication>    
 
-    <em:name>BiDi UI</em:name>
+    <em:name>BiDiBrowser UI</em:name>
     <em:description>Adds BiDi UI to Mozilla Firefox</em:description>
     <em:creator>Asaf Romano</em:creator>
     <em:homepageURL>http://bidiui.mozdev.org/</em:homepageURL>

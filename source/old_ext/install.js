@@ -1,5 +1,5 @@
 const author              = "Asaf Romano";
-const displayName         = "BiDi UI";
+const displayName         = "BiDiBrowser UI";
 const name                = "bidiext";
 const jarName             = name + ".jar";
 const existsInApplication = File.exists(getFolder(getFolder("chrome"), jarName));
