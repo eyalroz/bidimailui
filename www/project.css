@@ -37,17 +37,18 @@ div#hebrew-navbar #project-navigation th{
   color: #900;
   font-family: helvetica,arial,san-serif, serif;
   padding: 0;
+  margin: 0;
 }
 .project-name:after {
   content: url(http://www.mozdev.org/sharedimages/boxes.gif);
 }
 
 div#english-navbar .project-name:after {
-  padding-left: 1.1em;
+  padding-right: 1.1em;
 }
 
 div#hebrew-navbar .project-name:after {
-  padding-right: 1.1em;
+  padding-left: 1.1em;
 }
 
 div#hebrew-navbar {
