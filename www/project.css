@@ -109,6 +109,9 @@ h5 {
   padding-bottom: 15px;
 }
 
+#main-content ol li {
+  padding-bottom: 5px;
+}
 
 .infoTab .infoItems {
   font-size: smaller;
