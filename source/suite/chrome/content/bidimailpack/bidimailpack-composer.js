@@ -14,6 +14,7 @@ function GetCurrentParagraphDirection()
   try {
     if (editor.selection.rangeCount > 0)
     {
+      view = document.defaultView;
       for (i=0; i<editor.selection.rangeCount; ++i)
       {
         var range = editor.selection.getRangeAt(i);
@@ -25,7 +26,7 @@ function GetCurrentParagraphDirection()
           var closestBlockElement = findClosestBlockElement(node);
           if (closestBlockElement)
           {
-            var computedDir = closestBlockElement.ownerDocument.defaultView.getComputedStyle(closestBlockElement, "").getPropertyValue("direction");
+            var computedDir = view.getComputedStyle(closestBlockElement, "").getPropertyValue("direction");
             switch (computedDir)
             {
               case 'ltr':
@@ -183,14 +184,6 @@ function composeWindowEditorOnLoadHandler2() {
   directionSwitchController.setAllCasters();
 }
 
-function OnEditorDocumentFocus() {
-  directionSwitchController.setAllCasters();
-}
-
-function OnEditorDocumentLostFocus() {
-  directionSwitchController.setAllCasters();
-}
-
 function InstallComposeWindowEditorHandler() {
 
   // problem: if I add a handler for both events, than the first time
@@ -307,7 +300,7 @@ function onKeyPress(ev)
     return;
 
   // Steal all Enters but Shift-Enters. Shift-Enters should insert BR, as usual.
-  if ((ev.keyCode == KeyEvent.DOM_VK_ENTER || ev.keyCode == KeyEvent.DOM_VK_RETURN) && !ev.shiftKey)
+  if ((ev.keyCode == KeyEvent.DOM_VK_ENTER || ev.keyCode == KeyEvent.DOM_VK_RETURN) && !ev.shiftKey  && !isInList())
   {
     // Do whatever it takes to prevent the editor from inserting a BR
     ev.preventDefault();
@@ -317,6 +310,24 @@ function onKeyPress(ev)
     // ... and insert a paragraph break instead
     InsertParagraph();
   }
+}
+
+function isInList()
+{
+  var editor = GetCurrentEditor();
+  editor.beginTransaction();
+
+  var isListMixed = new Object;
+  var isListOl = new Object;
+  var isListUl = new Object;
+  var isListDl = new Object;
+  editor.getListState(isListMixed, isListOl, isListUl, isListDl);
+  editor.endTransaction();
+
+  if (isListOl.value || isListUl.value || isListDl.value)
+    return true;
+  else
+    return false;
 }
 
 // Will attempt to break the current line into two paragraphs (unless we're in a list).
@@ -330,24 +341,31 @@ function InsertParagraph()
   }
 
   editor.beginTransaction();
-  // Avoid mangling LIs and different kinds of paragraphs
+  // getParagraphState returns the paragraph state for the selection.
+  // A "new line" operation nukes the current selection.
+  // We want 'getParagraphState' to test the paragraph which the
+  // cursor would be on after the nuking, so we nuke it ourselves first.
   if (!editor.selection.isCollapsed)
    editor.deleteSelection(editor.eNone);
 
-  var isParMixed = new Object;
-  var isListMixed = new Object;
-  var isListOl = new Object;
-  var isListUl = new Object;
-  var isListDl = new Object;
+  var isParMixed = new Object; // would be ignored
   var parState;
   parState = editor.getParagraphState(isParMixed);
-  editor.getListState(isListMixed, isListOl, isListUl, isListDl);
 
-  if ((parState == "") && !isListOl.value && !isListUl.value && !isListDl.value)
+  if (parState == "")
     editor.setParagraphFormat("p");
   editor.insertLineBreak();
-  if (!isListOl.value && !isListUl.value && !isListDl.value)
-   editor.setParagraphFormat("p");
+  editor.setParagraphFormat("p");
+  var par = findClosestBlockElement(editor.selection.focusNode);
+  var prevPar = par.previousSibling;
+
+  alert('prevpar = ' + prevPar.innerHTML);
+  alert('par = ' + par.innerHTML);
+
+  // Hunt and shoot the extra BR. We don't want it.
+  var node = prevPar.lastChild;
+  if (node && (node.nodeType == node.ELEMENT_NODE) && (node.tagName.toUpperCase() == "BR") && (prevPar.childNodes.length > 1))
+    editor.deleteNode(node);
 
   editor.endTransaction();
 }
