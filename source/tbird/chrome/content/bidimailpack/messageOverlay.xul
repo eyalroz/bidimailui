@@ -17,8 +17,8 @@
 
   <keyset id="mailKeys">
     <key id="key-bidimail-switch"
-         modifiers="&key-bidimail-switch-document-direction:modifiers;"
-         key="&key-bidimail-switch-document-direction:keycode;"
+         modifiers="&key-bidimail-switch-document-direction.modifiers;"
+         key="&key-bidimail-switch-document-direction.keycode;"
          oncommand="SwitchMessageDirection()" />
   </keyset>
 
@@ -29,16 +29,16 @@
 
   <menupopup id="menu_View_Popup">
     <menuitem insertafter="mailviewCharsetMenu"
-              label="&menu-bidimail-switch-document-direction:label;"
-              accesskey="&menu-bidimail-switch-document-direction:accesskey;" 
+              label="&menu-bidimail-switch-document-direction.label;"
+              accesskey="&menu-bidimail-switch-document-direction.accesskey;" 
               key="key-bidimail-switch" oncommand="SwitchMessageDirection()" />
   </menupopup>
   
   <popup id="messagePaneContext">
     <menuseparator/>
-    <menuitem label="&menu-bidimail-switch-document-direction:label;"
+    <menuitem label="&menu-bidimail-switch-document-direction.label;"
               key="key-bidimail-switch"
-              accesskey="&menu-bidimail-switch-document-direction:accesskey;"
+              accesskey="&menu-bidimail-switch-document-direction.accesskey;"
               oncommand="SwitchMessageDirection()" />
   </popup>
   
@@ -47,13 +47,13 @@
                    class="toolbarbutton-1"
                    oncommand="SetMessageDirection('ltr');"
                    observes="ltr-document-direction-broadcaster"
-                   label="&bidimail-ltr-button:label;"
-                   tooltiptext="&bidimail-ltr-button:tip;" />
+                   label="&bidimail-ltr-button.label;"
+                   tooltiptext="&bidimail-ltr-button.tip;" />
     <toolbarbutton id="button-direction-rtl-main-bar"
                    class="toolbarbutton-1"
                    oncommand="SetMessageDirection('rtl');"
                    observes="rtl-document-direction-broadcaster"
-                   label="&bidimail-rtl-button:label;"
-                   tooltiptext="&bidimail-rtl-button:tip;" />  
+                   label="&bidimail-rtl-button.label;"
+                   tooltiptext="&bidimail-rtl-button.tip;" />  
   </toolbarpalette>
 </overlay>
