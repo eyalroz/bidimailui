@@ -1,7 +1,7 @@
 /* make the bar marking the quoted message appear      */
 /* to the right of it if we are replying right-to-left */
 
-body[dir="rtl"] blockquote[type=cite] {
+[dir="rtl"] blockquote[type=cite] {
   padding-right: 1em !important;
   padding-left: 0 !important;
   border-right-style: solid !important;
