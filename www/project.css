@@ -45,6 +45,14 @@ Mozilla resource:///res/html.css
   font-size: smaller;
 }
 
+div#english-navbar #project-navigation {
+  direction: ltr;
+}
+
+div#hebrew-navbar #project-navigation {
+  direction: rtl;
+}
+
 #project-navigation .navigation-list {
 }
 
