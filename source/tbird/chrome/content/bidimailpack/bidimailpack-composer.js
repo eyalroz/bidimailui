@@ -2,9 +2,9 @@
 // ---------------------------------------
 // the following 3 lines enable logging messages to the javascript console:
 //
-// netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
-// var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
-// jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
+netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
+jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 //
 // here is an example of a console log message describing a DOM node:
 // jsConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
@@ -25,8 +25,6 @@ var gBug262497Workaround;   // a boolean value which is true if we need to be ap
                             // of Ctrl+Home and Ctrl+End)
 
 function GetCurrentSelectionDirection() {
-
-  // jsConsoleService.logStringMessage('----- in GetCurrentSelectionDirection() -----');
 
   // The current selection is a forest of DOM nodes,
   // each of which is contained in a block HTML
@@ -295,35 +293,38 @@ function HandleDirectionButtons() {
 
 function LoadParagraphMode() {
   var editorType = GetCurrentEditorType();
-  if (editorType == 'htmlmail') {
-    // Determine Enter key behavior
-    try {
-      gAlternativeEnterBehavior =
-          gPrefService.getBoolPref("mailnews.alternative_enter_behavior");
+  if (editorType != 'htmlmail')
+    return;
+
+  // Determine Enter key behavior
+  try {
+    gAlternativeEnterBehavior =
+        gPrefService.getBoolPref("mailnews.alternative_enter_behavior");
+  }
+  catch(e) {} // pref probably not set
+
+  if (!gAlternativeEnterBehavior)
+    return;
+
+  // Get margin-top and margin-bottom prefs for paragraphs we add
+  // We use global variables in order to avoid different margins in the same document
+  gParagraphMarginTop    = getParagraphMarginFromPref("mailnews.paragraph.margin_top");
+  gParagraphMarginBottom = getParagraphMarginFromPref("mailnews.paragraph.margin_bottom");
+
+  // our extension likes paragraph text entry, not 'body text' - since
+  // paragraph are block elements, with a direction setting
+  try {
+    var editor = GetCurrentEditor();
+    if (editor) {
+      editor.setParagraphFormat("p");
+      var par = findClosestBlockElement(editor.selection.focusNode);
+      // Set Paragraph Margins
+      par.style.marginTop    = gParagraphMarginTop;
+      par.style.marginBottom = gParagraphMarginBottom;
     }
-    catch(e) {} // pref probably not set
-    
-    if (gAlternativeEnterBehavior) {
-      // Get margin-top and margin-bottom prefs for paragraphs we add
-      // We use global variables in order to avoid different margins in the same document
-      gParagraphMarginTop    = getParagraphMarginFromPref("mailnews.paragraph.margin_top");
-      gParagraphMarginBottom = getParagraphMarginFromPref("mailnews.paragraph.margin_bottom");
-      // our extension likes paragraph text entry, not 'body text' - since
-      // paragraph are block elements, with a direction setting
-      try {
-        var editor = GetCurrentEditor();
-        if (editor) {
-          doStatefulCommand('cmd_paragraphState', "p");
-          var par = findClosestBlockElement(editor.selection.focusNode);
-          // Set Paragraph Margins
-          par.style.marginTop    = gParagraphMarginTop;
-          par.style.marginBottom = gParagraphMarginBottom;
-        }
-      } catch(e) {
-        // since the window is not 'ready', something might throw
-        // an exception here, like inability to focus etc.
-      }
-    }
+  } catch(e) {
+    // since the window is not 'ready', something might throw
+    // an exception here, like inability to focus etc.
   }
 }
 
