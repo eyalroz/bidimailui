@@ -4,17 +4,18 @@
 
 <h2><a id="content" name="faq">Frequently-Asked Questions</a></h2>
 
-<h3><a name="blah">Installation & Removal</a></h3>
+<h3><a name="installation_and_removal">Installation & Removal</a></h3>
 
 <div class="faq-item">
-<div class="question">I have some version of Moofie's <code>hebmailpack</code> installed. What should I do before installing BiDi Mail UI?</div>
+<div class="question">I have some version of Moofie's <code>hebmailpack</code> installed. What should I do before installing <code>BiDi Mail UI?</code></div>
 <div class="answer">
-<p>First remove the old extension: Follow the instructions <a href="http://bidiui.mozdev.org/mail/installation.html#הוראות_הסרה_ידנית_מספריית_הפרופיל_האישי_של_מוזילה">here</a>, using the name <code>hebmailpack</code> instead of <code>bidimailpack</code>.
-Now install the new extension.</p>
+<p>That depends on whether you have the version Moofie made specifically for Thunderbird. To check whether you have that version installed, take a look at the Thunderbird extension panel. If you see Moofie's extension (the word 'Hebmailpack', or something mentioning Hebrew Mail or BiDi) - remove it as you would normally remove a Thunderbird extension - using the Uninstall button.</p>
+<p>If the extension does not appear in the panel, or if you're using the Mozilla suite, you will have to manually remove the old extension: Follow the instructions <a href="http://bidiui.mozdev.org/mail/installation.html#הוראות_הסרה_ידנית_מספריית_הפרופיל_האישי_של_מוזילה">here</a>, using the name <code>hebmailpack</code> instead of <code>bidimailpack</code>.</p>
+<p> <em>Note: Moofie's extension must also be manually removed from Thunderbird if it does not appear in the extension panel, so in this case the removal instructions apply to both Thunderbird and Mozilla suite!</em></p>
+<p>Now install the new extension.</p>
 </div>
 <hr>
 </div>
-
 
 <h3><a name="direction_detection">Automatic Direction Detection</a></h3>
 <div class="faq-item">
@@ -31,14 +32,95 @@ Now install the new extension.</p>
 <hr>
 </div>
 
+<h3><a name="keyboard_behavior">Keyboard Behavior</a></h3>
+
 <div class="faq-item">
-<div class="question">Another question</div>
+<div class="question">After installing <code>BiDi Mail UI</code>, As I compose new messages, I feel there's something weird about the behavior of the <code>Enter</code> key; what gives?</div>
 <div class="answer">
-<p>An answer</p>
+<p>Without the extension, pressing <code>Enter</code> in the composer window inserts a line break (i.e. the &lt;br&gt; HTML tag). The extension indeed changes the behavior, and now pressing <code>Enter</code> 'inserts a paragraph break' (e.g. inserts a paragraph-ending &lt;/p&gt;, followed by a new paragraph-beginning &lt;p&gt;). This behavior is similar to that of word processors such as OpenOffice Writer and Microsoft Office. Following this line of similarity, with the extension installed you can insert a line break by pressing <code>Shift+Enter</code>.</p>
 </div>
 <hr>
 </div>
 
+<div class="faq-item">
+<div class="question">Why does direction switching not use the keyboard shortcuts <code>Ctrl+LeftShift</code> and <code>Ctrl+RightShift</code>, like in Microsoft Windows and popular Hebrew keyboard layouts for X?</div>
+<div class="answer">
+<p>We are hoping to eventually do so, but we are not yet able to, due to problems in keyboard input handling in Mozilla.</p>
+</div>
+<hr>
+</div>
+
+<h3><a name="replying_to_messages">Replying to Messages</a></h3>
+
+<div class="faq-item">
+<div class="question">When I reply to a Right-to-Left message, the message-quote bar continues to appear on the left of the message instead of moving over to the right. Can I make it behave the way I want to?</div>
+<div class="answer">
+<p>Add the following rules to <code>userChrome.css</code> in your profile's <code>chrome</code> folder:</p>
+<div class="code-segment">blockquote[type=cite] {
+  border-color: inherit !important;
+  border-width: 3px !important;
+}
+
+body[dir=rtl] blockquote[type=cite] {
+  padding-right: 1em !important;
+  padding-left: 0 !important;
+  border-right: 3px solid !important;
+  border-left: 0 !important;
+}
+</div>
+<p>If you like, here are some extra rules for <code>userContent.css</code> which will change the color of quoted text based on the quote depth:</p>
+<div class="code-segment">blockquote[type=cite] {
+  color: #660066 !important;
+}
+blockquote[type=cite] blockquote {
+  color: #007777 !important;
+}
+blockquote[type=cite] blockquote blockquote {
+  color: #990000 !important;
+}
+blockquote[type=cite] blockquote blockquote blockquote {
+  color: #000099 !important;
+}
+blockquote[type=cite] blockquote blockquote blockquote blockquote {
+  color: #bb6600 !important;
+}
+</div>
+<p>Alternatively, you can disable the bar altogether and see the textual quote '&gt;' marks, by the setting the preference <code>"mail.quoted_graphical"</code> to <code>false</code>; do so using the <code>about:config</code> URL in the Mozilla suite or by adding the following line to your profile's <code>user.js</code> file:
+<div class="code-segment">pref("mail.quoted_graphical", false);
+</div>
+<p>This FAQ item has been ripped off from Moofie :-) We are considering incorporating some of this CSS into the extension itself.</p>
+</div>
+<hr>
+</div>
+
+<div class="faq-item">
+<div class="question">When I reply to a Right-to-Left message, the reply composer is not always aligned to the right when it opens.</div>
+<div class="answer">
+<p>This is a known issue in some configurations. It will be fixed when we figure out the cause of this failure.</p>
+</div>
+<hr>
+</div>
+
+
+<h3><a name="miscellany">Miscellany</a></h3>
+
+<div class="faq-item">
+<div class="question">I noticed that some code from the <code>BiDi Browser UI</code> extension was incorporated into the Mozilla codebase. Can we expect this to happen with this extension also? How soon?</div>
+<div class="answer">
+<p>That's a very perecptive question... it is possible that code adoption will also happen with this extension, but there are no immediate plans for something like this. If you want to pester somebody more authoritative on this issue, take it up with one of the <a href="http://www.mozilla.org/owners.html">owners or peers</a> of the <a href="http://www.mozilla.org/owners.html#Mail/News">Mail/News</a>, <a href="http://www.mozilla.org/owners.html#Standalone%20Mail">Standalone Mail</a>, or <a href="http://www.mozilla.org/owners.html#Composer">Composer</a> modules.</p>
+</div>
+<hr>
+</div>
+
+<div class="faq-item">
+<div class="question">I have another issue which is not covered in this FAQ...</div>
+<div class="answer">
+<p>That's great! Submit a bug in our <a href="/bugs.html">bugs</a> section. Make sure to give as much detail as possible, and provide instructions for reproducing your problem.</p>
+</div>
+<hr>
+</div>
+
+<!--
 <h3><a name="blah">Some other subject</a></h3>
 
 <div class="faq-item">
@@ -48,8 +130,7 @@ Now install the new extension.</p>
 </div>
 <hr>
 </div>
+-->
 
-
-<p>more FAQs to follow...</p>
 <hr>
 </div>

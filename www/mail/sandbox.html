@@ -4,7 +4,7 @@
 
 <h2><a id="content" name="faq">Frequently-Asked Questions</a></h2>
 
-<h3><a name="blah">Installation & Removal</a></h3>
+<h3><a name="installation_and_removal">Installation & Removal</a></h3>
 
 <div class="faq-item">
 <div class="question">I have some version of Moofie's <code>hebmailpack</code> installed. What should I do before installing BiDi Mail UI?</div>
@@ -32,7 +32,7 @@
 <hr>
 </div>
 
-<h3><a name="blah">Keyboard Behavior</a></h3>
+<h3><a name="keyboard_behavior">Keyboard Behavior</a></h3>
 
 <div class="faq-item">
 <div class="question">After installing BiDi Mail UI, As I compose new messages, I feel there's something weird about the behavior of the Enter key; what gives?</div>
@@ -50,14 +50,13 @@
 <hr>
 </div>
 
-<h3><a name="blah">Replying to Messages</a></h3>
+<h3><a name="replying_to_messages">Replying to Messages</a></h3>
 
 <div class="faq-item">
 <div class="question">When I reply to a Right-to-Left message, the message-quote bar continues to appear on the left of the message instead of moving over to the right. Can I make it behave the way I want to?</div>
 <div class="answer">
 <p>Add the following rules to <code>userChrome.css</code> in your profile's <code>chrome</code> folder:</p>
-<div class="code-segment">
-blockquote[type=cite] {
+<div class="code-segment">blockquote[type=cite] {
   border-color: inherit !important;
   border-width: 3px !important;
 }
@@ -70,8 +69,7 @@ body[dir=rtl] blockquote[type=cite] {
 }
 </div>
 <p>If you like, here are some extra rules for <code>userContent.css</code> which will change the color of quoted text based on the quote depth:</p>
-<div class="code-segment">
-blockquote[type=cite] {
+<div class="code-segment">blockquote[type=cite] {
   color: #660066 !important;
 }
 blockquote[type=cite] blockquote {
@@ -88,8 +86,7 @@ blockquote[type=cite] blockquote blockquote blockquote blockquote {
 }
 </div>
 <p>Alternatively, you can disable the bar altogether and see the textual quote '&gt;' marks, by the setting the preference <code>"mail.quoted_graphical"</code> to <code>false</code>; do so using the <code>about:config</code> URL in the Mozilla suite or by adding the following line to your profile's <code>user.js</code> file:
-<div class="code-segment">
-pref("mail.quoted_graphical", false);
+<div class="code-segment">pref("mail.quoted_graphical", false);
 </div>
 <p>This FAQ item has been ripped off from Moofie :-) We are considering incorporating some of this CSS into the extension itself.</p>
 </div>
@@ -105,7 +102,7 @@ pref("mail.quoted_graphical", false);
 </div>
 
 
-<h3><a name="blah">Miscellany</a></h3>
+<h3><a name="miscellany">Miscellany</a></h3>
 
 <div class="faq-item">
 <div class="question">I noticed that some code from the BiDi UI Browser extension was incorporated into the Mozilla codebase. Can we expect this to happen with this extension also? How soon?</div>
