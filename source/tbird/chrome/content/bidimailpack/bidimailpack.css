@@ -10,8 +10,34 @@
 
 #button-direction-ltr-formatting-bar {
   list-style-image: url("chrome://bidimailpack/skin/ltr-formatting-bar.png");
+  -moz-image-region: rect(0px 19px 18px 0px);
+}
+
+#button-direction-ltr-formatting-bar:hover {
+  -moz-image-region: rect(0px 38px 18px 19px);
+}
+
+#button-direction-ltr-formatting-bar:hover:active {
+  -moz-image-region: rect(0px 57px 18px 38px);
+}
+
+#button-direction-ltr-formatting-bar[disabled="true"] {
+  -moz-image-region: rect(0px 76px 18px 57px) !important;
 }
 
 #button-direction-rtl-formatting-bar {
   list-style-image: url("chrome://bidimailpack/skin/rtl-formatting-bar.png");
+  -moz-image-region: rect(0px 19px 18px 0px);
+}
+
+#button-direction-rtl-formatting-bar:hover {
+  -moz-image-region: rect(0px 38px 18px 19px);
+}
+
+#button-direction-rtl-formatting-bar:hover:active {
+  -moz-image-region: rect(0px 57px 18px 38px);
+}
+
+#button-direction-rtl-formatting-bar[disabled="true"] {
+  -moz-image-region: rect(0px 76px 18px 57px) !important;
 }
