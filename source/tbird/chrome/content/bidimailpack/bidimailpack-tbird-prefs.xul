@@ -33,7 +33,6 @@
      <spacer />
      <checkbox id="bidimailpack-reply-in-default-dir" checked="false" label="&always-reply-in-default-dir;" autostretch="never" />
      <checkbox id="bidimailpack-display-buttons" checked="true" label="&display-buttons;" autostretch="never" />
-     <checkbox id="bidimailpack-display-context-control-charcters" checked="false" label="&display-rlm-lrm-contextual-menu-items;" autostretch="never" />
   </groupbox>
 
 </dialog>
