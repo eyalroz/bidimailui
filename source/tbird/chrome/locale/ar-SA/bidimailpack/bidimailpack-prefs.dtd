@@ -1,4 +1,5 @@
 <!ENTITY bidimailpack-settings                   "BiDi Mail UI إعدادات">
+<!ENTITY message-composition-groupbox-caption    "تأليف الرّسالة">
 <!ENTITY default-dir                             "الاتّجاه الافتراضي:">
 <!ENTITY rtl                                     "يمين إلى يسار">
 <!ENTITY ltr                                     "يسار إلى يمين">
