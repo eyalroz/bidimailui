@@ -8,6 +8,10 @@ Mozilla resource:///res/html.css
 
 */
 
+code {
+  unicode-bidi: embed;
+}
+
 #project-navigation a{
   border: none;
   padding: 0;
