@@ -145,10 +145,6 @@ function composeWindowEditorOnLoadHandler2() {
           // the initial setting; perhaps instead of this
           // we should have an 'init' method for the controller?
 
-        //var editor = GetCurrentEditor();
-        //editor.document.addEventListener('focus', OnEditorDocumentFocus, true);
-        //editor.document.addEventListener('lostfocus', OnEditorDocumentLostFocus, true);
-
         return;
 
       } catch(e1) {
@@ -170,17 +166,6 @@ function composeWindowEditorOnLoadHandler2() {
 
   directionSwitchController.setAllCasters();
 
-  //var editor = GetCurrentEditor();
-  //editor.document.addEventListener('focus', OnEditorDocumentFocus, true);
-  //editor.document.addEventListener('lostfocus', OnEditorDocumentLostFocus, true);
-}
-
-function OnEditorDocumentFocus() {
-  directionSwitchController.setAllCasters();
-}
-
-function OnEditorDocumentLostFocus() {
-  directionSwitchController.setAllCasters();
 }
 
 function InstallComposeWindowEditorHandler() {
