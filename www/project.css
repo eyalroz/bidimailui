@@ -1,0 +1,102 @@
+@import url("/hide_from_ns4.css");
+
+.project-name {
+  background: inherit;
+  color: #900;
+  font-family: helvetica,arial,san-serif, serif;
+  padding: 0;
+}
+.project-name:after {
+  content: url(http://www.mozdev.org/sharedimages/boxes.gif);
+  padding-left: 1.1em;
+}
+
+/*
+
+Mozilla resource:///res/html.css
+
+h5 {
+  display: block;
+  font-size: 0.83em;
+  font-weight: bold;
+  margin: 1.67em 0;
+}
+
+*/
+
+#content,
+.page-header {
+  background: inherit;
+  color: #000;
+  font-family: helvetica,arial,san-serif, serif;
+  font-size: 1em;
+  padding: 0;
+}
+
+.project-navigations {
+  margin-bottom: 2em;
+  border: none; /* work around weird ns4 bug */
+  font-size: smaller;
+}
+
+#project-navigation .navigation-list {
+}
+
+#project-navigation th {
+  background-color: inherit;
+  background-image: url("http://www.mozdev.org/sharedimages/nav-icon.png");
+  background-repeat: no-repeat;
+  color: #900;
+  font-family: helvetica,arial,san-serif, serif;
+  padding-left: 18px;
+  padding-top: 0;
+  margin-bottom: 0;
+  margin-top: 0;
+  vertical-align: top;
+}
+
+
+#infoTabs {
+  float: right;
+}
+
+.infoTab {
+  margin: 10px;
+  width: 154px;
+}
+
+.infoTab .infoHeader {
+  background: #f90 no-repeat url("http://www.mozdev.org/sharedimages/infotab_top.png");
+  color: #fff;
+  text-align: center;
+  font-family: Helvetica, Arial,san-serif, serif;
+  font-weight: bold;
+}
+
+#main-content-no-nav ul,
+#main-content ul {
+  font-size: smaller;
+  list-style-type: square;
+  list-style-image: url("http://www.mozdev.org/sharedimages/bullet.gif");
+  list-style-position: inside;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+#main-content-no-nav li,
+#main-content li {
+  padding-bottom: 15px;
+}
+
+
+.infoTab .infoItems {
+  font-size: smaller;
+}
+
+.infoTab .infoItems div {
+  background: white no-repeat url("http://www.mozdev.org/sharedimages/bullet.gif");
+  color: inherit;
+  padding-left: 16px;
+  padding-bottom: 5px;
+}
+
