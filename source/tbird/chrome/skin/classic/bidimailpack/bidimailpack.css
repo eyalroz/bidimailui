@@ -98,12 +98,8 @@
   -moz-appearance: textfield !important;
 }
 
-#margintop[classictheme="winstripe"][status="non_valid_value"] > *,
-#marginbottom[classictheme="winstripe"][status="non_valid_value"] > * {
-  background-color: #FF6666;
-  color: #FFFFFF;
-}
-
+#margintop[classictheme="winstripe"][status="non_valid_value"] *,
+#marginbottom[classictheme="winstripe"][status="non_valid_value"] *,
 #margintop[classictheme="pinstripe"][status="non_valid_value"] > hbox > textbox,
 #marginbottom[classictheme="pinstripe"][status="non_valid_value"] > hbox > textbox {
   background-color: #FF6666;
