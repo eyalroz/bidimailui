@@ -21,7 +21,7 @@
                     <xul:menuitem label="&pixelScale.label;" 
                                   accesskey="&pixelScale.accesskey;" />
                     <xul:menuitem label="&ptScale.label;"
-                                  accesskey="&pt.accesskey;" />
+                                  accesskey="&ptScale.accesskey;" />
                 </xul:menupopup>
             </xul:menulist>
         </content>
