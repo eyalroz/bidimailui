@@ -4,16 +4,14 @@
 <!ENTITY rtl                                     "يمين إلى يسار">
 <!ENTITY ltr                                     "يسار إلى يمين">
 <!ENTITY always-reply-in-default-dir             "الرّد دائماً بالاتّجاه التّلقائي">
-<!ENTITY more-info                               "للمزيد من المعلومات:">
-<!ENTITY link-text                               "BiDi UI صفحة ويب">
+<!ENTITY guide-url                               "http://bidiui.mozdev.org/mail/guide.html">
 <!ENTITY bidimailpack-preftree-label             "BiDi Mail UI">
 <!ENTITY display-buttons                         "عرض أزرار إعداد الاتّجاه">
 
-<!ENTITY marginTopTitle.label      "الفراغ فوق الفقرة:">
-<!ENTITY marginBottomTitle.label   "الفراغ تحت الفقرة:">
-<!ENTITY cmScale.label             "سم">
-<!ENTITY cmScale.accesskey         "س">
-<!ENTITY pixelScale.label          "بكسل">
-<!ENTITY pixelScale.accesskey      "ب">
-<!ENTITY ptScale.label             "نقطة">
-<!ENTITY ptScale.accesskey         "ن">
+<!ENTITY verticalParagraphMargins.label          "Paragarph vertical margins:">
+<!ENTITY cmScale.label                           "سم">
+<!ENTITY cmScale.accesskey                       "س">
+<!ENTITY pixelScale.label                        "بكسل">
+<!ENTITY pixelScale.accesskey                    "ب">
+<!ENTITY ptScale.label                           "نقطة">
+<!ENTITY ptScale.accesskey                       "ن">

@@ -1,4 +1,5 @@
 <!ENTITY bidimailpack-settings                   "אפשרויות BiDi Mail UI">
+<!ENTITY message-composition-groupbox-caption    "חיבור הודעות">
 <!ENTITY default-dir                             "כיוון ברירת-מחדל:">
 <!ENTITY rtl                                     "מימין לשמאל">
 <!ENTITY ltr                                     "משמאל לימין">
