@@ -1,15 +1,22 @@
+// A note for debugging the code
+// ---------------------------------------
+// the following 3 lines enable logging messages to the javascript console:
+//
+// netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+// var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
+// jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
+//
+// here is an example of a console log message describing a DOM node:
+// jsConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
+
+
 // Globals
 var gLastWindowToHaveFocus;
 var gAlternativeEnterBehavior = true;
+var gBug262497Workaround;
 
 function GetCurrentSelectionDirection()
 {
-  // the following 3 lines enable logging messages to the javascript console
-  // by doing jsConsoleService.logStringMessage('blah')
-
-  // netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
-  // var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
-  // jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 
   // jsConsoleService.logStringMessage('----- in GetCurrentSelectionDirection() -----');
 
@@ -352,6 +359,11 @@ function composeWindowEditorDelayedOnLoadHandler() {
     catch(e) {} // pref probably not set
   }
 
+  var re = /Gecko\/([0-9]+)/;
+  var arr = re.exec(navigator.userAgent);
+  var build = arr[1];
+  gBug262497Workaround = (build < "20041202");
+
   // Handle message direction
   var messageIsAReply = false;
   try {
@@ -528,9 +540,7 @@ function onKeyPress(ev)
   // workaround for Mozilla bug 262497 - let's make Ctrl+Home and Ctrl+End
   // behave properly...
   
-  // XXX TODO: add a version check here once the patch from 262497 is checked in
-  
-  if (ev.ctrlKey){
+  if (gBug262497Workaround && ev.ctrlKey){
 
     // move the caret ourselves if need be
 
@@ -543,15 +553,20 @@ function onKeyPress(ev)
       editor.selection.collapse(node, 0);
     }
     else if (ev.keyCode == KeyEvent.DOM_VK_END) {
-      var node = document.getElementById('content-frame').contentDocument.body;;
+      var node = document.getElementById('content-frame').contentDocument.body;
       do {
         node = node.lastChild;
       } while (node.hasChildNodes());
+
+      // XXX TODO: following is a special-case for dummy nodes at the
+      //           end of a document, but there may be more possibilites
+      //           for such dummy nodes which need to be taken into account
+
+      if (node.nodeName == "BR")
+        node = node.previousSibling;
+
       var editor = GetCurrentEditor();
-
-      // XXX TODO: special-case dummy nodes at end of document,
-      //           e.g. dummy <br>'s, dummy whitespace and dummy <p>'s
-
+      // if this is a node with text, go to the end of it
       if (node.length)
         editor.selection.collapse(node, node.length);
       else editor.selection.collapse(node, 0);
