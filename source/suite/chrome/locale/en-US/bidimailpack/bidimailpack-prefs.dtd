@@ -1,6 +1,4 @@
 <!ENTITY bidimailpack-settings                   "BiDi Mail UI Options">
-<!ENTITY message-display-groupbox-caption        "Message Display">
-<!ENTITY autodetect                              "Auto-Detect meessage direction">
 <!ENTITY message-composition-groupbox-caption    "Message Composition">
 <!ENTITY default-dir                             "Default Direction:">
 <!ENTITY rtl                                     "Right to Left">
