@@ -152,6 +152,10 @@ div#hebrew-navbar #project-navigation {
 
 #main-content-no-nav li,
 #main-content li {
+  padding-left: 5px;
+  margin-left: 5px;
+  padding-right: 5px;
+  margin-right: 5px;
   padding-bottom: 15px;
 }
 
