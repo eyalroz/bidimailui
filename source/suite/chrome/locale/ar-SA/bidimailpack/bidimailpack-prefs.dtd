@@ -1,4 +1,4 @@
-<!ENTITY bidimailpack-settings                   "BiDi Mail UI إعدادات">
+﻿<!ENTITY bidimailpack-settings                   "BiDi Mail UI إعدادات">
 <!ENTITY message-composition-groupbox-caption    "تأليف الرّسالة">
 <!ENTITY default-dir                             "الاتّجاه الافتراضي:">
 <!ENTITY rtl                                     "يمين إلى يسار">
@@ -8,7 +8,7 @@
 <!ENTITY bidimailpack-preftree-label             "BiDi Mail UI">
 <!ENTITY display-buttons                         "عرض أزرار إعداد الاتّجاه">
 
-<!ENTITY verticalParagraphMargins.label          "Paragarph vertical margins:">
+<!ENTITY verticalParagraphMargins.label          "هوامش الفقرة العموديّة:">
 <!ENTITY cmScale.label                           "سم">
 <!ENTITY cmScale.accesskey                       "س">
 <!ENTITY pixelScale.label                        "بكسل">
