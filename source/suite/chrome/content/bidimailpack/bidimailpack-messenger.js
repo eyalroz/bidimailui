@@ -3,15 +3,14 @@
 // none, for now!
 
 
-
-function dirAlignMessage(dir) {
+function SetMessageDirection(dir) {
   var brwsr = getMessageBrowser();
   if (!brwsr) return;
   var body = brwsr.docShell.contentViewer.DOMDocument.body;
   body.setAttribute('dir', dir);
 }
 
-function switchMessageDirectionality() {
+function SwitchMessageDirection() {
   var brwsr = getMessageBrowser();
   if (!brwsr) return;
   var body = brwsr.docShell.contentViewer.DOMDocument.body;
@@ -63,7 +62,6 @@ function browserOnLoadHandler() {
   {
     dirAlignMessage('rtl');
   }
-  
 }
 
 function InstallBrowserHandler() {

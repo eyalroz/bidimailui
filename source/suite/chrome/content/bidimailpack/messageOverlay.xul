@@ -17,20 +17,20 @@
   <keyset id="mailKeys">
     <key id="key-bidimail-switch"
         modifiers="&key-bidimail-switch-document-direction:modifiers;" key="&key-bidimail-switch-document-direction:keycode;"
-        oncommand="switchMessageDirectionality()" />
+        oncommand="SwitchMessageDirection()" />
   </keyset>
 
   <menupopup id="menu_View_Popup">
     <menuitem insertafter="mailviewCharsetMenu" label="&menu-bidimail-switch-document-direction:label;"
         accesskey="&menu-bidimail-switch-document-direction:accesskey;" 
-        key="key-bidimail-switch" oncommand="switchMessageDirectionality()" />
+        key="key-bidimail-switch" oncommand="SwitchMessageDirection()" />
   </menupopup>
   
   <popup id="messagePaneContext">
     <menuseparator/>
     <menuitem label="&menu-bidimail-switch-document-direction:label;" key="key-bidimail-switch"
         accesskey="&menu-bidimail-switch-document-direction:accesskey;" 
-        oncommand="switchMessageDirectionality()" />
+        oncommand="SwitchMessageDirection()" />
   </popup>
   
 </overlay>
