@@ -10,7 +10,7 @@ Mozilla resource:///res/html.css
 
 #project-navigation a{
   border: none;
-  padding: none;
+  padding: 0;
 /*  padding-left: 5px;
   padding-right: 5px;*/
 }
