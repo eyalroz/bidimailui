@@ -501,7 +501,11 @@ function InsertParagraph()
   EditorGetTextProperty("tt", "", "", isStyleTT, anyHas, allHas);
   var isStyleFontFace = { value: false };
   EditorGetTextProperty("font", "face", "", isStyleFontFace, anyHas, allHas);
-  styleFontFace=editor.getFontFaceState(allHas);
+  var styleFontFace;
+  styleFontFace = editor.getFontFaceState(allHas);
+  var isStyleFontColor = { value: false };
+  EditorGetTextProperty("font", "color", "", isStyleFontColor, anyHas, allHas);
+  var styleFontColor = editor.getFontColorState(allHas);
   // ------------------------------- "remember old style"
 
 
@@ -547,6 +551,8 @@ function InsertParagraph()
     EditorSetTextProperty("tt", "", "");
   if (isStyleFontFace.value) // font-face can't be "mixed": there is no selected text
     EditorSetTextProperty("font", "face", styleFontFace);
+  if (isStyleFontColor.value) // same as above
+    EditorSetTextProperty("font", "color", styleFontColor);
   // ------------------------------- "set old style"
 }
 
