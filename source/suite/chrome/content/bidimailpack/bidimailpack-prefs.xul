@@ -49,4 +49,13 @@
             prefbase="editor.paragraph.vertical_margins"/>
     </hbox>
   </groupbox>
+
+  <spacer style="height: 1em" />
+
+  <description>
+    <hbox>
+      <label value="&more-info;" />
+      <html:a href="&guide-link-url;" onclick="open(this.href, '_new');return false;" style="cursor: pointer; color: blue;">&guide-link-text;</html:a>
+    </hbox>
+  </description>
 </page>

@@ -4,7 +4,9 @@
 <!ENTITY rtl                                     "يمين إلى يسار">
 <!ENTITY ltr                                     "يسار إلى يمين">
 <!ENTITY always-reply-in-default-dir             "الرّد دائماً بالاتّجاه التّلقائي">
-<!ENTITY guide-url                               "http://bidiui.mozdev.org/mail/guide.html">
+<!ENTITY more-info                               "لمزيد من المعلومات:">
+<!ENTITY guide-link-text                         "دليل المستخدم لـ BiDi Mail UI">
+<!ENTITY guide-link-url                          "http://bidiui.mozdev.org/mail/guide.html">
 <!ENTITY bidimailpack-preftree-label             "BiDi Mail UI">
 <!ENTITY display-buttons                         "عرض أزرار إعداد الاتّجاه">
 
@@ -15,3 +17,4 @@
 <!ENTITY pixelScale.accesskey                    "ب">
 <!ENTITY ptScale.label                           "نقطة">
 <!ENTITY ptScale.accesskey                       "ن">
+
