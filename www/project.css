@@ -65,7 +65,7 @@ div#english-navbar {
   background-image: url("http://www.mozdev.org/sharedimages/nav-icon.png");
   background-repeat: no-repeat;
   color: #900;
-  font-family: helvetica,arial,san-serif, serif;
+  font-family: helvetica,arial,sans-serif, serif;
   padding-top: 0;
   margin-bottom: 0;
   margin-top: 0;
@@ -77,7 +77,7 @@ div#english-navbar {
   background-image: url("http://www.mozdev.org/sharedimages/nav-icon.png");
   background-repeat: no-repeat;
   color: #900;
-  font-family: helvetica,arial,san-serif, serif;
+  font-family: helvetica,arial,sans-serif, serif;
   padding-top: 0;
   margin-bottom: 0;
   margin-top: 0;
@@ -92,6 +92,10 @@ div#english-navbar #project-navigation th {
 div#hebrew-navbar #project-navigation-hebrew th {
   padding-right: 18px;
   background-position: right;
+}
+
+#project-navigation-hebrew {
+  font-family: verdana, arial, sans-serif;
 }
 
 
