@@ -60,12 +60,12 @@ Mozilla resource:///res/html.css
   vertical-align: top;
 }
 
-div.#english-navbar #project-navigation th {
+div#english-navbar #project-navigation th {
   padding-left: 18px;
   background-position: left;
 }
 
-div.#hebrew-navbar #project-navigation th {
+div#hebrew-navbar #project-navigation th {
   padding-right: 18px;
   background-position: right;
 }
