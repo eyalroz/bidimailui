@@ -29,7 +29,7 @@
   </menupopup>
   
   <popup id="messagePaneContext">
-    <menuseparato r/>
+    <menuseparator />
     <menuitem label="&menu-bidimail-switch-document-direction:label;"
               key="key-bidimail-switch"
               accesskey="&menu-bidimail-switch-document-direction:accesskey;" 
