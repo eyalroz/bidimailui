@@ -17,8 +17,9 @@
 
   <keyset id="mailKeys">
     <key id="key-bidimail-switch"
-        modifiers="&key-bidimail-switch-document-direction:modifiers;" key="&key-bidimail-switch-document-direction:keycode;"
-        oncommand="SwitchMessageDirection()" />
+         modifiers="&key-bidimail-switch-document-direction:modifiers;"
+         key="&key-bidimail-switch-document-direction:keycode;"
+         oncommand="SwitchMessageDirection()" />
   </keyset>
 
   <menupopup id="menu_View_Popup">
@@ -30,21 +31,22 @@
   
   <popup id="messagePaneContext">
     <menuseparator/>
-    <menuitem label="&menu-bidimail-switch-document-direction:label;" key="key-bidimail-switch"
-        accesskey="&menu-bidimail-switch-document-direction:accesskey;" 
-        oncommand="SwitchMessageDirection()" />
+    <menuitem label="&menu-bidimail-switch-document-direction:label;"
+              key="key-bidimail-switch"
+              accesskey="&menu-bidimail-switch-document-direction:accesskey;"
+              oncommand="SwitchMessageDirection()" />
   </popup>
   
   <toolbarpalette id="MailToolbarPalette">
     <toolbarbutton id="button-direction-ltr-main-bar"
                    class="toolbarbutton-1"
-                   oncommand="alert('a'); SetMessageDirection('ltr');"
+                   command="cmd-ltr-document"
                    observes="ltr-document-direction-broadcaster"
                    label="&bidimail-ltr-button:label;"
                    tooltiptext="&bidimail-ltr-button:tip;" />
     <toolbarbutton id="button-direction-rtl-main-bar"
                    class="toolbarbutton-1"
-                   oncommand="alert('b'); SetMessageDirection('rtl');"
+                   command="cmd-rtl-document"
                    observes="rtl-document-direction-broadcaster"
                    label="&bidimail-rtl-button:label;"
                    tooltiptext="&bidimail-rtl-button:tip;" />  
