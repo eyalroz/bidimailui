@@ -97,22 +97,21 @@ removal of BiDi Mail UI from Mozilla 1.x Suite application folder </a></h3>
 
 <p>The following instructions only apply to Mozilla, not to Thunderbird.</p>
 <ol>
-  <li>Open Mozilla's chrome folder</li>
+  <li>Open Mozilla's <code>chrome</code> folder</li>
   <li>Edit the file installed-chrome.txt and delete any line that
-contains the string "bidimailpack.jar".</li>
-  <li>Delete the file bidimailpack.jar</li>
-  <li>Delete the folder overlayinfo and any file contained within it</li>
-  <li>Delete the file chrome.rdf</li>
-Restart Mozilla (in Linux, do it as root if needed). Mozilla
-will recreate the overlayinfo folder and the chrome.rdf file that were
-deleted in steps #4 and #5.</ol>
+contains the string <code>bidimailpack.jar</code>.</li>
+  <li>Delete the file <code>bidimailpack.jar</code> .</li>
+  <li>Delete the folder <code>overlayinfo</code> and everyting it contains.</li>
+  <li>Delete the file <code>chrome.rdf</code> .</li>
+  <li>Restart Mozilla (in Linux, do it as root if needed). Mozilla
+will now regenerate the deleted <code>overlayinfo</code> folder and the <code>chrome.rdf</code> file.
+</ol>
 
 <h3><a name="הוראות_הסרה_ידנית_מספריית_הפרופיל_האישי_של_מוזילה"> Manual
 removal of BiDi Mail UI from Mozilla 1.x Suite user's profile folder </a></h3>
 <p>
 The following instructions only apply to Mozilla, not to Thunderbird.</p>
 <ol>
-
   <li>Close Mozilla.</li>
   <li>Open your profile's <code>chrome</code> folder - the files mentioned
   below are all located there.</li>
@@ -122,7 +121,7 @@ The following instructions only apply to Mozilla, not to Thunderbird.</p>
 delete the tags beginning with <code>&lt;RDF:Seq RDF:about</code>
 that contain the word <code>bidimailpack</code> (note these may be multi-line tags!).</li>
   <li>Edit the file <code>chrome.rdf</code> in the chrome folder: Delete
-the lines that begin with <code>RDF:li</code> and contain the word <code>bidimailpack</code> (not the tags containing them, just the lines themselves); also, delete the tags that begin with <code>&gt;RDF:Seq RDF:about</code> and contain the word <code>bidimailpack</code> (these too may be multi-line).</li>
+the lines that begin with <code>RDF:li</code> and contain the word <code>bidimailpack</code> (not the tags containing them, just the lines themselves); also, delete the tags that begin with <code>&lt;RDF:Seq RDF:about</code> and contain the word <code>bidimailpack</code> (these too may be multi-line).</li>
   <li>Start Mozilla again.</li>
 </ol>
 
