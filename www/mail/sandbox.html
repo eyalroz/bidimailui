@@ -10,7 +10,8 @@
 <div class="question">I have some version of Moofie's <code>hebmailpack</code> installed. What should I do before installing BiDi Mail UI?</div>
 <div class="answer">
 <p>That depends on whether you have the version Moofie made specifically for Thunderbird. To check whether you have that version installed, take a look at the Thunderbird extension panel. If you see Moofie's extension (the word 'Hebmailpack', or something mentioning Hebrew Mail or BiDi) - remove it as you would normally remove a Thunderbird extension - using the Uninstall button.</p>
-<p>If the extension does not appear in the panel, or if you're using the Mozilla suite, you will have to manually remove the old extension: Follow the instructions <a href="http://bidiui.mozdev.org/mail/installation.html#הוראות_הסרה_ידנית_מספריית_הפרופיל_האישי_של_מוזילה">here</a>, using the name <code>hebmailpack</code> instead of <code>bidimailpack</code>. <em>Note: Moofie's extension must also be manually removed from Thunderbird if it does not appear in the extension panel, so in this case the removal instructions apply to both Thunderbird and Mozilla suite!</em>
+<p>If the extension does not appear in the panel, or if you're using the Mozilla suite, you will have to manually remove the old extension: Follow the instructions <a href="http://bidiui.mozdev.org/mail/installation.html#הוראות_הסרה_ידנית_מספריית_הפרופיל_האישי_של_מוזילה">here</a>, using the name <code>hebmailpack</code> instead of <code>bidimailpack</code>.</p>
+<p> <em>Note: Moofie's extension must also be manually removed from Thunderbird if it does not appear in the extension panel, so in this case the removal instructions apply to both Thunderbird and Mozilla suite!</em></p>
 <p>Now install the new extension.</p>
 </div>
 <hr>
@@ -86,6 +87,10 @@ blockquote[type=cite] blockquote blockquote blockquote blockquote {
   color: #bb6600 !important;
 }
 </div>
+<p>Alternatively, you can disable the bar altogether and see the textual quote '&gt;' marks, by the setting the preference <code>"mail.quoted_graphical"</code> to <code>false</code>; do so using the <code>about:config</code> URL in the Mozilla suite or by adding the following line to your profile's <code>user.js</code> file:
+<div class="code-segment">
+pref("mail.quoted_graphical", false);
+</div>
 <p>This FAQ item has been ripped off from Moofie :-) We are considering incorporating some of this CSS into the extension itself.</p>
 </div>
 <hr>
@@ -99,14 +104,6 @@ blockquote[type=cite] blockquote blockquote blockquote blockquote {
 <hr>
 </div>
 
-
-הוסיפו את הגדרות הסגנון האלה ל-userContent.css. תוכלו להשתמש בהן גם אם אינכם משתמשים בתוסף. ההגדרות מתאימות גם להודעות באנגלית (LTR).
-
-בהגדרות הללו יש בונוס: ציטוטים בעומק שונה יוצגו בצבעים שונים (השתמשתי בצבעי groups.Google.com).
-
-לחלופין, אם אינכם רוצים להשתמש בהגדרות הסגנון הללו, תוכלו להנחות את מוזילה לא להציג ציטוטים בצורה מיוחדת: הוסיפו את השורה הבאה ל-user.js או ל-prefs.js.
-
-pref("mail.quoted_graphical", false);
 
 <h3><a name="blah">Miscellany</a></h3>
 
