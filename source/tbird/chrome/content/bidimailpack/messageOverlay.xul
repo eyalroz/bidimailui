@@ -40,13 +40,13 @@
   <toolbarpalette id="MailToolbarPalette">
     <toolbarbutton id="button-direction-ltr-main-bar"
                    class="toolbarbutton-1"
-                   command="cmd-ltr-document"
+                   oncommand="SetMessageDirection('ltr');"
                    observes="ltr-document-direction-broadcaster"
                    label="&bidimail-ltr-button:label;"
                    tooltiptext="&bidimail-ltr-button:tip;" />
     <toolbarbutton id="button-direction-rtl-main-bar"
                    class="toolbarbutton-1"
-                   command="cmd-rtl-document"
+                   oncommand="SetMessageDirection('rtl');"
                    observes="rtl-document-direction-broadcaster"
                    label="&bidimail-rtl-button:label;"
                    tooltiptext="&bidimail-rtl-button:tip;" />  
