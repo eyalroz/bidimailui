@@ -1,17 +1,26 @@
 <?xml version="1.0"?>
 
-<!DOCTYPE window [   <!ENTITY % bidimailpackPrefsDTD
-            SYSTEM "chrome://bidimailpack/locale/bidimailpack-prefs.dtd" >            %bidimailpackPrefsDTD;]>
+<!DOCTYPE window [
+   <!ENTITY % bidimailpackPrefsDTD
+            SYSTEM "chrome://bidimailpack/locale/bidimailpack-prefs.dtd" >
+            %bidimailpackPrefsDTD;
+]>
 <bindings xmlns="http://www.mozilla.org/xbl"
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
     <binding id="marginsBinding">
         <content>
             <xul:textbox size="6" />
-            <xul:menulist>                <xul:menupopup>                    <xul:menuitem label="&cmScale.label;"
+            <xul:menulist>
+                <xul:menupopup>
+                    <xul:menuitem label="&cmScale.label;"
                                   accesskey="&cmScale.accesskey;"
-                                  selected="true" />                    <xul:menuitem label="&pixelScale.label;" 
-                                  accesskey="&pixelScale.accesskey;" />                    <xul:menuitem label="&precentScale.label;"
-                                  accesskey="&precentScale.accesskey;" />                </menupopup>            </menulist>
+                                  selected="true" />
+                    <xul:menuitem label="&pixelScale.label;" 
+                                  accesskey="&pixelScale.accesskey;" />
+                    <xul:menuitem label="&precentScale.label;"
+                                  accesskey="&precentScale.accesskey;" />
+                </xul:menupopup>
+            </xul:menulist>
         </content>
         <implementation>
             <constructor><![CDATA[
