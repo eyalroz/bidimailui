@@ -1,4 +1,4 @@
-<!ENTITY bidimailpack-settings                   "הגדרות BiDi Mail UI">
+<!ENTITY bidimailpack-settings                   "אפשרויות BiDi Mail UI">
 <!ENTITY message-display-groupbox-caption        "תצוגת הודעות">
 <!ENTITY autodetect                              "זיהוי כיוון אוטומטי">
 <!ENTITY message-composition-groupbox-caption    "חיבור הודעות">
@@ -8,7 +8,7 @@
 <!ENTITY always-reply-in-default-dir             "ענה להודעות תמיד בכיוון ברירת-המחדל">
 <!ENTITY more-info                               "למידע נוסף:">
 <!ENTITY link-text                               "דף-הבית של פרויקט BiDi UI">
-<!ENTITY bidimailpack-preftree-label             "BiDi UI">
+<!ENTITY bidimailpack-preftree-label             "BiDi Mail UI">
 <!ENTITY display-buttons                         "הצג כפתורי כיווניות">
 
 <!ENTITY marginTopTitle.label                    "רווח מעל הפסקה:">
@@ -19,4 +19,3 @@
 <!ENTITY pixelScale.accesskey                    "פ">
 <!ENTITY ptScale.label                           "נקודות">
 <!ENTITY ptScale.accesskey                       "נ">
-
