@@ -59,12 +59,16 @@ function saveValues()
 
 function dialogAccept()
 {
-  if (document.getElementById('margintop').validateData() &&
-      document.getElementById('marginbottom').validateData()) {
-    saveValues();
-    return true;
-  }
+  var rv = false;
+
+  if (!document.getElementById('margintop').validateData())
+    document.getElementById('margintop').focus();
+  else if (!document.getElementById('marginbottom').validateData())
+    document.getElementById('marginbottom').focus();
   else {
-    return false;
+    saveValues();
+    rv = true;
   }
+  
+  return rv;
 }
