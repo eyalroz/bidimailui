@@ -132,16 +132,6 @@ function composeWindowEditorOnLoadHandler() {
 }
 
 function composeWindowEditorOnLoadHandler2() {
-  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-
-  // show rlm & lrm menu items?
-  var hiddenControlCharItems = true;
-  try {
-    if (prefs.getBoolPref('mail.compose.show_context_control_characters'))
-      hiddenControlCharItems = false;
-  }
-  catch(e) {}
-  document.getElementById('rlm-lrm-broadcaster').setAttribute('hidden', hiddenControlCharItems);
   var body = document.getElementById('content-frame').contentDocument.body;
 
   // Handle message direction
@@ -153,6 +143,8 @@ function composeWindowEditorOnLoadHandler2() {
 
   try
   {
+    var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+
     // New message OR "Always reply in default direction" is checked
     if (!messageIsAReply || prefs.getBoolPref("mailnews.reply_in_default_direction") )
     {
