@@ -1,12 +1,24 @@
-<!ENTITY bidimailpack-settings                   "BiDi UI إعداد">
+﻿<!ENTITY bidimailpack-settings                   "BiDi UI إعداد">
+
 <!ENTITY message-display-groupbox-caption        "عرض الرّسالة">
+
 <!ENTITY autodetect                              "كشف آلي لاتّجاه الرّسالة">
+
 <!ENTITY message-composition-groupbox-caption    "تأليف الرّسالة">
+
 <!ENTITY default-dir                             "الاتّجاه الافتراضي:">
+
 <!ENTITY rtl                                     "يمين إلى يسار">
+
 <!ENTITY ltr                                     "يسار إلى يمين">
+
 <!ENTITY always-reply-in-default-dir             "الرّد دائماً بالاتّجاه التّلقائي">
+
 <!ENTITY more-info                               "للمزيد من المعلومات:">
+
 <!ENTITY link-text                               "BiDi UI صفحة ويب">
+
 <!ENTITY bidimailpack-preftree-label             "BiDi UI">
+
 <!ENTITY display-buttons                         "عرض أزرار إعداد الاتّجاه">
+
