@@ -485,4 +485,13 @@ var directionSwitchController =
 }
 
 
-function CommandUpdate_MsgComposeDirection(){  var focusedWindow = top.document.commandDispatcher.focusedWindow;   // we're just setting focus to where it was before  if (focusedWindow == gLastWindowToHaveFocus) {    return;  }   gLastWindowToHaveFocus = focusedWindow;  directionSwitchController.setAllCasters();}
+function CommandUpdate_MsgComposeDirection()
+{
+  var focusedWindow = top.document.commandDispatcher.focusedWindow;
+  // we're just setting focus to where it was before
+  if (focusedWindow == gLastWindowToHaveFocus) {
+    return;
+  }
+  gLastWindowToHaveFocus = focusedWindow;
+  directionSwitchController.setAllCasters();
+}
