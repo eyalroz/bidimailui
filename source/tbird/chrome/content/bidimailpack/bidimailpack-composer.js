@@ -35,7 +35,7 @@ function GetCurrentParagraphDirection()
         else if (node.nextSibling)
           node = node.nextSibling;
         else
-          // find a parent node which has anything after 
+          // find a parent node which has anything after
           while (node = node.parentNode)
           {
             if (node.nextSibling)
@@ -48,15 +48,15 @@ function GetCurrentParagraphDirection()
       while (node)
     }
   }
- 
+
   if ((hasLTR && hasRTL) || (!hasLTR && !hasRTL))
     return 'complex';
-    
+
   if (hasRTL)
     return 'rtl';
   if (hasLTR)
     return 'ltr';
-  
+
   return null;
 }
 
@@ -70,10 +70,10 @@ function SwitchDocumentDirection() {
 
   var body = document.getElementById('content-frame').contentDocument.body;
   currentDir = body.getAttribute("dir");
-  
+
   if ((currentDir == 'rtl') || (currentDir == 'RTL'))
     directionSwitchController.doCommand("cmd_ltr_document");
-  else 
+  else
     directionSwitchController.doCommand("cmd_rtl_document");
 }
 
@@ -90,7 +90,7 @@ function composeWindowEditorOnLoadHandler() {
       if (!prefs.getBoolPref('mail.compose.show_direction_buttons'))
         hiddenbuttons = true;
     }
-    catch(e) { } // preference is not set.  
+    catch(e) { } // preference is not set.
 
     // Note: the hidden attribute defaults to being set false
     // Note: the main toolbar buttons are never hidden, since that toolbar
@@ -98,7 +98,7 @@ function composeWindowEditorOnLoadHandler() {
     document.getElementById('ltr-paragraph-direction-broadcaster').setAttribute('hidden',hiddenbuttons);
     document.getElementById('rtl-paragraph-direction-broadcaster').setAttribute('hidden',hiddenbuttons);
   }
-  
+
   // Direction Controller
   top.controllers.insertControllerAt(1, directionSwitchController);
 
@@ -106,7 +106,7 @@ function composeWindowEditorOnLoadHandler() {
   document.getElementById('contextSwitchParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');
   document.getElementById('contextClearParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');
   document.getElementById('contextBodyDirectionItem').setAttribute('hidden', editorType == 'htmlmail');
-  
+
   // the following is a very ugly hack!
   // the reason for it is that without a timeout, it seems
   // that gMsgCompose does often not yet exist when
@@ -114,12 +114,12 @@ function composeWindowEditorOnLoadHandler() {
   setTimeout('composeWindowEditorOnLoadHandler2();', 50);
 }
 
-function composeWindowEditorOnLoadHandler2() {    
+function composeWindowEditorOnLoadHandler2() {
   var messageIsAReply = (gMsgCompose.originalMsgURI.length > 0);
   var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
   var body = document.getElementById('content-frame').contentDocument.body;
-  
-  try 
+
+  try
   {
     // New message OR "Always reply in default direction" is checked
     if (!messageIsAReply || prefs.getBoolPref("mailnews.reply_in_default_direction") )
@@ -138,7 +138,7 @@ function composeWindowEditorOnLoadHandler2() {
           // we should have an 'init' method for the controller?
 
         return;
-        
+
       } catch(e1) {
         // preference is not set.
       }
@@ -149,13 +149,13 @@ function composeWindowEditorOnLoadHandler2() {
     // note that since the logic is short-circuit, if this is not a reply we
     // can't get here
   }
-  
+
   // aligning in same direction as message
   if (hasRTLWord(body))
     SetDocumentDirection('rtl');
   else
     SetDocumentDirection('ltr');
-    
+
   directionSwitchController.setAllCasters();
 }
 
@@ -168,7 +168,7 @@ function InstallComposeWindowEditorHandler() {
 
   document.addEventListener('load', composeWindowEditorOnLoadHandler, true);
   document.addEventListener('compose-window-reopen', composeWindowEditorOnLoadHandler2, true);
-  //document.addEventListener('keypress', onKeyPress, true);
+  document.addEventListener('keypress', onKeyPress, true);
 }
 
 function findClosestBlockElement(node)
@@ -222,14 +222,14 @@ function ApplyToSelectionBlockElements(evalStr)
         // condition, to handle cases where begin == end
         if (node == range.endContainer)
           break;
-        
+
         // Traverse through the tree in order
         if (node.firstChild)
           node = node.firstChild;
         else if (node.nextSibling)
           node = node.nextSibling;
         else
-          // find a parent node which has anything after 
+          // find a parent node which has anything after
           while (node = node.parentNode)
           {
             if (node.nextSibling)
@@ -250,18 +250,18 @@ function ClearParagraphDirection()
   var evalStr = 'editor.removeAttribute(closestBlockElement, \'dir\');';
   ApplyToSelectionBlockElements(evalStr);
 }
-  
+
 
 function SetParagraphDirection(dir)
 {
   var evalStr = 'editor.setAttribute(closestBlockElement, \'dir\', \'' + dir + '\');';
   ApplyToSelectionBlockElements(evalStr);
 }
-  
+
 function SwitchParagraphDirection()
 {
-  var evalStr = 
-    'var dir = (closestBlockElement.ownerDocument.defaultView.getComputedStyle(closestBlockElement, "").getPropertyValue("direction") == "rtl"? "ltr" : "rtl");' + 
+  var evalStr =
+    'var dir = (closestBlockElement.ownerDocument.defaultView.getComputedStyle(closestBlockElement, "").getPropertyValue("direction") == "rtl"? "ltr" : "rtl");' +
     'editor.setAttribute(closestBlockElement, \'dir\', dir);';
   ApplyToSelectionBlockElements(evalStr);
 }
@@ -274,6 +274,7 @@ function onKeyPress(ev)
   if (editorType != 'htmlmail')
     return;
 
+  // Steal all Enters but Shift-Enters. Shift-Enters should insert BR, as usual.
   if ((ev.keyCode == KeyEvent.DOM_VK_ENTER || ev.keyCode == KeyEvent.DOM_VK_RETURN) && !ev.shiftKey)
   {
     // Do whatever it takes to prevent the editor from inserting a BR
@@ -286,102 +287,37 @@ function onKeyPress(ev)
   }
 }
 
+// Will attempt to break the current line into two paragraphs (unless we're in a list).
 function InsertParagraph()
 {
- var editor = GetCurrentEditor();
- if (!editor)
- {
-  alert("Could not acquire editor object.");
-  return;
- }
-
- var selection = editor.selection;
- if (!selection.isCollapsed)
-   editor.deleteSelection(0);
- var range = selection.getRangeAt(0);
- var cursorNode = range.startContainer;
- var cursorOffset = range.startOffset;
- var doc = cursorNode.ownerDocument;
-
- // Find the block element our cursor resides in.  
- var blockElem = findClosestBlockElement(cursorNode);
-
- // Create a new paragraph
- var newPar;
- if (blockElem.tagName.toUpperCase() == "P")
- {
-  // Select the stuff between the cursor and the block's end (including the block's tag).
-  var rangeLast = doc.createRange();
-  if (cursorNode.nodeValue && (cursorNode.nodeValue.length > cursorOffset))
-   rangeLast.setStart(cursorNode, cursorOffset);
-  else
-   rangeLast.setStartAfter(cursorNode);
-  rangeLast.setEndAfter(blockElem);
-  
-  // Get the piece we move to the other next paragraph.
-  // The paragraph element itself is included.
-  var fragment = rangeLast.extractContents();
-  
-  // Note: If I place 'blockElem.nextSibling' inline, in the insertBefore
-  // statement (instead of calculating it "ahead of time"), Mozilla segfaults.
-  // This should be reported some day (talkback and all...).
-  var beforeElem = blockElem.nextSibling;
-  var newFrag = blockElem.parentNode.insertBefore(fragment, beforeElem);
-  newPar = blockElem.nextSibling;
- }
- else // other block elements (e.g. BODY)
- {
-  // Climb up to the direct child of the block element
-  for(node = cursorNode.parentNode; node && (node.parentNode != blockElem); node = node.parentNode);
-  var blockElemChild = node;
-  
-  // Find whether our non-P parent block has any P siblings. We want to slurp
-  // everything after the cursor into our paragraph, *but not sibling paragraphs*!
-  // e.g.
-  // <body>hel<cursor>lo world<p>foobar</p></body>
-  // turns to:
-  // <body>hel<p>lo world</p><p>foobar</p></body>
-  var siblingPar;
-  for(node = blockElemChild; node && ((node.type != node.ELEMENT_NODE) || (node.tagName.toUpperCase() != "P")); node = node.nextSibling);
-  if (node)
-   siblingPar = node;
- 
-  // A range between the cursor and the end of our block (excluding
-  // the block's tag) *or* a sibling paragraph.
-  // e.g. <body>hel<cursor>[lo world]</body>
-  var rangeLast = doc.createRange();
-  if (cursorNode.nodeValue && (cursorNode.nodeValue.length > cursorOffset))
-   rangeLast.setStart(cursorNode, cursorOffset);
-  else
-   rangeLast.setStartAfter(cursorNode);
-  if (siblingPar)
-   rangeLast.setEndBefore(siblingPar);
-  else
-   rangeLast.setEndAfter(blockElem.lastChild);
-  
-  var fragment = rangeLast.extractContents();
- 
-  // Create the paragraph and fill it with our fragment.
-  // Since, at this point, the fragment is no longer in the original
-  // document (it was "extracted"), we can rely on cursorNode.nextSibling
-  // being the true insertion point.
-  newPar = doc.createElement("P");
-  blockElem.insertBefore(newPar, cursorNode.nextSibling);
-  newPar.appendChild(fragment);
- }
- 
- // Place the cursor at the beginning of the new paragraph; if possible,
- // on the first character *inside* the paragraph. The editor behaves a bit
- // insane when its cursor is placed before a paragraph tag.
- if (newPar)
- {
-  if (!newPar.firstChild)
+  var editor = GetCurrentEditor();
+  if (!editor)
   {
-   var node = doc.createTextNode("");
-   newPar.appendChild(node);
+    alert("Could not acquire editor object.");
+    return;
   }
-  selection.collapse(newPar.firstChild, 0);
- }
+
+  editor.beginTransaction();
+  // Avoid mangling LIs and different kinds of paragraphs
+  if (!editor.selection.isCollapsed)
+   editor.deleteSelection(editor.eNone);
+
+  var isParMixed = new Object;
+  var isListMixed = new Object;
+  var isListOl = new Object;
+  var isListUl = new Object;
+  var isListDl = new Object;
+  var parState;
+  parState = editor.getParagraphState(isParMixed);
+  editor.getListState(isListMixed, isListOl, isListUl, isListDl);
+
+  if ((parState == "") && !isListOl.value && !isListUl.value && !isListDl.value)
+    editor.setParagraphFormat("p");
+  editor.insertLineBreak();
+  if (!isListOl.value && !isListUl.value && !isListDl.value)
+   editor.setParagraphFormat("p");
+
+  editor.endTransaction();
 }
 
 var directionSwitchController =
