@@ -374,6 +374,7 @@ div.faq-item hr {
 }
 
 div.code-segment {
+  direction: ltr;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   font-family: monospace;
