@@ -848,24 +848,34 @@ var directionSwitchController = {
   },
 
   isCommandEnabled: function(command) {
-    var rv = true;
+    // we're enabled if the editor is focused
+    var rv = (content == top.document.commandDispatcher.focusedWindow);
+    
     // and now for what this function is actually supposed to do...
-    switch (command) {
-      case "cmd_switch_paragraph":
-      case "cmd_clear_paragraph_dir":
-      case "cmd_rtl_paragraph":
-      case "cmd_ltr_paragraph":
-      case "cmd_rtl_document":
-      case "cmd_ltr_document":
-      case "cmd_switch_document":
-        // editor focused?
-        rv = (content == top.document.commandDispatcher.focusedWindow);
 
-        // due to the ridiculous design of the controller interface,
-        // the isCommandEnabled function has side-effects! and we
-        // must use it to update button states because no other
-        // method gets called to do that
-        this.setCaster(command);
+    // due to the ridiculous design of the controller interface,
+    // the isCommandEnabled function has side-effects! and we
+    // must use it to update button states because no other
+    // method gets called to do that
+
+    switch (command) {
+      case 'cmd_switch_paragraph':
+      case 'cmd_clear_paragraph_dir':
+      case 'cmd_switch_document':
+        break;
+
+      case 'cmd_ltr_document':
+        this.setCasterGroup('document');
+      case 'cmd_rtl_document':
+        // necessary side-effects performed when
+        // isCommandEnabled is called for cmd_ltr_document
+        break;
+      
+      case 'cmd_ltr_paragraph':
+        this.setCasterGroup('paragraph');
+      case 'cmd_rtl_paragraph':
+        // necessary side-effects performed when
+        // isCommandEnabled is called for cmd_ltr_paragraph
         break;
       default:
         rv = false;
@@ -874,62 +884,40 @@ var directionSwitchController = {
     return rv;
   },
 
-  getState: function(command) {
-    var direction;
+  setCasterGroup: function(casterPair) {
+    var casterID, oppositeCasterID, command;
+    var direction = null;
+    var enabled = (content == top.document.commandDispatcher.focusedWindow);
 
-    switch (command) {
-      case "cmd_rtl_paragraph":
-        direction = GetCurrentSelectionDirection();
-        if (direction == 'rtl')
-          return 'checked';
-        else
-          return 'unchecked';
-      case "cmd_ltr_paragraph":
-        direction = GetCurrentSelectionDirection();
-        if (direction == 'ltr')
-          return 'checked';
-        else
-          return 'unchecked';
-      case "cmd_rtl_document":
+    switch (casterPair) {
+      case 'document':
+        command = 'cmd_ltr_document';
+        casterID = 'ltr-document-direction-broadcaster';
+        oppositeCasterID = 'rtl-document-direction-broadcaster';
         direction = document.defaultView.getComputedStyle(document.getElementById('content-frame').contentDocument.body, "").getPropertyValue("direction");
-        return ((direction == 'rtl') ? 'checked' : 'unchecked');
-      case "cmd_ltr_document":
-        direction = document.defaultView.getComputedStyle(document.getElementById('content-frame').contentDocument.body, "").getPropertyValue("direction");
-        return ((direction == 'ltr') ? 'checked' : 'unchecked');
-    }
-    return null;
-  },
-
-  setCaster: function(command) {
-    var caster;
-
-    switch (command) {
-      case "cmd_rtl_paragraph":
-        caster = 'rtl-paragraph-direction-broadcaster';
         break;
-      case "cmd_ltr_paragraph":
-        caster = 'ltr-paragraph-direction-broadcaster';
-        break;
-      case "cmd_rtl_document":
-        caster = 'rtl-document-direction-broadcaster';
-        break;
-      case "cmd_ltr_document":
-        caster = 'ltr-document-direction-broadcaster';
+      case 'paragraph':
+        command = 'cmd_ltr_paragraph';
+        casterID = 'ltr-paragraph-direction-broadcaster';
+        oppositeCasterID = 'rtl-paragraph-direction-broadcaster';
+        direction = GetCurrentSelectionDirection();
         break;
       default:
         return;
     }
-    var state = this.getState(command);
+    var caster = document.getElementById(casterID);
+    var oppositeCaster = document.getElementById(oppositeCasterID);
 
-    document.getElementById(caster).setAttribute('checked', (state == 'checked') );
-    document.getElementById(caster).setAttribute('disabled', (content != top.document.commandDispatcher.focusedWindow) );
+    caster.setAttribute('checked', (direction == 'ltr') );
+    caster.setAttribute('disabled', !enabled );
+    oppositeCaster.setAttribute('checked', (direction == 'rtl') );
+    oppositeCaster.setAttribute('disabled', !enabled );
+
   },
 
   setAllCasters: function() {
-    this.setCaster("cmd_ltr_document");
-    this.setCaster("cmd_rtl_document");
-    this.setCaster("cmd_ltr_paragraph");
-    this.setCaster("cmd_rtl_paragraph");
+    this.setCasterGroup('document');
+    this.setCasterGroup('paragraph');
   },
 
   doCommand: function(command) {
