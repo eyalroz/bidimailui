@@ -605,6 +605,24 @@ function onKeyPress(ev) {
       // ... and insert a paragraph break instead
       InsertParagraph();
     }
+    // If the backspace key has been pressed at this state:
+    // <p>[p1 content]</p><p><caret />[p2 content]</p>
+    // The expected result is
+    // <p>[p1 content][p2 content]</p>
+    // (NOT: <p>[p1 content]<br>[p2 content]</p> as nsIHTMLEditor's impl')
+    else if (ev.keyCode == KeyEvent.DOM_VK_BACK_SPACE) {
+      var editor = GetCurrentEditor();
+      if (editor.selection.isCollapsed) {
+        var par = findClosestBlockElement(editor.selection.focusNode);
+        var prevPar = par.previousSibling; //xxx
+        if ( (par.firstChild == editor.selection.focusNode) &&
+             (editor.selection.focusOffset == 0) ) {
+          ev.preventDefault();
+          ev.stopPropagation();
+          ev.initKeyEvent("keypress", false, true, null, false, false, false, false, 0, 0);
+        }
+      }  
+    }
   }
 }
 
