@@ -247,12 +247,32 @@ function composeWindowEditorOnLoadHandler() {
 
   // Direction Buttons
   HandleDirectionButtons();
+  // reply CSS
+  HandleComposeReplyCSS();
 
   // the following is a very ugly hack!
   // the reason for it is that without a timeout, it seems
   // that gMsgCompose does often not yet exist when
   // the OnLoad handler runs...
   setTimeout('composeWindowEditorDelayedOnLoadHandler();', 125);
+}
+
+function HandleComposeReplyCSS()
+{
+  var editorType = GetCurrentEditorType();
+
+  if (editorType == 'htmlmail')
+  {
+    var editor = GetCurrentEditor();
+    if (!editor)
+    {
+      alert("Could not acquire editor object.");
+      return;
+    }
+
+    editor.QueryInterface(nsIEditorStyleSheets);
+    editor.addOverrideStyleSheet("chrome://bidimailpack/content/reply.css");
+  }
 }
 
 function HandleDirectionButtons()
@@ -287,6 +307,8 @@ function HandleDirectionButtons()
 function composeWindowEditorOnReopenHandler() {
   // Direction Buttons
   HandleDirectionButtons();
+  // reply CSS
+  HandleComposeReplyCSS();
 
   // another ugly hack (see composeWindowEditorOnLoadHandler):
   // if we don't delay before running the other handler, the
