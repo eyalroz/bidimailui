@@ -9,14 +9,16 @@ function initValues()
     element.checked = prefs.getBoolPref('mailnews.message_display.autodetect_direction');
   } catch(e) {};
 
-  // Default composing direction for a new message. Default: Left-to-Right
+  // Default composing direction for a new message. Default: LTR.
   try {
-    element = document.getElementById('bidimailpack-default-dir');
-    prefDir = prefs.getCharPref('mailnews.send_default_direction');
-    if ( (prefDir == 'rtl') || (prefDir == 'RTL') )
-      element.selectedItem = element.childNodes[1];
-    else element.selectedItem = element.childNodes[0];
-  } catch(e) {};
+    var prefDir = prefs.getCharPref('mailnews.send_default_direction');
+    if ( (prefDir == 'RTL') || (prefDir == 'rtl') )
+      document.getElementById('bidimailpack-default-dir').selectedIndex = 1;
+    else
+      document.getElementById('bidimailpack-default-dir').selectedIndex = 0;
+  } catch(e) {
+    // the LTR default it is marked selected in the XUL
+  };
 
   // Reply direction options: 
   //   - same direction as the orginal message, or
