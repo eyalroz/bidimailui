@@ -202,20 +202,20 @@ h2 {
   display: block;
   font-size: 1.7em;
   font-weight: bold;
-  margin: 1.67em 0;
+  margin: 0.8em 0;
 }
 
 h3 {
   display: block;
   font-size: 1.5em;
   font-weight: bold;
-  margin: 0.8em 0;
+  margin: 0.4em 0;
 }
 
 h3 {
   display: block;
   font-size: 1.3em;
-  margin: 0.4em 0;
+  margin: 0.2em 0;
 }
 
 
@@ -223,5 +223,5 @@ h5 {
   display: block;
   font-size: 1.1em;
   font-weight: bold;
-  margin: 0.2em 0;
+  margin: 0;
 }
