@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % bidimailpackDTD SYSTEM "chrome://bidimailpack/locale/bidimailpack.dtd">
+%bidimailpackDTD;
+]>
+
+<overlay
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/x-javascript" src="bidimailpack-common.js"/>
+  <script type="application/x-javascript" src="bidimailpack-composer.js"/>
+  <script type="application/x-javascript">
+    InstallComposeWindowEditorHandler();
+  </script>
+
+<broadcasterset>
+  <broadcaster id="ltr-document-direction-broadcaster" checked="false"/>
+  <broadcaster id="rtl-document-direction-broadcaster" checked="false"/>
+  <broadcaster id="ltr-paragraph-direction-broadcaster" checked="false"/>
+  <broadcaster id="rtl-paragraph-direction-broadcaster" checked="false"/>
+</broadcasterset>
+
+<commandset id="composeCommands">
+  <command id="cmd_rtl_paragraph" oncommand="goDoCommand('cmd_rtl_paragraph');" />
+  <command id="cmd_ltr_paragraph" oncommand="goDoCommand('cmd_ltr_paragraph');" />
+  <command id="cmd_switch_paragraph" oncommand="goDoCommand('cmd_switch_paragraph');" />  
+  <command id="cmd_rtl_document" oncommand="goDoCommand('cmd_rtl_document');" />
+  <command id="cmd_ltr_document" oncommand="goDoCommand('cmd_ltr_document');" />
+  <command id="cmd_switch_document" oncommand="goDoCommand('cmd_switch_document');" />
+  <command id="cmd_clear_paragraph_dir" oncommand="goDoCommand('cmd_clear_paragraph_dir');" />
+</commandset>
+
+<!-- there are two button sets, on two different toolbars; the
+formatting toolbar buttons are per-paragraph direction controls, the
+main toolbar buttons are whole-document direction controls -->
+
+<toolbox class="toolbox-top" id="headers-box">
+  <toolbar id="composeToolbar">
+    <hbox id="toolbar_button_box">
+      <hbox id="directionality-toolbar-section" insertafter="button-save">
+       <toolbarseparator id="directionality-separator-main-bar" class="toolbarseparator-primary" />
+         <toolbarbutton class="toolbarbutton-1" id="button-direction-ltr-main-bar" label="&bidimail-ltr-button:label;" tooltiptext="&bidimail-ltr-button:tip;" command="cmd_ltr_document" observes="ltr-document-direction-broadcaster" />
+         <toolbarbutton class="toolbarbutton-1" id="button-direction-rtl-main-bar" label="&bidimail-rtl-button:label;" tooltiptext="&bidimail-rtl-button:tip;" command="cmd_rtl_document" observes="rtl-document-direction-broadcaster" />
+      </hbox>
+    </hbox>
+  </toolbar>
+  
+   <toolbar id="FormatToolbar">
+      <hbox id="directionality-toolbar-section" insertafter="ParagraphSelect">
+      <toolbarbutton id="button-direction-ltr-formatting-bar" tooltiptext="&bidimail-ltr-button:tip;" command="cmd_ltr_paragraph" checked="false" hidden="true" observes="ltr-paragraph-direction-broadcaster" />
+      <toolbarbutton id="button-direction-rtl-formatting-bar" tooltiptext="&bidimail-rtl-button:tip;" command="cmd_rtl_paragraph" checked="false" hidden="true" observes="rtl-paragraph-direction-broadcaster" />
+       <toolbarseparator id="directionality-separator-formatting-bar" class="toolbarseparator-standard" />
+      </hbox>
+  </toolbar>
+  
+</toolbox>
+
+<keyset id="tasksKeys">
+  <key id="key-bidimail-switch" key="&key-bidimail-switch-document-direction:keycode;"
+      command="cmd_switch_document" modifiers="&key-bidimail-switch-document-direction:modifiers;" />
+</keyset>
+
+<popup id="msgComposeContext">
+  <menuseparator/>
+  <menuitem id="contextSwitchParagraphDirectionItem" label="&menu-bidimail-switch-paragraph-direction:label;"
+    accesskey="&menu-bidimail-switch-paragraph-direction:accesskey;" 
+    command="cmd_switch_paragraph" />
+  <menuitem id="contextBodyDirectionItem" label="&menu-bidimail-switch-document-direction:label;"
+    accesskey="&menu-bidimail-switch-document-direction:accesskey;" 
+    command="cmd_switch_document" />
+  <menuitem id="contextClearParagraphDirectionItem" label="&menu-bidimail-clear-paragraph-direction:label;"
+    accesskey="&menu-bidimail-clear-paragraph-direction:accesskey;" 
+    command="cmd_clear_paragraph_dir" />
+</popup>
+
+<menu id="menu_View">
+  <menupopup id="menu_View_Popup">
+  <menuitem label="&menu-bidimail-switch-document-direction:label;"
+    accesskey="&menu-bidimail-switch-document-direction:accesskey;" 
+    command="cmd_switch_document" key="key-bidimail-switch" />
+  </menupopup>
+</menu>
+
+</overlay>
