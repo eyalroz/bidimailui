@@ -10,5 +10,13 @@
 <!ENTITY link-text                               "דף-הבית של פרויקט BiDi UI">
 <!ENTITY bidimailpack-preftree-label             "BiDi UI">
 <!ENTITY display-buttons                         "הצג כפתורי כיווניות">
-<!ENTITY display-message-buttons-for-htmlmail    "הצג כפתורי כיוון כל ההודעה גם בחיבור הודעות HTML">
-<!ENTITY display-rlm-lrm-contextual-menu-items   "הצג פריטי-תפריט-הקשרי להוספת תווי RLM/LRM">
+
+<!ENTITY marginTopTitle.label                    "רווח מעל הפסקה:">
+<!ENTITY marginBottomTitle.label                 "רווח מתחת הפסקה:">
+<!ENTITY cmScale.label                           "סנטימטר">
+<!ENTITY cmScale.accesskey                       "ס">
+<!ENTITY pixelScale.label                        "פיקסלים">
+<!ENTITY pixelScale.accesskey                    "פ">
+<!ENTITY ptScale.label                           "נקודות">
+<!ENTITY ptScale.accesskey                       "נ">
+
