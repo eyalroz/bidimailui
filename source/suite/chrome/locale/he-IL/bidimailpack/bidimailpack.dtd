@@ -1,7 +1,5 @@
-﻿<!ENTITY menu-bidimail-switch-document-direction:label       "הפוך כיוון הודעה">
+<!ENTITY menu-bidimail-switch-document-direction:label       "הפוך כיוון הודעה">
 <!ENTITY menu-bidimail-switch-document-direction:accesskey   "g">
-<!ENTITY menu-bidimail-insert-lrm:label                      "הכנס סימן משמאל-לימין (LRM)">
-<!ENTITY menu-bidimail-insert-rlm:label                      "הכנס סימן מימין-לשמאל (RLM)">
 <!ENTITY key-bidimail-switch-document-direction:keycode      "X">
 <!ENTITY key-bidimail-switch-document-direction:modifiers    "accel,shift">
 
@@ -10,7 +8,14 @@
 <!ENTITY menu-bidimail-clear-paragraph-direction:label       "נקה קביעת כיוון פיסקה">
 <!ENTITY menu-bidimail-clear-paragraph-direction:accesskey   "a">
 
-<!ENTITY bidimail-ltr-button:label                           "שמאל-לימין">
-<!ENTITY bidimail-ltr-button:tip                             "כוון משמאל לימין">
-<!ENTITY bidimail-rtl-button:label                           "ימין-לשמאל">
-<!ENTITY bidimail-rtl-button:tip                             "כוון מימין לשמאל">
+<!ENTITY bidimail-ltr-button:label                           "שמאל־לימין">
+<!ENTITY bidimail-ltr-button:tip                             "כוון משמאל־לימין">
+<!ENTITY bidimail-rtl-button:label                           "ימין־לשמאל">
+<!ENTITY bidimail-rtl-button:tip                             "כוון מימין־לשמאל">
+
+<!ENTITY menu-bidimail-contol-character:label                "תו בקרה">
+<!ENTITY menu-bidimail-contol-character:accesskey            "n">
+<!ENTITY menu-bidimail-insert-contol-character:label         "הוסף תו בקרה">
+<!ENTITY menu-bidimail-insert-contol-character:accesskey     "I">
+<!ENTITY menu-bidimail-rlm:label                             "מימין־לשמאל (RLM)">
+<!ENTITY menu-bidimail-lrm:label                             "משמאל־לימין (LRM)">
