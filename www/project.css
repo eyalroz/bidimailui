@@ -15,6 +15,27 @@
 
 Mozilla resource:///res/html.css
 
+h2 {
+  display: block;
+  font-size: 0.9em;
+  font-weight: bold;
+  margin: 1.67em 0;
+}
+
+h3 {
+  display: block;
+  font-size: 0.83em;
+  font-weight: bold;
+  margin: 1.67em 0;
+}
+
+h3 {
+  display: block;
+  font-size: 0.83em;
+  margin: 1.67em 0;
+}
+
+
 h5 {
   display: block;
   font-size: 0.83em;
