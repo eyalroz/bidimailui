@@ -350,7 +350,7 @@ div.hebrew-content div.question {
 }
 
 div.question {
-  border: 1px solid rgb(192,192,192);
+  background-color: rgb(240,240,240);
   padding-left: 3%;
   padding-right: 3%;
   padding-top: 1%;
