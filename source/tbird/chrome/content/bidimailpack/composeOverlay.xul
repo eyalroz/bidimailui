@@ -52,24 +52,32 @@
 </keyset>
 
 <popup id="msgComposeContext">
-  <menuseparator/>
+  <menuseparator />
   <menuitem id="contextSwitchParagraphDirectionItem" label="&menu-bidimail-switch-paragraph-direction:label;"
     accesskey="&menu-bidimail-switch-paragraph-direction:accesskey;" 
     command="cmd_switch_paragraph" />
   <menuitem id="contextBodyDirectionItem" label="&menu-bidimail-switch-document-direction:label;"
     accesskey="&menu-bidimail-switch-document-direction:accesskey;" 
     command="cmd_switch_document" />
-  <menuitem id="contextClearParagraphDirectionItem" label="&menu-bidimail-clear-paragraph-direction:label;"
-    accesskey="&menu-bidimail-clear-paragraph-direction:accesskey;" 
-    command="cmd_clear_paragraph_dir" />
 </popup>
 
 <menu id="menu_View">
   <menupopup id="menu_View_Popup">
-  <menuitem label="&menu-bidimail-switch-document-direction:label;"
-    accesskey="&menu-bidimail-switch-document-direction:accesskey;" 
-    command="cmd_switch_document" key="key-bidimail-switch" />
+    <menuitem label="&menu-bidimail-switch-document-direction:label;"
+      accesskey="&menu-bidimail-switch-document-direction:accesskey;" 
+      command="cmd_switch_document" key="key-bidimail-switch" />
   </menupopup>
 </menu>
 
+<menu id="formatMenu">
+  <menupopup id="formatMenuPopup">
+    <menuseparator />
+    <menuitem id="formatSwitchParagraphDirectionItem" label="&menu-bidimail-switch-paragraph-direction:label;"
+      accesskey="&menu-bidimail-switch-paragraph-direction:accesskey;" 
+      command="cmd_switch_paragraph" />
+    <menuitem id="format_ClearParagraphDirectionItem" label="&menu-bidimail-clear-paragraph-direction:label;"
+      accesskey="&menu-bidimail-clear-paragraph-direction:accesskey;" 
+      command="cmd_clear_paragraph_dir" />
+  </menupopup>
+</menu>
 </overlay>
