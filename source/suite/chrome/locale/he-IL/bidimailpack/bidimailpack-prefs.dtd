@@ -4,7 +4,9 @@
 <!ENTITY rtl                                     "מימין לשמאל">
 <!ENTITY ltr                                     "משמאל לימין">
 <!ENTITY always-reply-in-default-dir             "ענה להודעות תמיד בכיוון ברירת-המחדל">
-<!ENTITY guide-url                               "http://bidiui.mozdev.org/mail/hebrew/guide.html">
+<!ENTITY more-info                               "למידע נוסף:">
+<!ENTITY guide-link-text                         "המדריך למשתמש ב-BiDi Mail UI">
+<!ENTITY guide-link-url                          "http://bidiui.mozdev.org/mail/hebrew/guide.html">
 <!ENTITY bidimailpack-preftree-label             "BiDi Mail UI">
 <!ENTITY display-buttons                         "הצג כפתורי כיווניות">
 
