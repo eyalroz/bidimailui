@@ -15,12 +15,4 @@
     </chrome:packages>
   </RDF:Description>
 
-  <RDF:Seq about="urn:mozilla:stylesheets">
-    <RDF:li resource="chrome://messenger/content/messengercompose/messengercompose.xul"/>
-  </RDF:Seq>
-
-  <RDF:Seq about="chrome://messenger/content/messengercompose/messengercompose.xul">
-    <RDF:li>chrome://bidimailpack/skin/bidimailpack.css</RDF:li>
-  </RDF:Seq>
-
 </RDF:RDF>
