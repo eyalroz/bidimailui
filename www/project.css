@@ -89,7 +89,7 @@ div#english-navbar {
 }
 
 div#hebrew-navbar #project-navigation {
-  margin-right: 20px;
+/*  margin-right: 20px;*/
   padding-right: 20px;
   right: 10%;
 }
