@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<bindings xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <binding id="marginsBinding">
+        <content>
+            <xul:label xbl:inherits="value=title"/>
+            <xul:textbox size="3" />
+            <xul:textbox size="2" />
+        </content>
+        <implementation>
+            <constructor><![CDATA[
+              this.initFromPref();
+            ]]></constructor>
+
+            <field name="valueField"> document.getAnonymousNodes(this)[1] </field>
+            <field name="scaleField"> document.getAnonymousNodes(this)[2] </field>
+
+            <property name="pref"
+                      onget="return this.getAttribute('pref');"
+                      onset="this.setAttribute('pref',val); return this.initFromPref();" />
+            <property name="value"
+                      onget="return (this.valueField.value);"
+                      onset="return (this.valueField.value = val);" />
+            <property name="scale"
+                      onget="return (this.scaleField.value);"
+                      onset="return (this.scaleField.value = val);" />
+            <property name="cssValue"
+                      onget="return (this.value+this.scale);"
+                      onset="return false;" />
+            <method name="initFromPref">
+                <body><![CDATA[
+                  var aValue = 0, aScale = "cm";
+                  try {
+                  
+                  }
+                  catch (e) {
+                    // default values;
+                    aValue = 0; aScale = "cm";                   
+                  }
+                  this.value = aValue; this.scale = aScale;
+                ]]></body>
+            </method>
+            <method name="saveToPref">
+                <body><![CDATA[
+                ]]></body>
+            </method>
+        </implementation>
+    </binding>
+</bindings>

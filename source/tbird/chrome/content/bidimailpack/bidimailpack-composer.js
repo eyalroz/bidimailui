@@ -696,7 +696,8 @@ function InsertParagraph()
   {
    editor.deleteNode(node);
   }
-
+    par.style.marginTop = "6px";
+    par.style.marginBottom = "6px";
   editor.endTransaction();
 
   // ------------------------------- "set old style" ------
