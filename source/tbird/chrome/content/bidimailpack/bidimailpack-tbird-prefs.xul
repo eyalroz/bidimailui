@@ -34,8 +34,7 @@
     <spacer />
     <checkbox id="bidimailpack-reply-in-default-dir" checked="false" label="&always-reply-in-default-dir;" autostretch="never" />
     <checkbox id="bidimailpack-display-buttons" checked="true" label="&display-buttons;" autostretch="never" />
-    <spacer />
-    <spcaer />
+    <spacer style="height: 1em;" />
     <vbox>
       <description>&marginTopTitle.label;</description>
       <hbox id="margintop"
@@ -47,7 +46,7 @@
             style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
             class="indent"
             prefbase="mailnews.paragraph.margin_bottom"/>
-     </vbox>
+    </vbox>
   </groupbox>
 
   <description>
