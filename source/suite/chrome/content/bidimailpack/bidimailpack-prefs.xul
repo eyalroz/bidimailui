@@ -21,13 +21,6 @@
   </script>
 
   <groupbox>
-    <caption label="&message-display-groupbox-caption;"/>
-    <vbox>
-      <checkbox id="bidimailpack-autodetect" label="&autodetect;" checked="true" autostretch="never" />
-    </vbox>
-  </groupbox>
-     
-  <groupbox>
     <caption label = "&message-composition-groupbox-caption;"/>
     <description>&default-dir;</description>
       <hbox class="indent">

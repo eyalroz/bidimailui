@@ -3,12 +3,6 @@ function initValues()
   var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
   var element;
 
-  // Auto detect text-plain incomming messages direction. Default: True.
-  try {
-    element = document.getElementById('bidimailpack-autodetect');
-    element.checked = prefs.getBoolPref('mailnews.message_display.autodetect_direction');
-  } catch(e) {};
-
   // Default composing direction for a new message. Default: LTR.
   try {
     var prefDir = prefs.getCharPref('mailnews.send_default_direction');
