@@ -4,22 +4,79 @@
 /*  list-style-image: url("chrome://bidimailpack/skin/ltr-main-bar.png");*/
 /*  list-style-image: url("jar:resource:/chrome/bidimailpack.jar!/skin/classic/bidimaipack/ltr-main-bar.png");*/
   list-style-image: url("chrome://bidimailpack/content/images/ltr-main-bar.png");
+  -moz-image-region: rect(0px 23px 21px 0px);
 }
+
+#button-direction-ltr-main-bar:hover {
+  -moz-image-region: rect(0px 46px 21px 23px);
+}
+
+#button-direction-ltr-main-bar:hover:active {
+  -moz-image-region: rect(0px 69px 21px 46px);
+}
+
+#button-direction-ltr-main-bar[disabled="true"] {
+  -moz-image-region: rect(0px 92px 21px 69px);
+}
+
 
 #button-direction-rtl-main-bar {
 /*  list-style-image: url("chrome://bidimailpack/skin/rtl-main-bar.png");*/
 /*  list-style-image: url("jar:resource:/chrome/bidimailpack.jar!/skin/classic/bidimaipack/rtl-main-bar.png");*/
   list-style-image: url("chrome://bidimailpack/content/images/rtl-main-bar.png");
+  -moz-image-region: rect(0px 23px 21px 0px);
 }
+
+#button-direction-rtl-main-bar:hover {
+  -moz-image-region: rect(0px 46px 21px 23px);
+}
+
+#button-direction-rtl-main-bar:hover:active {
+  -moz-image-region: rect(0px 69px 21px 46px);
+}
+
+#button-direction-rtl-main-bar[disabled="true"] {
+  -moz-image-region: rect(0px 92px 21px 69px);
+}
+
 
 #button-direction-ltr-formatting-bar {
 /*  list-style-image: url("chrome://bidimailpack/skin/ltr-formatting-bar.png");*/
 /*  list-style-image: url("jar:resource:/chrome/bidimailpack.jar!/skin/classic/bidimaipack/ltr-formatting-bar.png");*/
   list-style-image: url("chrome://bidimailpack/content/images/ltr-formatting-bar.png");
+  -moz-image-region: rect(0px 19px 18px 0px);
 }
+
+#button-direction-ltr-formatting-bar:hover {
+  -moz-image-region: rect(0px 38px 18px 19px);
+}
+
+#button-direction-ltr-formatting-bar:hover:active {
+  -moz-image-region: rect(0px 57px 18px 38px);
+}
+
+#button-direction-ltr-formatting-bar[disabled="true"] {
+  -moz-image-region: rect(0px 76px 18px 57px) !important;
+}
+
+
 
 #button-direction-rtl-formatting-bar {
 /*  list-style-image: url("chrome://bidimailpack/skin/rtl-formatting-bar.png");*/
 /*  list-style-image: url("jar:resource:/chrome/bidimailpack.jar!/skin/classic/bidimaipack/rtl-formatting-bar.png");*/
   list-style-image: url("chrome://bidimailpack/content/images/rtl-formatting-bar.png");
+  -moz-image-region: rect(0px 19px 18px 0px);
+}
+
+
+#button-direction-rtl-formatting-bar:hover {
+  -moz-image-region: rect(0px 38px 18px 19px);
+}
+
+#button-direction-rtl-formatting-bar:hover:active {
+  -moz-image-region: rect(0px 57px 18px 38px);
+}
+
+#button-direction-rtl-formatting-bar[disabled="true"] {
+  -moz-image-region: rect(0px 76px 18px 57px) !important;
 }
