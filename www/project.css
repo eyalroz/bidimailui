@@ -141,6 +141,8 @@ div#hebrew-navbar #project-navigation {
 
 .hebrew-news {
   float: left;
+  padding: 0;
+  margin: 0;
 }
 
 .english-news {
@@ -150,6 +152,18 @@ div#hebrew-navbar #project-navigation {
 .infoTab {
   margin: 10px;
   width: 154px;
+}
+
+
+.infoTab .infoItems {
+  font-size: smaller;
+}
+
+.infoTab .infoItems div {
+  background: white no-repeat url("http://www.mozdev.org/sharedimages/bullet.gif");
+  color: inherit;
+  padding-left: 16px;
+  padding-bottom: 5px;
 }
 
 .infoTab .infoHeader {
@@ -183,17 +197,6 @@ div#hebrew-navbar #project-navigation {
 }
 
 #main-content ol li {
-  padding-bottom: 5px;
-}
-
-.infoTab .infoItems {
-  font-size: smaller;
-}
-
-.infoTab .infoItems div {
-  background: white no-repeat url("http://www.mozdev.org/sharedimages/bullet.gif");
-  color: inherit;
-  padding-left: 16px;
   padding-bottom: 5px;
 }
 
