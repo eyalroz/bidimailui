@@ -46,7 +46,8 @@
 
 <toolbox id="headers-box" class="toolbox-top" mode="icons"> 
   <toolbar id="FormatToolbar">
-    <hbox id="directionality-toolbar-section" insertafter="ParagraphSelect">
+    <hbox id="directionality-toolbar-section" insertafter="IncreaseFontSizeButton">
+      <toolbarseparator id="directionality-separator-formatting-bar" class="toolbarseparator-standard" />
       <toolbarbutton id="button-direction-ltr-formatting-bar"
         tooltiptext="&bidimail-ltr-button:tip;"
         command="cmd_ltr_paragraph" checked="false" hidden="true"
@@ -55,7 +56,6 @@
         tooltiptext="&bidimail-rtl-button:tip;"
         command="cmd_rtl_paragraph" checked="false" hidden="true"
         observes="rtl-paragraph-direction-broadcaster" />
-      <toolbarseparator id="directionality-separator-formatting-bar" class="toolbarseparator-standard" />
     </hbox>
   </toolbar>
 </toolbox>

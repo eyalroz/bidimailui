@@ -236,6 +236,7 @@ function composeWindowEditorOnLoadHandler() {
     //       is customizable in tbird anyway
     document.getElementById('ltr-paragraph-direction-broadcaster').setAttribute('hidden',hiddenbuttons);
     document.getElementById('rtl-paragraph-direction-broadcaster').setAttribute('hidden',hiddenbuttons);
+    document.getElementById('directionality-separator-formatting-bar').setAttribute('hidden',hiddenbuttons);   
   }
 
   // Direction Controller
