@@ -11,7 +11,7 @@
 		chrome:authorURL="http://mano.fastmail.fm"
 		chrome:name="bidiext"
 		chrome:extension="true"
-		chrome:description="Adds BiDi UI to Mozilla">
+		chrome:description="Adds BiDi UI to Mozilla Firefox">
 	</RDF:Description>
 
 	<RDF:Seq about="urn:mozilla:overlays">
