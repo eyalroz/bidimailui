@@ -31,6 +31,7 @@
     <em:homepageURL>http://bidiui.mozdev.org/</em:homepageURL>
 
     <em:optionsURL>chrome://bidimailpack/content/bidimailpack-tbird-prefs.xul</em:optionsURL>
+    <em:iconURL>chrome://bidimailpack/content/bidimailpack.png</em:iconURL>
 
     <!-- Packages, Skins and Locales that this extension registers -->
     <em:file>
