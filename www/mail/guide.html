@@ -1,33 +1,30 @@
-﻿<!-- MAIN CONTENT -->
+<!-- MAIN CONTENT -->
 <div class="main-content english-content">
 
 
 <h2><a id="content" name="user_s_guide">User's Guide</a></h2>
-<p>
-</p>
-<h3><a name="לוח_ההעדפות"> Control Panel</a></h3>
-<p>Let's start by explaining the various option offered in BiDi UI
+<h3><a name="Control_Panel"> Control Panel</a></h3>
+<p>Let's start by explaining the various option offered in BiDi Mail UI
 Control Panel. Each option will be explained and demonstrated in the
 following section.</p>
-<p>In Mozilla 1.x Suite, the BiDi UI Control Panel appears as a
+<p>In Mozilla 1.x Suite, the BiDi Mail UI Control Panel appears as a
 separate branch under the main preferences tree (Edit -&gt;
-Preferences).
+Preferences -&gt Mail & Newsgroups).</p>
 
-</p>
 <div class="screenshot-container">
 <img class="screenshot"  src="../images/messenger-prefs-suite.png"
- alt="תמונה:bidiui-messenger-prefs-suite.png">
+ alt="bidiui-messenger-prefs-suite.png">
 </div>
 <p>In Thunderbird, one has to open the Extensions Manager (Tools
--&gt; Extensions), then double click the BiDi UI entry. This will open
+-&gt; Extensions), then double click the BiDi Mail UI entry. This will open
 the extension control panel:</p>
 <div class="screenshot-container">
 <img class="screenshot"  src="../images/messenger-prefs-tbird.png"
- alt="תמונה:bidiui-messenger-prefs-tbird.png">
+ alt="bidiui-messenger-prefs-tbird.png">
 </div>
-<h3><a name="זיהוי_כיוון_אוטומטי_להודעות_מוצגות"> Automatic direction
+<h3><a name="Automatic_direction_detection_for_displayed_messages"> Automatic direction
 detection for displayed messages </a></h3>
-<p>BiDi UI can automatically detect and set the proper direction of
+<p>BiDi Mail UI can automatically detect and set the proper direction of
 displayed messages. This feature is enabled by the option "Auto-Detect
 Message Direction".</p>
 <p>The concept behind the auto-detection logic is to search the text
@@ -39,55 +36,51 @@ toward right alignment. For example, the following message:<br>
 
 </p>
 <div class="screenshot-container">
-<img class="screenshot"  src="../images/messenger-all-rtl-one-ltr-word.png"
- alt="תמונה: bidiui-messenger-all-rtl-one-ltr-word.png">
+<img class="screenshot" src="../images/messenger-all-rtl-one-ltr-word.png"
+ alt="bidiui-messenger-all-rtl-one-ltr-word.png">
 </div></p>
 <p>Will be right-aligned, but so will this message:
 </p>
 <div class="screenshot-container">
 <img class="screenshot"  src="../images/messenger-all-ltr-one-rtl-word.png"
- alt="תמונה: bidiui-messenger-all-ltr-one-rtl-word.png">
+ alt="bidiui-messenger-all-ltr-one-rtl-word.png">
 </div>
 <p>In the case of mixed texts, the direction is set as Right-to-Left.</p>
 <p>In some cases, the character encoding defined by the displayed
 message is incorrect. This may cause Mozilla to display Hebrew letters
 as accented Latin characters. To prevent such messages from being
-mistakenly aligned, the algorithm employed by BiDi UI takes into
+mistakenly aligned, the algorithm employed by BiDi Mail UI takes into
 accounts only whole words, it doesn't rely merely on specific
 characters within words.</p>
 <div class="screenshot-container">
-<img class="screenshot"  src="../images/messenger-single-rtl-char-in-ltr-message.png"
- alt="תמונה: bidiui-messenger-single-rtl-char-in-ltr-message.png">
+<img class="screenshot" src="../images/messenger-single-rtl-char-in-ltr-message.png"
+ alt="bidiui-messenger-single-rtl-char-in-ltr-message.png">
 </div></p>
 <p>Both detection and setting of the direction is performed while
 loading the message. If a message is re-loaded, this automatic process
-repeats. <br>
+repeats.</p>
 
-</p>
 <p>The example below shows a message which was sent using the wrong
-character encoding. Note that BiDi UI automatically aligns it to the
-left:
-</p>
+character encoding. Note that BiDi Mail UI automatically aligns it to the
+left:</p>
+
 <div class="screenshot-container">
-<img class="screenshot"  src="../images/messenger-charset-error.png"
- alt="תמונה: bidiui-messenger-charset-error.png">
+<img class="screenshot" src="../images/messenger-charset-error.png"
+ alt="bidiui-messenger-charset-error.png">
 </div></p>
 <p>Changing the Encoding via the View menu (in this case, from
 ISO-8859-1 to Windows-1255) will re-trigger the direction
 auto-detection:</p>
 <div class="screenshot-container">
-<img class="screenshot"  src="../images/messenger-charset-corrected.png"
- alt="תמונה: bidiui-messenger-charset-corrected.png">
+<img class="screenshot" src="../images/messenger-charset-corrected.png"
+ alt="bidiui-messenger-charset-corrected.png">
 </div>
-<h3><a name="שינוי_כיוונן_של_הודעות_מוצגות"> Changing direction of
+<h3><a name="Changing_direction_of_displayed_messages"> Changing direction of
 displayed messages </a></h3>
 <p>
-In addition to auto-detection, BiDi UI also provides manual direction
+In addition to auto-detection, BiDi Mail UI also provides manual direction
 control over the displayed message. This can be done in three different
-ways:<br>
-<br>
-
-</p>
+ways:</p>
 <ul>
   <li>By pressing a keyboard shortcut: Ctrl+Shift+X (or Cmd+Shift+X in
 Mac OS). </li>
@@ -95,8 +88,8 @@ Mac OS). </li>
 message:</li>
 </ul>
 <div class="screenshot-container">
-<img class="screenshot"  src="../images/messenger-context-menu-before-switch.png"
- alt="תמונה: bidiui-messenger-context-menu-before-switch.png">
+<img class="screenshot" src="../images/messenger-context-menu-before-switch.png"
+ alt="bidiui-messenger-context-menu-before-switch.png">
 </div><br>
 </div>
 <br>
@@ -108,39 +101,35 @@ message:</li>
 &nbsp;<br>
   <ul>
 <div class="screenshot-container">
-<img class="screenshot"  src="../images/messenger-view-menu-before-switch.png"
- alt="תמונה: bidiui-messenger-view-menu-before-switch.png">
+<img class="screenshot" src="../images/messenger-view-menu-before-switch.png"
+ alt="bidiui-messenger-view-menu-before-switch.png">
 </div>
   </ul>
 </ul>
 <p>As a result, the direction switches to the opposite of the previous
 one:</p>
 <div class="screenshot-container">
-<img class="screenshot"  src="../images/messenger-message-after-switch.png"
- alt="תמונה: bidiui-messenger-message-after-switch.png">
+<img class="screenshot" src="../images/messenger-message-after-switch.png"
+ alt="bidiui-messenger-message-after-switch.png">
 </div>
-<p>
-</p>
-<p>
-</p>
 
-<h3><a name="קביעה_ראשונית_של_כיוון_הודעות_חדשות"> Setting the default
+<h3><a name="Setting_the_default_direction_for_new_messages"> Setting the default
 direction for new messages </a></h3>
-<p>When composing a new message without BiDi UI, Mozilla sets
+<p>When composing a new message without BiDi Mail UI, Mozilla sets
 Left-to-Right as the default direction. However, with this extension,
 there are two factors that effect the direction of new messages:
 The default direction (either Left-to-Right or Right-to-Left) and an
 option that allows to keep the direction of the original message when
 replying (rather than using the default direction). Both are user-set
-options that appear in the Message Composition section of BiDi UI
+options that appear in the Message Composition section of BiDi Mail UI
 control panel.</p>
 For example, if one chooses Left-to-Right as the default direction, but
 keeps the option "Always Reply in the Default Direction" unchecked,
 clicking "Compose" to start a new message will open a new window with
 Left-to-Right direction:<br>
 <div class="screenshot-container">
-<img class="screenshot"  src="../images/new-message-ltr.png"
- alt="תמונה: bidiui-new-message-ltr.png">
+<img class="screenshot" src="../images/new-message-ltr.png"
+ alt="bidiui-new-message-ltr.png">
 </div>
 <p>(Note the two direction control buttons - RTL/LTR - in the main
 toolbar; We shall touch upon these two later on.)</p>
@@ -150,13 +139,13 @@ right-aligned.</p>
 
 <div class="screenshot-container">
 <img class="screenshot"  src="../images/reply-rtl.png"
- alt="תמונה: bidiui-reply-rtl.png">
+ alt="bidiui-reply-rtl.png">
 </div>
-<h3><a name="שינויי_כיוון_בעת_כתיבת_הודעות_מלל_פשוט"> Changing
+<h3><a name="Changing_direction_when_editing_plain_text_messages"> Changing
 direction when editing plain text messages </a></h3>
 <p>
 In plain text messages there is only one single direction - the global
-message direction. BiDi UI provides four ways to control this direction:</p>
+message direction. BiDi Mail UI provides four ways to control this direction:</p>
 <ul>
   <li>Via a keyboard shortcut Ctrl+Shift+X (Cmd+Shift+X) </li>
   <li>By clicking one of the direction
@@ -165,7 +154,7 @@ Left-to-Right):
   </li>
   <li>
 <div class="screenshot-container">
-<img class="screenshot"  src="../images/composer-button-before-switch.png"
+<img class="screenshot" src="../images/composer-button-before-switch.png"
  alt="תמונה:  bidiui-composer-button-before-switch.png">
 </div>
   </li>
@@ -173,14 +162,14 @@ Left-to-Right):
 message content area:</li>
   <li>
 <div class="screenshot-container">
-<img class="screenshot"  src="../images/composer-context-menu-before-switch.png"
- alt="תמונה: bidiui-composer-context-menu-before-switch.png">
+<img class="screenshot" src="../images/composer-context-menu-before-switch.png"
+ alt="bidiui-composer-context-menu-before-switch.png">
 </div></li>
   <li>By choosing "Switch Message Direction" in the View menu of the
 Compose New message screen:
 <div class="screenshot-container">
-<img class="screenshot"  src="../images/composer-view-menu-before-switch.png"
- alt="תמונה: bidiui-composer-view-menu-before-switch.png">
+<img class="screenshot" src="../images/composer-view-menu-before-switch.png"
+ alt="bidiui-composer-view-menu-before-switch.png">
 </div>
 
   </li>
@@ -190,23 +179,27 @@ This action will align the message to the opposite direction of the
 current one (as described above for displaying messages):</p>
 <div class="screenshot-container">
 <img class="screenshot"  src="../images/composer-message-after-switch.png"
- alt="תמונה: bidiui-composer-message-after-switch.png">
+ alt="bidiui-composer-message-after-switch.png">
 </div>
-<h3><a name="שינויי_כיוון_בעת_כתיבת_הודעות_HTML">Changing direction
+<h3><a name="Changing_direction_when_editing_HTML_messages">Changing direction
 when editing HTML messages<br>
 </a></h3>
 <p>In HTML messages, each paragraph can be to a different direction.
-BiDi UI changes the behavior of the message editor, so that pressing
+BiDi Mail UI changes the behavior of the message editor, so that pressing
 Enter starts a new
 paragraph (similar to OpenOffice and MS Word). Shift+Enter starts a new
 line within a paragraph.</p>
 <p>The Design toolbar now includes two direction buttons that also
-display the current paragraph direction:<br>
-
-</p>
+display the current paragraph direction:</p>
+<h4><a name="space_between_paragraphs">Configuring the space between paragraphs</a></h4>
+<p>By default, BiDi Mail UI does not introduce any additional space 
+between paragraphs. As a result, new lines and new paragraph look the same. The difference is merely semantic.
+To changes this behavior, open the extension's control 
+panel and set the space above/below paragraphs as required.</p>
+<hr>
 <div class="screenshot-container">
 <img class="screenshot"  src="../images/composer-html-current-dir.png"
- alt="תמונה: bidiui-composer-html-current-dir.png">
+ alt="bidiui-composer-html-current-dir.png">
 </div>
 These two buttons also display the direction of text which is selected
 from several paragraphs – as long as it's a single direction. If the
@@ -214,18 +207,18 @@ selected text uses both directions, the buttons are depressed to
 signify this.<br>
 <div class="screenshot-container">
 <img class="screenshot"  src="../images/composer-html-no-single-dir.png"
- alt="תמונה: bidiui-composer-html-no-single-dir.png">
+ alt="bidiui-composer-html-no-single-dir.png">
 </div>
 <p>Changing the direction of a paragraph requires placing the caret
 within it. Alternatively, text from several paragraphs can be selected,
-so that changing the direction effects all selected paragraphs. </p>
+so that changing the direction effects all selected paragraphs.</p>
 <p>There are three ways to set the direction:</p>
 <ul>
   <li>By clicking one of the direction buttons in the main toolbar (RTL
 for Right-to-Left, LTR for Left-to-Right):
 <div class="screenshot-container">
 <img class="screenshot"  src="../images/composer-html-button-before-switch.png"
- alt="תמונה:  bidiui-composer-html-button-before-switch.png">
+ alt="bidiui-composer-html-button-before-switch.png">
 </div>
 
   </li>
@@ -233,25 +226,20 @@ for Right-to-Left, LTR for Left-to-Right):
 the message content area:
 <div class="screenshot-container">
 <img class="screenshot"  src="../images/composer-html-context-menu-before-switch.png"
- alt="תמונה: bidiui-composer-html-context-menu-before-switch.png">
+ alt="bidiui-composer-html-context-menu-before-switch.png">
 </div> </li>
   <li>By choosing "Switch Paragraph Direction" in the Format menu of
 message composition window:
 <div class="screenshot-container">
 <img class="screenshot"  src="../images/composer-html-format-menu-before-switch.png"
- alt="תמונה: bidiui-composer-html-format-menu-before-switch.png">
+ alt="bidiui-composer-html-format-menu-before-switch.png">
 </div> </li>
 </ul>
-<p>
-</p>
-<h4><a name="שינוי_'הכיוון_הכללי'_של_הודעת_HTML"> Changing the global
+<h4><a name="Changing_the_global_direction_of_HTML_messages"> Changing the global
 direction of HTML messages</a></h4>
 <p>Paragraphs that do not carry an explicit direction are displayed
-using the global
-message direction. This can be changed via the "Switch Message
-Direction" function, under the View menu. The user-set direction of
-specific paragraphs can be cleared using the "Clear Paragraph
-Direction"
-under the Format menu.</p>
-<hr>
+using the global message direction. This can be changed via the "Switch Message
+Direction" function, under the View menu. The user-set direction of specific paragraphs
+can be cleared using the "Clear Paragraph
+Direction" under the Format menu.</p>
 </div>
