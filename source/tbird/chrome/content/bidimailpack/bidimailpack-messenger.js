@@ -35,6 +35,9 @@ function browserOnLoadHandler() {
   var body = this.docShell.contentViewer.DOMDocument.body;
   var bodyIsPlainText = body.childNodes.length > 1
     && body.childNodes[1].className != 'moz-text-html'; // either '*-plain' or '*-flowed'
+
+  // TODO: consider changing the following condition so as to also set the
+  // direction of non-plain-text HTML messages without a preset direction
          
   if (bodyIsPlainText && hasRTLWord(body))
   {

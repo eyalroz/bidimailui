@@ -27,7 +27,7 @@
   <command id="cmd_switch_paragraph" oncommand="goDoCommand('cmd_switch_paragraph');" />  
   <command id="cmd_rtl_document" oncommand="goDoCommand('cmd_rtl_document');" />
   <command id="cmd_ltr_document" oncommand="goDoCommand('cmd_ltr_document');" />
-  <command id="cmd_switch_document" oncommand="goDoCommand('cmd_switch_documen');" />
+  <command id="cmd_switch_document" oncommand="goDoCommand('cmd_switch_document');" />
   <command id="cmd_clear_paragraph_dir" oncommand="goDoCommand('cmd_clear_paragraph_dir');" />
 </commandset>
 
