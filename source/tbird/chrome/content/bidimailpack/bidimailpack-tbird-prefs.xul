@@ -38,12 +38,12 @@
     <vbox>
       <description>&default-dir;</description>
       <hbox id="margintop"
-           style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
-           prefbase="mailnews.paragraph.margin_top"/>
+            style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
+            prefbase="mailnews.paragraph.margin_top"/>
       <description>&default-dir;</description>
       <hbox id="marginbottom"
             style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
-           prefbase="mailnews.paragraph.margin_bottom"/>
+            prefbase="mailnews.paragraph.margin_bottom"/>
      </vbox>
   </groupbox>
 
