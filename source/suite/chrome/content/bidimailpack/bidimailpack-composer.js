@@ -102,7 +102,6 @@ function composeWindowEditorOnLoadHandler() {
   // intl' globals
   gLastWindowToHaveFocus = null;
 
-  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
   var editorType = GetCurrentEditorType();
 
   // Direction Controller
@@ -117,30 +116,30 @@ function composeWindowEditorOnLoadHandler() {
   // the reason for it is that without a timeout, it seems
   // that gMsgCompose does often not yet exist when
   // the OnLoad handler runs...
-  setTimeout('composeWindowEditorOnLoadHandler2();', 50);
+  setTimeout('composeWindowEditorDelayedOnLoadHandler();', 0);
 }
 
-function composeWindowEditorOnLoadHandler2() {
-  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
 
-  // show rlm & lrm menu items?
-  var hiddenControlCharItems = true;
-  try {
-    if (prefs.getBoolPref('mail.compose.show_context_control_characters'))
-      hiddenControlCharItems = false;
-  }
-  catch(e) {}
-  document.getElementById('rlm-lrm-broadcaster').setAttribute('hidden', hiddenControlCharItems);
+function composeWindowEditorOnReopenHandler() {
+  // another ugly hack (see composeWindowEditorOnLoadHandler):
+  // if we don't delay before running the other handler, the
+  // message text will not be available so we will not know
+  // whether or not this is a reply
+  setTimeout('composeWindowEditorDelayedOnLoadHandler();', 0);
+}
+
+function composeWindowEditorDelayedOnLoadHandler() {
+  
+  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
   var body = document.getElementById('content-frame').contentDocument.body;
 
-  // Handle message direction
+
   var messageIsAReply = false;
   try {
     messageIsAReply = (gMsgCompose.originalMsgURI.length > 0);
   }
   catch(e) {};
   var editorType = GetCurrentEditorType();
-
 
   // decide which direction buttons are shown and which aren't
 
@@ -212,7 +211,7 @@ function InstallComposeWindowEditorHandler() {
   // window is opened the handler does not run even once
 
   document.addEventListener('load', composeWindowEditorOnLoadHandler, true);
-  document.addEventListener('compose-window-reopen', composeWindowEditorOnLoadHandler2, true);
+  document.addEventListener('compose-window-reopen', composeWindowEditorOnReopenHandler, true);
   document.addEventListener('keypress', onKeyPress, true);
 }
 

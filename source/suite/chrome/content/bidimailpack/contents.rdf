@@ -20,6 +20,7 @@
     <RDF:li resource="chrome://messenger/content/mailWindowOverlay.xul"/>
     <RDF:li resource="chrome://messenger/content/messengercompose/messengercompose.xul"/>
     <RDF:li resource="chrome://communicator/content/pref/preftree.xul"/>
+    <RDF:li resource="chrome://editor/content/editorOverlay.xul"/>
   </RDF:Seq>
 
   <RDF:Seq about="chrome://messenger/content/mailWindowOverlay.xul">
@@ -32,6 +33,13 @@
   
   <RDF:Seq about="chrome://communicator/content/pref/preftree.xul">
      <RDF:li>chrome://bidimailpack/content/bidimailpack-preftree.xul</RDF:li>
+  </RDF:Seq>
+
+  <!-- If I overlay the insert menu via composeOverlay.xul,
+      editorOverlay.xul is not yet apllied, and insertMenuPopup
+      is still empty -->
+  <RDF:Seq about="chrome://editor/content/editorOverlay.xul">
+    <RDF:li>chrome://bidimailpack/content/insertMenuOverlay.xul</RDF:li>
   </RDF:Seq>
 
 </RDF:RDF>

@@ -35,12 +35,6 @@ function initValues()
     element.checked = true;
   };
 
-  // RLM/LRM contextual menu item visibile? Default: False
-  try {
-    element = document.getElementById('bidimailpack-display-context-control-charcters');
-    element.checked = prefs.getBoolPref('mail.compose.show_context_control_characters');
-  } catch(e) {};
-
 }
 
 function saveValues()
@@ -59,6 +53,4 @@ function saveValues()
     element = document.getElementById('bidimailpack-display-buttons');
     prefs.setBoolPref('mail.compose.show_direction_buttons', element.checked);
 
-    element = document.getElementById('bidimailpack-display-context-control-charcters');
-    prefs.setBoolPref('mail.compose.show_context_control_characters', element.checked);
 }
