@@ -337,3 +337,10 @@ div#language-selection a {
   font-family: verdana,arial,sans-serif;
   font-size: small;
 }
+
+p.question {
+  font-family: cursive;
+}
+
+p.answer {
+}
