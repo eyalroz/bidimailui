@@ -1,9 +1,24 @@
-.PHONY: all clean bidiext.jar
+SUBDIRS = chrome
+XPI_FILENAME = bidiui_suite.xpi
+.PHONY: all clean subdirs ${SUBDIRS}
 
-all: bidiext.jar
+all: subdirs ${XPI_FILENAME}
 
 clean:
-	rm bidiext.jar 2>/dev/null; true
+	rm ${XPI_FILENAME} 2>/dev/null; true
+	for DIR in ${SUBDIRS}; do \
+		${MAKE} -C $$DIR $@; \
+	done
 
-bidiext.jar: content locale
-	rm $@ 2>/dev/null; zip $@ -r $^ -x '*/CVS/*'
+subdirs: ${SUBDIRS}
+
+${SUBDIRS}:
+	${MAKE} -C $@
+
+${XPI_FILENAME}: subdirs
+	rm -rf $@; \
+	zip $@ \
+		chrome/bidimailpack.jar \
+		install.js \
+		install.rdf \
+
