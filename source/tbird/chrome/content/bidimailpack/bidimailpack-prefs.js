@@ -52,4 +52,6 @@ function saveValues()
 
     element = document.getElementById('bidimailpack-display-buttons');
     prefs.setBoolPref('mail.compose.show_direction_buttons', element.checked);
+    
+    document.getElementById('margintop').saveToPrefs();
 }
