@@ -223,23 +223,6 @@ div#hebrew-navbar #project-navigation {
   padding-bottom: 5px;
 }
 
-div#hebrew-content {
-  direction: rtl;
-  font-family: verdana, arial, sans-serif;
-  padding-right: 10px;
-  padding-left: 10px;
-  text-align: justify;
-  font-size: 0.9em;
-}
-
-div#english-content {
-  direction: ltr;
-  padding-right: 10px;
-  padding-left: 10px;
-  text-align: justify;
-  font-size: 0.9em;
-}
-
 .english-news + div {
   padding-right: 184px !important;
 }
@@ -247,6 +230,7 @@ div#english-content {
 .hebrew-news + div {
   padding-right: 184px !important;
 }
+
 
 a.download-xpi {
   text-align:center;
@@ -260,9 +244,28 @@ a.download-xpi {
   margin-right: 35%;
 }
 
-div#hebrew-content ul li , div#english-content ul li {
+div.main-content {
+  padding-right: 10px;
+  padding-left: 10px;
+  text-align: justify;
+  font-size: 0.9em;
+}
+
+div.main-content ul li  {
   font-size: small;
 }
+
+div.hebrew-content {
+  direction: rtl;
+  font-family: arial, sans-serif;
+}
+
+div.english-content {
+  direction: ltr;
+  font-family: verdana, arial, sans-serif;
+}
+
+
 
 div.screenshot-container {
   text-align: center;
