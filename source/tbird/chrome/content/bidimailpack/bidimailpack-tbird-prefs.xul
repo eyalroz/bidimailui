@@ -13,7 +13,8 @@
         title="&bidimailpack-settings;">
 
   <script type="application/x-javascript" src="chrome://bidimailpack/content/bidimailpack-prefs.js"/>
-
+  <script type="application/x-javascript" src="chrome://mozapps/content/extensions/extensions.js"/>
+  
   <groupbox>
     <caption label="&message-display-groupbox-caption;"/>
     <vbox>
@@ -34,5 +35,12 @@
      <checkbox id="bidimailpack-reply-in-default-dir" checked="false" label="&always-reply-in-default-dir;" autostretch="never" />
      <checkbox id="bidimailpack-display-buttons" checked="true" label="&display-buttons;" autostretch="never" />
   </groupbox>
+
+  <description>
+    <hbox>
+      <label value="&more-info;" />
+      <label href="http://bidiui.mozdev.org" onclick="openURL('http://bidiui.mozdev.org/mail/');" style="cursor: pointer; color: blue;">&link-text;</label>
+    </hbox>
+  </description>
 
 </dialog>
