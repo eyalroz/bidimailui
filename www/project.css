@@ -47,6 +47,10 @@ div#english-navbar .project-name:after {
   padding-right: 1.1em;
 }
 
+div#hebrew-navbar .project-name {
+  border: 1px solid black;
+}
+
 div#hebrew-navbar .project-name:after {
   padding-left: 1.1em;
 }
