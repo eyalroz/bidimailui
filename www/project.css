@@ -139,11 +139,11 @@ div#hebrew-navbar #project-navigation {
 }
 
 
-div#hebrew-content #infoTabs {
+.hebrew-news {
   float: left;
 }
 
-div#english-content #infoTabs {
+.english-news {
   float: right;
 }
 
@@ -214,11 +214,11 @@ div#english-content {
   font-size: 0.9em;
 }
 
-div.with-english-news {
+.english-news + div {
   padding-right: 184px !important;
 }
 
-div.with-hebrew-news {
+.hebrew-news + div {
   margin-left: 194px !important;
   background: rgb(255,255,245);
 }
