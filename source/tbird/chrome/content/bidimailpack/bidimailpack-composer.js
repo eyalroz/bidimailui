@@ -228,6 +228,9 @@ function composeWindowEditorOnLoadHandler() {
   document.getElementById('contextSwitchParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');
   document.getElementById('contextBodyDirectionItem').setAttribute('hidden', editorType == 'htmlmail');
 
+  // Direction Buttons
+  HandleDirectionButtons();
+
   // our extension likes paragraph text entry, not 'body text' - since
   // paragraph are block elements, with a direction setting
   if (editorType == 'htmlmail') {
@@ -246,12 +249,11 @@ function composeWindowEditorOnLoadHandler() {
   setTimeout('composeWindowEditorDelayedOnLoadHandler();', 125);
 }
 
-
-function composeWindowEditorOnReopenHandler() {
+function HandleDirectionButtons()
+{
   var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
   var editorType = GetCurrentEditorType();
 
-  // show direction buttons?
   if (editorType == 'htmlmail')
   {
     var hiddenbuttons = false;
@@ -268,6 +270,11 @@ function composeWindowEditorOnReopenHandler() {
     document.getElementById('rtl-paragraph-direction-broadcaster').setAttribute('hidden',hiddenbuttons);
     document.getElementById('directionality-separator-formatting-bar').setAttribute('hidden',hiddenbuttons);   
   }
+}
+
+function composeWindowEditorOnReopenHandler() {
+  // Direction Buttons
+  HandleDirectionButtons();
 
   // another ugly hack (see composeWindowEditorOnLoadHandler):
   // if we don't delay before running the other handler, the
