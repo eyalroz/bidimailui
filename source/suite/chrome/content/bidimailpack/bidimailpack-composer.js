@@ -465,8 +465,10 @@ function onKeyPress(ev)
   if (top.document.commandDispatcher.focusedWindow != content)
     return;
 
-  // Steal all Enters but Shift-Enters. Shift-Enters should insert BR, as usual.
-  if ((ev.keyCode == KeyEvent.DOM_VK_ENTER || ev.keyCode == KeyEvent.DOM_VK_RETURN) && !ev.shiftKey  && !isInList())
+  // Steal all plain enters without modifiers (e.g. do not change
+  // behaivor of Shift+Enter which inserts a <br>, Ctrl+Enter which
+  // sends the message etc.)
+  if ((ev.keyCode == KeyEvent.DOM_VK_ENTER || ev.keyCode == KeyEvent.DOM_VK_RETURN) && !ev.shiftKey && !altKey && !ctrlKey && !metaKey && !isInList())
   {
     // Do whatever it takes to prevent the editor from inserting a BR
     ev.preventDefault();
