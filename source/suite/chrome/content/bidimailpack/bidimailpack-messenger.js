@@ -62,5 +62,7 @@ function browserOnLoadHandler() {
 }
 
 function InstallBrowserHandler() {
-  getMessageBrowser().addEventListener('load', browserOnLoadHandler, true);
+  var browser = getMessageBrowser();
+  if (browser)
+    browser.addEventListener('load', browserOnLoadHandler, true);
 }
