@@ -19,8 +19,11 @@
 
 
 // Globals
+var gPrefService = null;
 var gLastWindowToHaveFocus;
 var gAlternativeEnterBehavior = true;
+var gParagraphMarginTop;
+var gParagraphMarginBottom;
 var gBug262497Workaround;
 
 function GetCurrentSelectionDirection()
@@ -239,6 +242,8 @@ function SwitchDocumentDirection() {
 function composeWindowEditorOnLoadHandler() {
   // intl' globals
   gLastWindowToHaveFocus = null;
+  gPrefService = Components.classes["@mozilla.org/preferences-service;1"].getService
+                         (Components.interfaces.nsIPrefBranch);
 
   var editorType = GetCurrentEditorType();
 
@@ -249,17 +254,6 @@ function composeWindowEditorOnLoadHandler() {
   // the switch for the whole document or for the current paragraph
   document.getElementById('contextSwitchParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');
   document.getElementById('contextBodyDirectionItem').setAttribute('hidden', editorType == 'htmlmail');
-
-  // our extension likes paragraph text entry, not 'body text' - since
-  // paragraph are block elements, with a direction setting
-  if (editorType == 'htmlmail') {
-    try {
-      doStatefulCommand('cmd_paragraphState', "p");
-    } catch(e) {
-      // since the window is not 'ready', something might throw
-      // an exception here, like inability to focus etc.
-    }
-  }
 
   // Direction Buttons
   HandleDirectionButtons();
@@ -291,22 +285,19 @@ function HandleComposeReplyCSS()
   }
 }
 
-function HandleDirectionButtons()
-{
-  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+function HandleDirectionButtons() {
   var editorType = GetCurrentEditorType();
 
   // decide which direction buttons are shown and which aren't
 
   var hiddenButtons = false;
   try {
-    if (!prefs.getBoolPref('mail.compose.show_direction_buttons'))
+    if (!gPrefService.getBoolPref('mail.compose.show_direction_buttons'))
       hiddenButtons = true;
   }
   catch(e) { } // preference is not set.
 
-  if (editorType == 'htmlmail')
-  {
+  if (editorType == 'htmlmail') {
     document.getElementById('ltr-paragraph-direction-broadcaster').setAttribute('hidden',hiddenButtons);
     document.getElementById('rtl-paragraph-direction-broadcaster').setAttribute('hidden',hiddenButtons);
     document.getElementById('directionality-separator-formatting-bar').setAttribute('hidden',hiddenButtons);
@@ -320,7 +311,52 @@ function HandleDirectionButtons()
   }
 }
 
+function getParagraphMarginFromPref(basePrefName) {
+  var aValue, aScale;
+  try {
+    aValue = gPrefService.getCharPref(basePrefName + ".value");
+    aScale = gPrefService.getCharPref(basePrefName + ".scale");
+  }
+  catch (e) {
+    // default values:
+    aValue = "0"; aScale = "cm";                   
+  }
+  
+  return (aValue+aScale);
+}
+
+function loadParagraphMode() {
+  var editorType = GetCurrentEditorType();
+  if (editorType == 'htmlmail') {
+    // Determine Enter key behavior
+    try {
+      gAlternativeEnterBehavior =
+          gPrefService.getBoolPref("mailnews.alternative_enter_behavior");
+    }
+    catch(e) {} // pref probably not set
+    
+    if (gAlternativeEnterBehavior) {
+      // Get margin-top and margin-bottom prefs for paragraphs we add
+      // We use global variables in order to avoid different margins in the same document
+      gParagraphMarginTop    = getParagraphMarginFromPref("mailnews.paragraph.margin_top");
+      gParagraphMarginBottom = getParagraphMarginFromPref("mailnews.paragraph.margin_bottom");
+      // our extension likes paragraph text entry, not 'body text' - since
+      // paragraph are block elements, with a direction setting
+      try {
+        doStatefulCommand('cmd_paragraphState', "p");
+      } catch(e) {
+        // since the window is not 'ready', something might throw
+        // an exception here, like inability to focus etc.
+      }
+    }
+  }
+}
+
 function composeWindowEditorOnReopenHandler() {
+  if (!gPrefService)
+      gPrefService = Components.classes["@mozilla.org/preferences-service;1"].getService
+                         (Components.interfaces.nsIPrefBranch);
+
   // Direction Buttons
   HandleDirectionButtons();
   // reply CSS
@@ -351,12 +387,12 @@ function GetMessageDisplayDirection(messageURI) {
   var messageWindowList = windowManager.getEnumerator("mail:messageWindow");
 
   while (true) {
-
     if (messengerWindowList.hasMoreElements())
       win = messengerWindowList.getNext();
     else if (messageWindowList.hasMoreElements())
       win = messageWindowList.getNext();
-    else break;
+    else
+      break;
 
     loadedMessageURI = win.GetLoadedMessage();
     if (loadedMessageURI != messageURI) continue;
@@ -369,17 +405,7 @@ function GetMessageDisplayDirection(messageURI) {
 }
 
 function composeWindowEditorDelayedOnLoadHandler() {
-  var editorType = GetCurrentEditorType();
   var body = document.getElementById('content-frame').contentDocument.body;
-  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-
-  if (editorType == 'htmlmail') {
-    // Determine Enter key behavior
-    try {
-      gAlternativeEnterBehavior = prefs.getBoolPref("mailnews.alternative_enter_behavior");
-    }
-    catch(e) {}
-  }
 
   var re = /rv:([0-9.]+).*Gecko\/([0-9]+)/;
   var arr = re.exec(navigator.userAgent);
@@ -398,21 +424,19 @@ function composeWindowEditorDelayedOnLoadHandler() {
   if (messageIsAReply)
     originalMessageDisplayDirection = GetMessageDisplayDirection(gMsgCompose.originalMsgURI);
 
-  try
-  {
+  try {
 
     // New message OR "Always reply in default direction" is checked
-    if (!messageIsAReply || prefs.getBoolPref("mailnews.reply_in_default_direction") )
-    {
-      try
-      {
-        var defaultDirection = prefs.getCharPref("mailnews.send_default_direction");
+    if (!messageIsAReply || gPrefService.getBoolPref("mailnews.reply_in_default_direction") ) {
+      try {
+        var defaultDirection = gPrefService.getCharPref("mailnews.send_default_direction");
         // aligning to default direction
         if ((defaultDirection == 'rtl') || (defaultDirection == 'RTL'))
           SetDocumentDirection('rtl');
         else
           SetDocumentDirection('ltr');
 
+        loadParagraphMode();
         // the initial setting; perhaps instead of this
         // we should have an 'init' method for the controller?
         directionSwitchController.setAllCasters();
@@ -442,6 +466,8 @@ function composeWindowEditorDelayedOnLoadHandler() {
     else
       SetDocumentDirection('ltr');
   }
+  
+  loadParagraphMode();
   directionSwitchController.setAllCasters();
 }
 
@@ -457,16 +483,14 @@ function InstallComposeWindowEditorHandler() {
   document.addEventListener('keypress', onKeyPress, true);
 }
 
-function findClosestBlockElement(node)
-{
+function findClosestBlockElement(node) {
   // Try to locate the closest ancestor with display:block
   var v = node.ownerDocument.defaultView;
-  while (node)
-  {
-    if (node.nodeType == node.ELEMENT_NODE)
-    {
+  while (node) {
+    if (node.nodeType == node.ELEMENT_NODE) {
       var display = v.getComputedStyle(node, "").getPropertyValue('display');
-      if (display == 'block' || display == 'table-cell' || display == 'table-caption' || display == 'list-item')
+      if (display == 'block' || display == 'table-cell' || 
+            display == 'table-caption' || display == 'list-item')
         return node;
     }
     node = node.parentNode;
@@ -475,77 +499,66 @@ function findClosestBlockElement(node)
 }
 
 
-function ApplyToSelectionBlockElements(evalStr)
-{
+function ApplyToSelectionBlockElements(evalStr) {
   var editor = GetCurrentEditor();
-  if (!editor)
-  {
+  if (!editor) {
     alert("Could not acquire editor object.");
     return;
   }
 
-  if (editor.selection.rangeCount > 0)
-  {
+  if (editor.selection.rangeCount > 0) {
     editor.beginTransaction();
     try {
-    for (i=0; i<editor.selection.rangeCount; ++i)
-    {
-      var range = editor.selection.getRangeAt(i);
-      var node = range.startContainer;
-      // walk the tree till we find the endContainer of the selection range,
-      // giving our directionality style to everything on our way
-      do
-      {
-        var closestBlockElement = findClosestBlockElement(node);
-        if (closestBlockElement)
-        {
-          eval(evalStr);
-        }
-        else
-          break;
-
-        // This check should be placed here, not as the 'while'
-        // condition, to handle cases where begin == end
-        if (node == range.endContainer)
-          break;
-
-        // Traverse through the tree in order
-        if (node.firstChild)
-          node = node.firstChild;
-        else if (node.nextSibling)
-          node = node.nextSibling;
-        else
-          // find a parent node which has anything after
-          while (node = node.parentNode)
-          {
-            if (node.nextSibling)
-            {
-              node = node.nextSibling;
-              break;
-            }
+      for (i=0; i<editor.selection.rangeCount; ++i) {
+        var range = editor.selection.getRangeAt(i);
+        var node = range.startContainer;
+        // walk the tree till we find the endContainer of the selection range,
+        // giving our directionality style to everything on our way
+        do {
+          var closestBlockElement = findClosestBlockElement(node);
+          if (closestBlockElement) {
+            eval(evalStr);
           }
+          else
+            break;
+
+          // This check should be placed here, not as the 'while'
+          // condition, to handle cases where begin == end
+          if (node == range.endContainer)
+            break;
+
+          // Traverse through the tree in order
+          if (node.firstChild)
+            node = node.firstChild;
+          else if (node.nextSibling)
+            node = node.nextSibling;
+          else
+            // find a parent node which has anything after
+            while (node = node.parentNode) {
+              if (node.nextSibling) {
+                node = node.nextSibling;
+                break;
+              }
+            }
+        }
+        while(node);
       }
-      while(node);
-    }
     } finally { editor.endTransaction(); }
   }
 }
 
-function ClearParagraphDirection()
-{
+function ClearParagraphDirection() {
   var evalStr = 'editor.removeAttribute(closestBlockElement, \'dir\');';
   ApplyToSelectionBlockElements(evalStr);
 }
 
 
-function SetParagraphDirection(dir)
-{
+function SetParagraphDirection(dir) {
   var evalStr = 'editor.setAttribute(closestBlockElement, \'dir\', \'' + dir + '\');';
   ApplyToSelectionBlockElements(evalStr);
 }
 
-function SwitchParagraphDirection()
-{
+function SwitchParagraphDirection() {
   var evalStr =
     'var dir = (closestBlockElement.ownerDocument.defaultView.getComputedStyle(closestBlockElement, "").getPropertyValue("direction") == "rtl"? "ltr" : "rtl");' +
     'editor.setAttribute(closestBlockElement, \'dir\', dir);';
@@ -553,8 +566,7 @@ function SwitchParagraphDirection()
 }
 
 
-function onKeyPress(ev)
-{
+function onKeyPress(ev) {
   // Don't change the behavior for text-plain messages
   var editorType = GetCurrentEditorType();
   if (editorType != 'htmlmail')
@@ -567,7 +579,7 @@ function onKeyPress(ev)
   // workaround for Mozilla bug 262497 - let's make Ctrl+Home and Ctrl+End
   // behave properly...
   
-  if (gBug262497Workaround && ev.ctrlKey){
+  if (gBug262497Workaround && ev.ctrlKey) {
 
     // move the caret ourselves if need be
 
@@ -614,8 +626,7 @@ function onKeyPress(ev)
     // behaivor of Shift+Enter which inserts a <br>, Ctrl+Enter which
     // sends the message etc.)
     if ( (ev.keyCode == KeyEvent.DOM_VK_ENTER || ev.keyCode == KeyEvent.DOM_VK_RETURN) 
-         && !ev.shiftKey && !ev.altKey && !ev.ctrlKey && !ev.metaKey && !isInList()    )
-    {
+         && !ev.shiftKey && !ev.altKey && !ev.ctrlKey && !ev.metaKey && !isInList() ) {
       // Do whatever it takes to prevent the editor from inserting a BR
       ev.preventDefault();
       ev.stopPropagation();
@@ -627,8 +638,7 @@ function onKeyPress(ev)
   }
 }
 
-function isInList()
-{
+function isInList() {
   var editor = GetCurrentEditor();
   editor.beginTransaction();
 
@@ -646,11 +656,9 @@ function isInList()
 }
 
 // Will attempt to break the current line into two paragraphs (unless we're in a list).
-function InsertParagraph()
-{
+function InsertParagraph() {
   var editor = GetCurrentEditor();
-  if (!editor)
-  {
+  if (!editor) {
     alert("Could not acquire editor object.");
     return;
   }
@@ -685,8 +693,7 @@ function InsertParagraph()
   // its block element. If it is different, we'll apply font-size
   var isStyleFontSize = { value: false };
   var styleFontSize;
-  try
-  {
+  try {
     styleFontSize = document.defaultView.getComputedStyle(editor.getSelectionContainer(), "").getPropertyValue("font-size");
     isStyleFontSize.value = (styleFontSize != document.defaultView.getComputedStyle(findClosestBlockElement(editor.getSelectionContainer()), "").getPropertyValue("font-size"));
   }
@@ -718,10 +725,13 @@ function InsertParagraph()
   // 2. It's not the special case of the BR being an only child (thus
   //    not a candidate for removal -- we need it to keep the P
   //    from becoming empty)
-  if (node && (node.nodeType == node.ELEMENT_NODE) && (node.tagName.toLowerCase() == "br") && prevPar.firstChild != node)
-  {
-   editor.deleteNode(node);
-  }
+  if (node && (node.nodeType == node.ELEMENT_NODE) &&
+        (node.tagName.toLowerCase() == "br") && prevPar.firstChild != node)
+    editor.deleteNode(node);
+
+  // Set Paragraph Margins
+  par.style.marginTop    = gParagraphMarginTop;
+  par.style.marginBottom = gParagraphMarginBottom;
 
   editor.endTransaction();
 
@@ -751,12 +761,9 @@ function InsertParagraph()
   // ------------------------------- "set old style" ------
 }
 
-var directionSwitchController =
-{
-  supportsCommand: function(command)
-  {
-    switch (command)
-    {
+var directionSwitchController = {
+  supportsCommand: function(command) {
+    switch (command) {
       case "cmd_rtl_paragraph":
       case "cmd_ltr_paragraph":
       case "cmd_rtl_document":
@@ -770,12 +777,10 @@ var directionSwitchController =
     }
   },
 
-  isCommandEnabled: function(command)
-  {
+  isCommandEnabled: function(command) {
     var rv = true;
     // and now for what this function is actually supposed to do...
-    switch (command)
-    {
+    switch (command) {
       case "cmd_switch_paragraph":
       case "cmd_clear_paragraph_dir":
       case "cmd_rtl_paragraph":
@@ -799,12 +804,10 @@ var directionSwitchController =
     return rv;
   },
 
-  getState: function(command)
-  {
+  getState: function(command) {
     var dir;
 
-    switch (command)
-    {
+    switch (command) {
       case "cmd_rtl_paragraph":
         dir = GetCurrentSelectionDirection();
         if (dir == 'rtl')
@@ -826,10 +829,8 @@ var directionSwitchController =
     return null;
   },
 
-  setCaster: function(command)
-  {
-    switch (command)
-    {
+  setCaster: function(command) {
+    switch (command) {
       case "cmd_rtl_paragraph":
         caster = 'rtl-paragraph-direction-broadcaster';
         break;
@@ -851,18 +852,15 @@ var directionSwitchController =
     document.getElementById(caster).setAttribute('disabled', (content != top.document.commandDispatcher.focusedWindow) );
   },
 
-  setAllCasters: function()
-  {
+  setAllCasters: function() {
     this.setCaster("cmd_ltr_document");
     this.setCaster("cmd_rtl_document");
     this.setCaster("cmd_ltr_paragraph");
     this.setCaster("cmd_rtl_paragraph");
   },
 
-  doCommand: function(command)
-  {
-    switch (command)
-    {
+  doCommand: function(command) {
+    switch (command) {
       case "cmd_rtl_paragraph":
         SetParagraphDirection('rtl');
         break;
@@ -892,8 +890,7 @@ var directionSwitchController =
 }
 
 
-function CommandUpdate_MsgComposeDirection()
-{
+function CommandUpdate_MsgComposeDirection() {
   var focusedWindow = top.document.commandDispatcher.focusedWindow;
  
   // we're just setting focus to where it was before
