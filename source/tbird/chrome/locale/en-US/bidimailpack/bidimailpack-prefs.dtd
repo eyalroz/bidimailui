@@ -11,3 +11,4 @@
 <!ENTITY bidimailpack-preftree-label             "BiDi UI">
 <!ENTITY display-buttons                         "Display Direction Setting Buttons">
 <!ENTITY display-message-buttons-for-htmlmail    "Display Entire-Message Direction Setting Buttons for HTML Mail">
+<!ENTITY display-rlm-lrm-contextual-menu-items   "Display RLM/LRM insertation contextual menu items">

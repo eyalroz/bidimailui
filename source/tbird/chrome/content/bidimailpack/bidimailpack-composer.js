@@ -96,12 +96,12 @@ function composeWindowEditorOnLoadHandler() {
   // intl' globals
   gLastWindowToHaveFocus = null;
 
+  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
   var editorType = GetCurrentEditorType();
 
   // show direction buttons?
   if (editorType == 'htmlmail')
   {
-    var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
     var hiddenbuttons = false;
     try {
       if (!prefs.getBoolPref('mail.compose.show_direction_buttons'))
@@ -120,7 +120,8 @@ function composeWindowEditorOnLoadHandler() {
   top.controllers.insertControllerAt(1, directionSwitchController);
 
   // Decide what to show in the contextual menu
-  document.getElementById('contextSwitchParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');
+  // paragraph or body?
+  document.getElementById('contextSwitchParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');  
   document.getElementById('contextBodyDirectionItem').setAttribute('hidden', editorType == 'htmlmail');
 
   // the following is a very ugly hack!
@@ -131,13 +132,24 @@ function composeWindowEditorOnLoadHandler() {
 }
 
 function composeWindowEditorOnLoadHandler2() {
+  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+
+  // show rlm & lrm menu items?
+  var hiddenbuttons = true;
+  try {
+    if (prefs.getBoolPref('mail.compose.show_context_control_characters'))
+      hiddenbuttons = false;
+  }
+  catch(e) {}
+  document.getElementById('rlm-lrm-broadcaster').setAttribute('hidden', hiddenbuttons);
+  var body = document.getElementById('content-frame').contentDocument.body;
+
+  // Handle message direction
   var messageIsAReply = false;
   try {
     messageIsAReply = (gMsgCompose.originalMsgURI.length > 0);
   }
   catch(e) {};
-  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-  var body = document.getElementById('content-frame').contentDocument.body;
 
   try
   {
@@ -154,8 +166,8 @@ function composeWindowEditorOnLoadHandler2() {
           SetDocumentDirection('ltr');
 
         directionSwitchController.setAllCasters();
-          // the initial setting; perhaps instead of this
-          // we should have an 'init' method for the controller?
+        // the initial setting; perhaps instead of this
+        // we should have an 'init' method for the controller?
 
         return;
 
@@ -177,7 +189,6 @@ function composeWindowEditorOnLoadHandler2() {
     SetDocumentDirection('ltr');
 
   directionSwitchController.setAllCasters();
-
 }
 
 function InstallComposeWindowEditorHandler() {
@@ -337,13 +348,14 @@ function InsertParagraph()
   }
 
   editor.beginTransaction();
+
+  if (!editor.selection.isCollapsed)
+   editor.deleteSelection(editor.eNone);
+
   // getParagraphState returns the paragraph state for the selection.
   // A "new line" operation nukes the current selection.
   // We want 'getParagraphState' to test the paragraph which the
   // cursor would be on after the nuking, so we nuke it ourselves first.
-  if (!editor.selection.isCollapsed)
-   editor.deleteSelection(editor.eNone);
-
   var isParMixed = new Object; // would be ignored
   var parState;
   parState = editor.getParagraphState(isParMixed);
@@ -354,9 +366,6 @@ function InsertParagraph()
   editor.setParagraphFormat("p");
   var par = findClosestBlockElement(editor.selection.focusNode);
   var prevPar = par.previousSibling;
-
-//  alert('prevpar = ' + prevPar.innerHTML);
-//  alert('par = ' + par.innerHTML);
 
   // Hunt and shoot the extra BR. We don't want it.
   var node = prevPar.lastChild;
