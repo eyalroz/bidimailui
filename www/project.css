@@ -359,3 +359,9 @@ div.question {
 
 div.answer {
 }
+
+div.answer + hr {
+  margin-left: 30%
+  margin-right: 30%
+  width: 2px;
+}
