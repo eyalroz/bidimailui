@@ -302,7 +302,14 @@ function loadParagraphMode() {
       // our extension likes paragraph text entry, not 'body text' - since
       // paragraph are block elements, with a direction setting
       try {
-        doStatefulCommand('cmd_paragraphState', "p");
+        var editor = GetCurrentEditor();
+        if (editor) {
+          doStatefulCommand('cmd_paragraphState', "p");
+          var par = findClosestBlockElement(editor.selection.focusNode);
+          // Set Paragraph Margins
+          par.style.marginTop    = gParagraphMarginTop;
+          par.style.marginBottom = gParagraphMarginBottom;
+        }
       } catch(e) {
         // since the window is not 'ready', something might throw
         // an exception here, like inability to focus etc.
