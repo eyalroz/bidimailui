@@ -890,6 +890,5 @@ function loadThemeAttributeOnMainbarButtons() {
   else
     aClassicTheme = "winstripe";
   
-  document.getElementById("button-direction-ltr-main-bar").setAttribute("classictheme", aClassicTheme);
-  document.getElementById("button-direction-rtl-main-bar").setAttribute("classictheme", aClassicTheme);
+  document.documentElement.setAttribute("classictheme", aClassicTheme);
 }
