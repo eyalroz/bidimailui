@@ -144,8 +144,10 @@ div#hebrew-navbar #project-navigation {
   list-style-type: square;
   list-style-image: url("http://www.mozdev.org/sharedimages/bullet.gif");
   list-style-position: inside;
-  padding-left: 0;
-  margin-left: 0;
+  padding-left: 5px;
+  margin-left: 5px;
+  padding-right: 5px;
+  margin-right: 5px;
 }
 
 #main-content-no-nav li,
