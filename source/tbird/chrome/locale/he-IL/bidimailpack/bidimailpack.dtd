@@ -1,4 +1,4 @@
-﻿<!ENTITY menu-bidimail-switch-document-direction.label       "הפוך כיוון הודעה">
+<!ENTITY menu-bidimail-switch-document-direction.label       "הפוך כיוון הודעה">
 <!ENTITY menu-bidimail-switch-document-direction.accesskey   "g">
 <!ENTITY key-bidimail-switch-document-direction.keycode      "X">
 <!ENTITY key-bidimail-switch-document-direction.modifiers    "accel,shift">
