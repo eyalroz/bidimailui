@@ -10,10 +10,12 @@
 	
 	2. Currently, the size of Mozilla FF/TB toolbar icons is:
 	  
-	      main toolbar                  24px width x 24px height
-	      main toolbar small mode       16px width x 16px height
-              formatting/styling toolbar    ??px width x ??px height
+	      main toolbar                    24px width x 24px height
+	      main toolbar on mac             32px width x 32px height
+	      main toolbar small mode         16px width x 16px height
+	      main toolbar small mode on mac  24px width x 24px height
 
+          formatting/styling toolbar    ??px width x ??px height
 */				  
 
 /* Main Toolbar: small icons for s */
@@ -199,15 +201,12 @@
   width: 5em;
 }
 
-#margintop[classictheme="winstripe"][status="non_valid_value"] *,
-#marginbottom[classictheme="winstripe"][status="non_valid_value"] *,
-#margintop[classictheme="pinstripe"][status="non_valid_value"] > hbox > textbox,
-#marginbottom[classictheme="pinstripe"][status="non_valid_value"] > hbox > textbox {
+[classictheme="winstripe"] [status="non_valid_value"] *,
+[classictheme="pinstripe"] [status="non_valid_value"] > hbox > textbox {
   background-color: #FF6666;
   color: #FFFFFF;
 }
 
-#margintop[status="non_valid_value"] > hbox > textbox,
-#marginbottom[status="non_valid_value"] > hbox > textbox {
+[status="non_valid_value"] > hbox > textbox {
   font-weight: bold;
 }
