@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!-- The cust dialg needs the platform attributes as well -->
+<overlay
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/x-javascript" src="bidimailpack-composer.js"/>
+  <script type="application/x-javascript">
+    setTimeout('loadThemeAttributeOnMainbarButtons();', 0);
+  </script>
+</overlay>
