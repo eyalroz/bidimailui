@@ -34,28 +34,12 @@
       <checkbox id="bidimailpack-display-buttons" checked="false" label="&display-buttons;" autostretch="never" />
 
     <spacer style="height: 1em" />
-    <vbox>
-      <description>&marginTopTitle.label;</description>
-      <hbox id="margintop"
+    <hbox align="center">
+      <description>&verticalParagraphMargins.label;</description>
+      <hbox id="paragraph_vertical_margin"
             style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
             class="indent"
-            prefbase="mailnews.paragraph.margin_top"/>
-      <spacer style="height: 0.5em" />
-      <description>&marginBottomTitle.label;</description>
-      <hbox id="marginbottom"
-            style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
-            class="indent"
-            prefbase="mailnews.paragraph.margin_bottom"/>
-    </vbox>
-  </groupbox>
-
-  <spacer style="height: 2em" />
-
-  <description>
-    <hbox>
-      <label value="&more-info;" />
-      <html:a href="http://bidiui.mozdev.org" onclick="open(this.href, '_new');return false;" style="cursor: pointer; color: blue;">&link-text;</html:a>
+            prefbase="editor.paragraph.vertical_margins"/>
     </hbox>
-  </description>
-     
+  </groupbox>
 </page>

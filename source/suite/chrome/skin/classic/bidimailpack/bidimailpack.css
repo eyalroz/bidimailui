@@ -75,40 +75,16 @@
 }
 
 
-#margintop[classictheme="winstripe"] > hbox,
-#marginbottom[classictheme="winstripe"] > hbox {
-  visibility: hidden;
-}
-
-#margintop[classictheme="pinstripe"] > hbox,
-#marginbottom[classictheme="pinstripe"] > hbox {
-  -moz-appearance: textfield;
-}
-
-#margintop[classictheme="pinstripe"] > hbox > textbox,
-#marginbottom[classictheme="pinstripe"] > hbox > textbox {
-  -moz-appearance: none;
-  margin: 0px !important;
-  padding: 0px !important; 
-  font: -moz-field;
-  border: none !important;
-}
-
-#margintop > hbox > textbox,
-#marginbottom > hbox > textbox {
-  visibility: visible !important;
-  width: 5em;
-}
-
-#margintop[classictheme="winstripe"][status="non_valid_value"] *,
-#marginbottom[classictheme="winstripe"][status="non_valid_value"] *,
-#margintop[classictheme="pinstripe"][status="non_valid_value"] > hbox > textbox,
-#marginbottom[classictheme="pinstripe"][status="non_valid_value"] > hbox > textbox {
+#paragraph_vertical_margin[system="not_mac"][status="non_valid_value"] *
+{
   background-color: #FF6666;
   color: #FFFFFF;
 }
 
-#margintop[status="non_valid_value"] > hbox > textbox,
-#marginbottom[status="non_valid_value"] > hbox > textbox {
+#paragraph_vertical_margin[system="mac"][status="non_valid_value"] > textbox {
+  color: darkred;
+}
+
+#paragraph_vertical_margin[status="non_valid_value"] > textbox {
   font-weight: bold;
 }
