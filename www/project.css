@@ -16,6 +16,7 @@ div.#hebrew-navbar {
   margin: 0;
   padding: 0;
   direction: rtl;
+  text-align: justify;
 }
 
 div.#english-navbar {
