@@ -116,7 +116,7 @@ function composeWindowEditorOnLoadHandler() {
   // the reason for it is that without a timeout, it seems
   // that gMsgCompose does often not yet exist when
   // the OnLoad handler runs...
-  setTimeout('composeWindowEditorDelayedOnLoadHandler();', 0);
+  setTimeout('composeWindowEditorDelayedOnLoadHandler();', 75);
 }
 
 
@@ -125,7 +125,7 @@ function composeWindowEditorOnReopenHandler() {
   // if we don't delay before running the other handler, the
   // message text will not be available so we will not know
   // whether or not this is a reply
-  setTimeout('composeWindowEditorDelayedOnLoadHandler();', 0);
+  setTimeout('composeWindowEditorDelayedOnLoadHandler();', 75);
 }
 
 function composeWindowEditorDelayedOnLoadHandler() {
