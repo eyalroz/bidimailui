@@ -28,6 +28,10 @@ div#english-navbar #project-navigation th{
   margin-right: 3px;
 }
 
+div#hebrew-navbar #project-navigation th{
+  margin-left: 3px;
+}
+
 .project-name {
   background: inherit;
   color: #900;
