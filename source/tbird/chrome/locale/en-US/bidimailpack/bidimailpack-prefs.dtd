@@ -10,3 +10,10 @@
 <!ENTITY link-text                               "The BiDi UI Project Homepage">
 <!ENTITY bidimailpack-preftree-label             "BiDi UI">
 <!ENTITY display-buttons                         "Display Direction Setting Buttons">
+
+<!ENTITY cmScale.label                           "cm">
+<!ENTITY cmScale.accesskey                       "c">
+<!ENTITY pixelScale.label                        "pixels">
+<!ENTITY pixelScale.accesskey                    "p">
+<!ENTITY precentScale.label                      "precents">
+<!ENTITY precentScale.accesskey                  "r">
