@@ -516,8 +516,11 @@ function InsertParagraph()
   var prevPar = par.previousSibling;
 
   // Hunt down and shoot the extra BR. We don't want it.
-  var node = prevPar.lastChild;
-  if (node && (node.nodeType == node.ELEMENT_NODE) && (node.tagName.toUpperCase() == "BR") && (prevPar.childNodes.length > 1))
+  // Go up to the last child.
+  // e.g. <p><b>foo<br></b></p> -- we accend to B, then to BR.
+  for (var node = prevPar.lastChild; node && node.lastChild; node = node.lastChild);
+  alert(node + ' ' + node.tagName);
+  if (node && (node.nodeType == node.ELEMENT_NODE) && (node.tagName.toUpperCase() == "BR"))
     editor.deleteNode(node);
 
   editor.endTransaction();
@@ -530,6 +533,8 @@ function InsertParagraph()
   if (isStyleUnderline.value)
     EditorSetTextProperty("u", "", "");
   // ------------------------------- "set old style"
+
+  alert(par.ownerDocument.documentElement.innerHTML);
 }
 
 var directionSwitchController =
