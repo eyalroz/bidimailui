@@ -5,7 +5,7 @@ function hasRTLWord(element) {
 
   // 0x0591 to 0x05F4 is the range of Hebrew characters (basic letters are 0x05D0 - 0x5EA),
   // 0x060C to 0x06F9 is the range of Arabic characters
-  var re = /(^|\s)([\u0591-\u05F4]+|[\u060C-\u06F9]+)($|\s)/;
+  var re = /(^|\s|[<>])([\u0591-\u05F4]+|[\u060C-\u06F9]+)($|\s|[<>])/;
 
   try {
     var iterator = new XPathEvaluator();
