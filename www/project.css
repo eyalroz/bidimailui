@@ -9,6 +9,7 @@ Mozilla resource:///res/html.css
 */
 
 div#english-navbar #project-navigation a{
+  text-decoration: none;
   border-left: 1px solid black;
   padding-left: 6px;
   padding-right: 5px;
@@ -25,6 +26,7 @@ div#english-navbar #project-navigation th{
 
 
 div#hebrew-navbar #project-navigation a{
+  text-decoration: none;
   border-right: 1px solid black;
   border-left: none;
   padding-right: 6px;
