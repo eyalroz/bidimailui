@@ -55,7 +55,7 @@
   <description>
     <hbox>
       <label value="&more-info;" />
-      <html:a href="&guide-link-url;" onclick="open(this.href, '_new');return false;" style="cursor: pointer; color: blue;">&guide-link-text;</html:a>
+      <html:a href="&guide-url;" onclick="open(this.href, '_new');return false;" style="cursor: pointer; color: blue;">&guide-link-text;</html:a>
     </hbox>
   </description>
 </page>
