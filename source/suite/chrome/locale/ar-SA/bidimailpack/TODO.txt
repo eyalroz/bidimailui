@@ -1,0 +1,1 @@
+right now the 'switch message directionality' text in arabic says 'switch the direction of the text', not 'of the message'. Fix this.

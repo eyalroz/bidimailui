@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://bidimailpack/locale/bidimailpack-prefs.dtd">
+
+<overlay id="bidimailpackPrefTreeOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <treechildren id="panelChildren">
+    <treeitem id = "bidimailpackPrefTree" 
+                  container = "false"
+                  insertafter ="mailnews,editor,navigator,appearance">
+      <treerow>
+        <treecell url = "chrome://bidimailpack/content/bidimailpack-prefs.xul" 
+                  label="&bidimailpack-preftree-label;"/>
+      </treerow>
+    </treeitem>
+  </treechildren>
+</overlay>

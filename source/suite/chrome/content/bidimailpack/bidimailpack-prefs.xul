@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet type="text/css" href="chrome://communicator/skin/"?>
+
+<!DOCTYPE page SYSTEM "chrome://bidimailpack/locale/bidimailpack-prefs.dtd">
+
+<page xmlns          = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+      xmlns:html     = "http://www.w3.org/1999/xhtml"
+      onload         = "init();"
+      onunload       = "saveValues();"
+      headertitle    = "&bidimailpack-preftree-label;">
+
+  <script type="application/x-javascript" src="chrome://global/content/globalOverlay.js"/>
+  <script type="application/x-javascript" src="chrome://bidimailpack/content/bidimailpack-prefs.js"/>
+  <script type="application/x-javascript">
+    function init()
+    {
+      parent.initPanel('chrome://bidimailpack/content/bidimailpack-prefs.xul');
+      initValues();
+    }
+  </script>
+
+  <groupbox>
+    <caption label="&message-display-groupbox-caption;"/>
+    <vbox>
+      <checkbox id="bidimailpack-autodetect" label="&autodetect;" checked="true" autostretch="never" />
+    </vbox>
+  </groupbox>
+     
+  <groupbox>
+    <caption label = "&message-composition-groupbox-caption;"/>
+    <description>&default-dir;</description>
+      <hbox class="indent">
+        <radiogroup id="bidimailpack-default-dir">
+          <radio id="bidimailpack-default-dir-rtl" value="rtl" label="&rtl;" />
+          <radio id="bidimailpack-default-dir-ltr" value="ltr" label="&ltr;" />
+        </radiogroup>
+      </hbox>
+      <spacer />
+      <checkbox id="bidimailpack-reply-in-default-dir" checked="false" label="&always-reply-in-default-dir;" autostretch="never" />
+      <checkbox id="bidimailpack-display-buttons" checked="false" label="&display-buttons;" autostretch="never" />
+      <checkbox id="bidimailpack-display-message-buttons-for-htmlmail" checked="false" label="&display-message-buttons-for-htmlmail;" autostretch="never" />
+  </groupbox>
+
+  <spacer style="height: 2em" />
+
+  <description>
+    <hbox>
+      <label value="&more-info;" />
+      <html:a href="http://bidiui.mozdev.org" onclick="open(this.href, '_new');return false;" style="cursor: pointer; color: blue;">&link-text;</html:a>
+    </hbox>
+  </description>
+     
+</page>
