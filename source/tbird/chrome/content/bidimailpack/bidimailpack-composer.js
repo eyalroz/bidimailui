@@ -497,8 +497,13 @@ function InsertParagraph()
   EditorGetTextProperty("i", "", "", isStyleItalic, anyHas, allHas);
   var isStyleUnderline = { value: false };
   EditorGetTextProperty("u", "", "", isStyleUnderline, anyHas, allHas);
-
+  var isStyleTT = { value: false };
+  EditorGetTextProperty("tt", "", "", isStyleTT, anyHas, allHas);
+  var isStyleFontFace = { value: false };
+  EditorGetTextProperty("font", "face", "", isStyleFontFace, anyHas, allHas);
+  styleFontFace=editor.getFontFaceState(allHas);
   // ------------------------------- "remember old style"
+
 
   // getParagraphState returns the paragraph state for the selection.
   // A "new line" operation nukes the current selection.
@@ -519,7 +524,7 @@ function InsertParagraph()
   // Go up to the last child.
   // e.g. <p><b>foo<br></b></p> -- we accend to B, then to BR.
   for (var node = prevPar.lastChild; node && node.lastChild; node = node.lastChild);
-  alert(node + ' ' + node.tagName);
+  // alert(node + ' ' + node.tagName);
   if (node && (node.nodeType == node.ELEMENT_NODE) && (node.tagName.toUpperCase() == "BR"))
     editor.deleteNode(node);
 
@@ -532,9 +537,13 @@ function InsertParagraph()
     EditorSetTextProperty("i", "", "");
   if (isStyleUnderline.value)
     EditorSetTextProperty("u", "", "");
+  if (isStyleTT.value)
+    EditorSetTextProperty("tt", "", "");
+  if (isStyleFontFace.value) // font-face can't be "mixed": there is no selected text
+    EditorSetTextProperty("font", "face", styleFontFace);
   // ------------------------------- "set old style"
 
-  alert(par.ownerDocument.documentElement.innerHTML);
+  // alert(par.ownerDocument.documentElement.innerHTML);
 }
 
 var directionSwitchController =
