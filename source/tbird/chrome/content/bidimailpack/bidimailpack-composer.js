@@ -875,26 +875,27 @@ var directionSwitchController = {
   },
 
   getState: function(command) {
-    var dir;
+    var direction;
 
     switch (command) {
       case "cmd_rtl_paragraph":
-        dir = GetCurrentSelectionDirection();
-        if (dir == 'rtl')
+        direction = GetCurrentSelectionDirection();
+        if (direction == 'rtl')
           return 'checked';
         else
           return 'unchecked';
       case "cmd_ltr_paragraph":
-        dir = GetCurrentSelectionDirection();
-        if (dir == 'ltr')
+        direction = GetCurrentSelectionDirection();
+        if (direction == 'ltr')
           return 'checked';
         else
           return 'unchecked';
-      // the body dir is always set either to ltr or rtl
       case "cmd_rtl_document":
-        return ((document.getElementById('content-frame').contentDocument.body.dir == 'rtl') ? 'checked' : 'unchecked');
+        direction = document.defaultView.getComputedStyle(document.getElementById('content-frame').contentDocument.body, "").getPropertyValue("direction");
+        return ((direction == 'rtl') ? 'checked' : 'unchecked');
       case "cmd_ltr_document":
-        return ((document.getElementById('content-frame').contentDocument.body.dir == 'ltr') ? 'checked' : 'unchecked');
+        direction = document.defaultView.getComputedStyle(document.getElementById('content-frame').contentDocument.body, "").getPropertyValue("direction");
+        return ((direction == 'ltr') ? 'checked' : 'unchecked');
     }
     return null;
   },
