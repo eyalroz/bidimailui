@@ -346,57 +346,106 @@ function onKeyPress(ev)
     ev.initKeyEvent("keypress", false, true, null, false, false, false, false, 0, 0);
 
     // ... and insert a paragraph break instead
-    var editor = GetCurrentEditor();
-    if (!editor)
-    {
-      alert("Could not acquire editor object.");
-      return;
-    }
-
-    var selection = editor.selection;
-    if (!selection.isCollapsed)
-      editor.deleteSelection(0);
-    var range = selection.getRangeAt(0);
-    var startNode = range.startContainer;
-    var startOffset = range.startOffset;
-    var textCut;
-    if (startNode.nodeType == Node.TEXT_NODE)
-    {
-      var text = startNode.nodeValue;
-      textCut = text.substring(startOffset, text.length);
-      startNode.nodeValue = text.substring(0, startOffset);
-    }
-
-    var nextSiblingForNewPar;
-    var parentForNewPar;
-    var blockElem = findClosestBlockElement(startNode);
-    if (blockElem.tagName == "p")
-    {
-      parentForNewPar = blockElem.parentNode;
-      nextSiblingForNewPar = blockElem.nextSibling;
-    }
-    else
-    {
-      parentForNewPar = blockElem;
-      nextSiblingForNewPar = startNode.nextSibling;
-    }
-
-    var newPar = startNode.ownerDocument.createElement("p");
-    // var newPar = editor.createNode("p", parent, 0);
-    parentForNewPar.insertBefore(newPar, nextSiblingForNewPar);
-
-    if (textCut)
-    {
-      var textNode = newPar.ownerDocument.createTextNode(textCut);
-      newPar.appendChild(textNode);
-    }
-
-    // Our paragraph will swallow its next siblings, till it'll find a peer paragraph
-    for(node = newPar.nextSibling; node && node.tagName != "p"; node = newPar.nextSibling)
-      newPar.appendChild(node);
-
-    selection.collapse(newPar, 0);
+    InsertParagraph();
   }
+}
+
+function InsertParagraph()
+{
+ var editor = GetCurrentEditor();
+ if (!editor)
+ {
+  alert("Could not acquire editor object.");
+  return;
+ }
+
+ var selection = editor.selection;
+ if (!selection.isCollapsed)
+  editor.deleteSelection(0);
+ var range = selection.getRangeAt(0);
+ var cursorNode = range.startContainer;
+ var cursorOffset = range.startOffset;
+ var doc = cursorNode.ownerDocument;
+
+ // Find the block element our cursor resides in.  
+ var blockElem = findClosestBlockElement(cursorNode);
+
+ // Create a new paragraph
+ var newPar;
+ if (blockElem.tagName.toUpperCase() == "P")
+ {
+  // Select the stuff between the cursor and the block's end (including the block's tag).
+  var rangeLast = doc.createRange();
+  if (cursorNode.nodeValue && (cursorNode.nodeValue.length > cursorOffset))
+   rangeLast.setStart(cursorNode, cursorOffset);
+  else
+   rangeLast.setStartAfter(cursorNode);
+  rangeLast.setEndAfter(blockElem);
+  
+  // Get the piece we move to the other next paragraph.
+  // The paragraph element itself is included.
+  var fragment = rangeLast.extractContents();
+  
+  // Note: If I place 'blockElem.nextSibling' inline, in the insertBefore
+  // statement (instead of calculating it "ahead of time"), Mozilla segfaults.
+  // This should be reported some day (talkback and all...).
+  var beforeElem = blockElem.nextSibling;
+  var newFrag = blockElem.parentNode.insertBefore(fragment, beforeElem);
+  newPar = blockElem.nextSibling;
+ }
+ else // other block elements (e.g. BODY)
+ {
+  // Climb up to the direct child of the block element
+  for(node = cursorNode.parentNode; node && (node.parentNode != blockElem); node = node.parentNode);
+  var blockElemChild = node;
+  
+  // Find whether our non-P parent block has any P siblings. We want to slurp
+  // everything after the cursor into our paragraph, *but not sibling paragraphs*!
+  // e.g.
+  // <body>hel<cursor>lo world<p>foobar</p></body>
+  // turns to:
+  // <body>hel<p>lo world</p><p>foobar</p></body>
+  var siblingPar;
+  for(node = blockElemChild; node && ((node.type != node.ELEMENT_NODE) || (node.tagName.toUpperCase() != "P")); node = node.nextSibling);
+  if (node)
+   siblingPar = node;
+ 
+  // A range between the cursor and the end of our block (excluding
+  // the block's tag) *or* a sibling paragraph.
+  // e.g. <body>hel<cursor>[lo world]</body>
+  var rangeLast = doc.createRange();
+  if (cursorNode.nodeValue && (cursorNode.nodeValue.length > cursorOffset))
+   rangeLast.setStart(cursorNode, cursorOffset);
+  else
+   rangeLast.setStartAfter(cursorNode);
+  if (siblingPar)
+   rangeLast.setEndBefore(siblingPar);
+  else
+   rangeLast.setEndAfter(blockElem.lastChild);
+  
+  var fragment = rangeLast.extractContents();
+ 
+  // Create the paragraph and fill it with our fragment.
+  // Since, at this point, the fragment is no longer in the original
+  // document (it was "extracted"), we can rely on cursorNode.nextSibling
+  // being the true insertion point.
+  newPar = doc.createElement("P");
+  blockElem.insertBefore(newPar, cursorNode.nextSibling);
+  newPar.appendChild(fragment);
+ }
+ 
+ // Place the cursor at the beginning of the new paragraph; if possible,
+ // on the first character *inside* the paragraph. The editor behaves a bit
+ // insane when its cursor is placed before a paragraph tag.
+ if (newPar)
+ {
+  if (!newPar.firstChild)
+  {
+   var node = doc.createTextNode("");
+   newPar.appendChild(node);
+  }
+  selection.collapse(newPar.firstChild, 0);
+ }
 }
 
 var directionSwitchController =
