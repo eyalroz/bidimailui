@@ -15,9 +15,9 @@
       accesskey="&menu-bidimail-insert-contol-character:accesskey;">
       <menupopup id="menu_Insert_ControlCharacters_Popup">
         <menuitem id="menu_insertInsertRLM" label="&menu-bidimail-rlm:label;"
-          oncommand="InsertEntity('&amp;rlm;')" />
+          oncommand="InsertControlCharacter('\u200f');" />
         <menuitem id="menu_insertInsertLRM" label="&menu-bidimail-lrm:label;"
-          oncommand="InsertEntity('&amp;lrm;')" />
+          oncommand="InsertControlCharacter('\u200e');" />
       </menupopup>
     </menu>
   </menupopup>
