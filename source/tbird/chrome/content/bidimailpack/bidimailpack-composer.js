@@ -417,7 +417,6 @@ function ClearParagraphDirection()
   ApplyToSelectionBlockElements(evalStr);
 }
 
-
 function SetParagraphDirection(dir)
 {
   var evalStr = 'editor.setAttribute(closestBlockElement, \'dir\', \'' + dir + '\');';
@@ -431,7 +430,6 @@ function SwitchParagraphDirection()
     'editor.setAttribute(closestBlockElement, \'dir\', dir);';
   ApplyToSelectionBlockElements(evalStr);
 }
-
 
 function onKeyPress(ev)
 {
@@ -486,7 +484,7 @@ function InsertParagraph()
   if (!editor.selection.isCollapsed)
    editor.deleteSelection(editor.eNone);
 
-  // ------------------------------- "remember old style"
+  // ------------------------------- "remember old style" ------
   // will be ignord
   var allHas = { value: false };
   var anyHas = { value: false };
@@ -567,6 +565,13 @@ function InsertParagraph()
   if (isStyleFontSize.value)
     // we have css value, set it as a span
     EditorSetTextProperty("span", "style", "font-size: " + styleFontSize);
+
+  // If the previous paragraph has a dir attribute, apply it to the new paragraph
+  try {
+    if (prevPar.hasAttribute("dir"))
+      editor.setAttribute(par, "dir", prevPar.dir);
+  }
+  catch (er) {}
   // ------------------------------- "set old style" ------
 }
 
