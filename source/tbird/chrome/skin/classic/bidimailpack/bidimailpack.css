@@ -104,7 +104,7 @@
   color: #FFFFFF;
 }
 
-#margintop[classictheme="pinstripe"][status="non_valid_value"] > > hbox > textbox,
+#margintop[classictheme="pinstripe"][status="non_valid_value"] > hbox > textbox,
 #marginbottom[classictheme="pinstripe"][status="non_valid_value"] > hbox > textbox {
   background-color: #FF6666;
   color: #FFFFFF;
