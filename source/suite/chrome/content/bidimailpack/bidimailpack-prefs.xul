@@ -32,13 +32,15 @@
     <description>&default-dir;</description>
       <hbox class="indent">
         <radiogroup id="bidimailpack-default-dir">
-          <radio id="bidimailpack-default-dir-rtl" value="rtl" label="&rtl;" />
           <radio id="bidimailpack-default-dir-ltr" value="ltr" label="&ltr;" />
+          <radio id="bidimailpack-default-dir-rtl" value="rtl" label="&rtl;" />
         </radiogroup>
       </hbox>
       <spacer />
       <checkbox id="bidimailpack-reply-in-default-dir" checked="false" label="&always-reply-in-default-dir;" autostretch="never" />
       <checkbox id="bidimailpack-display-buttons" checked="false" label="&display-buttons;" autostretch="never" />
+      <checkbox id="bidimailpack-display-context-control-charcters" checked="false" label="&display-rlm-lrm-contextual-menu-items;" autostretch="never" />
+      
   </groupbox>
 
   <spacer style="height: 2em" />
