@@ -48,14 +48,9 @@ div#english-navbar .project-name:after {
 }
 
 div#hebrew-navbar .project-name {
-  border: 1px solid black;
-  background: rgb(0,255,0);
 }
 
 div#hebrew-navbar .project-name:after {
-/*  padding-left: 1.1em;*/
-    padding-left: 5em;
-    background: rgb(255,0,0);
 }
 
 div#hebrew-navbar {
