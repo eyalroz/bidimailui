@@ -326,22 +326,28 @@ function InsertParagraph()
   }
 
   editor.beginTransaction();
-  // Avoid mangling LIs and different kinds of paragraphs
+  // getParagraphState returns the paragraph state for the selection.
+  // A "new line" operation nukes the current selection.
+  // We want 'getParagraphState' to test the paragraph which the
+  // cursor would be on after the nuking, so we nuke it ourselves first.
   if (!editor.selection.isCollapsed)
    editor.deleteSelection(editor.eNone);
 
-  var isParMixed = new Object;
+  var isParMixed = new Object; // would be ignored
   var parState;
   parState = editor.getParagraphState(isParMixed);
 
   if (parState == "")
     editor.setParagraphFormat("p");
-  var currentElement = editor.getSelectionContainer();
-  if (currentElement)
-  {
-    editor.setCaretAfterElement(currentElement);
-    editor.setParagraphFormat("p");
-  }
+  editor.insertLineBreak();
+  editor.setParagraphFormat("p");
+  var par = findClosestBlockElement(editor.selection.focusNode);
+  var prevPar = par.previousSibling;
+
+  // Hunt and shoot the extra BR. We don't want it.
+  var node = prevPar.lastChild;
+  if (node && (node.nodeType == node.ELEMENT_NODE) && (node.tagName.toUpperCase() == "BR"))
+    editor.deleteNode(node);
 
   editor.endTransaction();
 }
