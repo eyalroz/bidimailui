@@ -141,7 +141,7 @@
 }
 
 #button-direction-ltr-formatting-bar[disabled="true"] {
-  -moz-image-region: rect(0px 38px 18px 18px) !important;
+  -moz-image-region: rect(0px 38px 18px 19px) !important;
 }
 
 #button-direction-rtl-formatting-bar {
