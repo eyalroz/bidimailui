@@ -88,7 +88,7 @@ div#english-navbar {
 }
 
 #project-navigation th {
-  width: 16%;
+  width: 17%;
   background-color: inherit;
   background-image: url("http://www.mozdev.org/sharedimages/nav-icon.png");
   background-repeat: no-repeat;
@@ -101,7 +101,6 @@ div#english-navbar {
 }
 
 #project-navigation td {
-  width: 84%;
   padding-top: 0;
   margin-bottom: 0;
   margin-top: 0;
