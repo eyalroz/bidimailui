@@ -58,7 +58,7 @@ padding-right: 1.1em;
 
 div#hebrew-navbar {
   margin: 0;
-  padding: 0;
+  padding-right: 5px;
   direction: rtl;
   text-align: justify;
 }
