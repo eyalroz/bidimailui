@@ -22,10 +22,6 @@ function initValues()
     element = document.getElementById('bidimailpack-display-buttons');
     element.checked = prefs.getBoolPref('mail.compose.show_direction_buttons');
   } catch(e) {};
-  try {
-    element = document.getElementById('bidimailpack-display-message-buttons-for-htmlmail');
-    element.checked = prefs.getBoolPref('mail.compose.show_whole_message_direction_buttons_for_htmlmail');
-  } catch(e) {};
 }
 
 function saveValues()
@@ -40,6 +36,4 @@ function saveValues()
     prefs.setBoolPref('mailnews.reply_in_default_direction', element.checked);
     element = document.getElementById('bidimailpack-display-buttons');
     prefs.setBoolPref('mail.compose.show_direction_buttons', element.checked);
-    element = document.getElementById('bidimailpack-display-message-buttons-for-htmlmail');
-    prefs.setBoolPref('mail.compose.show_whole_message_direction_buttons_for_htmlmail', element.checked);
 }

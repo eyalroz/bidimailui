@@ -15,8 +15,8 @@
   </script>
 
 <broadcasterset>
-  <broadcaster id="ltr-document-direction-broadcaster" checked="false"/>
-  <broadcaster id="rtl-document-direction-broadcaster" checked="false"/>
+  <broadcaster id="ltr-document-direction-broadcaster" checked="false" hidden="true"/>
+  <broadcaster id="rtl-document-direction-broadcaster" checked="false" hidden="true"/>
   <broadcaster id="ltr-paragraph-direction-broadcaster" checked="false"/>
   <broadcaster id="rtl-paragraph-direction-broadcaster" checked="false"/>
 </broadcasterset>
