@@ -21,4 +21,3 @@ ${XPI_FILENAME}: subdirs
 		chrome/bidimailpack.jar \
 		install.js \
 		install.rdf \
-
