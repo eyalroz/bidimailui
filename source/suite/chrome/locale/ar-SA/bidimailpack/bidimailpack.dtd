@@ -1,4 +1,4 @@
-﻿<!ENTITY menu-bidimail-switch-document-direction.label                "تحويل اتّجاه الرّسالة">
+<!ENTITY menu-bidimail-switch-document-direction.label                "تحويل اتّجاه الرّسالة">
 <!ENTITY menu-bidimail-switch-document-direction.accesskey            "g">
 <!ENTITY menu-bidimail-insert-lrm.label                               "إدراج علامة يسار إلى يمين">
 <!ENTITY menu-bidimail-insert-rlm.label                               "إدراج علامة يمين إلى يسار">
