@@ -265,8 +265,9 @@ div.hebrew-content {
   font-family: arial, sans-serif;
 }
 
-div.hebrew-content > ul > li {
+ ul#version-history > li {
   margin-bottom: 9pt;
+  font-weight: bold;
 }
 
 
