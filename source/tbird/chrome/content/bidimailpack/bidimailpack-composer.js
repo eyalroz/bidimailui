@@ -5,51 +5,55 @@ function GetCurrentParagraphDirection()
 {
   var hasLTR = false, hasRTL = false;
   var editor = GetCurrentEditor();
-  if (editor.selection.rangeCount > 0)
-  {
-    for (i=0; i<editor.selection.rangeCount; ++i)
+  try {
+    if (editor.selection.rangeCount > 0)
     {
-      var range = editor.selection.getRangeAt(i);
-      var node = range.startContainer;
-      // walk the tree till we find the endContainer of the selection range,
-      // giving our directionality style to everything on our way
-      do
+      for (i=0; i<editor.selection.rangeCount; ++i)
       {
-        var closestBlockElement = findClosestBlockElement(node);
-        if (closestBlockElement)
+        var range = editor.selection.getRangeAt(i);
+        var node = range.startContainer;
+        // walk the tree till we find the endContainer of the selection range,
+        // giving our directionality style to everything on our way
+        do
         {
-          var computedDir = closestBlockElement.ownerDocument.defaultView.getComputedStyle(closestBlockElement, "").getPropertyValue("direction");
-          switch (computedDir)
+          var closestBlockElement = findClosestBlockElement(node);
+          if (closestBlockElement)
           {
-            case 'ltr':
-              hasLTR = true;
-              break;
-            case 'rtl':
-              hasRTL = true;
-              break;
-          }
-        }
-        // This check should be placed here, not as the 'while'
-        // condition, to handle cases where begin == end
-        if (node == range.endContainer)
-          break;
-        if (node.firstChild)
-          node = node.firstChild;
-        else if (node.nextSibling)
-          node = node.nextSibling;
-        else
-          // find a parent node which has anything after
-          while (node = node.parentNode)
-          {
-            if (node.nextSibling)
+            var computedDir = closestBlockElement.ownerDocument.defaultView.getComputedStyle(closestBlockElement, "").getPropertyValue("direction");
+            switch (computedDir)
             {
-              node = node.nextSibling;
-              break;
+              case 'ltr':
+                hasLTR = true;
+                break;
+              case 'rtl':
+                hasRTL = true;
+                break;
             }
           }
+          // This check should be placed here, not as the 'while'
+          // condition, to handle cases where begin == end
+          if (node == range.endContainer)
+            break;
+          if (node.firstChild)
+            node = node.firstChild;
+          else if (node.nextSibling)
+            node = node.nextSibling;
+          else
+            // find a parent node which has anything after
+            while (node = node.parentNode)
+            {
+              if (node.nextSibling)
+              {
+                node = node.nextSibling;
+                break;
+              }
+            }
+        }
+        while (node)
       }
-      while (node)
     }
+  } catch(e) {
+    // perhaps editor is not available? No idea why...
   }
 
   if ((hasLTR && hasRTL) || (!hasLTR && !hasRTL))
