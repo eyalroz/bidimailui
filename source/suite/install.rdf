@@ -26,6 +26,7 @@
         <em:locale>locale/he-IL/bidimailpack/</em:locale>
         <em:locale>locale/ar-SA/bidimailpack/</em:locale>
         <em:skin>skin/classic/bidimailpack/</em:skin>
+        <em:skin>skin/modern/bidimailpack/</em:skin>
       </Description>
     </em:file>
   </Description>      

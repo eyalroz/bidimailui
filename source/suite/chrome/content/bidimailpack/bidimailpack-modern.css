@@ -1,0 +1,71 @@
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+#button-direction-ltr-main-bar {
+  list-style-image: url("chrome://bidimailpack/content/images/ltr-main-bar-modern.png");
+  -moz-image-region: rect(0px 49px 33px 0);
+}
+
+#button-direction-ltr-main-bar:hover {
+  -moz-image-region: rect(0px 99px 33px 50px);
+}
+
+#button-direction-ltr-main-bar:hover:active {
+  -moz-image-region: rect(0px 149px 33px 100px);
+}
+
+#button-direction-ltr-main-bar[disabled="true"] {
+  -moz-image-region: rect(0px 199px 33px 150px) !important;
+}
+
+#button-direction-rtl-main-bar {
+  list-style-image: url("chrome://bidimailpack/content/images/rtl-main-bar-modern.png");
+  -moz-image-region: rect(0px 49px 33px 0);
+}
+
+#button-direction-rtl-main-bar:hover {
+  -moz-image-region: rect(0px 99px 33px 50px);
+}
+
+#button-direction-rtl-main-bar:hover:active {
+  -moz-image-region: rect(0px 149px 33px 100px);
+}
+
+#button-direction-rtl-main-bar[disabled="true"] {
+  -moz-image-region: rect(0px 199px 33px 150px) !important;
+}
+
+
+#button-direction-ltr-formatting-bar {
+  list-style-image: url("chrome://bidimailpack/content/images/ltr-formatting-bar.png");
+  -moz-image-region: rect(0px 19px 18px 0px);
+}
+
+#button-direction-ltr-formatting-bar:hover {
+  -moz-image-region: rect(0px 38px 18px 19px);
+}
+
+#button-direction-ltr-formatting-bar:hover:active {
+  -moz-image-region: rect(0px 57px 18px 38px);
+}
+
+#button-direction-ltr-formatting-bar[disabled="true"] {
+  -moz-image-region: rect(0px 76px 18px 57px) !important;
+}
+
+#button-direction-rtl-formatting-bar {
+  list-style-image: url("chrome://bidimailpack/content/images/rtl-formatting-bar.png");
+  -moz-image-region: rect(0px 19px 18px 0px);
+}
+
+
+#button-direction-rtl-formatting-bar:hover {
+  -moz-image-region: rect(0px 38px 18px 19px);
+}
+
+#button-direction-rtl-formatting-bar:hover:active {
+  -moz-image-region: rect(0px 57px 18px 38px);
+}
+
+#button-direction-rtl-formatting-bar[disabled="true"] {
+  -moz-image-region: rect(0px 76px 18px 57px) !important;
+}
