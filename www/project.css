@@ -184,6 +184,10 @@ div#hebrew-navbar #project-navigation {
   padding-bottom: 5px;
 }
 
+.hebrew-news .infoTab .infoItems div {
+  background-position: right;
+}
+
 .infoTab .infoHeader {
   background: #f90 no-repeat url("http://www.mozdev.org/sharedimages/infotab_top.png");
   color: #fff;
