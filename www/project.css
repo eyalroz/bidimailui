@@ -141,8 +141,6 @@ div#hebrew-navbar #project-navigation {
 
 .hebrew-news {
   float: left;
-  padding: 0;
-  margin: 0;
 }
 
 .english-news {
@@ -164,8 +162,6 @@ div#hebrew-navbar #project-navigation {
   color: inherit;
   padding-left: 16px;
   padding-bottom: 5px;
-  padding: 0;
-  margin: 0;
 }
 
 .infoTab .infoHeader {
@@ -224,6 +220,8 @@ div#english-content {
 }
 
 .hebrew-news + div {
+  padding: 0;
+  margin: 0;
 }
 
 a.download-xpi {
