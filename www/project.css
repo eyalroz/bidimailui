@@ -133,6 +133,15 @@ div#hebrew-content {
   font-size: 0.9em;
 }
 
+div#english-content {
+  direction: ltr;
+  font-family: verdana, arial, sans-serif;
+  padding-right: 10px;
+  padding-left: 10px;
+  text-align: justify;
+  font-size: 0.9em;
+}
+
 a.download-xpi {
   text-align:center;
   display: block;
