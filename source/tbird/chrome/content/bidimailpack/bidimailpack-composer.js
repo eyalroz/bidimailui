@@ -317,6 +317,8 @@ function LoadParagraphMode() {
     var editor = GetCurrentEditor();
     if (editor) {
       editor.setParagraphFormat("p");
+      // as we don't use doStatefulCommand, we need to update the command state attribute...
+      document.getElementById('cmd_paragraphState').setAttribute("state", "p")
       var par = findClosestBlockElement(editor.selection.focusNode);
       // Set Paragraph Margins
       par.style.marginTop    = gParagraphMarginTop;
@@ -900,6 +902,8 @@ var directionSwitchController = {
   },
 
   setCaster: function(command) {
+    var caster;
+
     switch (command) {
       case "cmd_rtl_paragraph":
         caster = 'rtl-paragraph-direction-broadcaster';
