@@ -11,8 +11,8 @@
   <script type="application/x-javascript" src="bidimailpack-common.js"/>
   <script type="application/x-javascript" src="bidimailpack-messenger.js"/>
   <script type="application/x-javascript">
+    LoadOSAttributeOnWindow();
     InstallBrowserHandler();
-    setTimeout('LoadOSAttributeOnWindow();', 0);
   </script>
 
   <keyset id="mailKeys">
@@ -22,9 +22,10 @@
   </keyset>
 
   <menupopup id="menu_View_Popup">
-    <menuitem insertafter="mailviewCharsetMenu" label="&menu-bidimail-switch-document-direction:label;"
-        accesskey="&menu-bidimail-switch-document-direction:accesskey;" 
-        key="key-bidimail-switch" oncommand="SwitchMessageDirection()" />
+    <menuitem insertafter="mailviewCharsetMenu"
+              label="&menu-bidimail-switch-document-direction:label;"
+              accesskey="&menu-bidimail-switch-document-direction:accesskey;" 
+              key="key-bidimail-switch" oncommand="SwitchMessageDirection()" />
   </menupopup>
   
   <popup id="messagePaneContext">
@@ -37,13 +38,13 @@
   <toolbarpalette id="MailToolbarPalette">
     <toolbarbutton id="button-direction-ltr-main-bar"
                    class="toolbarbutton-1"
-                   oncommand="SetMessageDirection('ltr');"
+                   oncommand="alert('a'); SetMessageDirection('ltr');"
                    observes="ltr-document-direction-broadcaster"
                    label="&bidimail-ltr-button:label;"
                    tooltiptext="&bidimail-ltr-button:tip;" />
     <toolbarbutton id="button-direction-rtl-main-bar"
                    class="toolbarbutton-1"
-                   oncommand="SetMessageDirection('rtl');"
+                   oncommand="alert('b'); SetMessageDirection('rtl');"
                    observes="rtl-document-direction-broadcaster"
                    label="&bidimail-rtl-button:label;"
                    tooltiptext="&bidimail-rtl-button:tip;" />  
