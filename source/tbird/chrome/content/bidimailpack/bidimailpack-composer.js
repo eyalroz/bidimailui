@@ -141,14 +141,8 @@ function composeWindowEditorOnReopenHandler() {
 }
 
 function composeWindowEditorDelayedOnLoadHandler() {
+  var editorType = GetCurrentEditorType();
   var body = document.getElementById('content-frame').contentDocument.body;
-
-  //the following 3 lines enable logging messages to the javascript console
-  //by doing jsConsoleService.logStringMessage('blah') 
-
-  netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
-  var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
-  jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 
   // Handle message direction
   var messageIsAReply = false;
@@ -195,7 +189,6 @@ function composeWindowEditorDelayedOnLoadHandler() {
     SetDocumentDirection('rtl');
   else
     SetDocumentDirection('ltr');
-
   directionSwitchController.setAllCasters();
 }
 
