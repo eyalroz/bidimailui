@@ -1,6 +1,5 @@
 // Summary of differences from tbird version:
 //
-// an extra button visibility pref
 // button visibility set in loadhandler2 rather than loadhander (perhaps this should also
 // be the case for tbird)
 // XUL differences have, for now, no reflection in script differences
@@ -117,29 +116,24 @@ function composeWindowEditorOnLoadHandler2() {
   // decide which direction buttons are shown and which aren't
 
   var hiddenButtons = false;
-  var hiddenMainButtons = false;
   try {
     if (!prefs.getBoolPref('mail.compose.show_direction_buttons'))
       hiddenButtons = true;
   }
   catch(e) { } // preference is not set.
 
+  // Note: the document direction casters default to being hidden
+
   if (editorType == 'htmlmail')
   {
-    try {
-      if (!prefs.getBoolPref('mail.compose.show_whole_message_direction_buttons_for_htmlmail')) 
-        hiddenMainButtons = true;
-    }
-    catch(e) {} // preference is not set.
-
-    // Note: the hidden attribute defaults to being set false
-    // Note: in seamonkey, an extra pref controls the visibility of the 
-    //       main toolbar buttons
     document.getElementById('ltr-paragraph-direction-broadcaster').setAttribute('hidden',hiddenButtons);
     document.getElementById('rtl-paragraph-direction-broadcaster').setAttribute('hidden',hiddenButtons);
   }
-  document.getElementById('ltr-document-direction-broadcaster').setAttribute('hidden',hiddenButtons || hiddenMainButtons);
-  document.getElementById('rtl-document-direction-broadcaster').setAttribute('hidden',hiddenButtons || hiddenMainButtons);
+  else {
+    // plain text mail
+    document.getElementById('ltr-document-direction-broadcaster').setAttribute('hidden',hiddenButtons);
+    document.getElementById('rtl-document-direction-broadcaster').setAttribute('hidden',hiddenButtons);
+  }
 
   try
   {
@@ -158,10 +152,6 @@ function composeWindowEditorOnLoadHandler2() {
         directionSwitchController.setAllCasters();
           // the initial setting; perhaps instead of this
           // we should have an 'init' method for the controller?
-
-        var editor = GetCurrentEditor();
-        editor.document.addEventListener('focus', OnEditorDocumentFocus, true);
-        editor.document.addEventListener('lostfocus', OnEditorDocumentLostFocus, true);
 
         return;
 
@@ -183,11 +173,6 @@ function composeWindowEditorOnLoadHandler2() {
     SetDocumentDirection('ltr');
 
   directionSwitchController.setAllCasters();
-
-  var editor = GetCurrentEditor();
-  editor.document.addEventListener('focus', OnEditorDocumentFocus, true);
-  editor.document.addEventListener('lostfocus', OnEditorDocumentLostFocus, true);
-
 }
 
 function OnEditorDocumentFocus() {
