@@ -446,7 +446,6 @@ var directionSwitchController =
     this.setCaster("cmd_rtl_document");
     this.setCaster("cmd_ltr_paragraph");
     this.setCaster("cmd_rtl_paragraph");
-    return 3;
   },
 
   doCommand: function(command)
