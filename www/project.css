@@ -144,3 +144,8 @@ a.download-xpi {
   margin-left: 35%;
   margin-right: 35%;
 }
+
+div#hebrew-content ul li {
+  font-size: medium;
+}
+ 
