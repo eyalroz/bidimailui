@@ -25,10 +25,12 @@ div#english-navbar #project-navigation th{
 
 
 div#hebrew-navbar #project-navigation a{
-  display: table-cell;
   border-right: 1px solid black;
+  border-left: none;
   padding-right: 6px;
+  margin-right: 6px;
   padding-left: 5px;
+  margin-left: 6px;
 }
 
 div#hebrew-navbar #project-navigation a.first-item{
