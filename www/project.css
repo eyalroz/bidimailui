@@ -25,6 +25,7 @@ div#english-navbar #project-navigation th{
 
 
 div#hebrew-navbar #project-navigation a{
+  display: table-cell;
   border-right: 1px solid black;
   padding-right: 12px;
   padding-left: 11px;
