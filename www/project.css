@@ -1,201 +1,238 @@
 /*@import url("/hide_from_ns4.css");*/
-
 /* note: some stuff needs to be moved to hide_from_ns4.css , but I don't know exactly what */
-
 /*
-
 Mozilla resource:///res/html.css
-
 */
 
-#project-navigation a{
-  border: none;
+a.download-xpi {
+  background: #FFC0C0;
+  border: 2px solid #FF0000;
+  display: block;
+  font-weight: bold;
+  margin-left: 35%;
+  margin-right: 35%;
+  padding: 5px;
+  text-align: center;
+  width: 30%;
+}
+
+div#english-content {
+  direction: ltr;
+  font-size: 0.9em;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: justify;
+}
+
+div#english-navbar {
+  direction: ltr;
+  margin: 0;
   padding: 0;
-/*  padding-left: 5px;
-  padding-right: 5px;*/
+  padding-bottom: 5px;
 }
-
-#project-navigation a.selected-item, div#language-selection .selected-item{
-  background: rgb(255,220,128);
-}
-
-/*
-div#english-navbar #project-navigation a{
-  border-left: 1px solid black;
-  padding-left: 6px;
-  padding-right: 5px;
-}
-
-div#hebrew-navbar #project-navigation a{
-  border: none;
-  padding: 0;
-}
-
-div#english-navbar #project-navigation a.first-item{
-  border-left: none;
-}
-*/
 
 div#english-navbar #project-navigation th{
   margin-right: 3px;
 }
 
-div#hebrew-navbar #project-navigation th{
-  margin-left: 3px;
-}
-
-.project-name {
-  background: inherit;
-  color: #900;
-  font-family: helvetica,arial,sans-serif;
-  padding: 0;
-  margin: 0;
-}
-.project-name:after {
-  content: url(http://www.mozdev.org/sharedimages/boxes.gif);
+div#english-navbar #project-navigation th {
+  background-position: left;
+  padding-left: 18px;
 }
 
 div#english-navbar .project-name:after {
   padding-right: 1.1em;
 }
 
-div#hebrew-navbar .project-name {
+div#english-navbar div#language-selection {
+  float: right;
+  margin-right: 40px;
 }
 
-div#hebrew-navbar .project-name:after {
-/* not padding due to bug http://bugzilla.mozilla.org/show_bug.cgi?id=258949
-padding-right: 10px;
-*/
-  padding: 0;
-}
-
-div#hebrew-navbar {
-  margin: 0;
-  padding-right: 5px;
+div#hebrew-content {
   direction: rtl;
+  font-family: verdana, arial, sans-serif;
+  font-size: 0.9em;
+  padding-left: 10px;
+  padding-right: 10px;
   text-align: justify;
 }
 
-div#english-navbar {
-  margin: 0;
-  padding: 0;
-  direction: ltr;
-  padding-bottom: 5px;
+div#hebrew-content ul li , div#english-content ul li {
+  font-size: small;
 }
 
-.project-navigations {
-  margin-bottom: 2em;
-  border: none; /* work around weird ns4 bug */
-  font-size: smaller;
+div#hebrew-navbar {
+  direction: rtl;
+  margin: 0;
+  padding-right: 5px;
+  text-align: justify;
 }
 
 div#hebrew-navbar #project-navigation {
   padding-right: 10px;
 }
 
-#project-navigation th {
-  width: 18%;
-  background-color: inherit;
-  background-image: url("http://www.mozdev.org/sharedimages/nav-icon.png");
-  background-repeat: no-repeat;
-  color: #900;
-  font-family: helvetica,arial,sans-serif, serif;
-  padding-top: 0;
-  margin-bottom: 0;
-  margin-top: 0;
-  vertical-align: top;
-}
-
-#project-navigation td {
-  padding-top: 0;
-  margin-bottom: 0;
-  margin-top: 0;
-  vertical-align: top;
-}
-
-div#english-navbar #project-navigation th {
-  padding-left: 18px;
-  background-position: left;
-}
-
-div#hebrew-navbar #project-navigation th {
-  padding-left: 18px;
-  padding-right: 18px;
-  background-position: right;
-  padding-top: 1pt;
-}
-
-#project-navigation {
-  width: 80%;
-}
-
 div#hebrew-navbar #project-navigation {
   font-family: verdana, arial, sans-serif;
 }
 
+div#hebrew-navbar #project-navigation th{
+  margin-left: 3px;
+}
+
+div#hebrew-navbar #project-navigation th {
+  background-position: right;
+  padding-left: 18px;
+  padding-right: 18px;
+  padding-top: 1pt;
+}
+
+div#hebrew-navbar .project-name {
+}
+
+div#hebrew-navbar .project-name:after {
+  padding: 0;
+/* not padding due to bug http://bugzilla.mozilla.org/show_bug.cgi?id=258949
+   padding-right: 10px;*/
+}
+
+div#hebrew-navbar div#language-selection {
+  float: left;
+  margin-left: 10px;
+}
+
+div#language-selection {
+  border: 1px solid #000000;
+  padding: 5px;
+  text-align: center;
+  width: 80px;
+}
+
+div#language-selection a {
+  display: block;
+  font-family: verdana,arial,sans-serif;
+  font-size: small;
+}
+
+div#language-selection span#title {
+  color: #990000;
+  display: block;
+  font-family: helvetica,arial,sans-serif;
+  font-size: small;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+div.screenshot-container {
+  margin-bottom: 1em;
+  margin-top: 1em;
+  text-align: center;
+}
+
+img.screenshot {
+  border: 0;
+}
+
+.english-news {
+  direction: ltr;
+  float: right;
+}
+
+.english-news .infotab ul {
+  direction: ltr;
+}
+
+.english-news + div {
+  padding-right: 184px !important;
+}
+
+.hebrew-news {
+  direction: rtl;
+  float: right;
+}
+
+.hebrew-news .infotab .infoheader {
+  background: url("/images/infotab_top_rtl.png") #FF9900 no-repeat;
+}
+
+.hebrew-news .infotab ul {
+  direction: rtl;
+}
+
+.hebrew-news .infotab ul li {
+  direction: rtl;
+}
+
+.hebrew-news + div {
+  padding-right: 184px !important;
+}
+
+.infotab {
+  direction: rtl;
+  margin: 10px;
+  width: 154px;
+}
+
+.infotab .infoheader {
+  background: url("http://www.mozdev.org/sharedimages/infotab_top.png") #FF9900 no-repeat;
+  color: #FFFFFF;
+  font-family: Helvetica, Arial,san-serif, serif;
+  font-weight: bold;
+  text-align: center;
+}
+
+.infotab .infoitems {
+  font-size: smaller;
+}
+
+.infotab .infoitems div {
+  background: url("http://www.mozdev.org/sharedimages/bullet.gif") #FFFFFF no-repeat;
+  color: inherit;
+  padding-bottom: 5px;
+  padding-left: 16px;
+}
+
+.project-name {
+  background: inherit;
+  color: #990000;
+  font-family: helvetica,arial,sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.project-name:after {
+  content: url(http://www.mozdev.org/sharedimages/boxes.gif);
+}
+
+.project-navigations {
+  border: none; /* work around weird ns4 bug */
+  font-size: smaller;
+  margin-bottom: 2em;
+}
 
 #content,
 .page-header {
   background: inherit;
-  color: #000;
+  color: #000000;
   font-family: helvetica,arial,san-serif, serif;
   font-size: 1em;
   padding: 0;
 }
 
-
-.hebrew-news {
-  float: right;
-  direction: rtl;
-}
-
-.english-news {
-  float: right;
-  direction: ltr;
-}
-
-.infoTab {
-  margin: 10px;
-  width: 154px;
-  direction: rtl;
-}
-
-.hebrew-news .infoTab ul {
-  direction: rtl;
-}
-
-.hebrew-news .infoTab ul li {
-  direction: rtl;
-}
-
-.english-news .infoTab ul {
-  direction: ltr;
-}
-
-
-.infoTab .infoItems {
-  font-size: smaller;
-}
-
-.infoTab .infoItems div {
-  background: white no-repeat url("http://www.mozdev.org/sharedimages/bullet.gif");
-  color: inherit;
-  padding-left: 16px;
+#main-content ol li {
   padding-bottom: 5px;
 }
 
-.infoTab .infoHeader {
-  background: #f90 no-repeat url("http://www.mozdev.org/sharedimages/infotab_top.png");
-  color: #fff;
-  text-align: center;
-  font-family: Helvetica, Arial,san-serif, serif;
-  font-weight: bold;
+#main-content-no-nav li,
+#main-content li {
+  padding-bottom: 15px;
+/*  padding-left: 5px;
+  margin-left: 5px;
+  padding-right: 5px;
+  margin-right: 5px;
+  text-indent: 15px;*/
 }
-
-.hebrew-news .infoTab .infoHeader {
-  background: #f90 no-repeat url("/images/infotab_top_rtl.png");
-}
-
 
 #main-content-no-nav ul,
 #main-content ul {
@@ -209,70 +246,41 @@ div#hebrew-navbar #project-navigation {
   margin-right: 5px;*/
 }
 
-#main-content-no-nav li,
-#main-content li {
+#project-navigation {
+  width: 80%;
+}
+
+#project-navigation a{
+  border: none;
+  padding: 0;
 /*  padding-left: 5px;
-  margin-left: 5px;
-  padding-right: 5px;
-  margin-right: 5px;
-  text-indent: 15px;*/
-  padding-bottom: 15px;
+  padding-right: 5px;*/
 }
 
-#main-content ol li {
-  padding-bottom: 5px;
+#project-navigation a.selected-item, div#language-selection .selected-item{
+  background: #FFDC80;
 }
 
-div#hebrew-content {
-  direction: rtl;
-  font-family: verdana, arial, sans-serif;
-  padding-right: 10px;
-  padding-left: 10px;
-  text-align: justify;
-  font-size: 0.9em;
+#project-navigation td {
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-top: 0;
+  vertical-align: top;
 }
 
-div#english-content {
-  direction: ltr;
-  padding-right: 10px;
-  padding-left: 10px;
-  text-align: justify;
-  font-size: 0.9em;
+#project-navigation th {
+  background-color: inherit;
+  background-image: url("http://www.mozdev.org/sharedimages/nav-icon.png");
+  background-repeat: no-repeat;
+  color: #990000;
+  font-family: helvetica,arial,sans-serif, serif;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-top: 0;
+  vertical-align: top;
+  width: 18%;
 }
 
-.english-news + div {
-  padding-right: 184px !important;
-}
-
-.hebrew-news + div {
-  padding-right: 184px !important;
-}
-
-a.download-xpi {
-  text-align:center;
-  display: block;
-  background: rgb(255,192,192);
-  border: 2px solid red;
-  font-weight: bold;
-  padding: 5px;
-  width: 30%;
-  margin-left: 35%;
-  margin-right: 35%;
-}
-
-div#hebrew-content ul li , div#english-content ul li {
-  font-size: small;
-}
-
-div.screenshot-container {
-  text-align: center;
-  margin-top: 1em;
-  margin-bottom: 1em;
-}
-
-img.screenshot {
-  border: 0;
-}
 /*
 h2 {
   display: block;
@@ -280,7 +288,6 @@ h2 {
   font-weight: bold;
   margin: 0.8em 0;
 }
-
 h3 {
   display: block;
   font-size: 1.5em;
@@ -294,7 +301,6 @@ h3 {
   margin: 0.2em 0;
 }
 
-
 h5 {
   display: block;
   font-size: 1.1em;
@@ -302,35 +308,3 @@ h5 {
   margin: 0;
 }
 */
-
-div#language-selection {
-  padding: 5px;
-  border: 1px solid black;
-  text-align: center;
-  width: 80px;
-}
-
-div#english-navbar div#language-selection {
-  float: right;
-  margin-right: 40px;
-}
-
-div#hebrew-navbar div#language-selection {
-  float: left;
-  margin-left: 10px;
-}
-
-div#language-selection span#title {
-  font-family: helvetica,arial,sans-serif;
-  font-size: small;
-  color: #900;
-  font-weight: bold;
-  display: block;
-  margin-bottom: 10px;
-}
-
-div#language-selection a {
-  display: block;
-  font-family: verdana,arial,sans-serif;
-  font-size: small;
-}
