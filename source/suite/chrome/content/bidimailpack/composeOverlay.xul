@@ -82,7 +82,9 @@ main toolbar buttons are whole-document direction controls -->
   </toolbar>
   
    <toolbar id="FormatToolbar">
-     <hbox id="directionality-toolbar-section" insertafter="IncreaseFontSizeButton" dir="ltr">
+     <hbox id="directionality-toolbar-section"
+           insertafter="IncreaseFontSizeButton"
+           dir="ltr">
        <toolbarbutton id="button-direction-ltr-formatting-bar"
                       command="cmd_ltr_paragraph"
                       observes="ltr-paragraph-direction-broadcaster"
