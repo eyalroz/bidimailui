@@ -159,6 +159,14 @@ div#hebrew-navbar #project-navigation {
   width: 154px;
 }
 
+.hebrew-news .infoTab ul {
+  direction: rtl;
+}
+
+.english-news .infoTab ul {
+  direction: ltr;
+}
+
 
 .infoTab .infoItems {
   font-size: smaller;
