@@ -23,8 +23,6 @@ div#english-navbar #project-navigation th{
   margin-right: 3px;
 }
 
-
-
 div#hebrew-navbar #project-navigation a{
   text-decoration: none;
   border-right: 1px solid black;
@@ -42,6 +40,11 @@ div#hebrew-navbar #project-navigation a.first-item{
 div#hebrew-navbar #project-navigation th{
   margin-left: 3px;
 }
+
+div#hebrew-navbar #project-navigation td{
+  text-align: center;
+}
+
 
 .project-name {
   background: inherit;
