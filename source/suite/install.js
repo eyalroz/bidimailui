@@ -1,4 +1,4 @@
-const displayName         = "BiDiMail UI";
+const displayName         = "BiDi Mail UI";
 const name                = "bidimailpack";
 const jarName             = name + ".jar";
 const jarPath             = "chrome/";
