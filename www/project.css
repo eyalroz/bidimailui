@@ -5,8 +5,8 @@ Mozilla resource:///res/html.css
 */
 
 a.download-xpi {
-  background: #FFC0C0;
-  border: 2px solid #FF0000;
+  background: rgb(255, 192, 192);
+  border: 2px solid rgb(255, 0, 0);
   display: block;
   font-weight: bold;
   margin-left: 35%;
@@ -103,7 +103,7 @@ div#hebrew-navbar div#language-selection {
 }
 
 div#language-selection {
-  border: 1px solid #000000;
+  border: 1px solid rgb(0, 0, 0);
   padding: 5px;
   text-align: center;
   width: 80px;
@@ -116,7 +116,7 @@ div#language-selection a {
 }
 
 div#language-selection span#title {
-  color: #990000;
+  color: rgb(153, 0, 0);
   display: block;
   font-family: helvetica,arial,sans-serif;
   font-size: small;
@@ -153,7 +153,7 @@ img.screenshot {
 }
 
 .hebrew-news .infotab .infoheader {
-  background: url("/images/infotab_top_rtl.png") #FF9900 no-repeat;
+  background: url("/images/infotab_top_rtl.png") rgb(255, 153, 0) no-repeat;
 }
 
 .hebrew-news .infotab ul {
@@ -175,8 +175,8 @@ img.screenshot {
 }
 
 .infotab .infoheader {
-  background: url("http://www.mozdev.org/sharedimages/infotab_top.png") #FF9900 no-repeat;
-  color: #FFFFFF;
+  background: url("http://www.mozdev.org/sharedimages/infotab_top.png") rgb(255, 153, 0) no-repeat;
+  color: rgb(255, 255, 255);
   font-family: Helvetica, Arial,san-serif, serif;
   font-weight: bold;
   text-align: center;
@@ -187,7 +187,7 @@ img.screenshot {
 }
 
 .infotab .infoitems div {
-  background: url("http://www.mozdev.org/sharedimages/bullet.gif") #FFFFFF no-repeat;
+  background: url("http://www.mozdev.org/sharedimages/bullet.gif") rgb(255, 255, 255) no-repeat;
   color: inherit;
   padding-bottom: 5px;
   padding-left: 16px;
@@ -195,7 +195,7 @@ img.screenshot {
 
 .project-name {
   background: inherit;
-  color: #990000;
+  color: rgb(153, 0, 0);
   font-family: helvetica,arial,sans-serif;
   margin: 0;
   padding: 0;
@@ -214,7 +214,7 @@ img.screenshot {
 #content,
 .page-header {
   background: inherit;
-  color: #000000;
+  color: rgb(0, 0, 0);
   font-family: helvetica,arial,san-serif, serif;
   font-size: 1em;
   padding: 0;
@@ -226,7 +226,7 @@ img.screenshot {
 
 #main-content-no-nav li,
 #main-content li {
-  padding-bottom: 15px;
+  padding-bottom: 15px; 
 /*  padding-left: 5px;
   margin-left: 5px;
   padding-right: 5px;
@@ -258,7 +258,7 @@ img.screenshot {
 }
 
 #project-navigation a.selected-item, div#language-selection .selected-item{
-  background: #FFDC80;
+  background: rgb(255, 220, 128);
 }
 
 #project-navigation td {
@@ -272,7 +272,7 @@ img.screenshot {
   background-color: inherit;
   background-image: url("http://www.mozdev.org/sharedimages/nav-icon.png");
   background-repeat: no-repeat;
-  color: #990000;
+  color: rgb(153, 0, 0);
   font-family: helvetica,arial,sans-serif, serif;
   margin-bottom: 0;
   margin-top: 0;
@@ -307,4 +307,5 @@ h5 {
   font-weight: bold;
   margin: 0;
 }
+
 */
