@@ -36,6 +36,7 @@ div#english-navbar #project-navigation a.first-item{
 */
 
 div#english-navbar #project-navigation th{
+  width: 10%;
   margin-right: 3px;
 }
 
@@ -260,7 +261,7 @@ h5 {
 
 div#langauge-selection {
   float: right;
-  margin-right: 10%;
+  margin-right: 40px;
   padding: 5px;
   border: 1px solid black;
   text-align: center;
