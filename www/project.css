@@ -148,11 +148,13 @@ a.download-xpi {
 div#hebrew-content ul li {
   font-size: small;
 }
- 
-img.screenshot {
-  display: block;
-  text-align:center;
-  border: 0;
+
+div.screenshot-container {
+  text-align: center;
   margin-top: 1em;
   margin-bottom: 1em;
+}
+
+img.screenshot {
+  border: 0;
 }
