@@ -3,7 +3,7 @@ const displayName         = "BiDi UI";
 const name                = "bidiext";
 const jarName             = name + ".jar";
 const existsInApplication = File.exists(getFolder(getFolder("chrome"), jarName));
-const version             = "0.3.6";
+const version             = "0.3.7";
 
 var contentFlag = CONTENT | PROFILE_CHROME;
 var error       = null;
@@ -32,6 +32,7 @@ if(error == SUCCESS)
     registerChrome(contentFlag, folder, "content/" + name + "/");
     registerChrome(localeFlag, folder, "locale/en-US/" + name + "/");
     registerChrome(localeFlag, folder, "locale/he-IL/" + name + "/");
+    registerChrome(localeFlag, folder, "locale/ar-SA/" + name + "/");
     
     error = performInstall();
 
