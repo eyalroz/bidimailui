@@ -22,6 +22,11 @@
          oncommand="SwitchMessageDirection()" />
   </keyset>
 
+  <broadcasterset id="mailBroadcasters">
+    <broadcaster id="ltr-document-direction-broadcaster" checked="false"/>
+    <broadcaster id="rtl-document-direction-broadcaster" checked="false"/>  
+  </broadcasterset>
+
   <menupopup id="menu_View_Popup">
     <menuitem insertafter="mailviewCharsetMenu"
               label="&menu-bidimail-switch-document-direction:label;"

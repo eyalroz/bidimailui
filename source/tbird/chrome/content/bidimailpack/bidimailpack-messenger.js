@@ -25,10 +25,10 @@ function SwitchMessageDirection() {
 
 // TB only - update optional direction buttons status
 function UpdateDirectionButtons(direction) {
-  var button = document.getElementById("button-direction-ltr-main-bar");
-  button.setAttribute("checked", direction == "ltr");
-  button = document.getElementById("button-direction-rtl-main-bar");
-  button.setAttribute("checked", direction == "rtl");
+  var caster = document.getElementById("ltr-document-direction-broadcaster");
+  caster.setAttribute("checked", direction == "ltr");
+  caster = document.getElementById("rtl-document-direction-broadcaster");
+  caster.setAttribute("checked", direction == "rtl");
 }
 
 function browserOnLoadHandler() {
