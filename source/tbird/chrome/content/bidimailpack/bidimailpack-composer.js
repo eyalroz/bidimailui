@@ -614,8 +614,9 @@ function onKeyPress(ev) {
       var editor = GetCurrentEditor();
       if (editor.selection.isCollapsed) {
         var par = findClosestBlockElement(editor.selection.focusNode);
-        var prevPar = par.previousSibling; //xxx
-        if ( (par.firstChild == editor.selection.focusNode) &&
+        var prevPar = par.previousSibling;
+        if ( (prevPar.tagName.toLowerCase() == "p") &&
+             (par.firstChild == editor.selection.focusNode) &&
              (editor.selection.focusOffset == 0) ) {
           ev.preventDefault();
           ev.stopPropagation();
