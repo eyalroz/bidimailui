@@ -54,7 +54,7 @@ div#hebrew-navbar .project-name {
 
 div#hebrew-navbar .project-name:after {
 /*  padding-left: 1.1em;*/
-    padding-left: 3em;
+    padding-left: 5em;
     background: rgb(255,0,0);
 }
 
