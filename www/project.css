@@ -139,7 +139,11 @@ div#hebrew-navbar #project-navigation {
 }
 
 
-#infoTabs {
+div#hebrew-content #infoTabs {
+  float: left;
+}
+
+div#english-content #infoTabs {
   float: right;
 }
 
