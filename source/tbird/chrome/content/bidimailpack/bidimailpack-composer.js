@@ -4,7 +4,7 @@ var gLastWindowToHaveFocus;
 function GetCurrentSelectionDirection()
 {
   // the following 3 lines enable logging messages to the javascript console
-  // by doing jsConsoleService.logStringMessage('blah') 
+  // by doing jsConsoleService.logStringMessage('blah')
 
   // netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
   // var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
@@ -13,7 +13,7 @@ function GetCurrentSelectionDirection()
   // jsConsoleService.logStringMessage('----- in GetCurrentSelectionDirection() -----');
 
   // The current selection is a forest of DOM nodes,
-  // each of which is contained in a block HTML 
+  // each of which is contained in a block HTML
   // element (which is also a DOM node in the document
   // node tree), which has a direction.
   // We check the direction of all block elements
@@ -23,7 +23,7 @@ function GetCurrentSelectionDirection()
   // Note that it is also possible to prune the scan
   // whenever a block element is reached (i.e. not
   // scan within it), but at the moment we do not do so.
-  
+
   var hasLTR = false, hasRTL = false;
   var editor = GetCurrentEditor();
   try {
@@ -34,7 +34,7 @@ function GetCurrentSelectionDirection()
     // the editor is apparently unavailable... although it should be available!
     return null;
   }
-      
+
   view = document.defaultView;
   for (i=0; i<editor.selection.rangeCount; ++i ) {
     var range = editor.selection.getRangeAt(i);
@@ -46,7 +46,7 @@ function GetCurrentSelectionDirection()
     // the entire range (but don't use its direction just yet)
 
     cac = range.commonAncestorContainer;
-    
+
     cbe = findClosestBlockElement(cac);
     switch (view.getComputedStyle(cbe, "").getPropertyValue("direction")) {
       case 'ltr': cacIsLTR = true; break;
@@ -57,7 +57,7 @@ function GetCurrentSelectionDirection()
     // jsConsoleService.logStringMessage('commonAncestorContainer:' + cac + "\ntype:" + cac.nodeType + "\nvalue:\n" + cac.nodeValue + "\nis LTR = " + cacIsLTR + "; is RTL = " + cacIsRTL);
 
     if (cac.nodeType == Node.TEXT_NODE) {
-      // the range is some text within a single DOM leaf node 
+      // the range is some text within a single DOM leaf node
       // so there's no need for any traversal
       // jsConsoleService.logStringMessage('just a text node, continuing');
       hasLTR = hasLTR || cacIsLTR;
@@ -66,9 +66,9 @@ function GetCurrentSelectionDirection()
         return 'complex';
       continue; // ... to the next range
     }
-    
+
     // at this point we assume the cac nodeType is ELEMENT_NODE or something close to that...
-    
+
     if (range.startContainer == cac) {
       // we assume that in this case both containers are equal to cac
       // jsConsoleService.logStringMessage('zero-depth selection, using cac direction');
@@ -104,7 +104,7 @@ function GetCurrentSelectionDirection()
         }
       }
       node = node.parentNode;
-    } 
+    }
 
     // check all nodes from startContainer to endContainer
 
@@ -112,13 +112,13 @@ function GetCurrentSelectionDirection()
     do
     {
       // jsConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
-    
+
       // check the current node's direction
-       
+
       // Note: a node of type TEXT_NODE will not be checked for direction,
       //       nor will it trigger the use of the cac's direction!
-      
-       
+
+
       if (node.nodeType == Node.ELEMENT_NODE)
       {
         var nodeStyle = view.getComputedStyle(node, "");
@@ -151,7 +151,7 @@ function GetCurrentSelectionDirection()
 
 
       // is there is a child node which need be traversed?
-       
+
       if (node.firstChild ) {
         // jsConsoleService.logStringMessage('descending to first child');
         node = node.firstChild;
@@ -175,7 +175,7 @@ function GetCurrentSelectionDirection()
          else node = node.parentNode;
          // jsConsoleService.logStringMessage('moving back up');
        } while (node != cac);
-       
+
      } while (node != cac);
    }
 
@@ -243,7 +243,7 @@ function composeWindowEditorOnLoadHandler() {
 
   // decide which direction switch item should appear in the context menu -
   // the switch for the whole document or for the current paragraph
-  document.getElementById('contextSwitchParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');  
+  document.getElementById('contextSwitchParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');
   document.getElementById('contextBodyDirectionItem').setAttribute('hidden', editorType == 'htmlmail');
 
   // our extension likes paragraph text entry, not 'body text' - since
@@ -256,7 +256,7 @@ function composeWindowEditorOnLoadHandler() {
       // an exception here, like inability to focus etc.
     }
   }
-  
+
   // the following is a very ugly hack!
   // the reason for it is that without a timeout, it seems
   // that gMsgCompose does often not yet exist when
@@ -490,13 +490,13 @@ function InsertParagraph()
   // will be ignord
   var allHas = { value: false };
   var anyHas = { value: false };
-  
+
   var isStyleBold = { value: false };
   EditorGetTextProperty("b", "", "", isStyleBold, anyHas, allHas);
   var isStyleItalic = { value: false };
   EditorGetTextProperty("i", "", "", isStyleItalic, anyHas, allHas);
   var isStyleUnderline = { value: false };
-  EditorGetTextProperty("u", "", "", isStyleItalic, anyHas, allHas);  
+  EditorGetTextProperty("u", "", "", isStyleItalic, anyHas, allHas);
 
   // ------------------------------- "remember old style"
 
@@ -504,7 +504,7 @@ function InsertParagraph()
   // A "new line" operation nukes the current selection.
   // We want 'getParagraphState' to test the paragraph which the
   // cursor would be on after the nuking, so we nuke it ourselves first.
-  var isParMixed = new Object; // would be ignored
+  var isParMixed = { value: false }; // would be ignored
   var parState;
   parState = editor.getParagraphState(isParMixed);
 
