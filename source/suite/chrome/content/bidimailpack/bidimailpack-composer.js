@@ -5,6 +5,9 @@
 // be the case for tbird)
 // XUL differences have, for now, no reflection in script differences
 
+// Globals
+var gLastWindowToHaveFocus;
+
 function GetCurrentParagraphDirection()
 {
   var hasLTR = false, hasRTL = false;
@@ -85,6 +88,8 @@ function SwitchDocumentDirection() {
 }
 
 function composeWindowEditorOnLoadHandler() {
+  // intl' globals
+  gLastWindowToHaveFocus = null;
 
   var editorType = GetCurrentEditorType();
 
