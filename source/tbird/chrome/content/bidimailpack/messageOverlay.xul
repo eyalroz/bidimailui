@@ -15,11 +15,6 @@
     InstallBrowserHandler();
   </script>
 
-  <broadcasterset>
-    <broadcaster id="ltr-document-direction-broadcaster" checked="false"/>
-    <broadcaster id="rtl-document-direction-broadcaster" checked="false"/>
-  </broadcasterset>
-
   <keyset id="mailKeys">
     <key id="key-bidimail-switch"
          modifiers="&key-bidimail-switch-document-direction:modifiers;"
