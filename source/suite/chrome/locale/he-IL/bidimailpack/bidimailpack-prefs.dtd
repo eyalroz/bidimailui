@@ -8,7 +8,7 @@
 <!ENTITY always-reply-in-default-dir             "ענה להודעות תמיד בכיוון ברירת-המחדל">
 <!ENTITY more-info                               "למידע נוסף:">
 <!ENTITY link-text                               "דף-הבית של פרויקט BiDi UI">
-<!ENTITY bidimailpack-preftree-label             "BiDi UI">
+<!ENTITY bidimailpack-preftree-label             "BiDi Mail UI">
 <!ENTITY display-buttons                         "הצג כפתורי כיווניות">
 
 <!ENTITY marginTopTitle.label                    "רווח מעל הפסקה:">
@@ -19,4 +19,3 @@
 <!ENTITY pixelScale.accesskey                    "פ">
 <!ENTITY ptScale.label                           "נקודות">
 <!ENTITY ptScale.accesskey                       "נ">
-
