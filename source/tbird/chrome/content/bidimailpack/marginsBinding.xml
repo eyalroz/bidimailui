@@ -32,9 +32,9 @@
               this.initFromPref();
               // We use different style rules on mac pinstripe theme
               if (navigator.platform == "MacPPC")
-                this.setAttribute("classictheme", "pinstripe");
+                this.setAttribute("system", "mac");
               else
-                this.setAttribute("classictheme", "winstripe");
+                this.setAttribute("system", "not_mac");
             ]]></constructor>
 
             <field name="valueField">
