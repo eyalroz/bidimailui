@@ -9,9 +9,9 @@
 // ---------------------------------------
 // the following 3 lines enable logging messages to the javascript console:
 //
-netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
-var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
-jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
+// netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+// var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
+// jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 //
 // here is an example of a console log message describing a DOM node:
 // jsConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
@@ -96,48 +96,64 @@ function GetCurrentSelectionDirection()
       continue; // ... to the next range
     }
     
-    // at this point we assume the cac nodeType is ELEMENT_NODE or something close to that...
-    
+    // at this point we assume the cac nodeType is ELEMENT_NODE or something close to that
+
     if (range.startContainer == cac) {
-      // we assume that in this case both containers are equal to cac
-      // jsConsoleService.logStringMessage('zero-depth selection, using cac direction');
-      hasLTR = hasLTR || cacIsLTR;
-      hasRTL = hasRTL || cacIsRTL;
+      // we assume that in this case both containers are equal to cac;
+      // however, we will still traverse the tree below cac, in case
+      // some of its descendents have a direction different than its own
+      
+      // also, we need a special case for when the user has 'selected all',
+      // in which case the range.startContainer == range.endContainer == cac == body,
+      // but the body may have a different direction than all the paragraphs
+      
+      if ( cac.nodeName != "BODY" ||
+          !cac.firstChild ) { // if the body has no children, only its direction counts...
+        hasLTR = hasLTR || cacIsLTR;
+        hasRTL = hasRTL || cacIsRTL;
+      }
       if (hasLTR && hasRTL)
         return 'complex';
-      continue;
+      if (!cac.firstChild ) {
+        // no cac descendents to traverse...
+        continue;
+      }
     }
-
-    // check the start slope
-
-    node = range.startContainer;
-
-    while (node != cac) {
-      // jsConsoleService.logStringMessage('visiting start slope node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
-      if (node.nodeType == Node.ELEMENT_NODE) {
-        var nodeStyle = view.getComputedStyle(node, "");
-        var display = nodeStyle.getPropertyValue('display');
-        if (display == 'block' || display == 'table-cell' || display == 'table-caption' || display == 'list-item' || (node.nodeType == Node.DOCUMENT_NODE)) {
-          switch (nodeStyle.getPropertyValue("direction")) {
-            case 'ltr':
-              hasLTR = true;
-              // jsConsoleService.logStringMessage('found LTR');
-              if (hasRTL) return 'complex';
-              break;
-            case 'rtl':
-              hasRTL = true;
-              // jsConsoleService.logStringMessage('found RTL');
-              if (hasLTR) return 'complex';
-              break;
+    else {
+      // check the start slope
+  
+      node = range.startContainer;
+  
+      while (node != cac) {
+        // jsConsoleService.logStringMessage('visiting start slope node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
+        if (node.nodeType == Node.ELEMENT_NODE) {
+          var nodeStyle = view.getComputedStyle(node, "");
+          var display = nodeStyle.getPropertyValue('display');
+          if (display == 'block' || display == 'table-cell' || display == 'table-caption' || display == 'list-item' || (node.nodeType == Node.DOCUMENT_NODE)) {
+            switch (nodeStyle.getPropertyValue("direction")) {
+              case 'ltr':
+                hasLTR = true;
+                // jsConsoleService.logStringMessage('found LTR');
+                if (hasRTL) return 'complex';
+                break;
+              case 'rtl':
+                hasRTL = true;
+                // jsConsoleService.logStringMessage('found RTL');
+                if (hasLTR) return 'complex';
+                break;
+            }
           }
         }
+        node = node.parentNode;
       }
-      node = node.parentNode;
-    } 
+    }
 
-    // check all nodes from startContainer to endContainer
+    // check all nodes from startContainer to endContainer (or below the cac)
 
-    node = range.startContainer;
+    if (range.startContainer == cac)
+      node = cac.firstChild;
+    else node = range.startContainer;
+    
     do
     {
       // jsConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
@@ -206,7 +222,8 @@ function GetCurrentSelectionDirection()
        } while (node != cac);
        
      } while (node != cac);
-   }
+
+  } // end of the 'for' over the various ranges
 
   if (hasLTR && hasRTL)
     return 'complex';
