@@ -1,5 +1,7 @@
 ﻿<!ENTITY menu-bidimail-switch-document-direction:label      "تحويل اتّجاه النصّ">
 <!ENTITY menu-bidimail-switch-document-direction:accesskey            "g">
+<!ENTITY menu-bidimail-insert-lrm:label                               "Insert Left-To-Right Mark">
+<!ENTITY menu-bidimail-insert-rlm:label                               "Insert Right-To-Left Mark">
 <!ENTITY key-bidimail-switch-document-direction:keycode               "X">
 <!ENTITY key-bidimail-switch-document-direction:modifiers             "accel,shift">
 
