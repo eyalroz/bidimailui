@@ -13,14 +13,11 @@ function initValues()
 
   // Default composing direction for a new message. Default: ltr.
   try {
-    element = document.getElementById('bidimailpack-default-dir');
     prefDir = prefs.getCharPref('mailnews.send_default_direction');
-    if ( (prefDir == 'ltr') || (prefDir == 'LTR') )
-      element.selectedItem = element.childNodes[0];
-    else
-      element.selectedItem = element.childNodes[1];
+    if ( (prefDir == 'RTL') || (prefDir == 'rtl') )
+      document.getElementById('bidimailpack-default-dir').selectedItem = element.childNodes[1];
   } catch(e) {
-    element.selectedItem = element.childNodes[0];
+    // default is ltr, marked selected in xul
   };
 
   // Reply direction options: 
