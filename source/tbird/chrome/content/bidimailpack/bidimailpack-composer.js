@@ -195,7 +195,7 @@ function InstallComposeWindowEditorHandler() {
 
   document.addEventListener('load', composeWindowEditorOnLoadHandler, true);
   document.addEventListener('compose-window-reopen', composeWindowEditorOnLoadHandler2, true);
-  document.addEventListener('keypress', onKeyPress, true);
+  // document.addEventListener('keypress', onKeyPress, true);
 }
 
 function findClosestBlockElement(node)
