@@ -264,7 +264,7 @@ function HandleComposeReplyCSS() {
     }
 
     editor.QueryInterface(nsIEditorStyleSheets);
-    editor.addOverrideStyleSheet("chrome://bidimailpack/content/reply.css");
+    editor.addOverrideStyleSheet("chrome://bidimailpack/content/quotebar.css");
   }
 }
 

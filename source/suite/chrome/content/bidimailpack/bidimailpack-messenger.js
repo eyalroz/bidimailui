@@ -31,12 +31,12 @@ function browserOnLoadHandler() {
   var bodyIsPlainText = body.childNodes.length > 1
     && body.childNodes[1].className != 'moz-text-html'; // either '*-plain' or '*-flowed'
 
-  // reply css
+  // quote bar css
   var newSS;
   newSS = this.docShell.contentViewer.DOMDocument.createElement("link");
   newSS.rel  = "stylesheet";
   newSS.type = "text/css";
-  newSS.href = "chrome://bidimailpack/content/reply.css";
+  newSS.href = "chrome://bidimailpack/content/quotebar.css";
   head = this.docShell.contentViewer.DOMDocument.getElementsByTagName("head")[0];
   if (head)
     head.appendChild(newSS);
