@@ -36,9 +36,7 @@ function initValues()
 function saveValues()
 {
     var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-
-    element = document.getElementById('bidimailpack-autodetect');
-    prefs.setBoolPref('mailnews.message_display.autodetect_direction', element.checked);
+    var element;
 
     element = document.getElementById('bidimailpack-default-dir');
     prefs.setCharPref('mailnews.send_default_direction', element.value);
