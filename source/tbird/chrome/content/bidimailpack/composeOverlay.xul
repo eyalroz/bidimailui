@@ -36,18 +36,24 @@
 </commandset>
 
 <toolbarpalette id="MsgComposeToolbarPalette">
-  <toolbarbutton class="toolbarbutton-1" id="button-direction-ltr-main-bar"
-    label="&bidimail-ltr-button:label;" tooltiptext="&bidimail-ltr-button:tip;"
-    command="cmd_ltr_document" observes="ltr-document-direction-broadcaster" />
-  <toolbarbutton class="toolbarbutton-1" id="button-direction-rtl-main-bar"
-    label="&bidimail-rtl-button:label;" tooltiptext="&bidimail-rtl-button:tip;"
-    command="cmd_rtl_document" observes="rtl-document-direction-broadcaster" />
+  <toolbarbutton id="button-direction-ltr-main-bar"
+                 class="toolbarbutton-1"
+                 command="cmd_ltr_document"
+                 observes="ltr-document-direction-broadcaster"
+                 label="&bidimail-ltr-button:label;"
+                 tooltiptext="&bidimail-ltr-button:tip;" />
+  <toolbarbutton id="button-direction-rtl-main-bar"
+                 class="toolbarbutton-1"
+                 command="cmd_rtl_document"
+                 observes="rtl-document-direction-broadcaster"
+                 label="&bidimail-rtl-button:label;"
+                 tooltiptext="&bidimail-rtl-button:tip;" />
 </toolbarpalette>
 
 <toolbox id="headers-box" class="toolbox-top" mode="icons"> 
   <toolbar id="FormatToolbar">
     <hbox id="directionality-toolbar-section" insertafter="IncreaseFontSizeButton" dir="ltr">
-      <toolbarseparator id="directionality-separator-formatting-bar" class="toolbarseparator-standard" />
+      <toolbarseparator id="directionality-separator-formatting-bar"class="toolbarseparator-standard" />
       <toolbarbutton id="button-direction-ltr-formatting-bar"
         tooltiptext="&bidimail-ltr-button:tip;"
         command="cmd_ltr_paragraph" checked="false" hidden="true"
