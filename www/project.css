@@ -120,6 +120,10 @@ div#hebrew-navbar #project-navigation th {
   padding-top: 1pt;
 }
 
+#project-navigation {
+  width: 100%;
+}
+
 div#hebrew-navbar #project-navigation {
   font-family: verdana, arial, sans-serif;
 }
