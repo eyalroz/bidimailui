@@ -1,9 +1,8 @@
 // Globals
 var gLastWindowToHaveFocus;
 
-function GetCurrentParagraphDirection()
+function GetCurrentSelectionDirection()
 {
-
   // the following 3 lines enable logging messages to the javascript console
   // by doing jsConsoleService.logStringMessage('blah') 
 
@@ -11,7 +10,7 @@ function GetCurrentParagraphDirection()
   // var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
   // jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 
-  // jsConsoleService.logStringMessage('----- in GetCurrentParagraphDirection() -----');
+  // jsConsoleService.logStringMessage('----- in GetCurrentSelectionDirection() -----');
 
   // The current selection is a forest of DOM nodes,
   // each of which is contained in a block HTML 
@@ -600,13 +599,13 @@ var directionSwitchController =
     switch (command)
     {
       case "cmd_rtl_paragraph":
-        dir = GetCurrentParagraphDirection();
+        dir = GetCurrentSelectionDirection();
         if (dir == 'rtl')
           return 'checked';
         else
           return 'unchecked';
       case "cmd_ltr_paragraph":
-        dir = GetCurrentParagraphDirection();
+        dir = GetCurrentSelectionDirection();
         if (dir == 'ltr')
           return 'checked';
         else
