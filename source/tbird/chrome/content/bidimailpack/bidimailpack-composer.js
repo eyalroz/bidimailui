@@ -656,10 +656,10 @@ function onKeyPress(ev) {
           else {
             var nc = prevPar.childNodes.length;
             while (pChild) {
-              var pcClone = pChild.cloneNode(true);
-              //jsConsoleService.logStringMessage('copying pcClone:' + pcClone + "\ntype: " + pcClone.nodeType + "\nname: " + pcClone.nodeName + "\nHTML:\n" + pcClone.innerHTML + "\nOuter HTML:\n" + pcClone.innerHTML + "\nvalue:\n" + pcClone.nodeValue);
-              newPar.appendChild(pcClone);
+              var pc2 = pChild;
               pChild = pChild.nextSibling;
+              //jsConsoleService.logStringMessage('copying pcClone:' + pcClone + "\ntype: " + pcClone.nodeType + "\nname: " + pcClone.nodeName + "\nHTML:\n" + pcClone.innerHTML + "\nOuter HTML:\n" + pcClone.innerHTML + "\nvalue:\n" + pcClone.nodeValue);
+              newPar.appendChild(pc2);
             }
             prevPar.parentNode.removeChild(par);
             prevPar.parentNode.replaceChild(newPar,prevPar);
