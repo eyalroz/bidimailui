@@ -11,9 +11,7 @@
   <script type="application/x-javascript" src="bidimailpack-common.js"/>
   <script type="application/x-javascript" src="bidimailpack-composer.js"/>
   <script type="application/x-javascript">
-
     InstallComposeWindowEditorHandler();
-
   </script>
 
 <broadcasterset>
@@ -21,29 +19,42 @@
   <broadcaster id="rtl-document-direction-broadcaster" checked="false"/>
   <broadcaster id="ltr-paragraph-direction-broadcaster" checked="false"/>
   <broadcaster id="rtl-paragraph-direction-broadcaster" checked="false"/>
-  <broadcaster id="rlm-lrm-broadcaster" hidden="false"/>
 </broadcasterset>
 
 <commandset id="composerStyleMenuItems">
-  <command id="cmd_rtl_paragraph" oncommand="goDoCommand('cmd_rtl_paragraph');"  commandupdater="true" events="focus" oncommandupdate="CommandUpdate_MsgComposeDirection()" />
-  <command id="cmd_ltr_paragraph" oncommand="goDoCommand('cmd_ltr_paragraph');"  commandupdater="true" events="focus" oncommandupdate="CommandUpdate_MsgComposeDirection()" />
-  <command id="cmd_switch_paragraph" oncommand="goDoCommand('cmd_switch_paragraph');"  commandupdater="true" events="focus" oncommandupdate="CommandUpdate_MsgComposeDirection()" />
+  <command id="cmd_rtl_paragraph" oncommand="goDoCommand('cmd_rtl_paragraph');"
+    commandupdater="true" events="focus" oncommandupdate="CommandUpdate_MsgComposeDirection()" />
+  <command id="cmd_ltr_paragraph" oncommand="goDoCommand('cmd_ltr_paragraph');"
+    commandupdater="true" events="focus" oncommandupdate="CommandUpdate_MsgComposeDirection()" />
+  <command id="cmd_switch_paragraph" oncommand="goDoCommand('cmd_switch_paragraph');"
+    commandupdater="true" events="focus" oncommandupdate="CommandUpdate_MsgComposeDirection()" />
   <command id="cmd_rtl_document" oncommand="goDoCommand('cmd_rtl_document');" />
   <command id="cmd_ltr_document" oncommand="goDoCommand('cmd_ltr_document');" />
   <command id="cmd_switch_document" oncommand="goDoCommand('cmd_switch_document');" />
-  <command id="cmd_clear_paragraph_dir" oncommand="goDoCommand('cmd_clear_paragraph_dir');"  commandupdater="true" events="focus" oncommandupdate="CommandUpdate_MsgComposeDirection()" />
+  <command id="cmd_clear_paragraph_dir" oncommand="goDoCommand('cmd_clear_paragraph_dir');"
+    commandupdater="true" events="focus" oncommandupdate="CommandUpdate_MsgComposeDirection()" />
 </commandset>
 
 <toolbarpalette id="MsgComposeToolbarPalette">
-  <toolbarbutton class="toolbarbutton-1" id="button-direction-ltr-main-bar" label="&bidimail-ltr-button:label;" tooltiptext="&bidimail-ltr-button:tip;" command="cmd_ltr_document" observes="ltr-document-direction-broadcaster" />
-  <toolbarbutton class="toolbarbutton-1" id="button-direction-rtl-main-bar" label="&bidimail-rtl-button:label;" tooltiptext="&bidimail-rtl-button:tip;" command="cmd_rtl_document" observes="rtl-document-direction-broadcaster" />
+  <toolbarbutton class="toolbarbutton-1" id="button-direction-ltr-main-bar"
+    label="&bidimail-ltr-button:label;" tooltiptext="&bidimail-ltr-button:tip;"
+    command="cmd_ltr_document" observes="ltr-document-direction-broadcaster" />
+  <toolbarbutton class="toolbarbutton-1" id="button-direction-rtl-main-bar"
+    label="&bidimail-rtl-button:label;" tooltiptext="&bidimail-rtl-button:tip;"
+    command="cmd_rtl_document" observes="rtl-document-direction-broadcaster" />
 </toolbarpalette>
 
 <toolbox id="headers-box" class="toolbox-top" mode="icons"> 
   <toolbar id="FormatToolbar">
     <hbox id="directionality-toolbar-section" insertafter="ParagraphSelect">
-      <toolbarbutton id="button-direction-ltr-formatting-bar" tooltiptext="&bidimail-ltr-button:tip;" command="cmd_ltr_paragraph" checked="false" hidden="true" observes="ltr-paragraph-direction-broadcaster" />
-      <toolbarbutton id="button-direction-rtl-formatting-bar" tooltiptext="&bidimail-rtl-button:tip;" command="cmd_rtl_paragraph" checked="false" hidden="true" observes="rtl-paragraph-direction-broadcaster" />
+      <toolbarbutton id="button-direction-ltr-formatting-bar"
+        tooltiptext="&bidimail-ltr-button:tip;"
+        command="cmd_ltr_paragraph" checked="false" hidden="true"
+        observes="ltr-paragraph-direction-broadcaster" />
+      <toolbarbutton id="button-direction-rtl-formatting-bar"
+        tooltiptext="&bidimail-rtl-button:tip;"
+        command="cmd_rtl_paragraph" checked="false" hidden="true"
+        observes="rtl-paragraph-direction-broadcaster" />
       <toolbarseparator id="directionality-separator-formatting-bar" class="toolbarseparator-standard" />
     </hbox>
   </toolbar>
@@ -51,22 +62,29 @@
 
 <keyset id="tasksKeys">
   <key id="key-bidimail-switch" key="&key-bidimail-switch-document-direction:keycode;"
-      command="cmd_switch_document" modifiers="&key-bidimail-switch-document-direction:modifiers;" />
+    command="cmd_switch_document" modifiers="&key-bidimail-switch-document-direction:modifiers;" />
 </keyset>
 
 <popup id="msgComposeContext">
   <menuseparator />
-  <menuitem id="contextSwitchParagraphDirectionItem" label="&menu-bidimail-switch-paragraph-direction:label;"
+  <menuitem id="contextSwitchParagraphDirectionItem"
+    label="&menu-bidimail-switch-paragraph-direction:label;"
     accesskey="&menu-bidimail-switch-paragraph-direction:accesskey;" 
     command="cmd_switch_paragraph" />
-  <menuitem id="contextBodyDirectionItem" label="&menu-bidimail-switch-document-direction:label;"
+  <menuitem id="contextBodyDirectionItem"
+    label="&menu-bidimail-switch-document-direction:label;"
     accesskey="&menu-bidimail-switch-document-direction:accesskey;" 
     command="cmd_switch_document" />
-  <menuseparator observes="rlm-lrm-broadcaster" />
-  <menuitem id="contextInsertLRM" label="&menu-bidimail-insert-lrm:label;"
-    oncommand="InsertEntity('&amp;lrm;')" observes="rlm-lrm-broadcaster" />
-  <menuitem id="contextInsertRLM" label="&menu-bidimail-insert-rlm:label;"
-    oncommand="InsertEntity('&amp;rlm;')" observes="rlm-lrm-broadcaster" />
+  <menu id="menu_Context_ControlCharacters"
+    label="&menu-bidimail-insert-contol-character:label;"
+    accesskey="&menu-bidimail-insert-contol-character:accesskey;">
+    <menupopup id="menu_Context_ControlCharacters_Popup">
+      <menuitem id="contextInsertRLM" label="&menu-bidimail-rlm:label;"
+        oncommand="InsertEntity('&amp;rlm;')" />
+      <menuitem id="contextInsertLRM" label="&menu-bidimail-lrm:label;"
+        oncommand="InsertEntity('&amp;lrm;')" />
+    </menupopup>
+  </menu>
 </popup>
 
 <menu id="menu_View">
@@ -80,12 +98,15 @@
 <menu id="formatMenu">
   <menupopup id="formatMenuPopup">
     <menuseparator />
-    <menuitem id="formatSwitchParagraphDirectionItem" label="&menu-bidimail-switch-paragraph-direction:label;"
+    <menuitem id="formatSwitchParagraphDirectionItem"
+      label="&menu-bidimail-switch-paragraph-direction:label;"
       accesskey="&menu-bidimail-switch-paragraph-direction:accesskey;" 
       command="cmd_switch_paragraph" />
-    <menuitem id="format_ClearParagraphDirectionItem" label="&menu-bidimail-clear-paragraph-direction:label;"
+    <menuitem id="format_ClearParagraphDirectionItem"
+      label="&menu-bidimail-clear-paragraph-direction:label;"
       accesskey="&menu-bidimail-clear-paragraph-direction:accesskey;" 
       command="cmd_clear_paragraph_dir" />
   </menupopup>
 </menu>
+
 </overlay>
