@@ -12,7 +12,9 @@
           <stylesheet src="chrome://bidimailpack/skin/bidimailpack.css"/>
         </resources>
         <content>
-            <xul:textbox />
+            <xul:hbox>
+              <xul:textbox />
+            </xul:hbox>
             <xul:menulist>
                 <xul:menupopup>
                     <xul:menuitem label="&cmScale.label;"
@@ -35,8 +37,12 @@
                 this.setAttribute("classictheme", "winstripe");
             ]]></constructor>
 
-            <field name="valueField"> document.getAnonymousNodes(this)[0] </field>
-            <field name="scaleField"> document.getAnonymousNodes(this)[1] </field>
+            <field name="valueField">
+              document.getAnonymousNodes(this)[0].firstChild
+            </field>
+            <field name="scaleField">
+              document.getAnonymousNodes(this)[1]
+            </field>
 
             <property name="prefbase"
                       onget="return this.getAttribute('prefbase');"
