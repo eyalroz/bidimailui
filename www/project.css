@@ -64,8 +64,9 @@ div#hebrew-navbar .project-name {
 
 div#hebrew-navbar .project-name:after {
 /* not padding due to bug http://bugzilla.mozilla.org/show_bug.cgi?id=258949
-padding-right: 1.1em;
+padding-right: 10px;
 */
+  padding: 0;
 }
 
 div#hebrew-navbar {
@@ -89,8 +90,7 @@ div#english-navbar {
 }
 
 div#hebrew-navbar #project-navigation {
-  padding-right: 20px;
-/*  right: 10%;*/
+  padding-right: 10px;
 }
 
 #project-navigation th {
