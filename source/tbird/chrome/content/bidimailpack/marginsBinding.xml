@@ -75,7 +75,7 @@
                   }
                   catch (e) {
                     // default values;
-                    aValue = 0; aScale = "cm";                   
+                    aValue = "0"; aScale = "cm";                   
                   }
                   this.value = aValue; this.scale = aScale;
                 ]]></body>
