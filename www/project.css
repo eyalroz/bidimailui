@@ -341,11 +341,11 @@ div#language-selection a {
 div.faq-item {
 }
 
-div#english-content div.question {
+div.english-content div.question {
   font-family: "Comic Sans MS", cursive;
 }
 
-div#hebrew-content div.question {
+div.hebrew-content div.question {
   font-family: cursive;
 }
 
