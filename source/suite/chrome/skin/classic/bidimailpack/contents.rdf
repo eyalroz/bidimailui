@@ -20,7 +20,7 @@
   </RDF:Seq>
 
   <RDF:Seq about="chrome://messenger/content/messengercompose/messengercompose.xul">
-    <RDF:li>chrome://bidimailpack/content/bidimailpack.css</RDF:li>
+    <RDF:li>chrome://bidimailpack/skin/bidimailpack.css</RDF:li>
   </RDF:Seq>
 
 </RDF:RDF>
