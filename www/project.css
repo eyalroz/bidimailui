@@ -14,6 +14,12 @@ div#english-navbar #project-navigation a{
   padding-right: 5px;
 }
 
+div#hebrew-navbar #project-navigation a{
+  border: none;
+  padding: 0;
+}
+
+
 div#english-navbar #project-navigation a.first-item{
   border-left: none;
 }
@@ -71,29 +77,17 @@ div#english-navbar {
   vertical-align: top;
 }
 
-#project-navigation-hebrew th {
-  background-color: inherit;
-  background-image: url("http://www.mozdev.org/sharedimages/nav-icon.png");
-  background-repeat: no-repeat;
-  color: #900;
-  font-family: helvetica,arial,sans-serif, serif;
-  padding-top: 0;
-  margin-bottom: 0;
-  margin-top: 0;
-  vertical-align: top;
-}
-
 div#english-navbar #project-navigation th {
   padding-left: 18px;
   background-position: left;
 }
 
-div#hebrew-navbar #project-navigation-hebrew th {
+div#hebrew-navbar #project-navigation th {
   padding-right: 18px;
   background-position: right;
 }
 
-#project-navigation-hebrew {
+div#hebrew-navbar #project-navigation {
   font-family: verdana, arial, sans-serif;
 }
 
