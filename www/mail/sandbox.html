@@ -1,29 +1,75 @@
-﻿<div id="english-navbar">
+﻿<!-- MAIN CONTENT -->
+<div class="main-content english-content">
 
-<div id="langauge-selection">
-<span id="title">Languages</span>
-<a href="/">English</a>
-<a href="/index-he.html">עברית</a>
+
+<h2><a id="content" name="faq">Frequently-Asked Questions</a></h2>
+
+<h3><a name="blah">Installation & Removal</a></h3>
+
+<div class="faq-item">
+<div class="question">I have some version of Moofie's <code>hebmailpack</code> installed. What should I do before installing BiDi Mail UI?</div>
+<div class="answer">
+<p>That depends on whether you have the version Moofie made specifically for Thunderbird. To check whether you have that version installed, take a look at the Thunderbird extension panel. If you see Moofie's extension (the word 'Hebmailpack', or something mentioning Hebrew Mail or BiDi) - remove it as you would normally remove a Thunderbird extension - using the Uninstall button.</p>
+<p>If the extension does not appear in the panel, or if you're using the Mozilla suite, you will have to manually remove the old extension: Follow the instructions <a href="http://bidiui.mozdev.org/mail/installation.html#הוראות_הסרה_ידנית_מספריית_הפרופיל_האישי_של_מוזילה">here</a>, using the name <code>hebmailpack</code> instead of <code>bidimailpack</code>. <em>Note: Moofie's extension must also be manually removed from Thunderbird if it does not appear in the extension panel, so in this case the removal instructions apply to both Thunderbird and Mozilla suite!</em>
+<p>Now install the new extension.</p>
+</div>
+<hr>
 </div>
 
-<h1 class="project-name" id="content">BiDi UI</h1>
+<h3><a name="direction_detection">Automatic Direction Detection</a></h3>
+<div class="faq-item">
+<div class="question">I recieved this message, and the extension did not set its direction correctly. Why?</div>
+<div class="answer">
+<p>This could be due to one of the following:</p>
+<ul>
+<li>Mozilla has mis-detected the message encoding, so the extension is not aware that there are actually any RTL-script characters in the message.
+<li>Your message contains both RTL and LTR text, and the detection algorithm simply works differently than your intuition for the message.
+<li>The message is in HTML rather than plain text.
+<li>You have disabled automatic message direction detection in the preferences dialog.
+</ul>
+</div>
+<hr>
+</div>
 
-<table id="project-navigation">
+<div class="faq-item">
+<div class="question">Another question</div>
+<div class="answer">
+<p>An answer</p>
+</div>
+<hr>
+</div>
 
-  <tbody id="project" class="project-navigations">
-  <tr style="background: red">
-  <th scope="row"  style="background: blue">Project:</th>
-  <td class="navigation-list"  style="background: green">
-  <a class="first-item" href="/index.html">Home</a> |
-<!--  <a href="/list.html">Mailing List</a> |  -->
-  <a href="/mail/">BiDi Mail UI Extension</a> |
-  <a href="/browser/">BiDi Browser UI Extension</a> |
-  <a href="/source.html">Source Code</a> |
-  <a href="/bugs.html">Bugs</a>
-  </td>
-  </tr>
-  </tbody>
-</table>
-<?php 
-downloads('/latest/bidimailui_tbird.xpi', 
-'Current Snap'); ?> </div>
+
+<h3><a name="blah">Keyboard Behavior</a></h3>
+
+<div class="faq-item">
+<div class="question">After installing BiDi Mail UI, As I compose new messages, I feel something weird about the behavior of the Enter key; what gives?</div>
+<div class="answer">
+<p>Without the extension, pressing <code>Enter</code> in the composer window inserts a line break (i.e. the &lt;br&gt; HTML tag). The extension indeed changes the behavior, and now pressing <code>Enter</code> 'inserts a paragraph break' (e.g. inserts a paragraph-ending &lt;/p&gt;, followed by a new paragraph-beginning &lt;p&gt;). This behavior is similar to that of word processors such as OpenOffice Writer and Microsoft Office. Following this line of similarity, with the extension installed you can insert a line break by pressing <code>Shift+Enter</code>.</p>
+</div>
+<hr>
+</div>
+
+<div class="faq-item">
+<div class="question">Another question</div>
+<div class="answer">
+<p>An answer</p>
+</div>
+<hr>
+</div>
+
+
+<h3><a name="blah">Some other subject</a></h3>
+
+<div class="faq-item">
+<div class="question">Another question</div>
+<div class="answer">
+<p>An answer</p>
+</div>
+<hr>
+</div>
+
+
+<p>more FAQs to follow...</p>
+<hr>
+</div>
