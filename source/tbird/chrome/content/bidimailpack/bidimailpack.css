@@ -2,10 +2,36 @@
 
 #button-direction-ltr-main-bar {
   list-style-image: url("chrome://bidimailpack/skin/ltr-main-bar.png");
+  -moz-image-region: rect(0px 30px 30px 0px);
+}
+
+#button-direction-ltr-main-bar:hover {
+  -moz-image-region: rect(0px 60px 30px 30px);
+}
+
+#button-direction-ltr-main-bar:hover:active {
+  -moz-image-region: rect(0px 90px 30px 60px);
+}
+
+#button-direction-ltr-main-bar[disabled="true"] {
+  -moz-image-region: rect(0px 120px 30px 90px);
 }
 
 #button-direction-rtl-main-bar {
   list-style-image: url("chrome://bidimailpack/skin/rtl-main-bar.png");
+  -moz-image-region: rect(0px 30px 30px 0px);
+}
+
+#button-direction-rtl-main-bar:hover {
+  -moz-image-region: rect(0px 60px 30px 30px);
+}
+
+#button-direction-rtl-main-bar:hover:active {
+  -moz-image-region: rect(0px 90px 30px 60px);
+}
+
+#button-direction-rtl-main-bar[disabled="true"] {
+  -moz-image-region: rect(0px 120px 30px 90px);
 }
 
 #button-direction-ltr-formatting-bar {
