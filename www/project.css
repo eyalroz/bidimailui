@@ -19,10 +19,16 @@ div#hebrew-navbar #project-navigation a{
   padding: 0;
 }
 
+#project-navigation a.selected-item{
+  background: rgb(255,220,128);
+}
 
+
+ class="selected_section"
 div#english-navbar #project-navigation a.first-item{
   border-left: none;
 }
+
 
 div#english-navbar #project-navigation th{
   margin-right: 3px;
