@@ -88,6 +88,10 @@ div#english-navbar {
   font-size: smaller;
 }
 
+div#hebrew-navbar .project-navigations {
+  margin-right: 20px;
+}
+
 #project-navigation th {
   width: 18%;
   background-color: inherit;
@@ -115,8 +119,7 @@ div#english-navbar #project-navigation th {
 
 div#hebrew-navbar #project-navigation th {
   padding-left: 18px;
-  padding-right: 24px;
-  margin-right: 5px;
+  padding-right: 18px;
   background-position: right;
   padding-top: 1pt;
 }
