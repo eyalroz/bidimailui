@@ -8,6 +8,16 @@ Mozilla resource:///res/html.css
 
 */
 
+#project-navigation a{
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#project-navigation a.selected-item, div#langauge-selection .selected-item{
+  background: rgb(255,220,128);
+}
+
+/*
 div#english-navbar #project-navigation a{
   border-left: 1px solid black;
   padding-left: 6px;
@@ -19,14 +29,10 @@ div#hebrew-navbar #project-navigation a{
   padding: 0;
 }
 
-#project-navigation a.selected-item, div#langauge-selection .selected-item{
-  background: rgb(255,220,128);
-}
-
 div#english-navbar #project-navigation a.first-item{
   border-left: none;
 }
-
+*/
 
 div#english-navbar #project-navigation th{
   margin-right: 3px;
