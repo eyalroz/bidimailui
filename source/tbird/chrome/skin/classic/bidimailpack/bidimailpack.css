@@ -83,3 +83,8 @@
 #button-direction-rtl-formatting-bar[disabled="true"] {
   -moz-image-region: rect(0px 76px 18px 57px) !important;
 }
+
+#margintop[status="non_valid_value"] > *
+{
+  background-color: red !important;
+}
