@@ -157,6 +157,7 @@ div#hebrew-navbar #project-navigation {
 .infoTab {
   margin: 10px;
   width: 154px;
+  direction: rtl;
 }
 
 .hebrew-news .infoTab ul {
