@@ -447,6 +447,10 @@ function onKeyPress(ev)
   var editorType = GetCurrentEditorType();
   if (editorType != 'htmlmail')
     return;
+    
+  // Don't change the behavior outside the message content
+  if (top.document.commandDispatcher.focusedWindow != content)
+    return;
 
   // Steal all Enters but Shift-Enters. Shift-Enters should insert BR, as usual.
   if ((ev.keyCode == KeyEvent.DOM_VK_ENTER || ev.keyCode == KeyEvent.DOM_VK_RETURN) && !ev.shiftKey  && !isInList())
