@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://communicator/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://messenger/skin/prefPanels.css" type="text/css"?>
+
+<!DOCTYPE page SYSTEM "chrome://bidimailpack/locale/bidimailpack-prefs.dtd">
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="initValues();"
+        ondialogaccept="saveValues();"
+        buttons="accept,cancel"
+        persist="screenX screenY"
+        title="&bidimailpack-settings;">
+
+  <script type="application/x-javascript" src="chrome://bidimailpack/content/bidimailpack-prefs.js"/>
+
+  <groupbox>
+    <caption label="&message-display-groupbox-caption;"/>
+    <vbox>
+      <checkbox id="bidimailpack-autodetect" label="&autodetect;" checked="true" autostretch="never" />
+    </vbox>
+  </groupbox>
+     
+  <groupbox>
+    <caption label="&message-composition-groupbox-caption;"/>
+    <description>&default-dir;</description>
+      <hbox class="indent">
+        <radiogroup id="bidimailpack-default-dir">
+          <radio id="bidimailpack-default-dir-ltr" value="ltr" label="&ltr;" selected="true" />
+          <radio id="bidimailpack-default-dir-rtl" value="rtl" label="&rtl;" />
+        </radiogroup>
+      </hbox>
+     <spacer />
+     <checkbox id="bidimailpack-reply-in-default-dir" checked="false" label="&always-reply-in-default-dir;" autostretch="never" />
+     <checkbox id="bidimailpack-display-buttons" checked="true" label="&display-buttons;" autostretch="never" />
+  </groupbox>
+
+</dialog>

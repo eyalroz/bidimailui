@@ -1,0 +1,12 @@
+<!ENTITY menu-bidimail-switch-directionality:label                "Switch Message Direction">
+<!ENTITY menu-bidimail-switch-directionality:accesskey            "g">
+<!ENTITY key-bidimail-switch-directionality:keycode               "X">
+<!ENTITY key-bidimail-switch-directionality:modifiers             "accel,shift">
+
+<!ENTITY menu-bidimail-switch-paragraph-directionality:label      "Switch Paragraph Direction">
+<!ENTITY menu-bidimail-switch-paragraph-directionality:accesskey  "w">
+
+<!ENTITY bidimail-ltr-button:label                                "LTR">
+<!ENTITY bidimail-ltr-button:tip                                  "Set Left-to-Right Direction">
+<!ENTITY bidimail-rtl-button:label                                "RTL">
+<!ENTITY bidimail-rtl-button:tip                                  "Set Right-to-Left Direction">
