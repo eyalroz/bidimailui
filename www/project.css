@@ -12,7 +12,7 @@
   padding-right: 1.1em;
 }
 
-div.#hebrew-navbar {
+div#hebrew-navbar {
   margin: 0;
   padding: 0;
   direction: rtl;
@@ -44,14 +44,6 @@ Mozilla resource:///res/html.css
   margin-bottom: 2em;
   border: none; /* work around weird ns4 bug */
   font-size: smaller;
-}
-
-div#english-navbar #project-navigation {
-  direction: ltr;
-}
-
-div#hebrew-navbar #project-navigation {
-  direction: rtl;
 }
 
 #project-navigation .navigation-list {
