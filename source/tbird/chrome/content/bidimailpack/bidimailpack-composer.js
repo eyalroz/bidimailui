@@ -49,7 +49,7 @@ function GetCurrentSelectionDirection() {
     return null;
   }
 
-  view = document.defaultView;
+  var view = document.defaultView;
   for (i=0; i<editor.selection.rangeCount; ++i ) {
     var range = editor.selection.getRangeAt(i);
     var node = range.startContainer;
@@ -559,7 +559,7 @@ function ApplyToSelectionBlockElements(evalStr) {
           }
           else
             // find a parent node which has anything after
-            while (node = node.parentNode) {
+            while ((node = node.parentNode)) {
               // jsConsoleService.logStringMessage('moved up to parent node');
               if (node.nextSibling) {
                 node = node.nextSibling;
@@ -594,6 +594,7 @@ function SwitchParagraphDirection() {
 function onKeyPress(ev) {
   // Don't change the behavior for text-plain messages
   var editorType = GetCurrentEditorType();
+  var editor = GetCurrentEditor();
   if (editorType != 'htmlmail')
     return;
     
@@ -613,7 +614,6 @@ function onKeyPress(ev) {
       do {
         node = node.firstChild;
       } while (node.hasChildNodes());
-      var editor = GetCurrentEditor();
       editor.selection.collapse(node, 0);
     }
     else if (ev.keyCode == KeyEvent.DOM_VK_END) {
@@ -629,7 +629,6 @@ function onKeyPress(ev) {
       if (node.nodeName == "BR")
         node = node.previousSibling;
 
-      var editor = GetCurrentEditor();
       // if this is a node with text, go to the end of it
       if (node.length)
         editor.selection.collapse(node, node.length);
@@ -674,7 +673,6 @@ function onKeyPress(ev) {
     // <p>[p1 content][p2 content]</p>
     // (NOT: <p>[p1 content]<br>[p2 content]</p> as nsIHTMLEditor's impl')
     else if (ev.keyCode == KeyEvent.DOM_VK_BACK_SPACE) {
-      var editor = GetCurrentEditor();
       if (editor.selection.isCollapsed) {
         var par = findClosestBlockElement(editor.selection.focusNode);
         var prevPar = par.previousSibling;
