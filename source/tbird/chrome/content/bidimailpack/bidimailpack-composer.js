@@ -524,9 +524,15 @@ function InsertParagraph()
   // Go up to the last child.
   // e.g. <p><b>foo<br></b></p> -- we accend to B, then to BR.
   for (var node = prevPar.lastChild; node && node.lastChild; node = node.lastChild);
-  // alert(node + ' ' + node.tagName);
-  if (node && (node.nodeType == node.ELEMENT_NODE) && (node.tagName.toUpperCase() == "BR"))
-    editor.deleteNode(node);
+  // Make sure:
+  // 1. It's a BR,
+  // 2. It's not the special case of the BR being an only child (thus
+  //    not a candidate for removal -- we need it to keep the P
+  //    from becoming empty)
+  if (node && (node.nodeType == node.ELEMENT_NODE) && (node.tagName.toLowerCase() == "br") && prevPar.firstChild != node)
+  {
+   editor.deleteNode(node);
+  }
 
   editor.endTransaction();
 
@@ -542,8 +548,6 @@ function InsertParagraph()
   if (isStyleFontFace.value) // font-face can't be "mixed": there is no selected text
     EditorSetTextProperty("font", "face", styleFontFace);
   // ------------------------------- "set old style"
-
-  // alert(par.ownerDocument.documentElement.innerHTML);
 }
 
 var directionSwitchController =
