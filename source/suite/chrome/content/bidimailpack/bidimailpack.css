@@ -16,7 +16,7 @@
 }
 
 #button-direction-ltr-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 92px 21px 69px);
+  -moz-image-region: rect(0px 92px 21px 69px) !important;
 }
 
 
@@ -36,7 +36,7 @@
 }
 
 #button-direction-rtl-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 92px 21px 69px);
+  -moz-image-region: rect(0px 92px 21px 69px) !important;
 }
 
 
