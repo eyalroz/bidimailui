@@ -40,16 +40,15 @@ function browserOnLoadHandler() {
     && body.childNodes[1].className != 'moz-text-html'; // either '*-plain' or '*-flowed'
 
   // reply css
-  if (!bodyIsPlainText) {
-    var newSS;
-    newSS = this.docShell.contentViewer.DOMDocument.createElement("link");
-    newSS.rel  = "stylesheet";
-    newSS.type = "text/css";
-    newSS.href = "chrome://bidimailpack/content/reply.css";
-    head = this.docShell.contentViewer.DOMDocument.getElementsByTagName("head")[0];
-    if (head)
-      head.appendChild(newSS);
-  }
+  var newSS;
+  newSS = this.docShell.contentViewer.DOMDocument.createElement("link");
+  newSS.rel  = "stylesheet";
+  newSS.type = "text/css";
+  newSS.href = "chrome://bidimailpack/content/reply.css";
+  head = this.docShell.contentViewer.DOMDocument.getElementsByTagName("head")[0];
+  if (head)
+    head.appendChild(newSS);
+
 
   // Auto detect plain text direction
   var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
