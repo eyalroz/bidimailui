@@ -58,6 +58,64 @@
 <hr>
 </div>
 
+<h3><a name="blah">Replying to Messages</a></h3>
+
+<div class="faq-item">
+<div class="question">When I reply to a Right-to-Left message, the message-quote bar continues to appear on the left of the message instead of moving over to the right. Can I make it behave the way I want to?</div>
+<div class="answer">
+<p>Add the following rules to <code>userChrome.css</code> in your profile's <code>chrome</code> folder:</p>
+<div class="code-segment">
+blockquote[type=cite] {
+  border-color: inherit !important;
+  border-width: 3px !important;
+}
+
+body[dir=rtl] blockquote[type=cite] {
+  padding-right: 1em !important;
+  padding-left: 0 !important;
+  border-right: 3px solid !important;
+  border-left: 0 !important;
+}
+</div>
+<p>If you like, here are some extra rules for <code>userContent.css</code> which will change the color of quoted text based on the quote depth:</p>
+<div class="code-segment">
+blockquote[type=cite] {
+  color: #660066 !important;
+}
+blockquote[type=cite] blockquote {
+  color: #007777 !important;
+}
+blockquote[type=cite] blockquote blockquote {
+  color: #990000 !important;
+}
+blockquote[type=cite] blockquote blockquote blockquote {
+  color: #000099 !important;
+}
+blockquote[type=cite] blockquote blockquote blockquote blockquote {
+  color: #bb6600 !important;
+}
+</div>
+<p>This FAQ item has been ripped off from Moofie :-)</p>
+</div>
+<hr>
+</div>
+
+<div class="faq-item">
+<div class="question">Another question</div>
+<div class="answer">
+<p>An answer</p>
+</div>
+<hr>
+</div>
+
+
+הוסיפו את הגדרות הסגנון האלה ל-userContent.css. תוכלו להשתמש בהן גם אם אינכם משתמשים בתוסף. ההגדרות מתאימות גם להודעות באנגלית (LTR).
+
+בהגדרות הללו יש בונוס: ציטוטים בעומק שונה יוצגו בצבעים שונים (השתמשתי בצבעי groups.Google.com).
+
+לחלופין, אם אינכם רוצים להשתמש בהגדרות הסגנון הללו, תוכלו להנחות את מוזילה לא להציג ציטוטים בצורה מיוחדת: הוסיפו את השורה הבאה ל-user.js או ל-prefs.js.
+
+pref("mail.quoted_graphical", false);
 
 <h3><a name="blah">Some other subject</a></h3>
 

@@ -372,3 +372,13 @@ div.faq-item hr {
   margin-bottom: 5%;
   height: 1px;
 }
+
+div.code-segment {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  font-family: monospace;
+  font-size: small;
+  white-space:pre;
+  margin-left: 15%;
+  margin-right: 15%;
+}
