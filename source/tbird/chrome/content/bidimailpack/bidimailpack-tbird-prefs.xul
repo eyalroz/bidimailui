@@ -41,6 +41,7 @@
             style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
             class="indent"
             prefbase="mailnews.paragraph.margin_top"/>
+      <spacer style="height: 0.5em;" />
       <description>&marginBottomTitle.label;</description>
       <hbox id="marginbottom"
             style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
