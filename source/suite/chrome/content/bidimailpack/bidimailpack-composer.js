@@ -112,6 +112,17 @@ function composeWindowEditorOnLoadHandler() {
   document.getElementById('contextSwitchParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');
   document.getElementById('contextBodyDirectionItem').setAttribute('hidden', editorType == 'htmlmail');
 
+  // our extension likes paragraph text entry, not 'body text' - since
+  // paragraph are block elements, with a direction setting
+  if (editorType == 'htmlmail') {
+    try {
+      doStatefulCommand('cmd_paragraphState', "p");
+    } catch(e) {
+      // since the window is not 'ready', something might throw
+      // an exception here, like inability to focus etc.
+    }
+  }
+
   // the following is a very ugly hack!
   // the reason for it is that without a timeout, it seems
   // that gMsgCompose does often not yet exist when
