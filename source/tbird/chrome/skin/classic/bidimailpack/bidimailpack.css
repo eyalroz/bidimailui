@@ -16,42 +16,6 @@
 
 */				  
 
-/* Main Toolbar Buttons - Large Icons */
-
-#button-direction-ltr-main-bar {
-  list-style-image: url("chrome://bidimailpack/skin/ltr-main-bar.png");
-  -moz-image-region: rect(0px 24px 24px 0px);
-}
-
-#button-direction-ltr-main-bar:hover {
-  -moz-image-region: rect(0px 48px 24px 24px);
-}
-
-#button-direction-ltr-main-bar:hover:active {
-  -moz-image-region: rect(0px 72px 24px 48px);
-}
-
-#button-direction-ltr-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 96px 24px 72px) !important;
-}
-
-#button-direction-rtl-main-bar {
-  list-style-image: url("chrome://bidimailpack/skin/rtl-main-bar.png");
-  -moz-image-region: rect(0px 24px 24px 0px);
-}
-
-#button-direction-rtl-main-bar:hover {
-  -moz-image-region: rect(0px 48px 24px 24px);
-}
-
-#button-direction-rtl-main-bar:hover:active {
-  -moz-image-region: rect(0px 72px 24px 48px);
-}
-
-#button-direction-rtl-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 96px 24px 72px) !important;
-}
-
 /* Main Toolbar Buttons - Small Icons */
 
 toolbar[iconsize="small"] #button-direction-ltr-main-bar {
@@ -86,6 +50,44 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover:active {
 
 toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
   -moz-image-region: rect(0px 64px 16px 48px) !important;
+}
+
+
+
+/* Main Toolbar Buttons - Large Icons */
+
+#button-direction-ltr-main-bar {
+  list-style-image: url("chrome://bidimailpack/skin/ltr-main-bar.png");
+  -moz-image-region: rect(0px 24px 24px 0px);
+}
+
+#button-direction-ltr-main-bar:hover {
+  -moz-image-region: rect(0px 48px 24px 24px);
+}
+
+#button-direction-ltr-main-bar:hover:active {
+  -moz-image-region: rect(0px 72px 24px 48px);
+}
+
+#button-direction-ltr-main-bar[disabled="true"] {
+  -moz-image-region: rect(0px 96px 24px 72px) !important;
+}
+
+#button-direction-rtl-main-bar {
+  list-style-image: url("chrome://bidimailpack/skin/rtl-main-bar.png");
+  -moz-image-region: rect(0px 24px 24px 0px);
+}
+
+#button-direction-rtl-main-bar:hover {
+  -moz-image-region: rect(0px 48px 24px 24px);
+}
+
+#button-direction-rtl-main-bar:hover:active {
+  -moz-image-region: rect(0px 72px 24px 48px);
+}
+
+#button-direction-rtl-main-bar[disabled="true"] {
+  -moz-image-region: rect(0px 96px 24px 72px) !important;
 }
 
 /* Formatting Bar Buttons */
