@@ -46,7 +46,7 @@
 
 <toolbox id="headers-box" class="toolbox-top" mode="icons"> 
   <toolbar id="FormatToolbar">
-    <hbox id="directionality-toolbar-section" insertafter="IncreaseFontSizeButton">
+    <hbox id="directionality-toolbar-section" insertafter="IncreaseFontSizeButton" dir="ltr">
       <toolbarseparator id="directionality-separator-formatting-bar" class="toolbarseparator-standard" />
       <toolbarbutton id="button-direction-ltr-formatting-bar"
         tooltiptext="&bidimail-ltr-button:tip;"
