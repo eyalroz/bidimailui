@@ -497,12 +497,45 @@ function InsertParagraph()
   if (!editor.selection.isCollapsed)
    editor.deleteSelection(editor.eNone);
 
+  // ------------------------------- "remember old style" ------
+  // will be ignord
+  var allHas = { value: false };
+  var anyHas = { value: false };
+
+  var isStyleBold = { value: false };
+  EditorGetTextProperty("b", "", "", isStyleBold, anyHas, allHas);
+  var isStyleItalic = { value: false };
+  EditorGetTextProperty("i", "", "", isStyleItalic, anyHas, allHas);
+  var isStyleUnderline = { value: false };
+  EditorGetTextProperty("u", "", "", isStyleUnderline, anyHas, allHas);
+  var isStyleTT = { value: false };
+  EditorGetTextProperty("tt", "", "", isStyleTT, anyHas, allHas);
+  var isStyleFontFace = { value: false };
+  EditorGetTextProperty("font", "face", "", isStyleFontFace, anyHas, allHas);
+  var styleFontFace;
+  styleFontFace = editor.getFontFaceState(allHas);
+  var isStyleFontColor = { value: false };
+  EditorGetTextProperty("font", "color", "", isStyleFontColor, anyHas, allHas);
+  var styleFontColor = editor.getFontColorState(allHas);
+  // solution for <big>, <small> and font-face tags:
+  // we compare the computed font-size of the selction to the font-size of
+  // its block element. If it is different, we'll apply font-size
+  var isStyleFontSize = { value: false };
+  var styleFontSize;
+  try
+  {
+    styleFontSize = document.defaultView.getComputedStyle(editor.getSelectionContainer(), "").getPropertyValue("font-size");
+    isStyleFontSize.value = (styleFontSize != document.defaultView.getComputedStyle(findClosestBlockElement(editor.getSelectionContainer()), "").getPropertyValue("font-size"));
+  }
+  catch (e) {}
+  // ------------------------------- "remember old style" ------
+
+
   // getParagraphState returns the paragraph state for the selection.
   // A "new line" operation nukes the current selection.
   // We want 'getParagraphState' to test the paragraph which the
   // cursor would be on after the nuking, so we nuke it ourselves first.
-
-  var isParMixed = new Object; // would be ignored
+  var isParMixed = { value: false }; // would be ignored
   var parState;
   parState = editor.getParagraphState(isParMixed);
 
@@ -513,12 +546,46 @@ function InsertParagraph()
   var par = findClosestBlockElement(editor.selection.focusNode);
   var prevPar = par.previousSibling;
 
-  // Hunt and shoot the extra BR. We don't want it.
-  var node = prevPar.lastChild;
-  if (node && (node.nodeType == node.ELEMENT_NODE) && (node.tagName.toUpperCase() == "BR") && (prevPar.childNodes.length > 1))
-    editor.deleteNode(node);
+  // Hunt down and shoot the extra BR. We don't want it.
+  // Go up to the last child.
+  // e.g. <p><b>foo<br></b></p> -- we accend to B, then to BR.
+  for (var node = prevPar.lastChild; node && node.lastChild; node = node.lastChild);
+  // Make sure:
+  // 1. It's a BR,
+  // 2. It's not the special case of the BR being an only child (thus
+  //    not a candidate for removal -- we need it to keep the P
+  //    from becoming empty)
+  if (node && (node.nodeType == node.ELEMENT_NODE) && (node.tagName.toLowerCase() == "br") && prevPar.firstChild != node)
+  {
+   editor.deleteNode(node);
+  }
 
   editor.endTransaction();
+
+  // ------------------------------- "set old style" ------
+  if (isStyleBold.value)
+    EditorSetTextProperty("b", "", "");
+  if (isStyleItalic.value)
+    EditorSetTextProperty("i", "", "");
+  if (isStyleUnderline.value)
+    EditorSetTextProperty("u", "", "");
+  if (isStyleTT.value)
+    EditorSetTextProperty("tt", "", "");
+  if (isStyleFontFace.value) // font-face can't be "mixed": there is no selected text
+    EditorSetTextProperty("font", "face", styleFontFace);
+  if (isStyleFontColor.value) // same as above
+    EditorSetTextProperty("font", "color", styleFontColor);
+  if (isStyleFontSize.value)
+    // we have css value, set it as a span
+    EditorSetTextProperty("span", "style", "font-size: " + styleFontSize);
+
+  // If the previous paragraph has a dir attribute, apply it to the new paragraph
+  try {
+    if (prevPar.hasAttribute("dir"))
+      editor.setAttribute(par, "dir", prevPar.dir);
+  }
+  catch (er) {}
+  // ------------------------------- "set old style" ------
 }
 
 var directionSwitchController =
