@@ -15,7 +15,7 @@ Mozilla resource:///res/html.css
   padding-right: 5px;*/
 }
 
-#project-navigation a.selected-item, div#langauge-selection .selected-item{
+#project-navigation a.selected-item, div#language-selection .selected-item{
   background: rgb(255,220,128);
 }
 
@@ -303,25 +303,24 @@ h5 {
 }
 */
 
-div#langauge-selection {
-  margin-right: 40px;
+div#language-selection {
   padding: 5px;
   border: 1px solid black;
   text-align: center;
   width: 80px;
 }
 
-div#english-navbar div#langauge-selection {
+div#english-navbar div#language-selection {
   float: right;
   margin-right: 40px;
 }
 
-div#hebrew-navbar div#langauge-selection {
+div#hebrew-navbar div#language-selection {
   float: left;
-  margin-left: 40px;
+  margin-left: 10px;
 }
 
-div#langauge-selection span#title {
+div#language-selection span#title {
   font-family: helvetica,arial,sans-serif;
   font-size: small;
   color: #900;
@@ -330,7 +329,7 @@ div#langauge-selection span#title {
   margin-bottom: 10px;
 }
 
-div#langauge-selection a {
+div#language-selection a {
   display: block;
   font-family: verdana,arial,sans-serif;
   font-size: small;
