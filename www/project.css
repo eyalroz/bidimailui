@@ -265,11 +265,6 @@ div.hebrew-content {
   font-family: arial, sans-serif;
 }
 
-div.hebrew-content ul {
-  margin-right: 5%;
-  padding-right: 5%;
-}
-
 div.english-content {
   direction: ltr;
   font-family: verdana, arial, sans-serif;
