@@ -199,6 +199,7 @@ div#hebrew-content {
   padding-left: 10px;
   text-align: justify;
   font-size: 0.9em;
+  clear: both;
 }
 
 div#english-content {
@@ -207,6 +208,7 @@ div#english-content {
   padding-left: 10px;
   text-align: justify;
   font-size: 0.9em;
+  clear: both;
 }
 
 a.download-xpi {
