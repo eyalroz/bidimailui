@@ -24,6 +24,7 @@ var gBug262497Workaround;   // a boolean value which is true if we need to be ap
                             // of Ctrl+Home and Ctrl+End)
 
 function GetCurrentSelectionDirection() {
+  // jsConsoleService.logStringMessage('----- in GetCurrentSelectionDirection() -----');
 
   // The current selection is a forest of DOM nodes,
   // each of which is contained in a block HTML
@@ -137,7 +138,7 @@ function GetCurrentSelectionDirection() {
     if (range.startContainer == cac)
       node = cac.firstChild;
     else node = range.startContainer;
-    
+
     do {
       // jsConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
 
@@ -166,16 +167,18 @@ function GetCurrentSelectionDirection() {
         }
         else if (node.parentNode == cac) {
           // there is a non-block child of cac, so we use cac's data
-          // jsConsoleService.logStringMessage('using cac direction');
+          // jsConsoleService.logStringMessage('non-block child of cac, using cac direction');
           hasLTR = hasLTR || cacIsLTR;
           hasRTL = hasRTL || cacIsRTL;
-          if (hasLTR && hasRTL) {
-            // jsConsoleService.logStringMessage('returning complex');
+          if (hasLTR && hasRTL)
             return 'complex';
-          }
         }
       }
 
+      if (node == range.endContainer) {
+        // jsConsoleService.logStringMessage('at end container, stopping traversal');
+        continue;
+      }
 
       // is there is a child node which need be traversed?
 
@@ -185,6 +188,12 @@ function GetCurrentSelectionDirection() {
         // fallthrough to sibling search in case first child is a text node
         if  (node.nodeType != Node.TEXT_NODE)
           continue; // we've found the next node to visit
+        else if (node == range.endContainer) {
+          // jsConsoleService.logStringMessage('at TEXT_NODE endContainer, stopping traversal');        
+          break; // if the next node is the end container as well as a
+                 // text node, we don't need to to check its direction,
+                 // but we do need to stop the traversal
+        }
       }
 
       // is there a node on the ancestry path from this node
@@ -205,7 +214,7 @@ function GetCurrentSelectionDirection() {
 
      } while (node != cac);
 
-  } // end of the 'for' over the various ranges
+  } // end of the 'for' over the different selection ranges
 
   if (hasLTR && hasRTL)
     return 'complex';

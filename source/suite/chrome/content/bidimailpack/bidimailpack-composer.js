@@ -30,19 +30,11 @@ var gBug262497Workaround;   // a boolean value which is true if we need to be ap
                             // our workaround for bugzilla bug 262497 (the behaviour 
                             // of Ctrl+Home and Ctrl+End)
 
-function GetCurrentSelectionDirection()
-{
-  // the following 3 lines enable logging messages to the javascript console
-  // by doing jsConsoleService.logStringMessage('blah') 
-
-  // netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
-  // var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
-  // jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
-
+function GetCurrentSelectionDirection() {
   // jsConsoleService.logStringMessage('----- in GetCurrentSelectionDirection() -----');
 
   // The current selection is a forest of DOM nodes,
-  // each of which is contained in a block HTML 
+  // each of which is contained in a block HTML
   // element (which is also a DOM node in the document
   // node tree), which has a direction.
   // We check the direction of all block elements
@@ -52,7 +44,7 @@ function GetCurrentSelectionDirection()
   // Note that it is also possible to prune the scan
   // whenever a block element is reached (i.e. not
   // scan within it), but at the moment we do not do so.
-  
+
   var hasLTR = false, hasRTL = false;
   var editor = GetCurrentEditor();
   try {
@@ -63,7 +55,7 @@ function GetCurrentSelectionDirection()
     // the editor is apparently unavailable... although it should be available!
     return null;
   }
-      
+
   view = document.defaultView;
   for (i=0; i<editor.selection.rangeCount; ++i ) {
     var range = editor.selection.getRangeAt(i);
@@ -75,7 +67,7 @@ function GetCurrentSelectionDirection()
     // the entire range (but don't use its direction just yet)
 
     cac = range.commonAncestorContainer;
-    
+
     cbe = findClosestBlockElement(cac);
     switch (view.getComputedStyle(cbe, "").getPropertyValue("direction")) {
       case 'ltr': cacIsLTR = true; break;
@@ -86,7 +78,7 @@ function GetCurrentSelectionDirection()
     // jsConsoleService.logStringMessage('commonAncestorContainer:' + cac + "\ntype:" + cac.nodeType + "\nvalue:\n" + cac.nodeValue + "\nis LTR = " + cacIsLTR + "; is RTL = " + cacIsRTL);
 
     if (cac.nodeType == Node.TEXT_NODE) {
-      // the range is some text within a single DOM leaf node 
+      // the range is some text within a single DOM leaf node
       // so there's no need for any traversal
       // jsConsoleService.logStringMessage('just a text node, continuing');
       hasLTR = hasLTR || cacIsLTR;
@@ -95,7 +87,7 @@ function GetCurrentSelectionDirection()
         return 'complex';
       continue; // ... to the next range
     }
-    
+
     // at this point we assume the cac nodeType is ELEMENT_NODE or something close to that
 
     if (range.startContainer == cac) {
@@ -120,8 +112,8 @@ function GetCurrentSelectionDirection()
       }
     }
     else {
-      // check the start slope
-  
+      // check the start slope from the range start to the cac
+
       node = range.startContainer;
   
       while (node != cac) {
@@ -146,26 +138,24 @@ function GetCurrentSelectionDirection()
         }
         node = node.parentNode;
       }
-    }
-
+    } 
+    
     // check all nodes from startContainer to endContainer (or below the cac)
 
     if (range.startContainer == cac)
       node = cac.firstChild;
     else node = range.startContainer;
-    
-    do
-    {
+
+    do {
       // jsConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
-    
+
       // check the current node's direction
-       
+
       // Note: a node of type TEXT_NODE will not be checked for direction,
       //       nor will it trigger the use of the cac's direction!
-      
-       
-      if (node.nodeType == Node.ELEMENT_NODE)
-      {
+
+
+      if (node.nodeType == Node.ELEMENT_NODE) {
         var nodeStyle = view.getComputedStyle(node, "");
         var display = nodeStyle.getPropertyValue('display');
         if (display == 'block' || display == 'table-cell' || display == 'table-caption' || display == 'list-item' || (node.nodeType == Node.DOCUMENT_NODE)) {
@@ -184,25 +174,33 @@ function GetCurrentSelectionDirection()
         }
         else if (node.parentNode == cac) {
           // there is a non-block child of cac, so we use cac's data
-          // jsConsoleService.logStringMessage('using cac direction');
+          // jsConsoleService.logStringMessage('non-block child of cac, using cac direction');
           hasLTR = hasLTR || cacIsLTR;
           hasRTL = hasRTL || cacIsRTL;
-          if (hasLTR && hasRTL) {
-            // jsConsoleService.logStringMessage('returning complex');
+          if (hasLTR && hasRTL)
             return 'complex';
-          }
         }
       }
 
+      if (node == range.endContainer) {
+        // jsConsoleService.logStringMessage('at end container, stopping traversal');
+        continue;
+      }
 
       // is there is a child node which need be traversed?
-       
+
       if (node.firstChild ) {
         // jsConsoleService.logStringMessage('descending to first child');
         node = node.firstChild;
         // fallthrough to sibling search in case first child is a text node
         if  (node.nodeType != Node.TEXT_NODE)
           continue; // we've found the next node to visit
+        else if (node == range.endContainer) {
+          // jsConsoleService.logStringMessage('at TEXT_NODE endContainer, stopping traversal');        
+          break; // if the next node is the end container as well as a
+                 // text node, we don't need to to check its direction,
+                 // but we do need to stop the traversal
+        }
       }
 
       // is there a node on the ancestry path from this node
@@ -220,10 +218,10 @@ function GetCurrentSelectionDirection()
          else node = node.parentNode;
          // jsConsoleService.logStringMessage('moving back up');
        } while (node != cac);
-       
+
      } while (node != cac);
 
-  } // end of the 'for' over the various ranges
+  } // end of the 'for' over the different selection ranges
 
   if (hasLTR && hasRTL)
     return 'complex';
