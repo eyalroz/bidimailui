@@ -103,7 +103,8 @@ function composeWindowEditorOnLoadHandler() {
   top.controllers.insertControllerAt(1, directionSwitchController);
 
   // Decide what to show in the contextual menu
-  document.getElementById('contextParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');
+  document.getElementById('contextSwitchParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');
+  document.getElementById('contextClearParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');
   document.getElementById('contextBodyDirectionItem').setAttribute('hidden', editorType == 'htmlmail');
   
   // the following is a very ugly hack!
@@ -246,7 +247,7 @@ function ApplyToSelectionBlockElements(evalStr)
 
 function ClearParagraphDirection()
 {
-  var evalStr = 'editor.setAttribute(closestBlockElement, \'dir\', \'\');';
+  var evalStr = 'editor.removeAttribute(closestBlockElement, \'dir\');';
   ApplyToSelectionBlockElements(evalStr);
 }
   
@@ -395,6 +396,7 @@ var directionSwitchController =
       case "cmd_ltr_document":
       case "cmd_switch_paragraph":
       case "cmd_switch_document":
+      case "cmd_clear_paragraph_dir":
         return true;
       default:
         return false;

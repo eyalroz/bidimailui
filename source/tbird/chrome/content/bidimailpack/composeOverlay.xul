@@ -28,6 +28,7 @@
   <command id="cmd_rtl_document" oncommand="goDoCommand('cmd_rtl_document');" />
   <command id="cmd_ltr_document" oncommand="goDoCommand('cmd_ltr_document');" />
   <command id="cmd_switch_document" oncommand="goDoCommand('cmd_switch_documen');" />
+  <command id="cmd_clear_paragraph_dir" oncommand="goDoCommand('cmd_clear_paragraph_dir');" />
 </commandset>
 
 <toolbarpalette id="MsgComposeToolbarPalette">
@@ -52,7 +53,7 @@
 
 <popup id="msgComposeContext">
   <menuseparator/>
-  <menuitem id="contextParagraphDirectionItem" label="&menu-bidimail-switch-paragraph-direction:label;"
+  <menuitem id="contextSwitchParagraphDirectionItem" label="&menu-bidimail-switch-paragraph-direction:label;"
     accesskey="&menu-bidimail-switch-paragraph-direction:accesskey;" 
     command="cmd_switch_paragraph" />
   <menuitem id="contextBodyDirectionItem" label="&menu-bidimail-switch-document-direction:label;"
