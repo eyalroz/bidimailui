@@ -245,33 +245,19 @@ function composeWindowEditorOnLoadHandler() {
     }
   }
 
+  // Direction Buttons
+  HandleDirectionButtons();
+
   // the following is a very ugly hack!
   // the reason for it is that without a timeout, it seems
   // that gMsgCompose does often not yet exist when
   // the OnLoad handler runs...
-  setTimeout('composeWindowEditorDelayedOnLoadHandler();', 75);
+  setTimeout('composeWindowEditorDelayedOnLoadHandler();', 125);
 }
 
-
-function composeWindowEditorOnReopenHandler() {
-  // another ugly hack (see composeWindowEditorOnLoadHandler):
-  // if we don't delay before running the other handler, the
-  // message text will not be available so we will not know
-  // whether or not this is a reply
-  setTimeout('composeWindowEditorDelayedOnLoadHandler();', 75);
-}
-
-function composeWindowEditorDelayedOnLoadHandler() {
-  
+function HandleDirectionButtons()
+{
   var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-  var body = document.getElementById('content-frame').contentDocument.body;
-
-
-  var messageIsAReply = false;
-  try {
-    messageIsAReply = (gMsgCompose.originalMsgURI.length > 0);
-  }
-  catch(e) {};
   var editorType = GetCurrentEditorType();
 
   // decide which direction buttons are shown and which aren't
@@ -295,6 +281,29 @@ function composeWindowEditorDelayedOnLoadHandler() {
     document.getElementById('ltr-document-direction-broadcaster').setAttribute('hidden',hiddenButtons);
     document.getElementById('rtl-document-direction-broadcaster').setAttribute('hidden',hiddenButtons);
   }
+}
+
+function composeWindowEditorOnReopenHandler() {
+  // Direction Buttons
+  HandleDirectionButtons();
+
+  // another ugly hack (see composeWindowEditorOnLoadHandler):
+  // if we don't delay before running the other handler, the
+  // message text will not be available so we will not know
+  // whether or not this is a reply
+  setTimeout('composeWindowEditorDelayedOnLoadHandler();', 125);
+}
+
+function composeWindowEditorDelayedOnLoadHandler() {
+  
+  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+  var body = document.getElementById('content-frame').contentDocument.body;
+
+  var messageIsAReply = false;
+  try {
+    messageIsAReply = (gMsgCompose.originalMsgURI.length > 0);
+  }
+  catch(e) {};
 
   try
   {
