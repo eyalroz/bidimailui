@@ -56,3 +56,15 @@ function saveValues()
     document.getElementById('margintop').saveToPrefs();
     document.getElementById('marginbottom').saveToPrefs();
 }
+
+function dialogAccept()
+{
+  if (document.getElementById('margintop').validateData() &&
+      document.getElementById('marginbottom').validateData()) {
+    saveValues();
+    return true;
+  }
+  else {
+    return false;
+  }
+}
