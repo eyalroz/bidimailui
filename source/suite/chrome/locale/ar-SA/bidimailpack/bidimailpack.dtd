@@ -1,0 +1,14 @@
+﻿<!ENTITY menu-bidimail-switch-document-direction:label      "تحويل اتّجاه النصّ">
+<!ENTITY menu-bidimail-switch-document-direction:accesskey            "g">
+<!ENTITY key-bidimail-switch-document-direction:keycode               "X">
+<!ENTITY key-bidimail-switch-document-direction:modifiers             "accel,shift">
+
+<!ENTITY menu-bidimail-switch-paragraph-direction:label        "تحويل اتّجاه الparagraph">
+<!ENTITY menu-bidimail-switch-paragraph-direction:accesskey    "w">
+<!ENTITY menu-bidimail-clear-paragraph-direction:label      "Clear Paragraph Direction">
+<!ENTITY menu-bidimail-clear-paragraph-direction:accesskey   "a">
+
+<!ENTITY bidimail-ltr-button:label                      "يسار إلى يمين">
+<!ENTITY bidimail-ltr-button:tip                        "تحديد الاتّجاه يسار إلى يمين">
+<!ENTITY bidimail-rtl-button:label                      "يمين إلى يسار">
+<!ENTITY bidimail-rtl-button:tip                        "تحديد الاتّجاه يمين إلى يسار">
