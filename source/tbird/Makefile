@@ -1,5 +1,5 @@
 SUBDIRS = chrome
-XPI_FILENAME = bidiui_tbird.xpi
+XPI_FILENAME = bidimailui_tbird.xpi
 .PHONY: all clean subdirs ${SUBDIRS}
 
 all: subdirs ${XPI_FILENAME}
