@@ -84,8 +84,20 @@
   -moz-image-region: rect(0px 76px 18px 57px) !important;
 }
 
-#margintop[status="non_valid_value"] > *,
-#marginbottom[status="non_valid_value"] > * {
+#margintop > textbox,
+#marginbottom > textbox {
+  -moz-appearance: none !important;
+  width: 5em;
+}
+
+#margintop[classictheme="winstripe"][status="non_valid_value"] > *,
+#marginbottom[classictheme="winstripe"][status="non_valid_value"] > * {
+  background-color: #FF6666;
+  color: #FFFFFF;
+}
+
+#margintop[classictheme="pinstripe"][status="non_valid_value"] > textbox,
+#marginbottom[classictheme="pinstripe"][status="non_valid_value"] > textbox {
   background-color: #FF6666;
   color: #FFFFFF;
 }
