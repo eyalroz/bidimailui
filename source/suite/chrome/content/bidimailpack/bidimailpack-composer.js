@@ -9,9 +9,9 @@
 // ---------------------------------------
 // the following 3 lines enable logging messages to the javascript console:
 //
-// netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
-// var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
-// jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
+netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
+jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 //
 // here is an example of a console log message describing a DOM node:
 // jsConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
@@ -905,26 +905,27 @@ var directionSwitchController = {
   },
 
   getState: function(command) {
-    var dir;
+    var direction;
 
     switch (command) {
       case "cmd_rtl_paragraph":
-        dir = GetCurrentSelectionDirection();
-        if (dir == 'rtl')
+        direction = GetCurrentSelectionDirection();
+        if (direction == 'rtl')
           return 'checked';
         else
           return 'unchecked';
       case "cmd_ltr_paragraph":
-        dir = GetCurrentSelectionDirection();
-        if (dir == 'ltr')
+        direction = GetCurrentSelectionDirection();
+        if (direction == 'ltr')
           return 'checked';
         else
           return 'unchecked';
-      // the body dir is always set either to ltr or rtl
       case "cmd_rtl_document":
-        return ((document.getElementById('content-frame').contentDocument.body.dir == 'rtl') ? 'checked' : 'unchecked');
+        direction = document.defaultView.getComputedStyle(document.getElementById('content-frame').contentDocument.body, "").getPropertyValue("direction");
+        return ((direction == 'rtl') ? 'checked' : 'unchecked');
       case "cmd_ltr_document":
-        return ((document.getElementById('content-frame').contentDocument.body.dir == 'ltr') ? 'checked' : 'unchecked');
+        direction = document.defaultView.getComputedStyle(document.getElementById('content-frame').contentDocument.body, "").getPropertyValue("direction");
+        return ((direction == 'ltr') ? 'checked' : 'unchecked');
     }
     return null;
   },
