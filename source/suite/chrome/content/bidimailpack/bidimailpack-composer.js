@@ -93,7 +93,6 @@ function composeWindowEditorOnLoadHandler() {
 
   // Decide what to show in the contextual menu
   document.getElementById('contextSwitchParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');
-  document.getElementById('contextClearParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');
   document.getElementById('contextBodyDirectionItem').setAttribute('hidden', editorType == 'htmlmail');
 
   // the following is a very ugly hack!
@@ -493,4 +492,18 @@ var directionSwitchController =
     }
     this.setAllCasters();
   }
+}
+
+
+function CommandUpdate_MsgComposeDirection()
+{
+  var focusedWindow = top.document.commandDispatcher.focusedWindow;
+ 
+  // we're just setting focus to where it was before
+  if (focusedWindow == gLastWindowToHaveFocus) {
+    return;
+  }
+ 
+  gLastWindowToHaveFocus = focusedWindow;
+  directionSwitchController.setAllCasters();
 }
