@@ -1,37 +1,68 @@
 <?xml version="1.0"?>
+
+<!DOCTYPE window [   <!ENTITY % bidimailpackPrefsDTD
+            SYSTEM "chrome://bidimailpack/locale/bidimailpack-prefs.dtd" >            %bidimailpackPrefsDTD;]>
 <bindings xmlns="http://www.mozilla.org/xbl"
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
     <binding id="marginsBinding">
         <content>
-            <xul:label xbl:inherits="value=title"/>
-            <xul:textbox size="3" />
-            <xul:textbox size="2" />
+            <xul:textbox size="6" />
+            <xul:menulist>                <xul:menupopup>                    <xul:menuitem label="&cmScale.label;"
+                                  accesskey="&cmScale.accesskey;"
+                                  selected="true" />                    <xul:menuitem label="&pixelScale.label;" 
+                                  accesskey="&pixelScale.accesskey;" />                    <xul:menuitem label="&precentScale.label;"
+                                  accesskey="&precentScale.accesskey;" />                </menupopup>            </menulist>
         </content>
         <implementation>
             <constructor><![CDATA[
               this.initFromPref();
             ]]></constructor>
 
-            <field name="valueField"> document.getAnonymousNodes(this)[1] </field>
-            <field name="scaleField"> document.getAnonymousNodes(this)[2] </field>
+            <field name="valueField"> document.getAnonymousNodes(this)[0] </field>
+            <field name="scaleField"> document.getAnonymousNodes(this)[1] </field>
 
-            <property name="pref"
-                      onget="return this.getAttribute('pref');"
-                      onset="this.setAttribute('pref',val); return this.initFromPref();" />
+            <property name="prefbase"
+                      onget="return this.getAttribute('prefbase');"
+                      onset="this.setAttribute('prefbase',val); return this.initFromPref();" />
             <property name="value"
                       onget="return (this.valueField.value);"
                       onset="return (this.valueField.value = val);" />
-            <property name="scale"
-                      onget="return (this.scaleField.value);"
-                      onset="return (this.scaleField.value = val);" />
+            <property name="scale">
+              <getter><![CDATA[
+                switch (this.scaleField.selectedIndex) {
+                  case 0:
+                    return "cm"
+                  case 1:
+                    return "px"
+                  case 2:
+                    return "%"
+                }
+              ]]></getter>
+              <setter><![CDATA[
+                switch (val) {
+                  case "cm":
+                    this.scaleField.selectedIndex = 0;
+                    return true;
+                  case "px":
+                    this.scaleField.selectedIndex = 1;
+                    return true;
+                  case "%":
+                    this.scaleField.selectedIndex = 2;
+                    return true;
+                }
+                return false;
+              ]]></setter>
+            </property>
             <property name="cssValue"
                       onget="return (this.value+this.scale);"
                       onset="return false;" />
             <method name="initFromPref">
                 <body><![CDATA[
-                  var aValue = 0, aScale = "cm";
+                  var aValue, aScale;
                   try {
-                  
+                      var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+                      aValue = prefs.getCharPref(this.prefbase + ".value");
+                      aScale = prefs.getCharPref(this.prefbase + ".scale");
                   }
                   catch (e) {
                     // default values;

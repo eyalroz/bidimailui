@@ -31,17 +31,20 @@
           <radio id="bidimailpack-default-dir-rtl" value="rtl" label="&rtl;" />
         </radiogroup>
       </hbox>
-     <spacer />
-     <checkbox id="bidimailpack-reply-in-default-dir" checked="false" label="&always-reply-in-default-dir;" autostretch="never" />
-     <checkbox id="bidimailpack-display-buttons" checked="true" label="&display-buttons;" autostretch="never" />
-     <box id="margintop"
-       style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
-       pref="...margin_top"
-       title="paragraph top margin: "/>
-     <box id="marginbottom"
-       style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
-       pref="...margin_bottom"
-       title="paragraph bottom margin: "/>
+    <spacer />
+    <checkbox id="bidimailpack-reply-in-default-dir" checked="false" label="&always-reply-in-default-dir;" autostretch="never" />
+    <checkbox id="bidimailpack-display-buttons" checked="true" label="&display-buttons;" autostretch="never" />
+    <spacer />
+    <vbox>
+      <description>&default-dir;</description>
+      <hbox id="margintop"
+           style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
+           prefbase="mailnews.paragraph.margin_top"/>
+      <description>&default-dir;</description>
+      <hbox id="marginbottom"
+            style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
+           prefbase="mailnews.paragraph.margin_bottom"/>
+     </vbox>
   </groupbox>
 
   <description>
