@@ -1,5 +1,6 @@
 function initValues()
 {
+
   var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
   var element;
 
@@ -11,13 +12,15 @@ function initValues()
     element.checked = true;
   };
 
-  // Default composing direction for a new message. Default: ltr.
+  // Default composing direction for a new message. Default: LTR.
   try {
-    prefDir = prefs.getCharPref('mailnews.send_default_direction');
+    var prefDir = prefs.getCharPref('mailnews.send_default_direction');
     if ( (prefDir == 'RTL') || (prefDir == 'rtl') )
-      document.getElementById('bidimailpack-default-dir').selectedItem = element.childNodes[1];
+      document.getElementById('bidimailpack-default-dir').selectedIndex = 1;
+    else
+      document.getElementById('bidimailpack-default-dir').selectedIndex = 0;
   } catch(e) {
-    // default is ltr, marked selected in xul
+    // the LTR default it is marked selected in the XUL
   };
 
   // Reply direction options: 
