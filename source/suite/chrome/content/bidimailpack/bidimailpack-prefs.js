@@ -35,20 +35,20 @@ function initValues()
 
 function saveValues()
 {
-    var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-    var element;
+  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+  var element;
 
-    element = document.getElementById('bidimailpack-default-dir');
-    prefs.setCharPref('mailnews.send_default_direction', element.value);
+  element = document.getElementById('bidimailpack-default-dir');
+  prefs.setCharPref('mailnews.send_default_direction', element.value);
 
-    element = document.getElementById('bidimailpack-reply-in-default-dir');
-    prefs.setBoolPref('mailnews.reply_in_default_direction', element.checked);
+  element = document.getElementById('bidimailpack-reply-in-default-dir');
+  prefs.setBoolPref('mailnews.reply_in_default_direction', element.checked);
 
-    element = document.getElementById('bidimailpack-display-buttons');
-    prefs.setBoolPref('mail.compose.show_direction_buttons', element.checked);
+  element = document.getElementById('bidimailpack-display-buttons');
+  prefs.setBoolPref('mail.compose.show_direction_buttons', element.checked);
 
-    document.getElementById('margintop').saveToPrefs();
-    document.getElementById('marginbottom').saveToPrefs();
+  document.getElementById('margintop').saveToPrefs();
+  document.getElementById('marginbottom').saveToPrefs();
 }
 
 function dialogAccept()
