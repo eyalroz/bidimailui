@@ -659,6 +659,14 @@ function onKeyPress(ev) {
     // sends the message etc.)
     if ( (ev.keyCode == KeyEvent.DOM_VK_ENTER || ev.keyCode == KeyEvent.DOM_VK_RETURN) 
          && !ev.shiftKey && !ev.altKey && !ev.ctrlKey && !ev.metaKey && !isInList()    ) {
+      // but don't do this if we're not in paragraph mode...
+      // (getParagraphState returns the paragraph state for the selection.)
+      editor = GetCurrentEditor();
+      var isParMixed = { value: false }; // would be ignored
+      var parState = editor.getParagraphState(isParMixed);
+      if (parState != "p")
+        return;
+
       // Do whatever it takes to prevent the editor from inserting a BR
       ev.preventDefault();
       ev.stopPropagation();
@@ -817,17 +825,6 @@ function InsertParagraph() {
   catch (e) {}
   // ------------------------------- "remember old style" ------
 
-
-  // getParagraphState returns the paragraph state for the selection.
-  // A "new line" operation nukes the current selection.
-  // We want 'getParagraphState' to test the paragraph which the
-  // cursor would be on after the nuking, so we nuke it ourselves first.
-  var isParMixed = { value: false }; // would be ignored
-  var parState;
-  parState = editor.getParagraphState(isParMixed);
-
-  if (parState == "")
-    editor.setParagraphFormat("p");
   editor.insertLineBreak();
   editor.setParagraphFormat("p");
   var par = findClosestBlockElement(editor.selection.focusNode);
