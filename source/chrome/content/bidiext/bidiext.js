@@ -32,9 +32,9 @@ var bidiext = {
     invert_textbox_dir: function() {
         var theBox = document.commandDispatcher.focusedElement;
         if (window.getComputedStyle(theBox,'').direction == 'rtl')
-            theBox.dir = 'ltr';
+            theBox.style.direction = 'ltr';
         else
-            theBox.dir = 'rtl';
+            theBox.style.direction = 'rtl';
     },
     invert_page_dir: function() {
         const documents = get_Frames(window.content, new Array());
