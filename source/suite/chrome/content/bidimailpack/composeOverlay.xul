@@ -21,7 +21,7 @@
   <broadcaster id="rtl-paragraph-direction-broadcaster" checked="false"/>
 </broadcasterset>
 
-<commandset id="composeCommands">
+<commandset id="composerStyleMenuItems">
   <command id="cmd_rtl_document" oncommand="goDoCommand('cmd_rtl_document');" />
   <command id="cmd_ltr_document" oncommand="goDoCommand('cmd_ltr_document');" />
   <command id="cmd_switch_document" oncommand="goDoCommand('cmd_switch_document');" />
