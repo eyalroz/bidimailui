@@ -14,7 +14,7 @@
 }
 
 #button-direction-ltr-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 120px 30px 90px);
+  -moz-image-region: rect(0px 120px 30px 90px) !important;
 }
 
 #button-direction-rtl-main-bar {
@@ -31,7 +31,7 @@
 }
 
 #button-direction-rtl-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 120px 30px 90px);
+  -moz-image-region: rect(0px 120px 30px 90px) !important;
 }
 
 #button-direction-ltr-formatting-bar {
