@@ -5,6 +5,8 @@
 %bidimailpackDTD;
 ]>
 
+<?xml-stylesheet href="chrome://bidimailpack/skin/bidimailpack.css" type="text/css"?>
+
 <overlay
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
