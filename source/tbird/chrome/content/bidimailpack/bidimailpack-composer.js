@@ -14,6 +14,7 @@
 var gLastWindowToHaveFocus;
 var gAlternativeEnterBehavior = true;
 var gBug262497Workaround;
+var gPrefService = null;
 
 function GetCurrentSelectionDirection()
 {
@@ -225,6 +226,8 @@ function SwitchDocumentDirection() {
 function composeWindowEditorOnLoadHandler() {
   // intl' globals
   gLastWindowToHaveFocus = null;
+  gPrefService = Components.classes["@mozilla.org/preferences-service;1"].getService
+                         (Components.interfaces.nsIPrefBranch);
 
   var editorType = GetCurrentEditorType();
 
@@ -279,14 +282,13 @@ function HandleComposeReplyCSS()
 
 function HandleDirectionButtons()
 {
-  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
   var editorType = GetCurrentEditorType();
 
   if (editorType == 'htmlmail')
   {
     var hiddenbuttons = false;
     try {
-      if (!prefs.getBoolPref('mail.compose.show_direction_buttons'))
+      if (!gPrefService.getBoolPref('mail.compose.show_direction_buttons'))
         hiddenbuttons = true;
     }
     catch(e) { } // preference is not set.
@@ -300,6 +302,10 @@ function HandleDirectionButtons()
 }
 
 function composeWindowEditorOnReopenHandler() {
+  if (!gPrefService)
+      gPrefService = Components.classes["@mozilla.org/preferences-service;1"].getService
+                         (Components.interfaces.nsIPrefBranch);
+
   // Direction Buttons
   HandleDirectionButtons();
   // reply CSS
@@ -349,12 +355,12 @@ function GetMessageDisplayDirection(messageURI) {
 function composeWindowEditorDelayedOnLoadHandler() {
   var editorType = GetCurrentEditorType();
   var body = document.getElementById('content-frame').contentDocument.body;
-  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
 
   if (editorType == 'htmlmail') {
     // Determine Enter key behavior
     try {
-      gAlternativeEnterBehavior = prefs.getBoolPref("mailnews.alternative_enter_behavior");
+      gAlternativeEnterBehavior =
+          gPrefService.getBoolPref("mailnews.alternative_enter_behavior");
     }
     catch(e) {} // pref probably not set
   }
@@ -379,11 +385,11 @@ function composeWindowEditorDelayedOnLoadHandler() {
   try
   {
     // New message OR "Always reply in default direction" is checked
-    if (!messageIsAReply || prefs.getBoolPref("mailnews.reply_in_default_direction") )
+    if (!messageIsAReply || gPrefService.getBoolPref("mailnews.reply_in_default_direction") )
     {
       try
       {
-        var defaultDirection = prefs.getCharPref("mailnews.send_default_direction");
+        var defaultDirection = gPrefService.getCharPref("mailnews.send_default_direction");
         // aligning to default direction
         if ((defaultDirection == 'rtl') || (defaultDirection == 'RTL'))
           SetDocumentDirection('rtl');
@@ -619,6 +625,21 @@ function isInList()
     return false;
 }
 
+function getParagraphMarginFromPref(basePrefName)
+{
+  var aValue, aScale;
+  try {
+    aValue = gPrefService.getCharPref(basePrefName + ".value");
+    aScale = gPrefService.getCharPref(basePrefName + ".scale");
+  }
+  catch (e) {
+    // default values:
+    aValue = "0"; aScale = "cm";                   
+  }
+  
+  return (aValue+aScale);
+}
+
 // Will attempt to break the current line into two paragraphs (unless we're in a list).
 function InsertParagraph()
 {
@@ -696,8 +717,11 @@ function InsertParagraph()
   {
    editor.deleteNode(node);
   }
-    par.style.marginTop = "6px";
-    par.style.marginBottom = "6px";
+  
+
+  par.style.marginTop    = getParagraphMarginFromPref("mailnews.paragraph.margin_top");
+  par.style.marginBottom = getParagraphMarginFromPref("mailnews.paragraph.margin_bottom");
+  
   editor.endTransaction();
 
   // ------------------------------- "set old style" ------
