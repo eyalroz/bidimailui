@@ -299,7 +299,7 @@ function onKeyPress(ev)
     return;
 
   // Steal all Enters but Shift-Enters. Shift-Enters should insert BR, as usual.
-  if ((ev.keyCode == KeyEvent.DOM_VK_ENTER || ev.keyCode == KeyEvent.DOM_VK_RETURN) && !ev.shiftKey)
+  if ((ev.keyCode == KeyEvent.DOM_VK_ENTER || ev.keyCode == KeyEvent.DOM_VK_RETURN) && !ev.shiftKey  && !isInList())
   {
     // Do whatever it takes to prevent the editor from inserting a BR
     ev.preventDefault();
@@ -309,6 +309,24 @@ function onKeyPress(ev)
     // ... and insert a paragraph break instead
     InsertParagraph();
   }
+}
+
+function isInList()
+{
+  var editor = GetCurrentEditor();
+  editor.beginTransaction();
+
+  var isListMixed = new Object;
+  var isListOl = new Object;
+  var isListUl = new Object;
+  var isListDl = new Object;
+  editor.getListState(isListMixed, isListOl, isListUl, isListDl);
+  editor.endTransaction();
+
+  if (isListOl.value || isListUl.value || isListDl.value)
+    return true;
+  else
+    return false;
 }
 
 // Will attempt to break the current line into two paragraphs (unless we're in a list).
@@ -327,19 +345,17 @@ function InsertParagraph()
    editor.deleteSelection(editor.eNone);
 
   var isParMixed = new Object;
-  var isListMixed = new Object;
-  var isListOl = new Object;
-  var isListUl = new Object;
-  var isListDl = new Object;
   var parState;
   parState = editor.getParagraphState(isParMixed);
-  editor.getListState(isListMixed, isListOl, isListUl, isListDl);
 
-  if ((parState == "") && !isListOl.value && !isListUl.value && !isListDl.value)
+  if (parState == "")
     editor.setParagraphFormat("p");
-  editor.insertLineBreak();
-  if (!isListOl.value && !isListUl.value && !isListDl.value)
-   editor.setParagraphFormat("p");
+  var currentElement = editor.getSelectionContainer();
+  if (currentElement)
+  {
+    editor.setCaretAfterElement(currentElement);
+    editor.setParagraphFormat("p");
+  }
 
   editor.endTransaction();
 }
