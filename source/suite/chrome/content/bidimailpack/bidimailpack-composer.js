@@ -330,38 +330,40 @@ function getParagraphMarginFromPref(basePrefName) {
   return (aValue+aScale);
 }
 
-function loadParagraphMode() {
+function LoadParagraphMode() {
   var editorType = GetCurrentEditorType();
-  if (editorType == 'htmlmail') {
-    // Determine Enter key behavior
-    try {
-      gAlternativeEnterBehavior =
-          gPrefService.getBoolPref("mailnews.alternative_enter_behavior");
+  if (editorType != 'htmlmail')
+    return;
+
+  // Determine Enter key behavior
+  try {
+    gAlternativeEnterBehavior =
+        gPrefService.getBoolPref("mailnews.alternative_enter_behavior");
+  }
+  catch(e) {} // pref probably not set
+
+  if (!gAlternativeEnterBehavior)
+    return;
+
+  // Get margin-top and margin-bottom prefs for paragraphs we add
+  // We use global variables in order to avoid different margins in the same document
+  gParagraphMarginTop    = getParagraphMarginFromPref("mailnews.paragraph.margin_top");
+  gParagraphMarginBottom = getParagraphMarginFromPref("mailnews.paragraph.margin_bottom");
+
+  // our extension likes paragraph text entry, not 'body text' - since
+  // paragraph are block elements, with a direction setting
+  try {
+    var editor = GetCurrentEditor();
+    if (editor) {
+      editor.setParagraphFormat("p");
+      var par = findClosestBlockElement(editor.selection.focusNode);
+      // Set Paragraph Margins
+      par.style.marginTop    = gParagraphMarginTop;
+      par.style.marginBottom = gParagraphMarginBottom;
     }
-    catch(e) {} // pref probably not set
-    
-    if (gAlternativeEnterBehavior) {
-      // Get margin-top and margin-bottom prefs for paragraphs we add
-      // We use global variables in order to avoid different margins in the same document
-      gParagraphMarginTop    = getParagraphMarginFromPref("mailnews.paragraph.margin_top");
-      gParagraphMarginBottom = getParagraphMarginFromPref("mailnews.paragraph.margin_bottom");
-      // our extension likes paragraph text entry, not 'body text' - since
-      // paragraph are block elements, with a direction setting
-      try {
-        doStatefulCommand('cmd_paragraphState', "p");
-        var editor = GetCurrentEditor();
-        if (editor) {
-          doStatefulCommand('cmd_paragraphState', "p");
-          var par = findClosestBlockElement(editor.selection.focusNode);
-          // Set Paragraph Margins
-          par.style.marginTop    = gParagraphMarginTop;
-          par.style.marginBottom = gParagraphMarginBottom;
-        }
-      } catch(e) {
-        // since the window is not 'ready', something might throw
-        // an exception here, like inability to focus etc.
-      }
-    }
+  } catch(e) {
+    // since the window is not 'ready', something might throw
+    // an exception here, like inability to focus etc.
   }
 }
 
