@@ -105,10 +105,10 @@
                 <body><![CDATA[
                   var rv;
                   switch (this.scale) {
-                    case "pt":
                     case "px":
                       rv = /^[0-9]+$/.test(this.value);
                       break;
+                    case "pt":
                     case "cm":
                       rv = /^[0-9]+(\.[0-9]+)?$/.test(this.value);
                   }
