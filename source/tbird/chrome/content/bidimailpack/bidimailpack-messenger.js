@@ -4,7 +4,7 @@ function SetMessageDirection(dir) {
   var body = brwsr.docShell.contentViewer.DOMDocument.body;
   body.setAttribute('dir', dir);
   // TB only
-  UpdateDirectionBroadcasters(dir);
+  UpdateDirectionButtons(dir);
 }
 
 function SwitchMessageDirection() {
@@ -19,17 +19,16 @@ function SwitchMessageDirection() {
   } 
   else {
     body.setAttribute('dir', 'rtl');
-    UpdateDirectionBroadcasters('ltr');
+    UpdateDirectionButtons('rtl');
   }
 }
 
 // TB only - update optional direction buttons status
-function UpdateDirectionBroadcasters(direction) {
-  var caster = document.getElementById("ltr-document-direction-broadcaster");
-  alert(caster);
-  caster.setAttribute("checked", direction == "ltr");
-  caster = document.getElementById("rtl-document-direction-broadcaster");
-  caster.setAttribute("checked", direction == "rtl");
+function UpdateDirectionButtons(direction) {
+  var button = document.getElementById("button-direction-ltr-main-bar");
+  button.setAttribute("checked", direction == "ltr");
+  button = document.getElementById("button-direction-rtl-main-bar");
+  button.setAttribute("checked", direction == "rtl");
 }
 
 function browserOnLoadHandler() {
