@@ -1,66 +1,140 @@
 ﻿<!-- MAIN CONTENT -->
 <div id="english-content" >
 
-<h2><a id="content" name="אודות_התוסף_BiDi_UI"> About BiDi Mail UI</a></h2>
-<p>
-Users of languages that are written from right to left, such as Arabic,
-Persian and Hebrew, require mail client software that is capable of
-displaying mail messages using the intended
-direction. This special functionality is especially important in the
-case of plain text
-messages, as those do not explicitly specify direction. Similar
-direction control is required when composing new messages.</p>
-<p>The BiDi UI extension provide access to the inherent Bi-Directional
-capabilities in Mozilla Mail clients (Mail&amp;News component in
-Mozilla 1.x Suite and the separate application Thunderbird) - both for
-display and composition. </p>
-<h3><a name="הֵקשֶר">Background </a></h3>
-BiDi UI is the new incarnation of another extension that bore the same
-name. The previous extension was targeted for Mozilla browsers and was
-created to solve <a
- href="http://bugzilla.mozilla.org/show_bug.cgi?id=85420"
- class="printable"
- title="http://bugzilla.mozilla.org/show bug.cgi?id=85420">Bug 85420</a>
-. Note that
-this bug has been fixed in the meanwhile, but it is hasn't been
-integrated yet to an official release of Mozilla browsers (this is
-expected to change soon). Another related extension
-that preceded this one is Moofie's <a
- href="http://www.typo.co.il/%7Emooffie/mozilla/hebmailpack.html"
- class="printable"
- title="http://www.typo.co.il/~mooffie/mozilla/hebmailpack.html">HebMailPack</a>
+<h2><a id="content" name="התקנת_התוסף"> Installation </a></h2>
 
- which
-was developed in order to fix <a
- href="http://bugzilla.mozilla.org/show_bug.cgi?id=119857"
- class="printable"
- title="http://bugzilla.mozilla.org/show bug.cgi?id=119857">Bug 119857</a><span
- style="text-decoration: underline;"> </span>;
-The new BiDi UI extension is a collection of modifications and
-improvements based
-on Moofie's original code.</p>
-<p>
-</p>
-<h3><a name="רישיון"> License </a></h3>
-<p>
-To ease code interchange, this extension is distributed under the terms
-of three licenses - <a href="http://www.mozilla.org/MPL/MPL-1.1.html"
- class="printable" title="http://www.mozilla.org/MPL/MPL-1.1.html">MPL
-1.1</a> , <a
- href="http://www.gnu.org/licenses/gpl.html" class="printable"
- title="http://www.gnu.org/licenses/gpl.html">GPL 2.0</a> ,
+<h3><a name="דרישות_קדם"> Prerequisites </a></h3>
+<p>BiDi Mail UI supports Thunderbird v0.7.x and v0.8.x, as well as Mozilla
+Suite Mail&amp;News v1.4x to v1.8.x. It has been successfully tested
+under Windows, Mac OS X and Linux+X.Org. It is most likely, though we
+can't guarantee it, to work fine with other versions and operating
+systems.</p>
+<h3><a name="הוראות_התקנה_עבור_Thunderbird"> Installation under
+Thunderbird<br>
+</a></h3>
 
-<a href="http://www.gnu.org/licenses/lgpl.html" class="printable"
- title="http://www.gnu.org/licenses/lgpl.html">LGPL 2.1</a>
-- at your pick.</p>
+
+<ol>
+  <li>Right click the download link below<br>
+  </li>
+  <li>Save the XPI file to your hard drive<br>
+  </li>
+  <li>Launch Thunderbird </li>
+  <li>Open the Tools menu and choose Extensions<br>
+
+  </li>
+  <li>Click Install </li>
+  <li>Browse to the folder where you've saved the XPI file, select it,
+then confirm </li>
+  <li>Restart Thunderbird when prompted<br>
+  </li>
+</ol>
+
+<a href="http://downloads.mozdev.org/bidiui/latest/bidimailui_tbird.xpi" class="download-xpi">The Thunderbird Extension</a>
+
 </p>
-<h3><a name="צרו_קשר"> Contact us</a></p>
-</h3>
-<p>To report bugs, please use this site's <a
- href="http://bidiui.mozdev.org/bugs.html">Bugzilla bug
-reporting interface</a> .
-You may email questions and suggestions to bidiui AT sent DOT com.
-Localization files for additional languages (e.g. Persian and Urdu) are
-most welcome.</p>
+<h3><a name="הוראות_התקנה_עבור_מוזילה"> Installation under Mozilla<br>
+</a></h3>
+<ol>
+  <li>If previous BiDi Mail UI versions are installed, make sure to remove
+them as described in section 3<br>
+  </li>
+  <li>Click the download link below<br>
+  </li>
+  <li>Confirm the installation when prompted<br>
+
+  </li>
+  <li>Choose whether you wish to install the extension in your
+personal profile folder or globally, in the application folder.
+Installation in the profile folder has a few advantages: There is no
+need to have root user privileges (in operating systems such as Linux)
+and there is no need to reinstall the extension after updating Mozilla
+to a new version. However, with operating systems that are oriented
+toward single user mode (such as Windows 98), but that are accessed by
+several users, it is preferable to install BiDi Mail UI in the Mozilla
+application folder, so that everyone can utilize it. This global
+installation may require root privileges in some operating systems.
+Note that installing the extension as root also requires to restart
+Mozilla as root.</li>
+  <li>Restart Mozilla when prompted. Make
+sure to close all the program's windows - Browser, Mail&amp;News,
+Composer and so forth.<br>
+  </li>
+</ol>
+<p>
+<a href="http://downloads.mozdev.org/bidiui/latest/bidimailui_suite.xpi" class="download-xpi">The Mozilla Extension</a>
+</p>
+
+<p>To overcome possible difficulties in step #3, it may be worthwhile
+to run the installation locally. Simply right click the XPI file, save
+it to your hard drive and double click it to start the installation.<br>
+<span style="font-weight: bold;"></span></p>
+<p><span style="font-weight: bold;"><br>
+</span></p>
+<span style="font-weight: bold;"></span>
+<h3><a name="התקנת_התוסף_הישן_לדפדפנים">Installation of the previous
+BiDi UI (browser extension) </a></h3>
+<p>Users of old versions of Mozilla, Firefox and Netscape may be
+interested in the previous (browser-oriented) extension:<br>
+</p>
+
+<a href="http://downloads.mozdev.org/bidiui/latest/bidiext.xpi" class="download-xpi">התוסף הישן לדפדפנים</a>
+
+<p>There is not need to install this extension in newer browser
+since its functionality is now built in. It is usually much preferred
+to
+install a new browser than to install this extension in an old one.<br>
+</p>
+<h2><a name="הסרת_התוסף"> Removal </a></h2>
+<p>If you wish to uninstall BiDi Mail UI, please follow the instructions
+that correspond to your chosen installation method. Further to that, if
+for some reason, your experience with the extension was less than
+satisfactory, please let us know. You can find our contact details
+above.
+</p>
+<h3><a name="הוראות_הסרה_מ-Thunderbird"> Removal of BiDi Mail UI from
+Thunderbird</a></h3>
+Open the Extensions manager (Tools -&gt; Extensions). Locate the BiDi
+UI entry and click Uninstall.
+<h3><a name="הוראות_הסרה_ידנית_מספריית_היישום_של_מוזילה"> Manual
+removal of BiDi Mail UI from Mozilla 1.x Suite application folder </a></h3>
+
+<p>The following instructions only apply to Mozilla, not to Thunderbird.<br>
+</p>
+<ol>
+  <li>Open Mozilla's chrome folder<br>
+  </li>
+  <li>Edit the file installed-chrome.txt and delete any line that
+contains the string "bidimailpack.jar". </li>
+  <li>Delete the file bidimailpack.jar </li>
+  <li>Delete the folder overlayinfo and any file contained within it<br>
+
+  </li>
+  <li>Delete the file chrome.rdf </li>
+Restart Mozilla (in Linux, do it as root if needed). Mozilla
+will recreate the overlayinfo folder and the chrome.rdf file that were
+deleted in steps #4 and #5.<br>
+</ol>
+
+<h3><a name="הוראות_הסרה_ידנית_מספריית_הפרופיל_האישי_של_מוזילה"> Manual
+removal of BiDi Mail UI from Mozilla 1.x Suite user's profile folder </a></h3>
+<p>
+The following instructions only apply to Mozilla, not to Thunderbird.</p>
+<ol>
+
+  <li> Open Mozilla's chrome folder</li>
+  <li>Delete the file bidimailpack.jar </li>
+  <li>Edit any of the overlay.rdf files that
+appear under the overlayinfo sub-directory. Delete the tags beginning
+with RDF:Seq
+RDF:about that include lines with reference to bidimailpack (these may
+be multi-line). </li>
+  <li>Edit the file chrome.rdf under the chrome folder and delete
+the lines that begin with RDF:li and contain references to
+bidimailpack, as well as tags that begin with RDF:Description RDF:about
+and contain references to bidimailpack (these too may be multi-line). </li>
+  <li>Restart Mozilla </li>
+</ol>
+
 <hr>
 </div>
