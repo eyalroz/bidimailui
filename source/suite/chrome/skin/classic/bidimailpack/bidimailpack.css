@@ -75,18 +75,14 @@
 }
 
 
-#margintop > hbox > textbox,
-#marginbottom > hbox > textbox {
-  -moz-appearance: none !important;
-  width:  3em;
-  height: inherit !important;
-  border: none !important;
-  margin: 0px;
-}
-
 #margintop > hbox,
 #marginbottom > hbox {
-  -moz-appearance: textfield !important;
+  visibility: hidden;
+}
+
+#margintop > hbox > textbox,
+#marginbottom > hbox > textbox {
+  visibility: visible !important;
 }
 
 #margintop[classictheme="winstripe"][status="non_valid_value"] *,
