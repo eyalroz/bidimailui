@@ -290,10 +290,10 @@ function HandleDirectionButtons() {
   }
 
   // TB ONLY: allow mac-specific style-rules (see bidimailpack.css in skin/classic/)
-  loadOSAttributeOnWindow();
+  LoadOSAttributeOnWindow();
 }
 
-function loadParagraphMode() {
+function LoadParagraphMode() {
   var editorType = GetCurrentEditorType();
   if (editorType == 'htmlmail') {
     // Determine Enter key behavior
@@ -409,7 +409,7 @@ function composeWindowEditorDelayedOnLoadHandler() {
         else
           SetDocumentDirection('ltr');
 
-        loadParagraphMode();
+        LoadParagraphMode();
         // the initial setting; perhaps instead of this
         // we should have an 'init' method for the controller?
         directionSwitchController.setAllCasters();
@@ -440,7 +440,7 @@ function composeWindowEditorDelayedOnLoadHandler() {
       SetDocumentDirection('ltr');
   }
   
-  loadParagraphMode();
+  LoadParagraphMode();
   directionSwitchController.setAllCasters();
 }
 
@@ -900,17 +900,4 @@ function CommandUpdate_MsgComposeDirection() {
   }
   gLastWindowToHaveFocus = focusedWindow;
   directionSwitchController.setAllCasters();
-}
-
-/* TB ONLY */
-function loadOSAttributeOnWindow() {
-  // We use different style rules on mac pinstripe theme
-  var aSystem;
-
-  if (navigator.platform == "MacPPC")
-    aSystem = "mac";
-  else
-    aSystem = "not_mac";
-  
-  document.documentElement.setAttribute("system", aSystem);
 }

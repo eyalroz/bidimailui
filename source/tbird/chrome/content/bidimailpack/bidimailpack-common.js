@@ -23,3 +23,17 @@ function hasRTLWord(element) {
   }
   return false;
 }
+
+
+/* TB ONLY */
+function LoadOSAttributeOnWindow() {
+  // We use different style rules on mac pinstripe theme
+  var aSystem;
+
+  if (navigator.platform == "MacPPC")
+    aSystem = "mac";
+  else
+    aSystem = "not_mac";
+  
+  document.documentElement.setAttribute("system", aSystem);
+}
