@@ -32,7 +32,7 @@
     <description>&default-dir;</description>
       <hbox class="indent">
         <radiogroup id="bidimailpack-default-dir">
-          <radio id="bidimailpack-default-dir-ltr" value="ltr" label="&ltr;" />
+          <radio id="bidimailpack-default-dir-ltr" value="ltr" label="&ltr;" selected="true" />
           <radio id="bidimailpack-default-dir-rtl" value="rtl" label="&rtl;" />
         </radiogroup>
       </hbox>
