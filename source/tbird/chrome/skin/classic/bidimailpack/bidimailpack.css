@@ -63,16 +63,8 @@
   -moz-image-region: rect(0px 32px 32px 0px);
 }
 
-[classictheme="pinstripe"] #button-direction-ltr-main-bar:hover {
-  -moz-image-region: rect(0px 64px 32px 32px);
-}
-
-[classictheme="pinstripe"] #button-direction-ltr-main-bar:hover:active {
-  -moz-image-region: rect(0px 96px 32px 64px);
-}
-
 [classictheme="pinstripe"] #button-direction-ltr-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 128px 32px 96px) !important;
+  -moz-image-region: rect(0px 64px 32px 32px) !important;
 }
 
 [classictheme="pinstripe"] #button-direction-rtl-main-bar {
@@ -80,16 +72,8 @@
   -moz-image-region: rect(0px 32px 32px 0px);
 }
 
-[classictheme="pinstripe"] #button-direction-rtl-main-bar:hover {
-  -moz-image-region: rect(0px 64px 32px 32px);
-}
-
-[classictheme="pinstripe"] #button-direction-rtl-main-bar:hover:active {
-  -moz-image-region: rect(0px 96px 32px 64px);
-}
-
 [classictheme="pinstripe"] #button-direction-rtl-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 128px 32px 96px) !important;
+  -moz-image-region: rect(0px 64px 32px 32px) !important;
 }
 
 /* Main Toolbar Buttons - large icons for s,
@@ -144,16 +128,8 @@
   -moz-image-region: rect(0px 19px 18px 0px);
 }
 
-#button-direction-ltr-formatting-bar:hover {
-  -moz-image-region: rect(0px 38px 18px 19px);
-}
-
-#button-direction-ltr-formatting-bar:hover:active {
-  -moz-image-region: rect(0px 57px 18px 38px);
-}
-
 #button-direction-ltr-formatting-bar[disabled="true"] {
-  -moz-image-region: rect(0px 76px 18px 57px) !important;
+  -moz-image-region: rect(0px 38px 18px 18px) !important;
 }
 
 #button-direction-rtl-formatting-bar {
@@ -161,16 +137,8 @@
   -moz-image-region: rect(0px 19px 18px 0px);
 }
 
-#button-direction-rtl-formatting-bar:hover {
-  -moz-image-region: rect(0px 38px 18px 19px);
-}
-
-#button-direction-rtl-formatting-bar:hover:active {
-  -moz-image-region: rect(0px 57px 18px 38px);
-}
-
 #button-direction-rtl-formatting-bar[disabled="true"] {
-  -moz-image-region: rect(0px 76px 18px 57px) !important;
+  -moz-image-region: rect(0px 38px 18px 19px) !important;
 }
 
 /* Options Panel */
