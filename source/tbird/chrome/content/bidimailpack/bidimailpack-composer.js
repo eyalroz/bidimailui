@@ -11,10 +11,12 @@
 
 
 // Globals
+var gPrefService = null;
 var gLastWindowToHaveFocus;
 var gAlternativeEnterBehavior = true;
+var gParagraphMarginTop;
+var gParagraphMarginBottom;
 var gBug262497Workaround;
-var gPrefService = null;
 
 function GetCurrentSelectionDirection()
 {
@@ -244,17 +246,6 @@ function composeWindowEditorOnLoadHandler() {
   // reply CSS
   HandleComposeReplyCSS();
 
-  // our extension likes paragraph text entry, not 'body text' - since
-  // paragraph are block elements, with a direction setting
-  if (editorType == 'htmlmail') {
-    try {
-      doStatefulCommand('cmd_paragraphState', "p");
-    } catch(e) {
-      // since the window is not 'ready', something might throw
-      // an exception here, like inability to focus etc.
-    }
-  }
-
   // the following is a very ugly hack!
   // the reason for it is that without a timeout, it seems
   // that gMsgCompose does often not yet exist when
@@ -298,6 +289,33 @@ function HandleDirectionButtons()
     document.getElementById('ltr-paragraph-direction-broadcaster').setAttribute('hidden',hiddenbuttons);
     document.getElementById('rtl-paragraph-direction-broadcaster').setAttribute('hidden',hiddenbuttons);
     document.getElementById('directionality-separator-formatting-bar').setAttribute('hidden',hiddenbuttons);   
+  }
+}
+
+function loadParagraphMode() {
+  var editorType = GetCurrentEditorType();
+  if (editorType == 'htmlmail') {
+    // Determine Enter key behavior
+    try {
+      gAlternativeEnterBehavior =
+          gPrefService.getBoolPref("mailnews.alternative_enter_behavior");
+    }
+    catch(e) {} // pref probably not set
+    
+    if (gAlternativeEnterBehavior) {
+      // Get margin-top and margin-bottom prefs for paragraphs we add
+      // We use global variables in order to avoid different margins in the same document
+      gParagraphMarginTop    = getParagraphMarginFromPref("mailnews.paragraph.margin_top");
+      gParagraphMarginBottom = getParagraphMarginFromPref("mailnews.paragraph.margin_bottom");
+      // our extension likes paragraph text entry, not 'body text' - since
+      // paragraph are block elements, with a direction setting
+      try {
+        doStatefulCommand('cmd_paragraphState', "p");
+      } catch(e) {
+        // since the window is not 'ready', something might throw
+        // an exception here, like inability to focus etc.
+      }
+    }
   }
 }
 
@@ -353,17 +371,7 @@ function GetMessageDisplayDirection(messageURI) {
 }
 
 function composeWindowEditorDelayedOnLoadHandler() {
-  var editorType = GetCurrentEditorType();
   var body = document.getElementById('content-frame').contentDocument.body;
-
-  if (editorType == 'htmlmail') {
-    // Determine Enter key behavior
-    try {
-      gAlternativeEnterBehavior =
-          gPrefService.getBoolPref("mailnews.alternative_enter_behavior");
-    }
-    catch(e) {} // pref probably not set
-  }
 
   var re = /rv:([0-9.]+).*Gecko\/([0-9]+)/;
   var arr = re.exec(navigator.userAgent);
@@ -396,6 +404,7 @@ function composeWindowEditorDelayedOnLoadHandler() {
         else
           SetDocumentDirection('ltr');
 
+        loadParagraphMode();
         // the initial setting; perhaps instead of this
         // we should have an 'init' method for the controller?
         directionSwitchController.setAllCasters();
@@ -425,6 +434,8 @@ function composeWindowEditorDelayedOnLoadHandler() {
     else
       SetDocumentDirection('ltr');
   }
+  
+  loadParagraphMode();
   directionSwitchController.setAllCasters();
 }
 
@@ -719,8 +730,8 @@ function InsertParagraph()
   }
   
 
-  par.style.marginTop    = getParagraphMarginFromPref("mailnews.paragraph.margin_top");
-  par.style.marginBottom = getParagraphMarginFromPref("mailnews.paragraph.margin_bottom");
+  par.style.marginTop    = gParagraphMarginTop;
+  par.style.marginBottom = gParagraphMarginBottom;
   
   editor.endTransaction();
 
