@@ -146,10 +146,12 @@ div#hebrew-navbar #project-navigation {
 
 .hebrew-news {
   float: left;
+  direction: rtl;
 }
 
 .english-news {
   float: right;
+  direction: ltr;
 }
 
 .infoTab {
