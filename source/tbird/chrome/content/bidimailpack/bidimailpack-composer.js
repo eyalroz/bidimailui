@@ -501,7 +501,7 @@ function InsertParagraph()
   var par = findClosestBlockElement(editor.selection.focusNode);
   var prevPar = par.previousSibling;
 
-  // Hunt and shoot the extra BR. We don't want it.
+  // Hunt down and shoot the extra BR. We don't want it.
   var node = prevPar.lastChild;
   if (node && (node.nodeType == node.ELEMENT_NODE) && (node.tagName.toUpperCase() == "BR") && (prevPar.childNodes.length > 1))
     editor.deleteNode(node);
