@@ -124,7 +124,7 @@ function composeWindowEditorOnLoadHandler2() {
   {
     try {
       if (!prefs.getBoolPref('mail.compose.show_whole_message_direction_buttons_for_htmlmail')) 
-        hiddenMainButtons = true; alert("hiddenMainButtons set to true");
+        hiddenMainButtons = true;
     }
     catch(e) {} // preference is not set.
 
@@ -367,11 +367,12 @@ var directionSwitchController =
       case "cmd_clear_paragraph_dir":
       case "cmd_rtl_paragraph":
       case "cmd_ltr_paragraph":
-        // editor focused?
-        rv = (content == top.document.commandDispatcher.focusedWindow);
       case "cmd_rtl_document":
       case "cmd_ltr_document":
       case "cmd_switch_document":
+        // editor focused?
+        rv = (content == top.document.commandDispatcher.focusedWindow);
+
         // due to the ridiculous design of the controller interface,
         // the isCommandEnabled function has side-effects! and we
         // must use it to update button states because no other
@@ -434,6 +435,7 @@ var directionSwitchController =
     var state = this.getState(command);
 
     document.getElementById(caster).setAttribute('checked', (state == 'checked') );
+    document.getElementById(caster).setAttribute('disabled', (content != top.document.commandDispatcher.focusedWindow) );
   },
 
   setAllCasters: function()
