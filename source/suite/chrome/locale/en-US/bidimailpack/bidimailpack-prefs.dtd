@@ -6,7 +6,7 @@
 <!ENTITY always-reply-in-default-dir             "Always reply in default direction">
 <!ENTITY more-info                               "For more information:">
 <!ENTITY guide-link-text                         "The BiDi Mail UI User's Guide">
-<!ENTITY guide-url                          "http://bidiui.mozdev.org/mail/guide.html">
+<!ENTITY guide-url                               "http://bidiui.mozdev.org/mail/guide.html">
 <!ENTITY bidimailpack-preftree-label             "BiDi Mail UI">
 <!ENTITY display-buttons                         "Display direction setting buttons">
 
