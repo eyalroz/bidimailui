@@ -318,7 +318,7 @@ function LoadParagraphMode() {
     if (editor) {
       editor.setParagraphFormat("p");
       // as we don't use doStatefulCommand, we need to update the command state attribute...
-      document.getElementById('cmd_paragraphState').setAttribute("state", "p")
+      document.getElementById('cmd_paragraphState').setAttribute("state", "p");
       var par = findClosestBlockElement(editor.selection.focusNode);
       // Set Paragraph Margins
       par.style.marginTop    = gParagraphMarginTop;
