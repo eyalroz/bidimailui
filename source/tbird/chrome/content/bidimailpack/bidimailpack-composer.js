@@ -15,24 +15,10 @@ function GetCurrentSelectionDirection()
   // The current selection is a forest of DOM nodes,
   // each of which is contained in a block HTML 
   // element (which is also a DOM node in the document
-  // node tree), which has a direction. The most
-  // intuitive and code-succinct method would be
-  // to check the direction of all block elements
+  // node tree), which has a direction.
+  // We check the direction of all block elements
   // containing nodes in the selection, by traversing
-  // the entire selection forest; we cannot accept such
-  // complexity at the moment (although you are welcome
-  // to debate this code simplicity vs. complexity tradeoff,
-  // contact us), so we shall arbitrarily limit the scan
-  // depth to:
-
-  var maxDFSDepth = 3; // (i.e. traverse levels 0,1,2,...maxDFSDepth, inclusive)
-
-  // ... to be scanned from each selection range's
-  // common ancestor element. Since we do not know
-  // the range of children to be scanned for each
-  // node, we will have to build the range's
-  // contour by climbing from its start and end
-  // to the common ancestor element
+  // the entire selection forest
 
   // Note that it is also possible to prune the scan
   // whenever a block element is reached (i.e. not
@@ -83,51 +69,7 @@ function GetCurrentSelectionDirection()
     
     // at this point we assume the cac nodeType is ELEMENT_NODE or something close to that...
     
-    // create the sequence of nodes on the range start slope:
-    //
-    //                           
-    //      *                   
-    //     /                     
-    //    / #                     
-    //   / ###                     
-    //  / #####                      
-    //                           
-
-    node = range.startContainer;
-
-    startSlope = Components.classes["@mozilla.org/supports-array;1"].createInstance(Components.interfaces.nsISupportsArray);
-    while (node != cac) {
-      // jsConsoleService.logStringMessage('start slope ' + startSlope.Count() + ':' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
-      startSlope.AppendElement(node);
-      node = node.parentNode;
-    } 
-    var startContainerDepth = startSlope.Count();
-    // jsConsoleService.logStringMessage('startContainerDepth =' + startContainerDepth);
-    startSlope.AppendElement(cac);
-
-    // create the sequence of nodes on the range end slope:
-    //
-    //                           
-    //      *                        
-    //       \                       
-    //      # \                      
-    //     ### \                      
-    //    ##### \                     
-    //                           
-
-    node = range.endContainer;
-
-    endSlope = Components.classes["@mozilla.org/supports-array;1"].createInstance(Components.interfaces.nsISupportsArray);
-    while (node != cac) {
-      // jsConsoleService.logStringMessage('end slope ' + endSlope.Count() + ':' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
-      endSlope.AppendElement(node);
-      node = node.parentNode;
-    }
-    var endContainerDepth = endSlope.Count();
-    // jsConsoleService.logStringMessage('endContainerDepth =' + endContainerDepth);
-    endSlope.AppendElement(cac);
-
-    if (startContainerDepth == 0) {
+    if (range.startContainer == cac) {
       // we assume that in this case both containers are equal to cac
       // jsConsoleService.logStringMessage('zero-depth selection, using cac direction');
       hasLTR = hasLTR || cacIsLTR;
@@ -137,12 +79,39 @@ function GetCurrentSelectionDirection()
       continue;
     }
 
-    node = startSlope.GetElementAt(startContainerDepth-1);
-    var depth = 1;
-      
+    // check the start slope
+
+    node = range.startContainer;
+
+    while (node != cac) {
+      // jsConsoleService.logStringMessage('visiting start slope node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
+      if (node.nodeType == Node.ELEMENT_NODE) {
+        var nodeStyle = view.getComputedStyle(node, "");
+        var display = nodeStyle.getPropertyValue('display');
+        if (display == 'block' || display == 'table-cell' || display == 'table-caption' || display == 'list-item' || (node.nodeType == Node.DOCUMENT_NODE)) {
+          switch (nodeStyle.getPropertyValue("direction")) {
+            case 'ltr':
+              hasLTR = true;
+              // jsConsoleService.logStringMessage('found LTR');
+              if (hasRTL) return 'complex';
+              break;
+            case 'rtl':
+              hasRTL = true;
+              // jsConsoleService.logStringMessage('found RTL');
+              if (hasLTR) return 'complex';
+              break;
+          }
+        }
+      }
+      node = node.parentNode;
+    } 
+
+    // check all nodes from startContainer to endContainer
+
+    node = range.startContainer;
     do
     {
-      // jsConsoleService.logStringMessage('visiting node:' + node + " at depth " + depth + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
+      // jsConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
     
       // check the current node's direction
        
@@ -156,8 +125,16 @@ function GetCurrentSelectionDirection()
         var display = nodeStyle.getPropertyValue('display');
         if (display == 'block' || display == 'table-cell' || display == 'table-caption' || display == 'list-item' || (node.nodeType == Node.DOCUMENT_NODE)) {
           switch (nodeStyle.getPropertyValue("direction")) {
-            case 'ltr': hasLTR = true; /*jsConsoleService.logStringMessage('found LTR');*/ if (hasRTL) return 'complex'; break;
-            case 'rtl': hasRTL = true; /*jsConsoleService.logStringMessage('found RTL');*/ if (hasLTR) return 'complex'; break;
+            case 'ltr':
+              hasLTR = true;
+              // jsConsoleService.logStringMessage('found LTR');
+              if (hasRTL) return 'complex';
+              break;
+            case 'rtl':
+              hasRTL = true;
+              // jsConsoleService.logStringMessage('found RTL');
+              if (hasLTR) return 'complex';
+              break;
           }
         }
         else if (node.parentNode == cac) {
@@ -171,44 +148,32 @@ function GetCurrentSelectionDirection()
           }
         }
       }
-      
+
+
       // is there is a child node which need be traversed?
        
-      if ((depth < maxDFSDepth) && node.firstChild ) {
-        if (depth < startContainerDepth) {
-          if (node == startSlope.GetElementAt(startContainerDepth-depth)) {
-            // jsConsoleService.logStringMessage('descending to edge child');
-            node = startSlope.GetElementAt(startContainerDepth-depth-1);
-            depth++;
-            continue;
-          }
-        }
+      if (node.firstChild ) {
         // jsConsoleService.logStringMessage('descending to first child');
-        node = node.firstChild; depth++;
-        continue;
+        node = node.firstChild;
+        // fallthrough to sibling search in case first child is a text node
+        if  (node.nodeType != Node.TEXT_NODE)
+          continue; // we've found the next node to visit
       }
 
       // is there a node on the ancestry path from this node
-      // to the common range ancestor which has a sibling node
+      // (inclusive) to the common range ancestor which has a sibling node
       // which need be traversed?
 
       do {
          if (node.nextSibling) {
-           // jsConsoleService.logStringMessage('next sibling of node is:' + node.nextSibling);
-           if (depth >= endContainerDepth) {
-             // jsConsoleService.logStringMessage('moving to next sibling');
-             node = node.nextSibling;
-             break;
-           }
-           if (node != endSlope.GetElementAt(endContainerDepth-depth)) {
-             // jsConsoleService.logStringMessage('moving to next sibling');
-             node = node.nextSibling;
-             break;
-           }
-           // jsConsoleService.logStringMessage('node == endSlope.GetElementAt(endContainerDepth-depth)\nhowever node.innerHTML =\n' + node.innerHTML + '\nwhile endSlope.GetElementAt(endContainerDepth-depth).innerHTML = \n' + endSlope.GetElementAt(endContainerDepth-depth).innerHTML);
+           node = node.nextSibling;
+           // jsConsoleService.logStringMessage('moving to next sibling');
+           if  (node.nodeType != Node.TEXT_NODE)
+             break; // we've found the next node to visit
+           else continue; // try the next sibling
          }
-         depth--; node = node.parentNode;
-         // jsConsoleService.logStringMessage('moving back up to depth ' + depth);
+         else node = node.parentNode;
+         // jsConsoleService.logStringMessage('moving back up');
        } while (node != cac);
        
      } while (node != cac);
