@@ -15,7 +15,7 @@ function SwitchMessageDirection() {
 
   if (currentDir == 'rtl') {
     body.setAttribute('dir', 'ltr');
-    UpdateDirectionBroadcasters('ltr');
+    UpdateDirectionButtons('ltr');
   } 
   else {
     body.setAttribute('dir', 'rtl');
