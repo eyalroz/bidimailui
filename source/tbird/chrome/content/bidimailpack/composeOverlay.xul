@@ -62,6 +62,7 @@
   <menuitem id="contextBodyDirectionItem" label="&menu-bidimail-switch-document-direction:label;"
     accesskey="&menu-bidimail-switch-document-direction:accesskey;" 
     command="cmd_switch_document" />
+  <menuseparator observes="rlm-lrm-broadcaster" />
   <menuitem id="contextInsertLRM" label="&menu-bidimail-insert-lrm:label;"
     oncommand="InsertEntity('&amp;lrm;')" observes="rlm-lrm-broadcaster" />
   <menuitem id="contextInsertRLM" label="&menu-bidimail-insert-rlm:label;"
