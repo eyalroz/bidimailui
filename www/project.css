@@ -267,6 +267,14 @@ div#langauge-selection {
   text-align: center;
 }
 
+div#english-navbar div#langauge-selection {
+  margin-right: 40px;
+}
+
+div#hebrew-navbar div#langauge-selection {
+  margin-left: 40px;
+}
+
 div#langauge-selection span#title {
   font-family: helvetica,arial,sans-serif;
   font-size: small;
