@@ -260,7 +260,6 @@ h5 {
 */
 
 div#langauge-selection {
-  float: right;
   margin-right: 40px;
   padding: 5px;
   border: 1px solid black;
@@ -268,10 +267,12 @@ div#langauge-selection {
 }
 
 div#english-navbar div#langauge-selection {
+  float: right;
   margin-right: 40px;
 }
 
 div#hebrew-navbar div#langauge-selection {
+  float: left;
   margin-left: 40px;
 }
 
