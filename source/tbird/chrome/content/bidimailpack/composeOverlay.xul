@@ -8,6 +8,7 @@
 <overlay
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
+  <script type="application/x-javascript" src="bidimailpack-common.js"/>
   <script type="application/x-javascript" src="bidimailpack-composer.js"/>
   <script type="application/x-javascript">
     InstallComposeWindowEditorHandler();
@@ -45,24 +46,27 @@
 </toolbox>
 
 <keyset id="tasksKeys">
-  <key id="key-bidimail-switch" key="&key-bidimail-switch-directionality:keycode;"
-      command="cmd_switch_document" modifiers="&key-bidimail-switch-directionality:modifiers;" />
+  <key id="key-bidimail-switch" key="&key-bidimail-switch-document-direction:keycode;"
+      command="cmd_switch_document" modifiers="&key-bidimail-switch-document-direction:modifiers;" />
 </keyset>
 
 <popup id="msgComposeContext">
   <menuseparator/>
-  <menuitem id="contextParagraphDirectionItem" label="&menu-bidimail-switch-paragraph-directionality:label;"
-    accesskey="&menu-bidimail-switch-paragraph-directionality:accesskey;" 
+  <menuitem id="contextParagraphDirectionItem" label="&menu-bidimail-switch-paragraph-direction:label;"
+    accesskey="&menu-bidimail-switch-paragraph-direction:accesskey;" 
     command="cmd_switch_paragraph" />
-  <menuitem id="contextBodyDirectionItem" label="&menu-bidimail-switch-directionality:label;"
-    accesskey="&menu-bidimail-switch-directionality:accesskey;" 
+  <menuitem id="contextBodyDirectionItem" label="&menu-bidimail-switch-document-direction:label;"
+    accesskey="&menu-bidimail-switch-document-direction:accesskey;" 
     command="cmd_switch_document" />
+  <menuitem id="contextClearParagraphDirectionItem" label="&menu-bidimail-clear-paragraph-direction:label;"
+    accesskey="&menu-bidimail-clear-paragraph-direction:accesskey;" 
+    command="cmd_clear_paragraph_dir" />
 </popup>
 
 <menu id="menu_View">
   <menupopup id="menu_View_Popup">
-  <menuitem label="&menu-bidimail-switch-directionality:label;"
-    accesskey="&menu-bidimail-switch-directionality:accesskey;" 
+  <menuitem label="&menu-bidimail-switch-document-direction:label;"
+    accesskey="&menu-bidimail-switch-document-direction:accesskey;" 
     command="cmd_switch_document" key="key-bidimail-switch" />
   </menupopup>
 </menu>
