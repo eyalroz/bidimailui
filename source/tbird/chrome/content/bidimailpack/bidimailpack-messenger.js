@@ -23,7 +23,7 @@ function SwitchMessageDirection() {
 }
 
 // TB only - update optional direction buttons status
-function UpdateDirectionBroadcasters(var direction) {
+function UpdateDirectionBroadcasters(direction) {
   var caster = document.getElementById("ltr-document-direction-broadcaster");
   caster.setAttribute("checked", direction == "ltr");
   caster = document.getElementById("rtl-document-direction-broadcaster");
