@@ -4,7 +4,7 @@ const jarName             = name + ".jar";
 const jarPath             = "chrome/";
 const jarLocation         = jarPath + jarName;
 const existsInApplication = File.exists(getFolder(getFolder("chrome"), jarName));
-const version             = "0.5.3";
+const version             = "0.6";
 const optionalThe         = "the "; // if package name is an inspecific noun, use "the ", otherwise ""
 
 var contentFlag = CONTENT | PROFILE_CHROME;
