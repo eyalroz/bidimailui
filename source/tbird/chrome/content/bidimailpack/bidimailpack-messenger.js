@@ -3,6 +3,8 @@ function SetMessageDirection(dir) {
   if (!brwsr) return;
   var body = brwsr.docShell.contentViewer.DOMDocument.body;
   body.setAttribute('dir', dir);
+  // TB only
+  UpdateDirectionBroadcasters(dir);
 }
 
 function SwitchMessageDirection() {
@@ -12,13 +14,20 @@ function SwitchMessageDirection() {
   var currentDir = window.getComputedStyle(body, null).direction;
 
   if (currentDir == 'rtl')
-  {
     body.setAttribute('dir', 'ltr');
-  }
   else
-  {
     body.setAttribute('dir', 'rtl');
-  }
+
+  // TB only
+  UpdateDirectionBroadcasters(dir);
+}
+
+// TB only - update optional direction buttons status
+function UpdateDirectionBroadcasters(var direction) {
+  var caster = document.getElementById("ltr-document-direction-broadcaster");
+  caster.setAttribute("checked", direction == "ltr");
+  caster = document.getElementById("rtl-document-direction-broadcaster");
+  caster.setAttribute("checked", direction == "rtl");
 }
 
 function browserOnLoadHandler() {
@@ -27,8 +36,7 @@ function browserOnLoadHandler() {
     && body.childNodes[1].className != 'moz-text-html'; // either '*-plain' or '*-flowed'
 
   // reply css
-  if (!bodyIsPlainText)
-  {
+  if (!bodyIsPlainText) {
     var newSS;
     newSS = this.docShell.contentViewer.DOMDocument.createElement("link");
     newSS.rel  = "stylesheet";
@@ -41,8 +49,7 @@ function browserOnLoadHandler() {
 
   // Auto detect plain text direction
   var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-  try
-  {
+  try {
     if (!prefs.getBoolPref("mailnews.message_display.autodetect_direction"))
       return;
   } catch(e) { } // preference is not set.  
@@ -54,9 +61,7 @@ function browserOnLoadHandler() {
   // direction of non-plain-text HTML messages without a preset direction
          
   if (bodyIsPlainText && hasRTLWord(body))
-  {
     SetMessageDirection('rtl');
-  }
 }
 
 function InstallBrowserHandler() {
