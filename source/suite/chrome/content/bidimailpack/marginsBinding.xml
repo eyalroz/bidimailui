@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE window [
+   <!ENTITY % bidimailpackPrefsDTD
+            SYSTEM "chrome://bidimailpack/locale/bidimailpack-prefs.dtd" >
+            %bidimailpackPrefsDTD;
+]>
+<bindings xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <binding id="marginsBinding">
+        <resources>
+          <stylesheet src="chrome://bidimailpack/skin/bidimailpack.css"/>
+        </resources>
+        <content>
+            <xul:hbox>
+              <xul:textbox />
+            </xul:hbox>
+            <xul:menulist>
+                <xul:menupopup>
+                    <xul:menuitem label="&cmScale.label;"
+                                  accesskey="&cmScale.accesskey;"
+                                  selected="true" />
+                    <xul:menuitem label="&pixelScale.label;" 
+                                  accesskey="&pixelScale.accesskey;" />
+                    <xul:menuitem label="&ptScale.label;"
+                                  accesskey="&ptScale.accesskey;" />
+                </xul:menupopup>
+            </xul:menulist>
+        </content>
+        <implementation>
+            <constructor><![CDATA[
+              this.initFromPref();
+              // We use different style rules on mac pinstripe theme
+              if (navigator.platform == "MacPPC")
+                this.setAttribute("classictheme", "pinstripe");
+              else
+                this.setAttribute("classictheme", "winstripe");
+            ]]></constructor>
+
+            <field name="valueField">
+              document.getAnonymousNodes(this)[0].firstChild
+            </field>
+            <field name="scaleField">
+              document.getAnonymousNodes(this)[1]
+            </field>
+
+            <property name="prefbase"
+                      onget="return this.getAttribute('prefbase');"
+                      onset="this.setAttribute('prefbase',val); return this.initFromPref();" />
+            <property name="value"
+                      onget="return (this.valueField.value);"
+                      onset="return (this.valueField.value = val);" />
+            <property name="scale">
+              <getter><![CDATA[
+                switch (this.scaleField.selectedIndex) {
+                  case 0:
+                    return "cm"
+                  case 1:
+                    return "px"
+                  case 2:
+                    return "pt"
+                }
+              ]]></getter>
+              <setter><![CDATA[
+                switch (val) {
+                  case "cm":
+                    this.scaleField.selectedIndex = 0;
+                    return true;
+                  case "px":
+                    this.scaleField.selectedIndex = 1;
+                    return true;
+                  case "pt":
+                    this.scaleField.selectedIndex = 2;
+                    return true;
+                }
+                return false;
+              ]]></setter>
+            </property>
+            <property name="cssValue"
+                      onget="return (this.value+this.scale);"
+                      onset="return false;" />
+            <method name="initFromPref">
+                <body><![CDATA[
+                  var aValue, aScale;
+                  try {
+                      var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+                      aValue = prefs.getCharPref(this.prefbase + ".value");
+                      aScale = prefs.getCharPref(this.prefbase + ".scale");
+                  }
+                  catch (e) {
+                    // default values;
+                    aValue = "0"; aScale = "cm";                   
+                  }
+                  this.value = aValue; this.scale = aScale;
+                ]]></body>
+            </method>
+            <method name="saveToPrefs">
+                <body><![CDATA[
+                  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+                  prefs.setCharPref(this.prefbase + ".value", this.value);
+                  prefs.setCharPref(this.prefbase + ".scale", this.scale);
+                ]]></body>
+            </method>
+            <method name="validateData">
+                <body><![CDATA[
+                  var rv;
+                  switch (this.scale) {
+                    case "pt":
+                    case "px":
+                      rv = /^[0-9]+$/.test(this.value);
+                      break;
+                    case "cm":
+                      rv = /^[0-9]+(\.[0-9]+)?$/.test(this.value);
+                  }
+                  if (!rv)
+                    this.setAttribute("status", "non_valid_value");
+                  else
+                    if (this.hasAttribute("class"))
+                      this.removeAttribute("status");
+                  return rv;
+                ]]></body>
+            </method>
+            <method name="focus">
+                <body><![CDATA[
+                   this.valueField.focus();
+                ]]></body>
+            </method>
+        </implementation>
+
+        <handlers>
+          <handler event="keyup"  action="this.validateData();" />
+          <handler event="change" action="this.validateData();" />
+        </handlers>
+    </binding>
+</bindings>
+

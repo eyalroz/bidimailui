@@ -7,7 +7,7 @@
 <page xmlns          = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
       xmlns:html     = "http://www.w3.org/1999/xhtml"
       onload         = "init();"
-      onunload       = "saveValues();"
+      onunload       = "dialogAccept();"
       headertitle    = "&bidimailpack-preftree-label;">
 
   <script type="application/x-javascript" src="chrome://global/content/globalOverlay.js"/>
@@ -39,7 +39,20 @@
       <spacer />
       <checkbox id="bidimailpack-reply-in-default-dir" checked="false" label="&always-reply-in-default-dir;" autostretch="never" />
       <checkbox id="bidimailpack-display-buttons" checked="false" label="&display-buttons;" autostretch="never" />
-      
+
+    <spacer style="height: 1em" />
+    <vbox>
+      <description>&marginTopTitle.label;</description>
+      <hbox id="margintop"
+            style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
+            class="indent"
+            prefbase="mailnews.paragraph.margin_top"/>
+      <description>&marginBottomTitle.label;</description>
+      <hbox id="marginbottom"
+            style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
+            class="indent"
+            prefbase="mailnews.paragraph.margin_bottom"/>
+    </vbox>
   </groupbox>
 
   <spacer style="height: 2em" />
