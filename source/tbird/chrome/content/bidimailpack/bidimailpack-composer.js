@@ -73,6 +73,13 @@ function SetDocumentDirection(dir) {
   body.setAttribute('dir', dir);
 }
 
+function InsertEntity(entityHTML) {
+  editor = GetCurrentEditor();
+  editor.beginTransaction();
+  editor.insertHTML(entityHTML);
+  editor.endTransaction();
+}
+
 function SwitchDocumentDirection() {
   var currentDir;
 
@@ -124,7 +131,11 @@ function composeWindowEditorOnLoadHandler() {
 }
 
 function composeWindowEditorOnLoadHandler2() {
-  var messageIsAReply = (gMsgCompose.originalMsgURI.length > 0);
+  var messageIsAReply = false;
+  try {
+    messageIsAReply = (gMsgCompose.originalMsgURI.length > 0);
+  }
+  catch(e) {};
   var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
   var body = document.getElementById('content-frame').contentDocument.body;
 
@@ -344,8 +355,8 @@ function InsertParagraph()
   var par = findClosestBlockElement(editor.selection.focusNode);
   var prevPar = par.previousSibling;
 
-  alert('prevpar = ' + prevPar.innerHTML);
-  alert('par = ' + par.innerHTML);
+//  alert('prevpar = ' + prevPar.innerHTML);
+//  alert('par = ' + par.innerHTML);
 
   // Hunt and shoot the extra BR. We don't want it.
   var node = prevPar.lastChild;
