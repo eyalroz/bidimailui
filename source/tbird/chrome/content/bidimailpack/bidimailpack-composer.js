@@ -304,6 +304,40 @@ function composeWindowEditorOnReopenHandler() {
   setTimeout('composeWindowEditorDelayedOnLoadHandler();', 125);
 }
 
+function GetMessageDisplayDirection(messageURI) {
+  // Note: there may be more than one window
+  // which displays the message we are replying to;
+  // since the enumeration is from the oldest window
+  // to the newest, we'll overwrite the direction
+  // setting if we find another window displaying the
+  // same message; we will also overwrite the direction set
+  // in a messenger window with a direction set in a
+  // single message window
+
+  var win,loadedMessageURI,brwsr,winBody,retVal;
+
+  var windowManager = Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(nsIWindowMediator);
+  var messengerWindowList = windowManager.getEnumerator("mail:3pane");
+  var messageWindowList = windowManager.getEnumerator("mail:messageWindow");
+
+  while (true) {
+
+    if (messengerWindowList.hasMoreElements())
+      win = messengerWindowList.getNext();
+    else if (messageWindowList.hasMoreElements())
+      win = messageWindowList.getNext();
+    else break;
+
+    loadedMessageURI = win.GetLoadedMessage();
+    if (loadedMessageURI != messageURI) continue;
+    brwsr = win.getMessageBrowser();
+    if (!brwsr) continue;
+    winBody = brwsr.docShell.contentViewer.DOMDocument.body;
+    retVal = win.getComputedStyle(winBody, null).direction; 
+  }
+  return retVal;
+}
+
 function composeWindowEditorDelayedOnLoadHandler() {
   var editorType = GetCurrentEditorType();
   var body = document.getElementById('content-frame').contentDocument.body;
@@ -314,6 +348,10 @@ function composeWindowEditorDelayedOnLoadHandler() {
     messageIsAReply = (gMsgCompose.originalMsgURI.length > 0);
   }
   catch(e) {};
+
+  var originalMessageDisplayDirection;
+  if (messageIsAReply)
+    originalMessageDisplayDirection = GetMessageDisplayDirection(gMsgCompose.originalMsgURI);
 
   try
   {
@@ -348,11 +386,18 @@ function composeWindowEditorDelayedOnLoadHandler() {
     // can't get here
   }
 
-  // aligning in same direction as message
-  if (hasRTLWord(body))
-    SetDocumentDirection('rtl');
-  else
-    SetDocumentDirection('ltr');
+  // aligning in same direction as the original message
+
+  if (originalMessageDisplayDirection)
+    SetDocumentDirection(originalMessageDisplayDirection);
+  else {
+    // we shouldn't be able to get here - when replying, the original
+    // window should be in existence
+    if (hasRTLWord(body))
+      SetDocumentDirection('rtl');
+    else
+      SetDocumentDirection('ltr');
+  }
   directionSwitchController.setAllCasters();
 }
 
