@@ -87,6 +87,7 @@ div#english-navbar #project-navigation th {
 }
 
 div#hebrew-navbar #project-navigation th {
+  padding-left: 18px;
   padding-right: 18px;
   background-position: right;
 }
