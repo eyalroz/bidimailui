@@ -12,9 +12,7 @@
           <stylesheet src="chrome://bidimailpack/skin/bidimailpack.css"/>
         </resources>
         <content>
-            <xul:hbox>
-              <xul:textbox />
-            </xul:hbox>
+            <xul:textbox size="4" />
             <xul:menulist>
                 <xul:menupopup>
                     <xul:menuitem label="&cmScale.label;"
@@ -32,13 +30,13 @@
               this.initFromPref();
               // We use different style rules on mac pinstripe theme
               if (navigator.platform == "MacPPC")
-                this.setAttribute("classictheme", "pinstripe");
+                this.setAttribute("system", "mac");
               else
-                this.setAttribute("classictheme", "winstripe");
+                this.setAttribute("system", "non_mac");
             ]]></constructor>
 
             <field name="valueField">
-              document.getAnonymousNodes(this)[0].firstChild
+              document.getAnonymousNodes(this)[0]
             </field>
             <field name="scaleField">
               document.getAnonymousNodes(this)[1]
