@@ -12,7 +12,7 @@
           <stylesheet src="chrome://bidimailpack/skin/bidimailpack.css"/>
         </resources>
         <content>
-            <xul:textbox size="6" />
+            <xul:textbox size="6" style="-moz-appearance: none;"/>
             <xul:menulist>
                 <xul:menupopup>
                     <xul:menuitem label="&cmScale.label;"
