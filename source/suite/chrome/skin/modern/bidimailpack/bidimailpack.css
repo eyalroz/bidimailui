@@ -121,6 +121,7 @@
 #margintop > hbox > textbox,
 #marginbottom > hbox > textbox {
   visibility: visible !important;
+  width: 5em;
 }
 
 #margintop[classictheme="winstripe"][status="non_valid_value"] *,
