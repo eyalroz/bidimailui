@@ -42,7 +42,6 @@ div#english-navbar #project-navigation th{
 
 div#hebrew-navbar #project-navigation th{
   margin-left: 3px;
-  padding-right: 10px;
 }
 
 .project-name {
@@ -117,6 +116,7 @@ div#english-navbar #project-navigation th {
 div#hebrew-navbar #project-navigation th {
   padding-left: 18px;
   padding-right: 18px;
+  margin-right: 5px;
   background-position: right;
   padding-top: 1pt;
 }
