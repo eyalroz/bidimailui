@@ -341,26 +341,30 @@ var directionSwitchController =
 
   isCommandEnabled: function(command)
   {
-
+    var rv = true;
     // and now for what this function is actually supposed to do...
     switch (command)
     {
+      case "cmd_switch_paragraph":
+      case "cmd_clear_paragraph_dir":
       case "cmd_rtl_paragraph":
       case "cmd_ltr_paragraph":
+        // editor focused?
+        rv = (content == top.document.commandDispatcher.focusedWindow);
       case "cmd_rtl_document":
       case "cmd_ltr_document":
       case "cmd_switch_document":
-      case "cmd_switch_paragraph":
-      case "cmd_clear_paragraph_dir":
         // due to the ridiculous design of the controller interface,
         // the isCommandEnabled function has side-effects! and we
         // must use it to update button states because no other
         // method gets called to do that
         this.setCaster(command);
-        return true;
+        break;
       default:
-        return false;
+        rv = false;
     }
+
+    return rv;
   },
 
   getState: function(command)
