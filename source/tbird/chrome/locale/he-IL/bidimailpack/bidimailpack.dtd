@@ -1,0 +1,12 @@
+﻿<!ENTITY menu-bidimail-switch-directionality:label                "הפוך כיוון הודעה">
+<!ENTITY menu-bidimail-switch-directionality:accesskey            "g">
+<!ENTITY key-bidimail-switch-directionality:keycode               "X">
+<!ENTITY key-bidimail-switch-directionality:modifiers             "accel,shift">
+
+<!ENTITY menu-bidimail-switch-message-directionality:label        "הפוך כיוון הודעה">
+<!ENTITY menu-bidimail-switch-message-directionality:accesskey    "w">
+
+<!ENTITY bidimail-ltr-button:label                                "שמאל-לימין">
+<!ENTITY bidimail-ltr-button:tip                                  "כוון משמאל לימין">
+<!ENTITY bidimail-rtl-button:label                                "ימין-לשמאל">
+<!ENTITY bidimail-rtl-button:tip                                  "כוון מימין לשמאל">

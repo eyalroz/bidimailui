@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % bidimailpackDTD SYSTEM "chrome://bidimailpack/locale/bidimailpack.dtd">
+%bidimailpackDTD;
+]>
+
+<overlay
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/x-javascript" src="bidimailpack-messenger.js"/>
+  <script type="application/x-javascript">
+    InstallBrowserHandler();
+  </script>
+
+  <keyset id="mailKeys">
+    <key id="key-bidimail-switch"
+        modifiers="&key-bidimail-switch-directionality:modifiers;" key="&key-bidimail-switch-directionality:keycode;"
+        oncommand="switchMessageDirectionality()" />
+  </keyset>
+
+  <menupopup id="menu_View_Popup">
+    <menuitem insertafter="mailviewCharsetMenu" label="&menu-bidimail-switch-directionality:label;"
+        accesskey="&menu-bidimail-switch-directionality:accesskey;" 
+        key="key-bidimail-switch" oncommand="switchMessageDirectionality()" />
+  </menupopup>
+  
+  <popup id="messagePaneContext">
+    <menuseparator/>
+    <menuitem label="&menu-bidimail-switch-directionality:label;" key="key-bidimail-switch"
+        accesskey="&menu-bidimail-switch-directionality:accesskey;" 
+        oncommand="switchMessageDirectionality()" />
+  </popup>
+  
+</overlay>

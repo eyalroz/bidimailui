@@ -1,0 +1,17 @@
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+#button-direction-ltr-main-bar {
+  list-style-image: url("chrome://bidimailpack/skin/ltr-main-bar.png");
+}
+
+#button-direction-rtl-main-bar {
+  list-style-image: url("chrome://bidimailpack/skin/rtl-main-bar.png");
+}
+
+#button-direction-ltr-formatting-bar {
+  list-style-image: url("chrome://bidimailpack/skin/ltr-formatting-bar.png");
+}
+
+#button-direction-rtl-formatting-bar {
+  list-style-image: url("chrome://bidimailpack/skin/rtl-formatting-bar.png");
+}

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:install-manifest">
+    <em:id>{54e72d7b-ed31-4736-854f-f517358f21ee}</em:id>
+    <em:version>0.9</em:version>
+    
+    <!-- Target Application this extension can install into, 
+        with minimum and maximum supported versions. --> 
+
+    <!-- Thunderbird -->
+    <em:targetApplication>
+     <Description>
+       <em:id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</em:id>
+       <em:minVersion>0.7</em:minVersion>
+       <em:maxVersion>1.0</em:maxVersion>
+     </Description>
+    </em:targetApplication>
+
+    <!-- Front End MetaData -->
+    <em:name>BiDi UI</em:name>
+    <em:description>Directionality control features for Mozilla Thunderbird</em:description>
+    <em:creator>The BiDi UI team</em:creator>
+    <em:contributor>Moofie</em:contributor>
+    <em:contributor>Eyal Rozenberg</em:contributor>
+    <em:contributor>Ilya Konstantinov</em:contributor>
+    <em:contributor>Asaf Romano</em:contributor>
+
+    <em:homepageURL>http://bidiui.mozdev.org/</em:homepageURL>
+
+    <em:optionsURL>chrome://bidimailpack/content/bidimailpack-tbird-prefs.xul</em:optionsURL>
+
+    <!-- Packages, Skins and Locales that this extension registers -->
+    <em:file>
+      <Description about="urn:mozilla:extension:file:bidimailpack.jar">
+        <em:package>content/bidimailpack/</em:package>
+        <em:locale>locale/en-US/bidimailpack/</em:locale>
+        <em:locale>locale/he-IL/bidimailpack/</em:locale>
+        <em:locale>locale/ar-SA/bidimailpack/</em:locale>
+        <em:skin>skin/classic/bidimailpack/</em:skin>
+      </Description>
+    </em:file>
+  </Description>      
+</RDF>
