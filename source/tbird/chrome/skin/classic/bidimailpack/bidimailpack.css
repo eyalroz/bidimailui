@@ -1,37 +1,53 @@
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
+/* Notes:
+   1. The syntax for -moz-image-region is
+
+         rect(first row coordinate of the image,
+			     first column coordinate after the image,
+				  first row coordinate after the image,
+			     first column coordinate of the image);
+	
+	2. Currently, the size of Mozilla FF/TB toolbar icons is:
+	  
+	      main toolbar        	         24px width x 24px height
+	      main toolbar small mode       16px width x 16px height
+			formatting/styling toolbar    ??px width x ??px height
+
+*/				  
+
 #button-direction-ltr-main-bar {
   list-style-image: url("chrome://bidimailpack/skin/ltr-main-bar.png");
-  -moz-image-region: rect(0px 30px 30px 0px);
+  -moz-image-region: rect(0px 24px 24px 0px);
 }
 
 #button-direction-ltr-main-bar:hover {
-  -moz-image-region: rect(0px 60px 30px 30px);
+  -moz-image-region: rect(0px 48px 24px 24px);
 }
 
 #button-direction-ltr-main-bar:hover:active {
-  -moz-image-region: rect(0px 90px 30px 60px);
+  -moz-image-region: rect(0px 72px 24px 48px);
 }
 
 #button-direction-ltr-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 120px 30px 90px) !important;
+  -moz-image-region: rect(0px 96px 24px 72px) !important;
 }
 
 #button-direction-rtl-main-bar {
   list-style-image: url("chrome://bidimailpack/skin/rtl-main-bar.png");
-  -moz-image-region: rect(0px 30px 30px 0px);
+  -moz-image-region: rect(0px 24px 24px 0px);
 }
 
 #button-direction-rtl-main-bar:hover {
-  -moz-image-region: rect(0px 60px 30px 30px);
+  -moz-image-region: rect(0px 48px 24px 24px);
 }
 
 #button-direction-rtl-main-bar:hover:active {
-  -moz-image-region: rect(0px 90px 30px 60px);
+  -moz-image-region: rect(0px 72px 24px 48px);
 }
 
 #button-direction-rtl-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 120px 30px 90px) !important;
+  -moz-image-region: rect(0px 96px 24px 72px) !important;
 }
 
 #button-direction-ltr-formatting-bar {
