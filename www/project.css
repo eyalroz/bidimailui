@@ -79,6 +79,7 @@ div#english-navbar {
   margin: 0;
   padding: 0;
   direction: ltr;
+  padding-bottom: 5px;
 }
 
 .project-navigations {
@@ -208,7 +209,6 @@ div#english-content {
   padding-left: 10px;
   text-align: justify;
   font-size: 0.9em;
-  padding-top: 5px;
 }
 
 a.download-xpi {
