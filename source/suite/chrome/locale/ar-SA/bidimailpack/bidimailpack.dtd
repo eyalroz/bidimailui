@@ -19,3 +19,10 @@
 <!ENTITY bidimail-ltr-button:tip                        "تحديد الاتّجاه يسار إلى يمين">
 <!ENTITY bidimail-rtl-button:label                      "يمين إلى يسار">
 <!ENTITY bidimail-rtl-button:tip                        "تحديد الاتّجاه يمين إلى يسار">
+
+<!ENTITY menu-bidimail-contol-character:label                         "Control Character">
+<!ENTITY menu-bidimail-contol-character:accesskey                     "n">
+<!ENTITY menu-bidimail-insert-contol-character:label                  "Insert Control Character">
+<!ENTITY menu-bidimail-insert-contol-character:accesskey              "I">
+<!ENTITY menu-bidimail-rlm:label                                      "Right-to-Left Mark">
+<!ENTITY menu-bidimail-lrm:label                                      "Left-to-Right Mark">
