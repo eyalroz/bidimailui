@@ -19,7 +19,7 @@ div#hebrew-navbar #project-navigation a{
   padding: 0;
 }
 
-#project-navigation a.selected-item{
+#project-navigation a.selected-item, div#langauge-selection .selected-item{
   background: rgb(255,220,128);
 }
 
@@ -39,7 +39,7 @@ div#hebrew-navbar #project-navigation th{
 .project-name {
   background: inherit;
   color: #900;
-  font-family: helvetica,arial,san-serif, serif;
+  font-family: helvetica,arial,sans-serif;
   padding: 0;
   margin: 0;
 }
@@ -250,3 +250,27 @@ h5 {
   margin: 0;
 }
 */
+
+div#langauge-selection {
+  float: right;
+  left: 75%;
+  margin-right: 5px;
+  padding: 5px;
+  border: 1px solid black;
+  text-align: center;
+}
+
+div#langauge-selection span#title {
+  font-family: helvetica,arial,sans-serif;
+  font-size: small;
+  color: #900;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10px;
+}
+
+div#langauge-selection a {
+  display: block;
+  font-family: verdana,arial,sans-serif;
+  font-size: small;
+}
