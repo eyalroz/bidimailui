@@ -50,7 +50,7 @@ main toolbar buttons are whole-document direction controls -->
   </toolbar>
   
    <toolbar id="FormatToolbar">
-      <hbox id="directionality-toolbar-section" insertafter="ParagraphSelect">
+     <hbox id="directionality-toolbar-section" insertafter="IncreaseFontSizeButton" dir="ltr">
       <toolbarbutton id="button-direction-ltr-formatting-bar" tooltiptext="&bidimail-ltr-button:tip;" command="cmd_ltr_paragraph" checked="false" hidden="true" observes="ltr-paragraph-direction-broadcaster" />
       <toolbarbutton id="button-direction-rtl-formatting-bar" tooltiptext="&bidimail-rtl-button:tip;" command="cmd_rtl_paragraph" checked="false" hidden="true" observes="rtl-paragraph-direction-broadcaster" />
        <toolbarseparator id="directionality-separator-formatting-bar" class="toolbarseparator-standard" />
