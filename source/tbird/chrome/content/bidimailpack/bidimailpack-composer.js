@@ -1,5 +1,6 @@
 // Globals
 var gLastWindowToHaveFocus;
+var gAlternativeEnterBehavior = true;
 
 function GetCurrentSelectionDirection()
 {
@@ -348,10 +349,7 @@ function composeWindowEditorDelayedOnLoadHandler() {
     try {
       gAlternativeEnterBehavior = prefs.getBoolPref("mailnews.alternative_enter_behavior");
     }
-    catch(e) {
-      // pref probably not set
-      gAlternativeEnterBehavior = false;
-    }
+    catch(e) {} // pref probably not set
   }
 
   // Handle message direction
