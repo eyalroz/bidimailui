@@ -1,140 +1,262 @@
 ﻿<!-- MAIN CONTENT -->
 <div id="english-content" >
 
-<h2><a id="content" name="התקנת_התוסף"> Installation </a></h2>
-
-<h3><a name="דרישות_קדם"> Prerequisites </a></h3>
-<p>BiDi Mail UI supports Thunderbird v0.7.x and v0.8.x, as well as Mozilla
-Suite Mail&amp;News v1.4x to v1.8.x. It has been successfully tested
-under Windows, Mac OS X and Linux+X.Org. It is most likely, though we
-can't guarantee it, to work fine with other versions and operating
-systems.</p>
-<h3><a name="הוראות_התקנה_עבור_Thunderbird"> Installation under
-Thunderbird<br>
-</a></h3>
-
-
-<ol>
-  <li>Right click the download link below<br>
-  </li>
-  <li>Save the XPI file to your hard drive<br>
-  </li>
-  <li>Launch Thunderbird </li>
-  <li>Open the Tools menu and choose Extensions<br>
-
-  </li>
-  <li>Click Install </li>
-  <li>Browse to the folder where you've saved the XPI file, select it,
-then confirm </li>
-  <li>Restart Thunderbird when prompted<br>
-  </li>
-</ol>
-
-<a href="http://downloads.mozdev.org/bidiui/latest/bidimailui_tbird.xpi" class="download-xpi">The Thunderbird Extension</a>
-
-</p>
-<h3><a name="הוראות_התקנה_עבור_מוזילה"> Installation under Mozilla<br>
-</a></h3>
-<ol>
-  <li>If previous BiDi Mail UI versions are installed, make sure to remove
-them as described in section 3<br>
-  </li>
-  <li>Click the download link below<br>
-  </li>
-  <li>Confirm the installation when prompted<br>
-
-  </li>
-  <li>Choose whether you wish to install the extension in your
-personal profile folder or globally, in the application folder.
-Installation in the profile folder has a few advantages: There is no
-need to have root user privileges (in operating systems such as Linux)
-and there is no need to reinstall the extension after updating Mozilla
-to a new version. However, with operating systems that are oriented
-toward single user mode (such as Windows 98), but that are accessed by
-several users, it is preferable to install BiDi Mail UI in the Mozilla
-application folder, so that everyone can utilize it. This global
-installation may require root privileges in some operating systems.
-Note that installing the extension as root also requires to restart
-Mozilla as root.</li>
-  <li>Restart Mozilla when prompted. Make
-sure to close all the program's windows - Browser, Mail&amp;News,
-Composer and so forth.<br>
-  </li>
-</ol>
+<h2><a id="content" name="הסברים_וצילומי-מסך"> Annotated Screenshots </a></h2>
 <p>
-<a href="http://downloads.mozdev.org/bidiui/latest/bidimailui_suite.xpi" class="download-xpi">The Mozilla Extension</a>
 </p>
+<h3><a name="לוח_ההעדפות"> Control Panel</a><br>
+</h3>
+<p>Let's start by explaining the various option offered in BiDi UI
+Control Panel. Each option will be explained and demonstrated in the
+following section.</p>
+<p>In Mozilla 1.x Suite, the BiDi UI Control Panel appears as a
+separate branch under the main preferences tree (Edit -&gt;
+Preferences).
 
-<p>To overcome possible difficulties in step #3, it may be worthwhile
-to run the installation locally. Simply right click the XPI file, save
-it to your hard drive and double click it to start the installation.<br>
-<span style="font-weight: bold;"></span></p>
-<p><span style="font-weight: bold;"><br>
-</span></p>
-<span style="font-weight: bold;"></span>
-<h3><a name="התקנת_התוסף_הישן_לדפדפנים">Installation of the previous
-BiDi UI (browser extension) </a></h3>
-<p>Users of old versions of Mozilla, Firefox and Netscape may be
-interested in the previous (browser-oriented) extension:<br>
 </p>
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/messenger-prefs-suite.png"
+ alt="תמונה:bidiui-messenger-prefs-suite.png">
+</div>
+<p>In Thunderbird, one has to open the Extensions Manager (Tools
+-&gt; Extensions), then double click the BiDi UI entry. This will open
+the extension control panel:</p>
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/messenger-prefs-tbird.png"
+ alt="תמונה:bidiui-messenger-prefs-tbird.png">
+</div>
+<h3><a name="זיהוי_כיוון_אוטומטי_להודעות_מוצגות"> Automatic direction
+detection for displayed messages </a></h3>
+<p>BiDi UI can automatically detect and set the proper direction of
+displayed messages. This feature is enabled by the option "Auto-Detect
+Message Direction".</p>
+<p>The concept behind the auto-detection logic is to search the text
+for a word with
+Right-to-Left direction - if one is found - the direction of the
+entire document is set to Right-to-Left. Note that this algorithm is
+biased
+toward right alignment. For example, the following message:<br>
 
-<a href="http://downloads.mozdev.org/bidiui/latest/bidiext.xpi" class="download-xpi">The Old Browser Extension</a>
-
-<p>There is not need to install this extension in newer browser
-since its functionality is now built in. It is usually much preferred
-to
-install a new browser than to install this extension in an old one.<br>
 </p>
-<h2><a name="הסרת_התוסף"> Removal </a></h2>
-<p>If you wish to uninstall BiDi Mail UI, please follow the instructions
-that correspond to your chosen installation method. Further to that, if
-for some reason, your experience with the extension was less than
-satisfactory, please let us know. You can find our contact details
-above.
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/messenger-all-rtl-one-ltr-word.png"
+ alt="תמונה: bidiui-messenger-all-rtl-one-ltr-word.png">
+</div></p>
+<p>Will be right-aligned, but so will this message:
 </p>
-<h3><a name="הוראות_הסרה_מ-Thunderbird"> Removal of BiDi Mail UI from
-Thunderbird</a></h3>
-Open the Extensions manager (Tools -&gt; Extensions). Locate the BiDi
-UI entry and click Uninstall.
-<h3><a name="הוראות_הסרה_ידנית_מספריית_היישום_של_מוזילה"> Manual
-removal of BiDi Mail UI from Mozilla 1.x Suite application folder </a></h3>
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/messenger-all-ltr-one-rtl-word.png"
+ alt="תמונה: bidiui-messenger-all-ltr-one-rtl-word.png">
+</div>
+<p>In the case of mixed texts, the direction is set as Right-to-Left.</p>
+<p>In some cases, the character encoding defined by the displayed
+message is incorrect. This may cause Mozilla to display Hebrew letters
+as accented Latin characters. To prevent such messages from being
+mistakenly aligned, the algorithm employed by BiDi UI takes into
+accounts only whole words, it doesn't rely merely on specific
+characters within words.</p>
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/messenger-single-rtl-char-in-ltr-message.png"
+ alt="תמונה: bidiui-messenger-single-rtl-char-in-ltr-message.png">
+</div></p>
+<p>Both detection and setting of the direction is performed while
+loading the message. If a message is re-loaded, this automatic process
+repeats. <br>
 
-<p>The following instructions only apply to Mozilla, not to Thunderbird.<br>
 </p>
-<ol>
-  <li>Open Mozilla's chrome folder<br>
-  </li>
-  <li>Edit the file installed-chrome.txt and delete any line that
-contains the string "bidimailpack.jar". </li>
-  <li>Delete the file bidimailpack.jar </li>
-  <li>Delete the folder overlayinfo and any file contained within it<br>
-
-  </li>
-  <li>Delete the file chrome.rdf </li>
-Restart Mozilla (in Linux, do it as root if needed). Mozilla
-will recreate the overlayinfo folder and the chrome.rdf file that were
-deleted in steps #4 and #5.<br>
-</ol>
-
-<h3><a name="הוראות_הסרה_ידנית_מספריית_הפרופיל_האישי_של_מוזילה"> Manual
-removal of BiDi Mail UI from Mozilla 1.x Suite user's profile folder </a></h3>
+<p>The example below shows a message which was sent using the wrong
+character encoding. Note that BiDi UI automatically aligns it to the
+left:
+</p>
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/messenger-charset-error.png"
+ alt="תמונה: bidiui-messenger-charset-error.png">
+</div></p>
+<p>Changing the Encoding via the View menu (in this case, from
+ISO-8859-1 to Windows-1255) will re-trigger the direction
+auto-detection:</p>
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/messenger-charset-corrected.png"
+ alt="תמונה: bidiui-messenger-charset-corrected.png">
+</div>
+<h3><a name="שינוי_כיוונן_של_הודעות_מוצגות"> Changing direction of
+displayed messages </a></h3>
 <p>
-The following instructions only apply to Mozilla, not to Thunderbird.</p>
-<ol>
+In addition to auto-detection, BiDi UI also provides manual direction
+control over the displayed message. This can be done in three different
+ways:<br>
+<br>
 
-  <li> Open Mozilla's chrome folder</li>
-  <li>Delete the file bidimailpack.jar </li>
-  <li>Edit any of the overlay.rdf files that
-appear under the overlayinfo sub-directory. Delete the tags beginning
-with RDF:Seq
-RDF:about that include lines with reference to bidimailpack (these may
-be multi-line). </li>
-  <li>Edit the file chrome.rdf under the chrome folder and delete
-the lines that begin with RDF:li and contain references to
-bidimailpack, as well as tags that begin with RDF:Description RDF:about
-and contain references to bidimailpack (these too may be multi-line). </li>
-  <li>Restart Mozilla </li>
-</ol>
+</p>
+<ul>
+  <li>By pressing a keyboard shortcut: Ctrl+Shift+X (or Cmd+Shift+X in
+Mac OS). </li>
+  <li>By choosing "Switch Message Direction" in the context menu of the
+message:</li>
+</ul>
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/messenger-context-menu-before-switch.png"
+ alt="תמונה: bidiui-messenger-context-menu-before-switch.png">
+</div><br>
+</div>
+<br>
+<ul>
+  <li>By choosing "Switch Message Direction" from the View menu:</li>
+</ul>
 
+<ul>
+&nbsp;<br>
+  <ul>
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/messenger-view-menu-before-switch.png"
+ alt="תמונה: bidiui-messenger-view-menu-before-switch.png">
+</div>
+  </ul>
+</ul>
+<p>As a result, the direction switches to the opposite of the previous
+one:</p>
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/messenger-message-after-switch.png"
+ alt="תמונה: bidiui-messenger-message-after-switch.png">
+</div>
+<p>
+</p>
+<p>
+</p>
+
+<h3><a name="קביעה_ראשונית_של_כיוון_הודעות_חדשות"> Setting the default
+direction for new messages </a></h3>
+<p>When composing a new message without BiDi UI, Mozilla sets
+Left-to-Right as the default direction. However, with this extension,
+there are two factors that effect the direction of new messages:
+The default direction (either Left-to-Right or Right-to-Left) and an
+option that allows to keep the direction of the original message when
+replying (rather than using the default direction). Both are user-set
+options that appear in the Message Composition section of BiDi UI
+control panel.</p>
+For example, if one chooses Left-to-Right as the default direction, but
+keeps the option "Always Reply in the Default Direction" unchecked,
+clicking "Compose" to start a new message will open a new window with
+Left-to-Right direction:<br>
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/new-message-ltr.png"
+ alt="תמונה: bidiui-new-message-ltr.png">
+</div>
+<p>(Note the two direction control buttons - RTL/LTR - in the main
+toolbar; We shall discuss those later on) <span
+ style="color: rgb(255, 0, 0);">&lt;--- remove this note?</span></p>
+<p>However, if you reply to a message that was tagged by the automatic
+direction detection as Right-to-Left, the reply will also be set as
+right-aligned.</p>
+
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/reply-rtl.png"
+ alt="תמונה: bidiui-reply-rtl.png">
+</div>
+<h3><a name="שינויי_כיוון_בעת_כתיבת_הודעות_מלל_פשוט"> Changing
+direction when editing plain text messages </a></h3>
+<p>
+In plain text messages there is only one single direction - the global
+message direction. BiDi UI provides four ways to control this direction:</p>
+<ul>
+  <li>Via a keyboard shortcut Ctrl+Shift+X (Cmd+Shift+X) </li>
+  <li>
+    <div style="text-align: left;">By clicking one of the direction
+buttons in the main toolbar (RTL for Right-to-Left, LTR for
+Left-to-Right):</div>
+
+  </li>
+  <li>
+    <div style="text-align: left;">&nbsp;‎
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/composer-button-before-switch.png"
+ alt="תמונה:  bidiui-composer-button-before-switch.png">
+</div>
+  </li>
+  <li>By choosing "Switch Message Direction" in the context menu of the
+message content area:<br>
+  </li>
+  <li>
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/composer-context-menu-before-switch.png"
+ alt="תמונה: bidiui-composer-context-menu-before-switch.png">
+</div></li>
+  <li>By choosing "Switch Message Direction" in the View menu of the
+Compose New message screen:
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/composer-view-menu-before-switch.png"
+ alt="תמונה: bidiui-composer-view-menu-before-switch.png">
+</div>
+
+  </li>
+</ul>
+<p>
+This action will align the message to the opposite direction of the
+current one (as described above for displaying messages):</p>
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/composer-message-after-switch.png"
+ alt="תמונה: bidiui-composer-message-after-switch.png">
+</div>
+<h3><a name="שינויי_כיוון_בעת_כתיבת_הודעות_HTML">Changing direction
+when editing HTML messages<br>
+</a></h3>
+<p>In HTML messages, each paragraph can be to a different direction.
+BiDi UI changes the behavior of the message editor, so that pressing
+Enter starts a new
+paragraph (similar to OpenOffice and MS Word). Shift+Enter starts a new
+line within a paragraph.</p>
+<p>The Design toolbar now includes two direction buttons that also
+display the current paragraph direction:<br>
+
+</p>
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/composer-html-current-dir.png"
+ alt="תמונה: bidiui-composer-html-current-dir.png">
+</div>
+These two buttons also display the direction of text which is selected
+from several paragraphs – as long as it's a single direction. If the
+selected text uses both directions, the buttons are depressed to
+signify this.<br>
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/composer-html-no-single-dir.png"
+ alt="תמונה: bidiui-composer-html-no-single-dir.png">
+</div>
+<p>Changing the direction of a paragraph requires placing the caret
+within it. Alternatively, text from several paragraphs can be selected,
+so that changing the direction effects all selected paragraphs. </p>
+<p>There are three ways to set the direction:</p>
+<ul>
+  <li>By clicking one of the direction buttons in the main toolbar (RTL
+for Right-to-Left, LTR for Left-to-Right):
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/composer-html-button-before-switch.png"
+ alt="תמונה:  bidiui-composer-html-button-before-switch.png">
+</div>
+
+  </li>
+  <li>By clicking "Switch Paragraph Direction" in the context menu of
+the message content area:
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/composer-html-context-menu-before-switch.png"
+ alt="תמונה: bidiui-composer-html-context-menu-before-switch.png">
+</div> </li>
+  <li>By choosing "Switch Paragraph Direction" in the Format menu of
+message composition window:
+<div class="screenshot-container">
+<img class="screenshot"  src="../images/composer-html-format-menu-before-switch.png"
+ alt="תמונה: bidiui-composer-html-format-menu-before-switch.png">
+</div> </li>
+</ul>
+<p>
+</p>
+<h4><a name="שינוי_'הכיוון_הכללי'_של_הודעת_HTML"> Changing the global
+direction of HTML messages</a></h4>
+<p>Paragraphs that do not carry an explicit direction are displayed
+using the global
+message direction. This can be changed via the "Switch Message
+Direction" function, under the View menu. The user-set direction of
+specific paragraphs can be cleared using the "Clear Paragraph
+Direction"
+under the Format menu.</p>
 <hr>
 </div>
