@@ -5,8 +5,10 @@
 <!-- not using class="page-header" on the next h2 -->
 <h2><a id="content" name="אודות_התוסף_BiDi_Mail_UI"> אודות התוסף BiDi Mail UI </a></h2>
 
-<p>
-משתמשים בשפות הנכתבות מימין לשמאל, כמו ערבית, פרסית ועברית, זקוקים לתמיכה מיוחדת מצד תוכנת לקוח-הדואר, כדי שיוכלו לקרוא הודעות לפי הכיוון בו יש לקראן (במיוחד קשה בעייה זו במקרה של הודעות מלל פשוט, אשר לא כוללות ציון מפורש של כיוון ההודעה) ולבחור את כיוון המלל בעת כתיבת הודעות.
+
+BiDi-aware mail client software should be capable of displaying mail messages using their intended direction. This functionality is especially important in the case of plain text messages, as those do not explicitly specify direction. Similar direction control is required when composing new messages.
+
+<p>לקוח דואר אלקטרוני התומך בדו-כיוון צריך להיות מסוגל להציג הודעות תוך שימוש בכיוון המיועד שלהן. יכולת זו חשובה במיוחד במקרה של הודעות מלל פשוט, אשר לא כוללות ציון מפורש של כיוון ההודעה. יכולת שליטה בכיוון דרושה גם בחיבור הודעות חדשות.</p>
 
 <p>
 תוסף זה מביא לידי ביטוי את היכולות הדו-כיווניות של לקוח הדואר של מוזילה (אם כחלק מן ה-Mozilla Suite או בנפרד, כ-Thunderbird) - בקריאת הודעות ובכתיבתן. בקריאת הודעות מתווסף זיהוי כיוון אוטומטי בעת הצגת הודעות, ואפשרות החלפת כיוונה של הודעה מוצגת; בכתיבת הודעות מתווספות אפשרות שינוי כיוון כלל ההודעה (בהודעות מלל פשוט ובהודעות HTML) ואפשרות קביעת כיוון נפרד לכל פיסקה (הודעות HTML בלבד).
@@ -15,25 +17,18 @@
 
 <h3><a name="הֵקשֶר"> הֵקשֶר </a></h3>
 
-<p>
+<p>התוסף BiDi Mail UI הינו פיתוח נוסף של תוסף ישן יותר מאת מופי, בשם <a href="http://www.typo.co.il/~mooffie/mozilla/hebmailpack.html">HebMailPack</a>, אשר נכתב כמענה <a href="http://bugzilla.mozilla.org/show_bug.cgi?id=119857">באג 119857</a>; אנו הוספנו יכולות רבות, מספר תיקוני באגים וכן שיפורים אסתטיים (כמו תמונות skin).</p>
 
-תוסף זה משוחרר אחרי תוסף קודם בשם BiDi UI; התוסף הקודם יועד לדפדפן, כדי לפתור את <a href="http://bugzilla.mozilla.org/show_bug.cgi?id=85420" title="http://bugzilla.mozilla.org/show bug.cgi?id=85420">באג 85420</a>, אשר נפתר בינתיים (אם כי בעת כתיבת שורות אלה הפתרון עוד לא הוכנס לשימוש). תוסף אחר שקדם לתוסף זה הינו <a href="http://www.typo.co.il/~mooffie/mozilla/hebmailpack.html" title="http://www.typo.co.il/~mooffie/mozilla/hebmailpack.html">HebMailPack</a>, מאת Moofie, אשר בא לפתור את <a href="http://bugzilla.mozilla.org/show_bug.cgi?id=119857" title="http://bugzilla.mozilla.org/show bug.cgi?id=119857">באג 119857</a>; תוסף זה הינו אוסף הרחבות ושיפורים על הקוד המקורי של Moofie.
-
-<p>
 
 <h3><a name="רישיון"> רישיון </a></h3>
 
 <p>
 תוסף זה מופץ בתנאי אחד הרישיונות <a href="http://www.mozilla.org/MPL/MPL-1.1.html" title="http://www.mozilla.org/MPL/MPL-1.1.html">MPL 1.1</a>, <a href="http://www.gnu.org/licenses/gpl.html" title="http://www.gnu.org/licenses/gpl.html">GPL 2.0</a>, <a href="http://www.gnu.org/licenses/lgpl.html" title="http://www.gnu.org/licenses/lgpl.html">LGPL 2.1</a>, לפי בחירתכן/ם.
 
-
-<p>
-
 <h3><a name="צרו_קשר"> צרו קשר </a></h3>
 
 <p>
-לדיווח על באגים, השתמשו ב<a href="http://bidiui.mozdev.org/bugs.html" title="http://bidiui.mozdev.org/bugs.html">ממשק bugzilla שבאתר זה</a>. לשאלות והצעות ניתן לשלוח דואר אלקטרוני לכתובת bidiui AT sent DOT com. בפרט נשמח לקבל קבצי לוקאליזציה בשפות נוספות כגון פרסית ואורדו.
-</p>
+לדיווח על באגים, השתמשו ב<a href="http://bidiui.mozdev.org/bugs.html" title="http://bidiui.mozdev.org/bugs.html">ממשק bugzilla שבאתר זה</a>. לשאלות והצעות ניתן לשלוח דואר אלקטרוני לכתובת bidiui AT sent DOT com. בפרט נשמח לקבל קבצי לוקאליזציה בשפות נוספות כגון פרסית ואורדו.</p>
 
 <hr>
 
