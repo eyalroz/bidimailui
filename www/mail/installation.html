@@ -113,18 +113,19 @@ removal of BiDi Mail UI from Mozilla 1.x Suite user's profile folder </a></h3>
 The following instructions only apply to Mozilla, not to Thunderbird.</p>
 <ol>
 
-  <li> Open Mozilla's chrome folder</li>
-  <li>Delete the file bidimailpack.jar</li>
-  <li>Edit any of the overlay.rdf files that
-appear under the overlayinfo sub-directory. Delete the tags beginning
-with RDF:Seq
-RDF:about that include lines with reference to bidimailpack (these may
-be multi-line).</li>
-  <li>Edit the file chrome.rdf under the chrome folder and delete
+  <li>Close Mozilla.</li>
+  <li>Open your profile's chrome folder - the files mentioned
+  below are all located there.</li>
+  <li>Delete the file <code>bidimailpack.jar</code>.</li>
+  <li>Edit the various <code>overlay.rdf</code> files that
+appear under the <code>overlayinfo</code> sub-directory. In each of these files,
+delete the tags beginning with <code>RDF:Seq</code> or <code>RDF:about</code>
+that include refences to <code>bidimailpack</code> (note these may be multi-line tags!).</li>
+  <li>Edit the file <code>chrome.rdf</code> of the chrome folder and delete
 the lines that begin with RDF:li and contain references to
-bidimailpack, as well as tags that begin with RDF:Description RDF:about
+<code>bidimailpack</code>, as well as tags that begin with RDF:Description RDF:about
 and contain references to bidimailpack (these too may be multi-line).</li>
-  <li>Restart Mozilla</li>
+  <li>Start Mozilla again.</li>
 </ol>
 
 <hr>
