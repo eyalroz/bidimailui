@@ -141,8 +141,8 @@ div#hebrew-navbar #project-navigation {
 #main-content-no-nav ul,
 #main-content ul {
   font-size: smaller;
-/*  list-style-type: square;
-  list-style-image: url("http://www.mozdev.org/sharedimages/bullet.gif");
+  list-style-type: square;
+/*  list-style-image: url("http://www.mozdev.org/sharedimages/bullet.gif");
   list-style-position: inside;
   padding-left: 5px;
   margin-left: 5px;
