@@ -2,45 +2,203 @@
 <div id="hebrew-content" >
 
 <!-- not using class="page-header" on the next h2 -->
-<h2><a id="content" name="העושים/ות_במלאכה"> העושים/ות במלאכה </a></h2>
+<h2><a id="content" name="הסברים_וצילומי-מסך"> הסברים וצילומי-מסך </a></h2>
+
+
+<h3><a name="לוח_ההעדפות"> לוח ההעדפות </a></h3>
 
 <p>
-<strong>התוסף BiDi UI מבוסס בחלקו על <a href="http://www.typo.co.il/~mooffie/mozilla/hebmailpack.html" title="http://www.typo.co.il/~mooffie/mozilla/hebmailpack.html">HebMailPack</a> שנכתב ע"י מופי.</strong>
+ראשית, נסביר כיצד ניתן לשלוט באפשרויות שונות של התוסף באמצעות לוח ההעדפות; האפשרויות השונות תוצגנה בסעיפים הבאים, יחד עם מושאי השפעתן.
 
-<h3><a name="פיתוח"> פיתוח </a></h3>
+<p>
+ב-Mozilla Suite, יש לפתוח את לוח ההעדפות הכללי (באמצעות פריט-התפריט Edit-&gt;Preferences); בתוך עץ הקטגוריות תימצא לאחר התקנת התוסף, גם הקטגוריה BiDi UI, ואותה יש לבחור:
 
-<ul><li> אייל רוזנברג
-</li><li> אסף רומנו
-</li><li> איליה קונסטנטינוב
-</li></ul>
 
-<h3><a name="בדיקות_ובקרת_איכות"> בדיקות ובקרת איכות </a></h3>
+</p>
+<img border="0" src="../images/messenger-prefs-suite.png" alt="תמונה:bidiui-messenger-prefs-suite.png">
 
+<p>
+ב-Thunderbird, יש לפתוח את מנהל ההרחבות (באמצעות פריט-התפריט Tools-&gt;Extensions), ולהקליק כפולות על ההרחבה BiDi UI; אז ייפתח לוח האפשרויות של ההרחבה:
+
+</p>
+<img border="0" src="../images/messenger-prefs-tbird.png" alt="תמונה:bidiui-messenger-prefs-tbird.png">
+
+
+<h3><a name="זיהוי_כיוון_אוטומטי_להודעות_מוצגות"> זיהוי כיוון אוטומטי להודעות מוצגות </a></h3>
+
+<p>
+התוסף כולל יכולת להפעיל לוגיקת זיהוי כיוון של הודעות הנטענות להצגה, ולקבוע את כיוון ההצגה בהתאם. האפשרות Auto-Detect Message Direction קובעת האם לבצע זיהוי זה אם לאו.
+
+
+<p>
+עקרון הזיהוי הוא חיפוש מילה בשפת-כתיבה (script) שכיוונה מימין-לשמאל, במסמך, ואם נמצאה מילה כזו - לקבוע שכיוון המסמך הוא מימין לשמאל. שימו לב שהזיהוי מוטה לטובת כיוון מימין לשמאל; הודעה זו:
+
+</p>
+<img border="0" src="../images/messenger-all-rtl-one-ltr-word.png" alt="תמונה: bidiui-messenger-all-rtl-one-ltr-word.png">
+
+<p>
+תכוון מימין לשמאל, אך כך גם הודעה זו:
+
+</p>
+<img border="0" src="../images/messenger-all-ltr-one-rtl-word.png" alt="תמונה: bidiui-messenger-all-ltr-one-rtl-word.png">
+
+<p>
+כך שבמקרה של מלל מעורב, הכיוון יהיה מימין לשמאל.
+
+<p>
+קורה לעיתים שהקידוד שמוגדר בהודעה המוצגת שגוי, דבר שעשוי לגרום למוזילה להציג אותיות עבריות במקום אותיות לאטיניות עם אקצנטים. כדי להימנע מכיוון מוטעה של הודעות כאלה, התוסף מתייחס רק למילים שלמות ולא לאותיות בתוך מילים:
+
+</p>
+<img border="0" src="../images/messenger-single-rtl-char-in-ltr-message.png" alt="תמונה: bidiui-messenger-single-rtl-char-in-ltr-message.png">
+
+<p>
+זיהוי כיוונה המיועד של כל הודעה, וקביעת כיוון ההצגה בהתאם אליה, מבוצעים בטעינת הודעה להצגה; אם ההודעה נטענת שוב, הזיהוי האוטומטי מופעל שוב. כך, למשל, אם בחרנו הודעה אשר נשלחה בקידוד שגוי, התוסף מכוון אותה משמאל לימין:
+
+</p>
+<img border="0" src="../images/messenger-charset-error.png" alt="תמונה: bidiui-messenger-charset-error.png">
+
+<p>
+שינוי של הקידוד דרך פריט-התפריט View|Character-Encoding (במקרה זה, מ-ISO-8859-1 ל-Windows-1255) יגרום להפעלה-מחדש של לוגיקת זיהוי הכיוון:
+
+</p>
+<img border="0" src="../images/messenger-charset-corrected.png" alt="תמונה: bidiui-messenger-charset-corrected.png">
+
+
+<h3><a name="שינוי_כיוונן_של_הודעות_מוצגות"> שינוי כיוונן של הודעות מוצגות </a></h3>
+
+<p>
+
+בנוסף לזיהוי הכיוון האוטומטי, התוסף מאפשר גם קביעה ידנית של כיוון ההודעה המוצגת. ניתן לעשות זאת באחת מ-3 דרכים:
+
+<p>
 <ul >
-<li >ראובן גונן
-<li >Prognathous
-
+<li >באמצעות הקשה על קיצור המקשים המתאים: Ctrl+Shift+X (במק: Cmd+Shift+X).
+<li >באמצעות בחירת הפריט המתאים מתפריט ההקשר:
+<img border="0" src="../images/messenger-context-menu-before-switch.png" alt="תמונה: bidiui-messenger-context-menu-before-switch.png">
+<li >באמצעות בחירת הפריט המתאים מתפריט View:
+<img border="0" src="../images/messenger-view-menu-before-switch.png" alt="תמונה: bidiui-messenger-view-menu-before-switch.png">
 </ul >
 
-<h3><a name="גרפיקת_כפתורים"> גרפיקת כפתורים </a></h3>
+<p>
+והתוצאה המתקבלת תהיה כיוון הפוך מן הכיוון הקודם:
 
+</p>
+<img border="0" src="../images/messenger-message-after-switch.png" alt="תמונה: bidiui-messenger-message-after-switch.png">
+
+
+<h3><a name="קביעה_ראשונית_של_כיוון_הודעות_חדשות"> קביעה ראשונית של כיוון הודעות חדשות </a></h3>
+
+<p>
+כאשר מתחילים לכתוב הודעה חדשה, ללא התוסף, מוזילה קובע להודעה כיוון משמאל לימין. עם התוסף, שני גורמים משפיעים על כיוונה של הודעה חדשה: כיוון ברירת-מחדל (אשר יכול להיות מימין לשמאל או משמאל לימין), והברירה האם לענות להודעה בכיוון שלה (ולא להשתמש תמיד בברירת המחדל). שתי אלו הינן אפשרויות המופיעות בלוח האפשרויות של התוסף (בחלק Message Composition).
+
+<p>
+נניח שבחרנו כי כיוון ברירת-המחדל להודעות יהיה משמאל לימין, אך כי תשובה להודעה תאותחל לפי כיוון ההודעה. כאשר תלחצו על כפתור 'הודעה חדשה', יתקבל חלון בו המלל שתכניסו יופיע מכוון משמאל לימין:
+
+</p>
+<img border="0" src="../images/new-message-ltr.png" alt="תמונה: bidiui-new-message-ltr.png">
+
+<p>
+(שימו לב לזוג כפתורי השליטה בכיוון - RTL/LTR - בסרגל הראשי; נדון בהם בהמשך)
+
+<p>
+לעומת זאת, אם תענו להודעה אשר הזיהוי האוטומטי קובע שכיוונה מימין לשמאל, גם התשובה תכוון כך:
+
+</p>
+<img border="0" src="../images/reply-rtl.png" alt="תמונה: bidiui-reply-rtl.png">
+
+
+<h3><a name="שינויי_כיוון_בעת_כתיבת_הודעות_מלל_פשוט"> שינויי כיוון בעת כתיבת הודעות מלל פשוט </a></h3>
+
+<p>
+בהודעות מלל פשוט יש רק כיוון כללי, של כל ההודעה. התוסף מאפשר ארבע דרכים לשנות אותו:
+
+<p>
 <ul >
-<li >אייל רוזנברג
+<li >שימוש בקיצור המקשים Ctrl+Shift+X (במק: Cmd+Shift+X)
+<li >לחיצה על הכפתור המתאים לכיוון הרצוי (RTL - מימין לשמאל, LTR - משמאל לימין) בסרגל הכלים הראשי:
+<img border="0" src="../images/composer-button-before-switch.png" alt="תמונה:  bidiui-composer-button-before-switch.png">
+<li >בחירת הפריט Switch Message Direction בתפריט-ההקשר של שדה ההודעה:
+<img border="0" src="../images/composer-context-menu-before-switch.png" alt="תמונה: bidiui-composer-context-menu-before-switch.png">
+<li >בחירת הפריט Switch Message Direction בתפריט View של חלון חיבור ההודעה:
+
+<img border="0" src="../images/composer-view-menu-before-switch.png" alt="תמונה: bidiui-composer-view-menu-before-switch.png">
 </ul >
 
-<h3><a name="לוקאליזציה"> לוקאליזציה </a></h3>
+<p>
+פעולה כזו תכוון את ההודעה בכיוון הפוך לכיוון הנוכחי (כפי שתואר לעיל עבור הצגת הודעות):
 
+</p>
+<img border="0" src="../images/composer-message-after-switch.png" alt="תמונה: bidiui-composer-message-after-switch.png">
+
+
+<h3><a name="התנהגות_מקש_ה-Enter_בכתיבת_הודעות_HTML"> התנהגות מקש ה-Enter בכתיבת הודעות HTML </a></h3>
+
+<p>
+ללא התוסף, החלון של לחיבור הודעות HTML מתוכנן במחשבה על תמליל ללא פסקאות - body text, ערוך שורות-שורות. התוסף משנה את ההתנהגות לזו המוכרת מ-Open Office ו-Microsoft Office: בעת חיבור הודעה נעשה שימוש טבעי בפסקאות. כך, לאחר התקנת התוסף, הקשת <strong>Enter</strong> תרד לפיסקה חדשה, והקשת <strong>Shift+Enter</strong> תרד לשורה חדשה בפיסקה הנוכחית (ע"י הכנסת line break).
+
+
+
+<h3><a name="שינויי_כיוון_בעת_כתיבת_הודעות_HTML"> שינויי כיוון בעת כתיבת הודעות HTML </a></h3>
+
+<p>
+בהודעות HTML, לכל פיסקה יכול להיות כיוון שונה מיתר הפיסקאות. התוסף משנה את התנהגות עורך ההודעות החדשות כך שבהקשת Enter, מתחילה פיסקה חדשה (כנהוג ב-OpenOffice ו-MS Word); כדי להכניס שורה חדשה בתוך פיסקה, יש להקיש Shift+Enter.
+
+<p>
+לסרגל העיצוב מתווסף זוג כפתורי כיוון פיסקה. אלו מתארים מהו כיוון הפיסקה הנוכחית:
+
+</p>
+<img border="0" src="../images/composer-html-current-dir.png" alt="תמונה: bidiui-composer-html-current-dir.png">
+
+<p>
+כאשר מסומן מלל ממספר פיסקאות, הכפתורים מציגים את הכיוון המשותף לכל הפיסקאות הללו - אם יש כזה; אחרת, הן משקפות את העובדה שאין כיוון אחיד:
+
+</p>
+<img border="0" src="../images/composer-html-no-single-dir.png" alt="תמונה: bidiui-composer-html-no-single-dir.png">
+
+<p>
+לפני שניתן לשנות את כיוונה של פיסקה, יש להציב בה את הסמן; לחילופין ניתן לבחור מלל ממספר פיסקאות, כך ששינויי הכיוון ישפיע על כולן. לביצוע השינוי עצמו ישנן שלוש דרכים:
+
+<p>
 <ul >
-<li >אנגלית:
-<ul ><li > מופי
-<li > אסף רומנו
-<li >אייל רוזנברג
+<li >לחיצה על הכפתור המתאים לכיוון הרצוי (RTL - מימין לשמאל, LTR - משמאל לימין) בסרגל הכלים הראשי:
+<img border="0" src="../images/composer-html-button-before-switch.png" alt="תמונה:  bidiui-composer-html-button-before-switch.png">
+<li >בחירת הפריט Switch Paragraph Direction בתפריט-ההקשר של שדה ההודעה:
+<img border="0" src="../images/composer-html-context-menu-before-switch.png" alt="תמונה: bidiui-composer-html-context-menu-before-switch.png">
+<li >בחירת הפריט Switch Paragraph Direction בתפריט Format של חלון חיבור ההודעה:
+<img border="0" src="../images/composer-html-format-menu-before-switch.png" alt="תמונה: bidiui-composer-html-format-menu-before-switch.png">
 </ul >
-<li >עברית:
-<ul ><li >אייל רוזנברג</ul >
-<li >ערבית:
-<ul ><li >איימן חוריה</ul >
-</ul >
+
+
+<h4><a name="שינוי_'הכיוון_הכללי'_של_הודעות_HTML"> שינוי 'הכיוון הכללי' של הודעות HTML </a></h4>
+
+<p>
+ניתן להחליף את 'הכיוון הכללי' של המסמך באמצעות פריט-התפריט View-&gt;Switch Message Direction, כמו במקרה של הודעת מלל פשוט. החלפה זו קובעת את כיוון כל הפיסקאות עבורן לא נכפה כיוון מפורש. ניתן להסיר את כפיית הכיוון של פיסקאות מסומנות (או של הפיסקה הנוכחית, בהיעדר סימון), באמצעות פריט-התפריט Format|Clear Paragraph Direction.
+
+
+<h3><a name="הכנסת_תווי-בקרה_המשפיעים_על_הכיוון"> הכנסת תווי-בקרה המשפיעים על הכיוון </a></h3>
+
+<p>
+תקן Unicode כולל תווים שונים להשפעה על הצגתו של תמליל, מעבר לכיוון החיצוני שנקבע לו. שניים מן התווים החשובים ביניהם הינם 'סימן מימין-לשמאל' (Right-to-Left Mark) ו-'סימן משמאל-לימין' (Left-to-Right Mark). התוסף מאפשר להכניס תווים אלו להודעות מלל פשוט ו-HTML, באמצעות בחירת התו הרצוי מתפריט Insert-&gt;Control Characters:
+
+</p>
+<img border="0" src="../images/composer-insert-menu-before-lrm.png" alt="תמונה: bidiui-composer-insert-menu-before-lrm.png">
+
+<p>
+
+או מתפריט ההקשר (בתת-התפריט Insert Control Characters):
+
+</p>
+<img border="0" src="../images/composer-context-menu-before-lrm.png" alt="תמונה: bidiui-composer-context-menu-before-lrm.png">
+
+<p>
+אלו אינם תוים נראים לעין - רק השפעתם על הצגת הטקסט ניתנת להבחנה:
+
+</p>
+<img border="0" src="../images/composer-message-after-lrm.png" alt="תמונה: bidiui-composer-message-after-lrm.png">
+
+<p>
+עם זאת, תוים אלו מהווים חלק ממלל ההודעה ונשמרים גם בהודעות מלל פשוט וגם בהודעות HTML.
+</p>
 
 <hr>
 
