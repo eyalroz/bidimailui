@@ -23,24 +23,6 @@ div#english-navbar #project-navigation th{
   margin-right: 3px;
 }
 
-/*
-div#hebrew-navbar #project-navigation a{
-  text-decoration: none;
-  border-right: 1px solid black;
-  border-left: none;
-  padding-right: 6px;
-  padding-left: 5px;
-}
-
-div#hebrew-navbar #project-navigation a.first-item{
-  border-right: none;
-}
-
-div#hebrew-navbar #project-navigation th{
-  margin-left: 3px;
-}
-*/
-
 .project-name {
   background: inherit;
   color: #900;
