@@ -265,9 +265,10 @@ div.hebrew-content {
   font-family: arial, sans-serif;
 }
 
- ul#version-history > li {
+ ul#version-history > li > a  {
   margin-bottom: 9pt;
   font-weight: bold;
+  display: block;  
 }
 
 
