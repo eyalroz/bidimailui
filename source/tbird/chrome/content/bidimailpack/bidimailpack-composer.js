@@ -499,6 +499,7 @@ function findClosestBlockElement(node) {
 }
 
 function ApplyToSelectionBlockElements(evalStr) {
+  // jsConsoleService.logStringMessage('----- ApplyToSelectionBlockElements() -----');
   var editor = GetCurrentEditor();
   if (!editor) {
     alert("Could not acquire editor object.");
@@ -510,32 +511,59 @@ function ApplyToSelectionBlockElements(evalStr) {
     try {
       for (i=0; i<editor.selection.rangeCount; ++i) {
         var range = editor.selection.getRangeAt(i);
-        var node = range.startContainer;
+        var startContainer = range.startContainer;
+        var endContainer = range.endContainer;
+        
+        // special case: if our range is the entire body, what we want to change
+        // are its children's directions, not the body direction - we have a
+        // special function for that
+        
+        if (range.startContainer.nodeName == "BODY") {
+          startContainer = range.startContainer.firstChild;
+          endContainer = range.startContainer.lastChild;
+        }
+        
+        // jsConsoleService.logStringMessage('endContainer:' + endContainer + "\ntype: " + endContainer.nodeType + "\nHTML:\n" + endContainer.innerHTML + "\nvalue:\n" + endContainer.nodeValue);
+
+        var node = startContainer;
         // walk the tree till we find the endContainer of the selection range,
         // giving our directionality style to everything on our way
         do {
+          // jsConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
+
           var closestBlockElement = findClosestBlockElement(node);
           if (closestBlockElement) {
+            // jsConsoleService.logStringMessage('found closestBlockElement:' + closestBlockElement + "\ntype: " + closestBlockElement.nodeType + "\nHTML:\n" + closestBlockElement.innerHTML + "\nvalue:\n" + closestBlockElement.nodeValue);
             eval(evalStr);
           }
-          else
+          else {
+            jsConsoleService.logStringMessage('could not find cbe');
             break;
+          }
 
           // This check should be placed here, not as the 'while'
           // condition, to handle cases where begin == end
-          if (node == range.endContainer)
+          if (node == endContainer) {
+            // jsConsoleService.logStringMessage('at end container, stopping traversal');
             break;
+          }
 
           // Traverse through the tree in order
-          if (node.firstChild)
+          if (node.firstChild) {
+            // jsConsoleService.logStringMessage('descending to first child');
             node = node.firstChild;
-          else if (node.nextSibling)
+          }
+          else if (node.nextSibling) {
+            // jsConsoleService.logStringMessage('moving to next sibling');
             node = node.nextSibling;
+          }
           else
             // find a parent node which has anything after
             while (node = node.parentNode) {
+              // jsConsoleService.logStringMessage('moved up to parent node');
               if (node.nextSibling) {
                 node = node.nextSibling;
+                // jsConsoleService.logStringMessage('moved to next sibling');
                 break;
               }
             }
