@@ -128,11 +128,27 @@ function composeWindowEditorOnLoadHandler() {
   // the reason for it is that without a timeout, it seems
   // that gMsgCompose does often not yet exist when
   // the OnLoad handler runs...
-  setTimeout('composeWindowEditorOnLoadHandler2();', 50);
+  setTimeout('composeWindowEditorDelayedOnLoadHandler();', 0);
 }
 
-function composeWindowEditorOnLoadHandler2() {
+
+function composeWindowEditorOnReopenHandler() {
+  // another ugly hack (see composeWindowEditorOnLoadHandler):
+  // if we don't delay before running the other handler, the
+  // message text will not be available so we will not know
+  // whether or not this is a reply
+  setTimeout('composeWindowEditorDelayedOnLoadHandler();', 0);
+}
+
+function composeWindowEditorDelayedOnLoadHandler() {
   var body = document.getElementById('content-frame').contentDocument.body;
+
+  //the following 3 lines enable logging messages to the javascript console
+  //by doing jsConsoleService.logStringMessage('blah') 
+
+  netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+  var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
+  jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 
   // Handle message direction
   var messageIsAReply = false;
@@ -191,7 +207,7 @@ function InstallComposeWindowEditorHandler() {
   // window is opened the handler does not run even once
 
   document.addEventListener('load', composeWindowEditorOnLoadHandler, true);
-  document.addEventListener('compose-window-reopen', composeWindowEditorOnLoadHandler2, true);
+  document.addEventListener('compose-window-reopen', composeWindowEditorOnReopenHandler, true);
   document.addEventListener('keypress', onKeyPress, true);
 }
 
