@@ -10,7 +10,7 @@ function hasRTLWord(element) {
   // we use definitions from nsBiDiUtils.h as the criteria for BiDi text;
   // cf. the macros IS_IN_BMP_RTL_BLOCK and IS_RTL_PRESENTATION_FORM
   
-  var re = /(^|\s|[<>])([\u0590-\u08FF]|[\uFB1D-\uFDFF]|[\uFE70-\uFEFC])+($|\s|[<>])/;
+  var re = /(^|\s|[<>\.;,:])([\u0590-\u08FF]|[\uFB1D-\uFDFF]|[\uFE70-\uFEFC])+($|\s|[<>\.;,:])/;
 
   try {
     var iterator = new XPathEvaluator();
