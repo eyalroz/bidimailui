@@ -73,10 +73,10 @@ function SetDocumentDirection(dir) {
   body.setAttribute('dir', dir);
 }
 
-function InsertEntity(entityHTML) {
+function InsertControlCharacter(controlCharacter) {
   editor = GetCurrentEditor();
   editor.beginTransaction();
-  editor.insertHTML(entityHTML);
+  editor.insertText(controlCharacter);
   editor.endTransaction();
 }
 
