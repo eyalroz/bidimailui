@@ -283,10 +283,8 @@ function HandleDirectionButtons() {
     document.getElementById('directionality-separator-formatting-bar').setAttribute('hidden',hiddenbuttons);   
   }
 
-  // TB ONLY: assume default theme per OS used -> apply it as an attbiute
-  // on the mainbar buttons so we they can get different style rules on mac
-  // (see bidimailpack.css in skin/)
-  loadThemeAttributeOnMainbarButtons();
+  // TB ONLY: allow mac-specific style-rules (see bidimailpack.css in skin/classic/)
+  loadOSAttributeOnWindow();
 }
 
 function loadParagraphMode() {
@@ -880,15 +878,14 @@ function CommandUpdate_MsgComposeDirection() {
 }
 
 /* TB ONLY */
-function loadThemeAttributeOnMainbarButtons() {
+function loadOSAttributeOnWindow() {
   // We use different style rules on mac pinstripe theme
-  // XXX: use "winstripe" on mac for any theme but the default
-  var aClassicTheme;
+  var aSystem;
 
   if (navigator.platform == "MacPPC")
-    aClassicTheme = "pinstripe";
+    aSystem = "mac";
   else
-    aClassicTheme = "winstripe";
+    aSystem = "not_mac";
   
-  document.documentElement.setAttribute("classictheme", aClassicTheme);
+  document.documentElement.setAttribute("system", aSystem);
 }
