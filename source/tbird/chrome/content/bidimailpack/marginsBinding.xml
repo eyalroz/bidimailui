@@ -73,6 +73,9 @@
             </method>
             <method name="saveToPref">
                 <body><![CDATA[
+                      var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+                      prefs.setCharPref(this.prefbase + ".value", this.value);
+                      prefs.setCharPref(this.prefbase + ".scale", this.scale);
                 ]]></body>
             </method>
         </implementation>
