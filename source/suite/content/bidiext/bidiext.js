@@ -19,16 +19,13 @@ var bidiext = {
 	},
     showHideContext: function() {
         document.getElementById('context_invertdir').hidden = document.getElementById('context-undo').hidden;
+        document.getElementById('context_page_dir').hidden = !document.getElementById('context-undo').hidden;
     },
     showHideEdit: function() {
         if (document.commandDispatcher.focusedElement)
         {    
-            var whatTag = document.commandDispatcher.focusedElement.tagName;
-            if ((whatTag == 'INPUT' || whatTag == 'TEXTAREA') || whatTag == 'html:input') 
-            {
-                document.getElementById('edit_invertdir').setAttribute("disabled", "false");
-                return;
-            }
+            document.getElementById('edit_invertdir').setAttribute("disabled", "false");
+            return;
         }       
         document.getElementById('edit_invertdir').setAttribute("disabled", "true");
     },

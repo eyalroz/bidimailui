@@ -3,7 +3,7 @@ const displayName         = "BiDi UI";
 const name                = "bidiext";
 const jarName             = name + ".jar";
 const existsInApplication = File.exists(getFolder(getFolder("chrome"), jarName));
-const version             = "0.3.5";
+const version             = "0.3.6";
 
 var contentFlag = CONTENT | PROFILE_CHROME;
 var error       = null;
