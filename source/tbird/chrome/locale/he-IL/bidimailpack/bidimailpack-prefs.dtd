@@ -1,0 +1,13 @@
+﻿<!ENTITY bidimailpack-settings                    "הגדרות BiDi UI">
+<!ENTITY message-display-groupbox-caption        "תצוגת הודעות">
+<!ENTITY autodetect                              "זיהוי כיוון אוטומטי">
+<!ENTITY message-composition-groupbox-caption    "חיבור הודעות">
+<!ENTITY default-dir                             "כיוון ברירת-מחדל:">
+<!ENTITY rtl                                     "מימין לשמאל">
+<!ENTITY ltr                                     "משמאל לימין">
+<!ENTITY always-reply-in-default-dir             "ענה תמיד להודעות בכיוון ברירת-המחדל">
+<!ENTITY more-info                               "למידע נוסף:">
+<!ENTITY link-text                               "דף-הבית של התוסף BidiUI">
+<!ENTITY bidimailpack-preftree-label             "BiDi UI">
+<!ENTITY display-buttons                         "הצג כפתורי כיוון הודעה">
+<!ENTITY display-message-buttons-for-htmlmail    "הצג כפתורי כיוון כל ההודעה גם בחיבור הודעות HTML">
