@@ -11,6 +11,8 @@
 <!ENTITY bidimailpack-preftree-label             "BiDi UI">
 <!ENTITY display-buttons                         "Display Direction Setting Buttons">
 
+<!ENTITY marginTopTitle.label                    "Paragraphs' top margin:">
+<!ENTITY marginBottomTitle.label                 "Paragraphs' bottom margin:">
 <!ENTITY cmScale.label                           "cm">
 <!ENTITY cmScale.accesskey                       "c">
 <!ENTITY pixelScale.label                        "pixels">

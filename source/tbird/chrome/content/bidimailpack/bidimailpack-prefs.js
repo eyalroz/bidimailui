@@ -54,4 +54,5 @@ function saveValues()
     prefs.setBoolPref('mail.compose.show_direction_buttons', element.checked);
     
     document.getElementById('margintop').saveToPrefs();
+    document.getElementById('marginbottom').saveToPrefs();
 }
