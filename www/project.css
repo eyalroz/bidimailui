@@ -78,9 +78,9 @@ div#english-navbar {
   background-repeat: no-repeat;
   color: #900;
   font-family: helvetica,arial,sans-serif, serif;
-  padding-top: 0;
+/*  padding-top: 0;*/
   margin-bottom: 0;
-  margin-top: 0;
+/*  margin-top: 0;*/
   vertical-align: top;
 }
 
