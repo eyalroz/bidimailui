@@ -135,13 +135,13 @@ function composeWindowEditorOnLoadHandler2() {
   var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
 
   // show rlm & lrm menu items?
-  var hiddenbuttons = true;
+  var hiddenControlCharItems = true;
   try {
     if (prefs.getBoolPref('mail.compose.show_context_control_characters'))
-      hiddenbuttons = false;
+      hiddenControlCharItems = false;
   }
   catch(e) {}
-  document.getElementById('rlm-lrm-broadcaster').setAttribute('hidden', hiddenbuttons);
+  document.getElementById('rlm-lrm-broadcaster').setAttribute('hidden', hiddenControlCharItems);
   var body = document.getElementById('content-frame').contentDocument.body;
 
   // Handle message direction
