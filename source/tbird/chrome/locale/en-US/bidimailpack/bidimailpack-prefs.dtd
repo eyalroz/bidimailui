@@ -17,5 +17,5 @@
 <!ENTITY cmScale.accesskey                       "c">
 <!ENTITY pixelScale.label                        "pixels">
 <!ENTITY pixelScale.accesskey                    "p">
-<!ENTITY precentScale.label                      "precents">
-<!ENTITY precentScale.accesskey                  "r">
+<!ENTITY ptScale.label                           "pt">
+<!ENTITY ptScale.accesskey                       "t">

@@ -84,14 +84,13 @@
   -moz-image-region: rect(0px 76px 18px 57px) !important;
 }
 
-#margintop[status="non_valid_value"] > *
-{
+#margintop[status="non_valid_value"] > *,
+#marginbottom[status="non_valid_value"] > * {
   background-color: #FF6666;
   color: #FFFFFF;
 }
 
-#marginbottom[status="non_valid_value"] > *
-{ 
-  background-color: #FF6666 !important;
-  color: #FFFFFF;
+#margintop[status="non_valid_value"] > textbox,
+#marginbottom[status="non_valid_value"] > textbox {
+  font-weight: bold;
 }
