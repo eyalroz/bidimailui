@@ -9,7 +9,8 @@ Mozilla resource:///res/html.css
 */
 
 code {
-  unicode-bidi: embed;
+  direction: ltr;
+  unicode-bidi: bidi-override;
 }
 
 #project-navigation a{
