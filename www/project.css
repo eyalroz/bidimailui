@@ -153,7 +153,7 @@ a.download-xpi {
   margin-right: 35%;
 }
 
-div#hebrew-content ul li {
+div#hebrew-content ul li , div#english-content ul li {
   font-size: small;
 }
 
