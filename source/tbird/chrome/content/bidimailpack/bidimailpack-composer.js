@@ -496,7 +496,7 @@ function InsertParagraph()
   var isStyleItalic = { value: false };
   EditorGetTextProperty("i", "", "", isStyleItalic, anyHas, allHas);
   var isStyleUnderline = { value: false };
-  EditorGetTextProperty("u", "", "", isStyleItalic, anyHas, allHas);
+  EditorGetTextProperty("u", "", "", isStyleUnderline, anyHas, allHas);
 
   // ------------------------------- "remember old style"
 
