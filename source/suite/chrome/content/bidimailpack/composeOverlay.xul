@@ -19,6 +19,7 @@
   <broadcaster id="rtl-document-direction-broadcaster" checked="false" hidden="true"/>
   <broadcaster id="ltr-paragraph-direction-broadcaster" checked="false"/>
   <broadcaster id="rtl-paragraph-direction-broadcaster" checked="false"/>
+  <broadcaster id="rlm-lrm-broadcaster" hidden="false"/>
 </broadcasterset>
 
 <commandset id="composerStyleMenuItems">
@@ -69,6 +70,11 @@ main toolbar buttons are whole-document direction controls -->
   <menuitem id="contextBodyDirectionItem" label="&menu-bidimail-switch-document-direction:label;"
     accesskey="&menu-bidimail-switch-document-direction:accesskey;" 
     command="cmd_switch_document" />
+  <menuseparator observes="rlm-lrm-broadcaster" />
+  <menuitem id="contextInsertLRM" label="&menu-bidimail-insert-lrm:label;"
+    oncommand="InsertEntity('&amp;lrm;')" observes="rlm-lrm-broadcaster" />
+  <menuitem id="contextInsertRLM" label="&menu-bidimail-insert-rlm:label;"
+    oncommand="InsertEntity('&amp;rlm;')" observes="rlm-lrm-broadcaster" />
 </popup>
 
 <menu id="menu_View">

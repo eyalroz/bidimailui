@@ -119,8 +119,8 @@ function composeWindowEditorOnLoadHandler() {
   // Direction Controller
   top.controllers.insertControllerAt(1, directionSwitchController);
 
-  // Decide what to show in the contextual menu
-  // paragraph or body?
+  // decide which direction switch item should appear in the context menu -
+  // the switch for the whole document or for the current paragraph
   document.getElementById('contextSwitchParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');  
   document.getElementById('contextBodyDirectionItem').setAttribute('hidden', editorType == 'htmlmail');
 
@@ -165,9 +165,9 @@ function composeWindowEditorOnLoadHandler2() {
         else
           SetDocumentDirection('ltr');
 
-        directionSwitchController.setAllCasters();
         // the initial setting; perhaps instead of this
         // we should have an 'init' method for the controller?
+        directionSwitchController.setAllCasters();
 
         return;
 

@@ -1,5 +1,7 @@
 ﻿<!ENTITY menu-bidimail-switch-document-direction:label       "הפוך כיוון הודעה">
 <!ENTITY menu-bidimail-switch-document-direction:accesskey   "g">
+<!ENTITY menu-bidimail-insert-lrm:label                      "הכנס סימן משמאל-לימין (LRM)">
+<!ENTITY menu-bidimail-insert-rlm:label                      "הכנס סימן מימין-לשמאל (RLM)">
 <!ENTITY key-bidimail-switch-document-direction:keycode      "X">
 <!ENTITY key-bidimail-switch-document-direction:modifiers    "accel,shift">
 
