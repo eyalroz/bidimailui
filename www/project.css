@@ -214,8 +214,12 @@ div#english-content {
   font-size: 0.9em;
 }
 
-div.with-news {
+div.with-english-news {
   padding-right: 184px !important;
+}
+
+div.with-hebrew-news {
+  padding-left: 184px !important;
 }
 
 a.download-xpi {
