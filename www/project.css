@@ -204,10 +204,14 @@ div#hebrew-content {
 
 div#english-content {
   direction: ltr;
-  padding-right: 174px;
+  padding-right: 10px;
   padding-left: 10px;
   text-align: justify;
   font-size: 0.9em;
+}
+
+div.with-news {
+  padding-right: 174px !important;
 }
 
 a.download-xpi {
