@@ -518,6 +518,48 @@ function onKeyPress(ev)
   if (top.document.commandDispatcher.focusedWindow != content)
     return;
 
+  // workaround for Mozilla bug 262497 - let's make Ctrl+Home and Ctrl+End
+  // behave properly...
+  
+  // XXX TODO: add a version check here once the patch from 262497 is checked in
+  
+  if (ev.ctrlKey){
+
+    // move the caret ourselves if need be
+
+    if (ev.keyCode == KeyEvent.DOM_VK_HOME) {
+      var node = document.getElementById('content-frame').contentDocument.body;;
+      do {
+        node = node.firstChild;
+      } while (node.hasChildNodes());
+      var editor = GetCurrentEditor();
+      editor.selection.collapse(node, 0);
+    }
+    else if (ev.keyCode == KeyEvent.DOM_VK_END) {
+      var node = document.getElementById('content-frame').contentDocument.body;;
+      do {
+        node = node.lastChild;
+      } while (node.hasChildNodes());
+      var editor = GetCurrentEditor();
+
+      // XXX TODO: special-case dummy nodes at end of document,
+      //           e.g. dummy <br>'s, dummy whitespace and dummy <p>'s
+
+      if (node.length)
+        editor.selection.collapse(node, node.length);
+      else editor.selection.collapse(node, 0);
+    }
+
+    // and prevent the default behavior
+
+    if ((ev.keyCode == KeyEvent.DOM_VK_HOME) || (ev.keyCode == KeyEvent.DOM_VK_END)) {
+      // prevent default behavior
+      ev.preventDefault();
+      ev.stopPropagation();
+      ev.initKeyEvent("keypress", false, true, null, false, false, false, false, 0, 0);
+    }
+  }
+
   // Steal all plain enters without modifiers (e.g. do not change
   // behaivor of Shift+Enter which inserts a <br>, Ctrl+Enter which
   // sends the message etc.)
