@@ -1009,6 +1009,7 @@ var directionSwitchController = {
         ClearParagraphDirection();
         break;
       default:
+        dump("The command \"" + command + "\" isn't supported by the direction switch controller\n");
         return false;
     }
     this.setAllCasters();
