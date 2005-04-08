@@ -890,7 +890,7 @@ function InsertParagraph() {
   // If the previous paragraph has a dir attribute, apply it to the new paragraph
   try {
     if (prevPar.hasAttribute("dir"))
-      editor.setAttribute(par, "dir", prevPar.dir);
+      editor.setAttribute(par, "dir", prevPar.getAttribute("dir"));
   }
   catch (er) {}
   // ------------------------------- "set old style" ------
