@@ -1,5 +1,5 @@
 <!ENTITY menu-bidimail-switch-document-direction.label                "Switch Message Direction">
-<!ENTITY menu-bidimail-switch-document-direction.accesskey            "g">
+<!ENTITY menu-bidimail-switch-document-direction.accesskey            "w">
 <!ENTITY key-bidimail-switch-document-direction.keycode               "X">
 <!ENTITY key-bidimail-switch-document-direction.modifiers             "accel,shift">
 
@@ -17,5 +17,7 @@
 <!ENTITY menu-bidimail-contol-character.accesskey                     "n">
 <!ENTITY menu-bidimail-insert-contol-character.label                  "Insert Control Character">
 <!ENTITY menu-bidimail-insert-contol-character.accesskey              "I">
-<!ENTITY menu-bidimail-rlm.label                                      "Right-to-Left Mark">
 <!ENTITY menu-bidimail-lrm.label                                      "Left-to-Right Mark">
+<!ENTITY menu-bidimail-lrm.accesskey                                  "L">
+<!ENTITY menu-bidimail-rlm.label                                      "Right-to-Left Mark">
+<!ENTITY menu-bidimail-rlm.accesskey                                  "R">

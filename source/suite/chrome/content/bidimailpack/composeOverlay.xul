@@ -124,12 +124,14 @@ main toolbar buttons are whole-document direction controls -->
         label="&menu-bidimail-insert-contol-character.label;"
         accesskey="&menu-bidimail-insert-contol-character.accesskey;">
     <menupopup id="menu_Context_ControlCharacters_Popup">
-      <menuitem id="contextInsertRLM"
-                oncommand="InsertControlCharacter('\u200f');"
-                label="&menu-bidimail-rlm.label;" />
       <menuitem id="contextInsertLRM"
                 oncommand="InsertControlCharacter('\u200e');"
+                accesskey="&menu-bidimail-lrm.accesskey;"
                 label="&menu-bidimail-lrm.label;" />
+      <menuitem id="contextInsertRLM"
+                oncommand="InsertControlCharacter('\u200f');"
+                accesskey="&menu-bidimail-rlm.accesskey;"
+                label="&menu-bidimail-rlm.label;" />
     </menupopup>
   </menu>
 </popup>
