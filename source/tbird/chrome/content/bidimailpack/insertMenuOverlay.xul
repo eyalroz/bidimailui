@@ -14,10 +14,12 @@
       label="&menu-bidimail-contol-character.label;"
       accesskey="&menu-bidimail-contol-character.accesskey;">
       <menupopup id="menu_Insert_ControlCharacters_Popup">
-        <menuitem id="menu_insertInsertRLM" label="&menu-bidimail-rlm.label;"
-          oncommand="InsertControlCharacter('\u200f');" />
         <menuitem id="menu_insertInsertLRM" label="&menu-bidimail-lrm.label;"
+          accesskey="&menu-bidimail-lrm.accesskey;" 
           oncommand="InsertControlCharacter('\u200e');" />
+        <menuitem id="menu_insertInsertRLM" label="&menu-bidimail-rlm.label;"
+          accesskey="&menu-bidimail-rlm.accesskey;" 
+          oncommand="InsertControlCharacter('\u200f');" />
       </menupopup>
     </menu>
   </menupopup>

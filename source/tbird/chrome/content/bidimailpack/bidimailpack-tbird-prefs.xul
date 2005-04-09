@@ -20,18 +20,18 @@
   <description>&default-dir;</description>
   <hbox class="indent">
     <radiogroup id="bidimailpack-default-dir">
-      <radio id="bidimailpack-default-dir-ltr" value="ltr" label="&ltr;" selected="true" />
-      <radio id="bidimailpack-default-dir-rtl" value="rtl" label="&rtl;" />
+      <radio id="bidimailpack-default-dir-ltr" value="ltr" label="&ltr.label;" accesskey="&ltr.accesskey;" />
+      <radio id="bidimailpack-default-dir-rtl" value="rtl" label="&rtl.label;" accesskey="&rtl.accesskey;" />
     </radiogroup>
   </hbox>
 
   <spacer style="height: 0.75em;" />
 
   <checkbox id="bidimailpack-reply-in-default-dir" 
-            checked="false" label="&always-reply-in-default-dir;"
+            checked="false" label="&always-reply-in-default-dir.label;" accesskey="&always-reply-in-default-dir.accesskey;"
             autostretch="never" />
   <checkbox id="bidimailpack-display-buttons"
-            checked="true" label="&display-buttons;"
+            checked="true" label="&display-buttons.label;" accesskey="&display-buttons.accesskey;"
             autostretch="never" />
 
   <spacer style="height: 0.75em;" />
