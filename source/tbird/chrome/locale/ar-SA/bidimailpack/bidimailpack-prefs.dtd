@@ -1,14 +1,18 @@
 <!ENTITY bidimailpack-settings                   "BiDi Mail UI إعدادات">
 <!ENTITY message-composition-groupbox-caption    "تأليف الرّسالة">
 <!ENTITY default-dir                             "الاتّجاه الافتراضي:">
-<!ENTITY rtl                                     "يمين إلى يسار">
-<!ENTITY ltr                                     "يسار إلى يمين">
-<!ENTITY always-reply-in-default-dir             "الرّد دائماً بالاتّجاه التّلقائي">
+<!ENTITY ltr.label                               "يسار إلى يمين">
+<!ENTITY ltr.accesskey                           "ر">
+<!ENTITY rtl.label                              "يمين إلى يسار">
+<!ENTITY rtl.accesskey                           "م">
+<!ENTITY always-reply-in-default-dir.label       "الرّد دائماً بالاتّجاه التّلقائي">
+<!ENTITY always-reply-in-default-dir.accesskey   "ت">
 <!ENTITY more-info                               "لمزيد من المعلومات:">
 <!ENTITY guide-link-text                         "دليل المستخدم لـ BiDi Mail UI">
 <!ENTITY guide-url                               "http://bidiui.mozdev.org/mail/guide.html">
 <!ENTITY bidimailpack-preftree-label             "BiDi Mail UI">
-<!ENTITY display-buttons                         "عرض أزرار إعداد الاتّجاه">
+<!ENTITY display-buttons.label                   "عرض أزرار إعداد الاتّجاه">
+<!ENTITY display-buttons.accesskey               "ع">
 
 <!ENTITY verticalParagraphMargins.label          "هوامش الفقرة العموديّة:">
 <!ENTITY cmScale.label                           "سم">
