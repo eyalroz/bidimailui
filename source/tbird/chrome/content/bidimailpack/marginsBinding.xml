@@ -9,7 +9,7 @@
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
     <binding id="marginsBinding">
         <resources>
-          <stylesheet src="chrome://bidimailpack/skin/bidimailpack.css"/>
+            <stylesheet src="chrome://bidimailpack/skin/bidimailpack.css"/>
         </resources>
         <content>
             <xul:textbox size="4" />
@@ -126,8 +126,8 @@
         </implementation>
 
         <handlers>
-          <handler event="keyup" action="this.validateData();" />
-          <handler event="click" action="this.validateData();" />
+            <handler event="keyup" action="this.validateData();" />
+            <handler event="click" action="this.validateData();" />
         </handlers>
     </binding>
 </bindings>
