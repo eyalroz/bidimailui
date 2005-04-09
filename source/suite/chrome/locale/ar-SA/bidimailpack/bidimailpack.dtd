@@ -1,14 +1,14 @@
 <!ENTITY menu-bidimail-switch-document-direction.label                "تحويل اتّجاه الرّسالة">
-<!ENTITY menu-bidimail-switch-document-direction.accesskey            "g">
+<!ENTITY menu-bidimail-switch-document-direction.accesskey            "ر">
 <!ENTITY menu-bidimail-insert-lrm.label                               "إدراج علامة يسار إلى يمين">
 <!ENTITY menu-bidimail-insert-rlm.label                               "إدراج علامة يمين إلى يسار">
 <!ENTITY key-bidimail-switch-document-direction.keycode               "X">
 <!ENTITY key-bidimail-switch-document-direction.modifiers             "accel,shift">
 
 <!ENTITY menu-bidimail-switch-paragraph-direction.label        "تحويل اتّجاه الفقرة">
-<!ENTITY menu-bidimail-switch-paragraph-direction.accesskey    "w">
+<!ENTITY menu-bidimail-switch-paragraph-direction.accesskey    "ف">
 <!ENTITY menu-bidimail-clear-paragraph-direction.label         "مسح اتّجاه الفقرة">
-<!ENTITY menu-bidimail-clear-paragraph-direction.accesskey     "a">
+<!ENTITY menu-bidimail-clear-paragraph-direction.accesskey     "م">
 
 <!ENTITY bidimail-ltr-button.label                      "يسار إلى يمين">
 <!ENTITY bidimail-ltr-button.tip                        "تحديد الاتّجاه يسار إلى يمين">
@@ -16,8 +16,10 @@
 <!ENTITY bidimail-rtl-button.tip                        "تحديد الاتّجاه يمين إلى يسار">
 
 <!ENTITY menu-bidimail-contol-character.label                         "رمز تحكّم">
-<!ENTITY menu-bidimail-contol-character.accesskey                     "n">
+<!ENTITY menu-bidimail-contol-character.accesskey                     "ت">
 <!ENTITY menu-bidimail-insert-contol-character.label                  "إدراج رمز تحكّم">
-<!ENTITY menu-bidimail-insert-contol-character.accesskey              "I">
-<!ENTITY menu-bidimail-rlm.label                                      "علامة يمين إلى يسار">
+<!ENTITY menu-bidimail-insert-contol-character.accesskey              "ت">
 <!ENTITY menu-bidimail-lrm.label                                      "علامة يسار إلى يمين">
+<!ENTITY menu-bidimail-lrm.accceskey                              "م">
+<!ENTITY menu-bidimail-rlm.label                                      "علامة يمين إلى يسار">
+<!ENTITY menu-bidimail-rlm.accceskey                              "ر">

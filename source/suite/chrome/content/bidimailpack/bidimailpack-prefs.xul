@@ -20,7 +20,7 @@
       if (header)
       {
         // TODO: find a more respectable place for the version string
-        const version = 'v' + '0.6.3';
+        const version = 'v' + '0.6.4';
         header.setAttribute("description", version);
       }
       initValues();
@@ -32,13 +32,13 @@
     <description>&default-dir;</description>
       <hbox class="indent">
         <radiogroup id="bidimailpack-default-dir">
-          <radio id="bidimailpack-default-dir-ltr" value="ltr" label="&ltr;" selected="true" />
-          <radio id="bidimailpack-default-dir-rtl" value="rtl" label="&rtl;" />
+          <radio id="bidimailpack-default-dir-ltr" value="ltr" label="&ltr.label;" accesskey="&ltr.accesskey;" selected="true" />
+          <radio id="bidimailpack-default-dir-rtl" value="rtl" label="&rtl.label;" accesskey="&rtl.accesskey;" />
         </radiogroup>
       </hbox>
       <spacer />
-      <checkbox id="bidimailpack-reply-in-default-dir" checked="false" label="&always-reply-in-default-dir;" autostretch="never" />
-      <checkbox id="bidimailpack-display-buttons" checked="false" label="&display-buttons;" autostretch="never" />
+      <checkbox id="bidimailpack-reply-in-default-dir" checked="false" label="&always-reply-in-default-dir.label;" accesskey="&always-reply-in-default-dir.accesskey;" autostretch="never" />
+      <checkbox id="bidimailpack-display-buttons" checked="false" label="&display-button.labels;" accesskey="&display-buttons.accesskey;" autostretch="never" />
 
     <spacer style="height: 1em" />
     <hbox align="center">
