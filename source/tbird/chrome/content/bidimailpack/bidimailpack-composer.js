@@ -177,7 +177,7 @@ function GetCurrentSelectionDirection() {
 
       if (node == range.endContainer) {
         // jsConsoleService.logStringMessage('at end container, stopping traversal');
-        continue;
+        break; // proceed to the next selection range
       }
 
       // is there is a child node which need be traversed?
@@ -201,18 +201,18 @@ function GetCurrentSelectionDirection() {
       // which need be traversed?
 
       do {
-         if (node.nextSibling) {
-           node = node.nextSibling;
-           // jsConsoleService.logStringMessage('moving to next sibling');
-           if  (node.nodeType != Node.TEXT_NODE)
-             break; // we've found the next node to visit
-           else continue; // try the next sibling
-         }
-         else node = node.parentNode;
-         // jsConsoleService.logStringMessage('moving back up');
-       } while (node != cac);
+        if (node.nextSibling) {
+          node = node.nextSibling;
+          // jsConsoleService.logStringMessage('moving to next sibling');
+          if  (node.nodeType != Node.TEXT_NODE)
+            break; // we've found the next node to visit
+          else continue; // try the next sibling
+        }
+        else node = node.parentNode;
+        // jsConsoleService.logStringMessage('moving back up');
+      } while (node != cac);
 
-     } while (node != cac);
+    } while (node != cac);
 
   } // end of the 'for' over the different selection ranges
 
