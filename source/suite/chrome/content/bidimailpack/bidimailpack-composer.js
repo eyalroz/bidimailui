@@ -801,7 +801,9 @@ function isInList() {
     return false;
 }
 
-// Will attempt to break the current line into two paragraphs (unless we're in a list).
+// This function attempts to break off the remainder of the current
+// line into a new paragraph; it assumes we are not within a list
+
 function InsertParagraph() {
   var editor = GetCurrentEditor();
   if (!editor) {
