@@ -4,6 +4,8 @@
 <!ENTITY menu-bidimail-insert-rlm.label                               "إدراج علامة يمين إلى يسار">
 <!ENTITY key-bidimail-switch-document-direction.keycode               "X">
 <!ENTITY key-bidimail-switch-document-direction.modifiers             "accel,shift">
+<!ENTITY key-bidimail-switch-paragraph-direction.keycode              "E">
+<!ENTITY key-bidimail-switch-paragraph-direction.modifiers            "accel,shift">
 
 <!ENTITY menu-bidimail-switch-paragraph-direction.label        "تحويل اتّجاه الفقرة">
 <!ENTITY menu-bidimail-switch-paragraph-direction.accesskey    "ف">
