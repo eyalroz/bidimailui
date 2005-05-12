@@ -18,7 +18,8 @@
   <RDF:Seq about="urn:mozilla:stylesheets">
     <RDF:li resource="chrome://messenger/content/messengercompose/messengercompose.xul" />
     <RDF:li resource="chrome://global/content/customizeToolbar.xul" />
-    <RDF:li resource="chrome://messenger/content/mailWindowOverlay.xul" />
+    <RDF:li resource="chrome://messenger/content/messenger.xul" />
+    <RDF:li resource="chrome://messenger/content/messageWindow.xul" />
   </RDF:Seq>
 
   <RDF:Seq about="chrome://messenger/content/messengercompose/messengercompose.xul">
@@ -29,7 +30,11 @@
     <RDF:li>chrome://bidimailpack/skin/bidimailpack.css</RDF:li>
   </RDF:Seq>
 
-  <RDF:Seq about="chrome://messenger/content/mailWindowOverlay.xul">
+  <RDF:Seq about="chrome://messenger/content/messenger.xul">
+    <RDF:li>chrome://bidimailpack/skin/bidimailpack.css</RDF:li>
+  </RDF:Seq>
+
+  <RDF:Seq about="chrome://messenger/content/messageWindow.xul">
     <RDF:li>chrome://bidimailpack/skin/bidimailpack.css</RDF:li>
   </RDF:Seq>
 </RDF:RDF>
