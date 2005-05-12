@@ -67,11 +67,11 @@ toolbar[iconsize="small"] #button-direction-ltr-main-bar {
   -moz-image-region: rect(0px 16px 16px 0px);
 }
 
-toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover {
+[system="not_mac"] toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover {
   -moz-image-region: rect(0px 32px 16px 16px);
 }
 
-toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover:active {
+[system="not_mac"] toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover:active {
   -moz-image-region: rect(0px 48px 16px 32px);
 }
 
@@ -84,11 +84,11 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar {
   -moz-image-region: rect(0px 16px 16px 0px);
 }
 
-toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover {
+[system="not_mac"] toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover {
   -moz-image-region: rect(0px 32px 16px 16px);
 }
 
-toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover:active {
+[system="not_mac"] toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover:active {
   -moz-image-region: rect(0px 48px 16px 32px);
 }
 
@@ -104,11 +104,11 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
-#button-direction-ltr-main-bar:hover {
+[system="not_mac"] #button-direction-ltr-main-bar:hover {
   -moz-image-region: rect(0px 48px 24px 24px);
 }
 
-#button-direction-ltr-main-bar:hover:active {
+[system="not_mac"] #button-direction-ltr-main-bar:hover:active {
   -moz-image-region: rect(0px 72px 24px 48px);
 }
 
@@ -121,11 +121,11 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
-#button-direction-rtl-main-bar:hover {
+[system="not_mac"] #button-direction-rtl-main-bar:hover {
   -moz-image-region: rect(0px 48px 24px 24px);
 }
 
-#button-direction-rtl-main-bar:hover:active {
+[system="not_mac"] #button-direction-rtl-main-bar:hover:active {
   -moz-image-region: rect(0px 72px 24px 48px);
 }
 
