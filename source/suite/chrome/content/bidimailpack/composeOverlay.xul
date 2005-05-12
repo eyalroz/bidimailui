@@ -104,10 +104,14 @@ main toolbar buttons are whole-document direction controls -->
 </toolbox>
 
 <keyset id="tasksKeys">
-  <key id="key-bidimail-switch"
-       command="cmd_switch_document" 
-       key="&key-bidimail-switch-document-direction.keycode;"
-       modifiers="&key-bidimail-switch-document-direction.modifiers;" />
+  <key id="key-switch-document-direction"
+       command="cmd_switch_document"
+       modifiers="&key-bidimail-switch-document-direction.modifiers;"
+       key="&key-bidimail-switch-document-direction.keycode;"/>
+  <key id="key-switch-paragraph-direction"
+       command="cmd_switch_paragraph"
+       modifiers="&key-bidimail-switch-paragraph-direction.modifiers;"
+       key="&key-bidimail-switch-paragraph-direction.keycode;"/>
 </keyset>
 
 <popup id="msgComposeContext">
@@ -138,7 +142,8 @@ main toolbar buttons are whole-document direction controls -->
 
 <menu id="menu_View">
   <menupopup id="menu_View_Popup">
-    <menuitem command="cmd_switch_document" key="key-bidimail-switch"
+    <menuitem command="cmd_switch_document"
+              key="key-switch-document-direction"
               label="&menu-bidimail-switch-document-direction.label;"
               accesskey="&menu-bidimail-switch-document-direction.accesskey;" />
   </menupopup>
@@ -149,6 +154,7 @@ main toolbar buttons are whole-document direction controls -->
     <menuseparator />
     <menuitem id="formatSwitchParagraphDirectionItem"
               command="cmd_switch_paragraph"
+              key="key-switch-paragraph-direction"
               label="&menu-bidimail-switch-paragraph-direction.label;"
               accesskey="&menu-bidimail-switch-paragraph-direction.accesskey;" />
     <menuitem id="format_ClearParagraphDirectionItem"
