@@ -9,5 +9,5 @@ overlay chrome://editor/content/editorOverlay.xul chrome://bidimailpack/content/
 overlay chrome://global/content/customizeToolbar.xul chrome://bidimailpack/content/custOverlay.xul
 style chrome://messenger/content/messengercompose/messengercompose.xul chrome://bidimailpack/skin/bidimailpack.css
 style chrome://global/content/customizeToolbar.xul chrome://bidimailpack/skin/bidimailpack.css
-style chrome://messenger/content/messageWindow.xul.xul chrome://bidimailpack/skin/bidimailpack.css
+style chrome://messenger/content/messageWindow.xul chrome://bidimailpack/skin/bidimailpack.css
 style chrome://messenger/content/messenger.xul chrome://bidimailpack/skin/bidimailpack.css
