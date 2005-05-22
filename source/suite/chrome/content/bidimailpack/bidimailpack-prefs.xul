@@ -20,7 +20,7 @@
       if (header)
       {
         // TODO: find a more respectable place for the version string
-        const version = 'v' + '0.6.4';
+        const version = 'v' + '0.6.5';
         header.setAttribute("description", version);
       }
       initValues();
