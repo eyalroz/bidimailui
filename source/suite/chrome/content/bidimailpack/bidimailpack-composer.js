@@ -491,7 +491,7 @@ function composeWindowEditorDelayedOnLoadHandler() {
   else {
     // we shouldn't be able to get here - when replying, the original
     // window should be in existence
-    if (hasRTLWord(body))
+    if (canBeAssumedRTL(body))
       SetDocumentDirection('rtl');
     else
       SetDocumentDirection('ltr');
