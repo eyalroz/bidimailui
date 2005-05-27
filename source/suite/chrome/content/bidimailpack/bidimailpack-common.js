@@ -4,13 +4,14 @@
 
 function hasRTLWord(element) {
 
-  // we check whether there exists a complete word in the element text
-  // consisting solely of characters of an RTL script
+  // we check whether there exists a line whose first word
+  // consists solely of characters of an RTL script (excluding any
+  // punctuation/spacing/numbering at the beginning of the line)
 
   // we use definitions from nsBiDiUtils.h as the criteria for BiDi text;
   // cf. the macros IS_IN_BMP_RTL_BLOCK and IS_RTL_PRESENTATION_FORM
   
-  var re = /(^|\s|[<>\.;,:])([\u0590-\u08FF]|[\uFB1D-\uFDFF]|[\uFE70-\uFEFC])+($|\s|[<>\.;,:])/;
+  var re = /^(\s|[<>\.;,:0-9])*([\u0590-\u08FF]|[\uFB1D-\uFDFF]|[\uFE70-\uFEFC])+/;
 
   try {
     var iterator = new XPathEvaluator();
