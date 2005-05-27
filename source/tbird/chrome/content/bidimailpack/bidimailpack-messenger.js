@@ -63,7 +63,7 @@ function browserOnLoadHandler() {
   // TODO: consider changing the following condition so as to also set the
   // direction of non-plain-text HTML messages without a preset direction
          
-  if (hasRTLWord(body)) {
+  if (canBeAssumedRTL(body)) {
     if (bodyIsPlainText)
       SetMessageDirection('rtl');
     UpdateDirectionButtons('rtl');
