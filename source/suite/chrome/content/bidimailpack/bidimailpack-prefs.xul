@@ -38,7 +38,7 @@
       </hbox>
       <spacer />
       <checkbox id="bidimailpack-reply-in-default-dir" checked="false" label="&always-reply-in-default-dir.label;" accesskey="&always-reply-in-default-dir.accesskey;" autostretch="never" />
-      <checkbox id="bidimailpack-display-buttons" checked="false" label="&display-button.labels;" accesskey="&display-buttons.accesskey;" autostretch="never" />
+      <checkbox id="bidimailpack-display-buttons" checked="false" label="&display-button.label;" accesskey="&display-buttons.accesskey;" autostretch="never" />
 
     <spacer style="height: 1em" />
     <hbox align="center">
