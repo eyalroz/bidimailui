@@ -443,24 +443,30 @@ function composeWindowEditorDelayedOnLoadHandler() {
   var build = arr[2];
   gBug262497Workaround = (build < "20041202") || (revision < "1.8a6");
 
-  // Handle message direction
+  // When this message is already on display in the main Mail&News window
+  // (or a separate message window) with its direction set to some value,
+  // we wish to maintain the same direction when bringing up the message
+  // in an editor window. Such is the case for drafts and for replies;
+  // for new (empty) messages, we use a default direction
+  
   var messageIsAReply = false;
+  var messageIsEmpty = true;
   try {
     messageIsAReply = (gMsgCompose.originalMsgURI.length > 0);
+    messageIsEmpty = ((body.firstChild.nodeName == "BR") && (body.firstChild == body.lastChild));
   }
   catch(e) {};
-
+ 
   var originalMessageDisplayDirection;
-  if (messageIsAReply)
+  
+  if (messageIsAReply || !messageIsEmpty)
     originalMessageDisplayDirection = GetMessageDisplayDirection(gMsgCompose.originalMsgURI);
 
   try {
-
-    // New message OR "Always reply in default direction" is checked
-    if (!messageIsAReply || gPrefService.getBoolPref("mailnews.reply_in_default_direction") ) {
+    if ((!messageIsAReply && MessageIsEmpty) ||
+        (messageIsAReply && gPrefService.getBoolPref("mailnews.reply_in_default_direction")) ) {
       try {
         var defaultDirection = gPrefService.getCharPref("mailnews.send_default_direction");
-        // aligning to default direction
         if ((defaultDirection == 'rtl') || (defaultDirection == 'RTL'))
           SetDocumentDirection('rtl');
         else
@@ -483,8 +489,6 @@ function composeWindowEditorDelayedOnLoadHandler() {
     // note that since the logic is short-circuit, if this is not a reply we
     // can't get here
   }
-
-  // aligning in same direction as the original message
 
   if (originalMessageDisplayDirection)
     SetDocumentDirection(originalMessageDisplayDirection);
