@@ -3,7 +3,7 @@
 <!ENTITY key-bidimail-switch-document-direction.keycode      "X">
 <!ENTITY key-bidimail-switch-document-direction.modifiers    "accel,shift">
 <!ENTITY key-bidimail-switch-paragraph-direction.keycode     "E">
-<!ENTITY key-bidimail-switch-paragraph-direction.modifiers   "accel,shift">
+<!ENTITY key-bidimail-switch-paragraph-direction.modifiers   "accel">
 
 <!ENTITY menu-bidimail-switch-paragraph-direction.label      "הפוך כיוון פיסקה">
 <!ENTITY menu-bidimail-switch-paragraph-direction.accesskey  "פ">
