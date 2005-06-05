@@ -16,18 +16,18 @@
      <Description>
        <em:id>{86c18b42-e466-45a9-ae7a-9b95ba6f5640}</em:id>
        <em:minVersion>1.5</em:minVersion>
-       <em:maxVersion>1.7+</em:maxVersion>
+       <em:maxVersion>1.8</em:maxVersion>
      </Description>
     </em:targetApplication>
 
-    <!-- Future seamonkey releases -->
+    <!-- Future seamonkey releases
     <em:targetApplication>
      <Description>
        <em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
        <em:minVersion>1.0</em:minVersion>
        <em:maxVersion>1.0</em:maxVersion>
      </Description>
-    </em:targetApplication>
+    </em:targetApplication>  -->
 
     <!-- Front End MetaData -->
     <em:name>BiDi Mail UI</em:name>
