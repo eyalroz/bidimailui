@@ -467,7 +467,7 @@ function composeWindowEditorDelayedOnLoadHandler() {
     originalMessageDisplayDirection = GetMessageDisplayDirection(gMsgCompose.originalMsgURI);
 
   try {
-    if ((!messageIsAReply && MessageIsEmpty) ||
+    if ((!messageIsAReply && messageIsEmpty) ||
         (messageIsAReply && gPrefService.getBoolPref("mailnews.reply_in_default_direction")) ) {
       try {
         var defaultDirection = gPrefService.getCharPref("mailnews.send_default_direction");
