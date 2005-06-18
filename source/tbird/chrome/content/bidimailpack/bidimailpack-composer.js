@@ -424,7 +424,11 @@ function composeWindowEditorDelayedOnLoadHandler() {
   var messageIsEmpty = true;
   try {
     messageIsAReply = (gMsgCompose.originalMsgURI.length > 0);
-    messageIsEmpty = ((body.firstChild.nodeName == "BR") && (body.firstChild == body.lastChild));
+    messageIsEmpty = ((body.firstChild == body.lastChild) &&
+      (  (body.firstChild.nodeName == "BR") ||
+        ((body.firstChild.nodeName == "P") &&
+         (body.firstChild.firstChild.nodeName == "BR") &&
+         (body.firstChild.firstChild = body.firstChild.lastChild))));
   }
   catch(e) {};
  
