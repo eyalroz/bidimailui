@@ -421,21 +421,38 @@ function composeWindowEditorDelayedOnLoadHandler() {
   // for new (empty) messages, we use a default direction
   
   var messageIsAReply = false;
-  var messageIsEmpty = true;
+  var messageIsEmpty = false;
   try {
     messageIsAReply = (gMsgCompose.originalMsgURI.length > 0);
-    messageIsEmpty = ((body.firstChild == body.lastChild) &&
-      (  (body.firstChild.nodeName == "BR") ||
-        ((body.firstChild.nodeName == "P") &&
-         (body.firstChild.firstChild.nodeName == "BR") &&
-         (body.firstChild.firstChild = body.firstChild.lastChild))));
   }
   catch(e) {};
+  try {
+    if (!body.hasChildNodes()) 
+      messageIsEmpty = true;
+    else if ( body.hasChildNodes() && !(body.firstChild.hasChildNodes())) {
+      if ((body.firstChild == body.lastChild) &&
+          (body.firstChild.nodeName == "BR"))
+        messageIsEmpty = true;
+    }
+    else {
+      if ((body.firstChild == body.lastChild) &&
+          (body.firstChild.nodeName == "P") &&
+          (body.firstChild.firstChild.nodeName == "BR") &&
+          (body.firstChild.firstChild = body.firstChild.lastChild))
+        messageIsEmpty = true;
+    }
+  }
+  catch(e) {
+    // can't get elements - must be empty...
+    messageIsEmpty = true;
+  }
  
   var originalMessageDisplayDirection;
   
-  if (messageIsAReply || !messageIsEmpty)
+  if (messageIsAReply || !messageIsEmpty) {
+    // XXX TODO - this doesn't work for drafts; they have no gMsgCompose.originalMsgURI
     originalMessageDisplayDirection = GetMessageDisplayDirection(gMsgCompose.originalMsgURI);
+  }
 
   try {
     if ((!messageIsAReply && messageIsEmpty) ||
@@ -470,6 +487,7 @@ function composeWindowEditorDelayedOnLoadHandler() {
   else {
     // we shouldn't be able to get here - when replying, the original
     // window should be in existence
+    // XXX TODO: but we do get here for drafts
     if (canBeAssumedRTL(body))
       SetDocumentDirection('rtl');
     else
