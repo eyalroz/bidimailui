@@ -1,3 +1,13 @@
+function misdetectedRTLCodePage(element) {
+  var misdetectedCodePageSequence = "([\\u00BF-\\u00FF]{2,}|\\uFFFD{2,})";
+  var normalIgnore = "(\\s|[<>\\.;,:0-9\"'])";
+  var normalExpression = new RegExp ("(^|" + normalIgnore + "+)" + misdetectedCodePageSequence + "("+ normalIgnore + "+|$)");
+
+  var htmlizedIgnore = "(\\s|[\\.;,:0-9']|&lt;|&gt;|&amp;|&quot;)";
+  var htmlizedExpression = new RegExp ("((^|>)|" + htmlizedIgnore + "+)" + misdetectedCodePageSequence + "(" + htmlizedIgnore  + "($|<))");
+  return matchInText(element, normalExpression, htmlizedExpression);
+}
+
 function canBeAssumedRTL(element) {
 
   // we check whether there exists a line which either begins
@@ -9,19 +19,23 @@ function canBeAssumedRTL(element) {
   // cf. the macros IS_IN_BMP_RTL_BLOCK and IS_RTL_PRESENTATION_FORM
 
   var rtlSequence = "([\\u0590-\\u08FF]|[\\uFB1D-\\uFDFF]|[\\uFE70-\\uFEFC])+";
+  var normalIgnore = "(\\s|[<>\\.;,:0-9\"'])";
+  var normalExpression = new RegExp ("(^" + normalIgnore + "*" + rtlSequence + ")|(" +
+                         rtlSequence + normalIgnore + "+" + rtlSequence + normalIgnore + "*$)");
 
+  var htmlizedIgnore = "(\\s|[\\.;,:0-9']|&lt;|&gt;|&amp;|&quot;)";
+  var htmlizedExpression = new RegExp ("((^|>)" + htmlizedIgnore + "*" + rtlSequence + ")|(" +
+                       rtlSequence + htmlizedIgnore + "+" + rtlSequence + htmlizedIgnore + "*($|<))");
+  return matchInText(element, normalExpression, htmlizedExpression);
+}
+
+function matchInText(element, normalExpression, htmlizedExpression) {
   try {
-
-    var ignore = "(\\s|[<>\\.;,:0-9\"'])";
-    var re = new RegExp ("(^" + ignore + "*" + rtlSequence + ")|(" +
-                         rtlSequence + ignore + "+" + rtlSequence + ignore + "*$)");
-
-
     var iterator = new XPathEvaluator();
     var path = iterator.evaluate("//text()", element, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
     for (var node = path.iterateNext(); node; node = path.iterateNext())
     {
-      if (re.test(node.data))
+      if (normalExpression.test(node.data))
       return true;
     }
   } catch (e) {
@@ -29,11 +43,7 @@ function canBeAssumedRTL(element) {
     // to test the HTMLized message rather than the bare text lines;
     // the regexp must change accordingly
     
-    var ignore = "(\\s|[\\.;,:0-9']|&lt;|&gt;|&amp;|&quot;)";
-    var re = new RegExp ("((^|>)" + ignore + "*" + rtlSequence + ")|(" +
-                         rtlSequence + ignore + "+" + rtlSequence + ignore + "*($|<))");
-    
-    if (re.test(element.innerHTML))
+    if (htmlizedExpression.test(element.innerHTML))
       return true;
   }
   return false;
