@@ -41,8 +41,49 @@ function browserOnLoadHandler() {
   if (head)
     head.appendChild(newSS);
 
-  // Auto detect plain text direction
   var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+
+  // Auto-detect some mis-decoded messages
+  try {
+    var forcePref = false, charsetPref = null;
+    var misdecodeAutodetectPref = false;
+    try {
+      forcePref = prefs.getBoolPref("mailnews.force_charset_override");
+    } catch(e) {}
+    try {
+      charsetPref = prefs.getCharPref("mailnews.view_default_charset");
+    } catch(e) {}
+    try {
+      misdecodeAutodetectPref = prefs.getBoolPref("mailnews.message_display.autodetect_bidi_misdecoding");
+    } catch(e) {}
+     
+    // When shall we attempt re-detection and overriding of the character set?
+    // not if the encoding has _already_ been overridden (either due to the pref or not)
+    // and not if the default charset is not one of the 256-char codepages we expect get
+    // mangled, and then only when the charset is reported as one of the defaultish ones
+    // (or not reported at all)?
+    // Note that this means we don't detect 'false positives' e.g. of
+    // identifying a non-windows-1255 as windows-1255
+      
+    if ( misdecodeAutodetectPref && charsetPref &&
+         ((charsetPref == 'windows-1255') ||
+          (charsetPref == 'windows-1256')) &&
+         (!msgWindow.charsetOverride) &&
+         ((!msgWindow.mailCharacterSet) ||
+          (msgWindow.mailCharacterSet == 'US-ASCII') ||
+          (msgWindow.mailCharacterSet == 'ISO-8859-1') ||
+          (msgWindow.mailCharacterSet == 'windows-1252') ||
+          (msgWindow.mailCharacterSet == '')) ) {
+      if (misdetectedRTLCodePage(body)) {
+        messenger.SetDocumentCharset(charsetPref);
+        msgWindow.mailCharacterSet = charsetPref;
+        msgWindow.charsetOverride = true;
+      }
+    }
+
+  } catch(e) {}
+
+  // Auto-detect plain text direction
   try
   {
     if (!prefs.getBoolPref("mailnews.message_display.autodetect_direction"))
@@ -66,3 +107,4 @@ function InstallBrowserHandler() {
   if (browser)
     browser.addEventListener('load', browserOnLoadHandler, true);
 }
+
