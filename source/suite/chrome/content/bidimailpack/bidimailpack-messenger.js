@@ -46,7 +46,7 @@ function browserOnLoadHandler() {
   // Auto-detect some mis-decoded messages
   try {
     var forcePref = false, charsetPref = null;
-    var misdecodeAutodetectPref = false;
+    var misdecodeAutodetectPref = true;
     try {
       forcePref = prefs.getBoolPref("mailnews.force_charset_override");
     } catch(e) {}
