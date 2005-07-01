@@ -12,14 +12,17 @@
 
 // Globals
 var gPrefService = null;
+var gLoadEventCount = 0;    // see comment in InstallComposeWindowEventHandlers()
+                            // and the use of this variable in ComposeWindowOnLoad()
 var gLastWindowToHaveFocus; // used to prevent doing unncessary work when a focus
                             // 'changes' to the same window which is already in focus
 var gAlternativeEnterBehavior = true;
-                            // the default behavior of the Enter key in HTML mail messages
+                            // The default behavior of the Enter key in HTML mail messages
                             // is to insert a <br>; the alternative behavior we implement
                             // is to close a paragraph and begin a new one
-var gParagraphVerticalMargin; // how much space to add to paragraphs in HTML mail messages
-var gBug262497Workaround;   // a boolean value which is true if we need to be applying
+var gParagraphVerticalMargin; 
+                            // Amount of space to add to paragraphs in HTML mail messages
+var gBug262497Workaround;   // A boolean value which is true if we need to be applying
                             // our workaround for bugzilla bug 262497 (the behaviour 
                             // of Ctrl+Home and Ctrl+End)
 
@@ -147,7 +150,6 @@ function GetCurrentSelectionDirection() {
       // Note: a node of type TEXT_NODE will not be checked for direction,
       //       nor will it trigger the use of the cac's direction!
 
-
       if (node.nodeType == Node.ELEMENT_NODE) {
         var nodeStyle = view.getComputedStyle(node, "");
         var display = nodeStyle.getPropertyValue('display');
@@ -251,44 +253,42 @@ function SwitchDocumentDirection() {
     directionSwitchController.doCommand("cmd_rtl_document");
 }
 
-function composeWindowEditorOnLoadHandler() {
-  // intl' globals
-  gLastWindowToHaveFocus = null;
-  gPrefService = Components.classes["@mozilla.org/preferences-service;1"].getService
-                         (Components.interfaces.nsIPrefBranch);
+function ComposeWindowOnLoad() {
+  // Initialize (or update) globals
+  gLoadEventCount += 1;
+  if (gLoadEventCount == 1) {
+    gLastWindowToHaveFocus = null;
+    gPrefService = Components.classes["@mozilla.org/preferences-service;1"].getService
+                           (Components.interfaces.nsIPrefBranch);
 
-  var editorType = GetCurrentEditorType();
+    var re = /rv:([0-9.]+).*Gecko\/([0-9]+)/;
+    var arr = re.exec(navigator.userAgent);
+    var revision = arr[1];
+    var build = arr[2];
+    gBug262497Workaround = (build < "20041202") || (revision < "1.8a6");
 
-  // Direction Controller
-  top.controllers.insertControllerAt(1, directionSwitchController);
+    var editorType = GetCurrentEditorType();
 
-  // decide which direction switch item should appear in the context menu -
-  // the switch for the whole document or for the current paragraph
-  document.getElementById('contextSwitchParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');
-  document.getElementById('contextBodyDirectionItem').setAttribute('hidden', editorType == 'htmlmail');
+    // Direction Controller
+    top.controllers.insertControllerAt(1, directionSwitchController);
 
-  // Direction Buttons
-  HandleDirectionButtons();
-  // reply CSS
-  HandleComposeReplyCSS();
+    // Decide which direction switch item should appear in the context menu -
+    // the switch for the whole document or for the current paragraph
+    document.getElementById('contextSwitchParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');
+    document.getElementById('contextBodyDirectionItem').setAttribute('hidden', editorType == 'htmlmail');
 
-  // the following is a very ugly hack!
-  // the reason for it is that without a timeout, it seems
-  // that gMsgCompose does often not yet exist when
-  // the OnLoad handler runs...
-  setTimeout('composeWindowEditorDelayedOnLoadHandler();', 125);
+  }
+  else ComposeWindowOnActualLoad();
 }
 
 function HandleComposeReplyCSS() {
   var editorType = GetCurrentEditorType();
-
   if (editorType == 'htmlmail') {
     var editor = GetCurrentEditor();
     if (!editor) {
       alert("Could not acquire editor object.");
       return;
     }
-
     editor.QueryInterface(nsIEditorStyleSheets);
     editor.addOverrideStyleSheet("chrome://bidimailpack/content/quotebar.css");
   }
@@ -354,23 +354,6 @@ function LoadParagraphMode() {
   }
 }
 
-function composeWindowEditorOnReopenHandler() {
-  if (!gPrefService)
-      gPrefService = Components.classes["@mozilla.org/preferences-service;1"].getService
-                         (Components.interfaces.nsIPrefBranch);
-
-  // Direction Buttons
-  HandleDirectionButtons();
-  // reply CSS
-  HandleComposeReplyCSS();
-
-  // another ugly hack (see composeWindowEditorOnLoadHandler):
-  // if we don't delay before running the other handler, the
-  // message text will not be available so we will not know
-  // whether or not this is a reply
-  setTimeout('composeWindowEditorDelayedOnLoadHandler();', 125);
-}
-
 function GetMessageDisplayDirection(messageURI) {
   // Note: there may be more than one window
   // which displays the message we are replying to;
@@ -388,7 +371,6 @@ function GetMessageDisplayDirection(messageURI) {
   var messageWindowList = windowManager.getEnumerator("mail:messageWindow");
 
   while (true) {
-
     if (messengerWindowList.hasMoreElements())
       win = messengerWindowList.getNext();
     else if (messageWindowList.hasMoreElements())
@@ -405,58 +387,44 @@ function GetMessageDisplayDirection(messageURI) {
   return retVal;
 }
 
-function composeWindowEditorDelayedOnLoadHandler() {
+function DetermineNewMessageParams(messageParams) {
   var body = document.getElementById('content-frame').contentDocument.body;
 
-  var re = /rv:([0-9.]+).*Gecko\/([0-9]+)/;
-  var arr = re.exec(navigator.userAgent);
-  var revision = arr[1];
-  var build = arr[2];
-  gBug262497Workaround = (build < "20041202") || (revision < "1.8a6");
-
-  // When this message is already on display in the main Mail&News window
-  // (or a separate message window) with its direction set to some value,
-  // we wish to maintain the same direction when bringing up the message
-  // in an editor window. Such is the case for drafts and for replies;
-  // for new (empty) messages, we use a default direction
-  
-  var messageIsAReply = false;
-  var messageIsEmpty = false;
   try {
-    messageIsAReply = (gMsgCompose.originalMsgURI.length > 0);
+    messageParams.isReply = (gMsgCompose.originalMsgURI.length > 0);
   }
   catch(e) {};
   try {
     if (!body.hasChildNodes()) 
-      messageIsEmpty = true;
+      messageParams.isEmpty = true;
     else if ( body.hasChildNodes() && !(body.firstChild.hasChildNodes())) {
       if ((body.firstChild == body.lastChild) &&
           (body.firstChild.nodeName == "BR"))
-        messageIsEmpty = true;
+        messageParams.isEmpty = true;
     }
     else {
       if ((body.firstChild == body.lastChild) &&
           (body.firstChild.nodeName == "P") &&
           (body.firstChild.firstChild.nodeName == "BR") &&
           (body.firstChild.firstChild = body.firstChild.lastChild))
-        messageIsEmpty = true;
+        messageParams.isEmpty = true;
     }
   }
   catch(e) {
     // can't get elements - must be empty...
-    messageIsEmpty = true;
+    messageParams.isEmpty = true;
   }
  
-  var originalMessageDisplayDirection;
-  
-  if (messageIsAReply || !messageIsEmpty) {
+  if (messageParams.isReply || !messageParams.isEmpty) {
     // XXX TODO - this doesn't work for drafts; they have no gMsgCompose.originalMsgURI
-    originalMessageDisplayDirection = GetMessageDisplayDirection(gMsgCompose.originalMsgURI);
+    messageParams.originalDisplayDirection = GetMessageDisplayDirection(gMsgCompose.originalMsgURI);
   }
+}
 
+function SetInitialMessageDirection(messageParams) {
   try {
-    if ((!messageIsAReply && messageIsEmpty) ||
-        (messageIsAReply && gPrefService.getBoolPref("mailnews.reply_in_default_direction")) ) {
+    if ((!messageParams.isReply && messageParams.isEmpty) ||
+        (messageParams.isReply && gPrefService.getBoolPref("mailnews.reply_in_default_direction")) ) {
       try {
         var defaultDirection = gPrefService.getCharPref("mailnews.send_default_direction");
         if ((defaultDirection == 'rtl') || (defaultDirection == 'RTL'))
@@ -471,42 +439,60 @@ function composeWindowEditorDelayedOnLoadHandler() {
 
         return;
 
-      } catch(e1) {
-        // preference is not set.
-      }
+      } catch(e1) {} // send_default_direction is not set
     }
-  } catch(e2) {
-    // reply_in_default_direction preference is not set.
-    // we choose "reply_in_default_direction==true" as the default
-    // note that since the logic is short-circuit, if this is not a reply we
-    // can't get here
-  }
+  } catch(e2) {} // reply_in_default_direction is not set
 
-  if (originalMessageDisplayDirection)
-    SetDocumentDirection(originalMessageDisplayDirection);
+  if (messageParams.originalDisplayDirection)
+    SetDocumentDirection(messageParams.originalDisplayDirection);
   else {
     // we shouldn't be able to get here - when replying, the original
     // window should be in existence
     // XXX TODO: but we do get here for drafts
-    if (canBeAssumedRTL(body))
+    if (canBeAssumedRTL(document.getElementById('content-frame').contentDocument.body))
       SetDocumentDirection('rtl');
     else
       SetDocumentDirection('ltr');
   }
+}
+
+function ComposeWindowOnActualLoad() {
+
+  HandleDirectionButtons();
+  HandleComposeReplyCSS();
+
+  // When this message is already on display in the main Mail&News window
+  // (or a separate message window) with its direction set to some value,
+  // we wish to maintain the same direction when bringing up the message
+  // in an editor window. Such is the case for drafts and for replies;
+  // for new (empty) messages, we use a default direction
+
+  var messageParams = {
+    isReply: false,
+    isEmpty: false,
+    originalDisplayDirection: null
+  };
+    
+  DetermineNewMessageParams(messageParams);
+  SetInitialMessageDirection(messageParams);
   
   LoadParagraphMode();
   directionSwitchController.setAllCasters();
 }
 
-function InstallComposeWindowEditorHandler() {
+function InstallComposeWindowEventHandlers() {
 
-  // problem: if I add a handler for both events, than the first time
-  // a composer window is opened, the handler runs twice; but if I only
-  // add a handler for compose-window-reopen, the first time a composer
-  // window is opened the handler does not run even once
+  // Note:
+  // When a 'new message' window is first created, the 'load' handler
+  // is run for it, once, before it is displayed. If it is displayed
+  // immediately upon creation, the 'load' handler is run again; but
+  // a copy is also made of it, so that if a 'new message' window is closed
+  // then the user wants a new one, a copy of one of the closed windows
+  // is reopened. In this case, the 'compose-window-reopen' event occurs
+  // instead of a load event
 
-  document.addEventListener('load', composeWindowEditorOnLoadHandler, true);
-  document.addEventListener('compose-window-reopen', composeWindowEditorOnReopenHandler, true);
+  document.addEventListener('load', ComposeWindowOnLoad, true);
+  document.addEventListener('compose-window-reopen',ComposeWindowOnActualLoad, true);
   document.addEventListener('keypress', onKeyPress, true);
 }
 
@@ -564,7 +550,7 @@ function ApplyToSelectionBlockElements(evalStr) {
             eval(evalStr);
           }
           else {
-            jsConsoleService.logStringMessage('could not find cbe');
+            // jsConsoleService.logStringMessage('could not find cbe');
             break;
           }
 
@@ -586,7 +572,7 @@ function ApplyToSelectionBlockElements(evalStr) {
           }
           else
             // find a parent node which has anything after
-            while ((node = node.parentNode)) {
+            while (node = node.parentNode) {
               // jsConsoleService.logStringMessage('moved up to parent node');
               if (node.nextSibling) {
                 node = node.nextSibling;
@@ -621,7 +607,6 @@ function SwitchParagraphDirection() {
 function onKeyPress(ev) {
   // Don't change the behavior for text-plain messages
   var editorType = GetCurrentEditorType();
-  var editor = GetCurrentEditor();
   if (editorType != 'htmlmail')
     return;
     
@@ -629,13 +614,13 @@ function onKeyPress(ev) {
   if (top.document.commandDispatcher.focusedWindow != content)
     return;
 
+  var editor = GetCurrentEditor();
+
   // workaround for Mozilla bug 262497 - let's make Ctrl+Home and Ctrl+End
   // behave properly...
-  
   if (gBug262497Workaround && ev.ctrlKey) {
 
-    // move the caret ourselves if need be
-
+    // move the caret ourselves if necessary ...
     if (ev.keyCode == KeyEvent.DOM_VK_HOME) {
       var node = document.getElementById('content-frame').contentDocument.body;;
       do {
@@ -652,7 +637,6 @@ function onKeyPress(ev) {
       // XXX TODO: following is a special-case for dummy nodes at the
       //           end of a document, but there may be more possibilites
       //           for such dummy nodes which need to be taken into account
-
       if (node.nodeName == "BR")
         node = node.previousSibling;
 
@@ -662,10 +646,8 @@ function onKeyPress(ev) {
       else editor.selection.collapse(node, 0);
     }
 
-    // and prevent the default behavior
-
+    // ... and prevent the default behavior of Ctrl+Home / Ctrl+End
     if ((ev.keyCode == KeyEvent.DOM_VK_HOME) || (ev.keyCode == KeyEvent.DOM_VK_END)) {
-      // prevent default behavior
       ev.preventDefault();
       ev.stopPropagation();
       ev.initKeyEvent("keypress", false, true, null, false, false, false, false, 0, 0);
@@ -1031,10 +1013,12 @@ var directionSwitchController = {
 
 function CommandUpdate_MsgComposeDirection() {
   var focusedWindow = top.document.commandDispatcher.focusedWindow;
+
   // we're just setting focus to where it was before
   if (focusedWindow == gLastWindowToHaveFocus) {
     return;
   }
+
   gLastWindowToHaveFocus = focusedWindow;
   directionSwitchController.setAllCasters();
 }
