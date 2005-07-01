@@ -46,7 +46,7 @@
       <hbox id="paragraph_vertical_margin"
             style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
             class="indent"
-            prefbase="editor.paragraph.vertical_margins"/>
+            prefbase="mailnews.paragraph.vertical_margin"/>
     </hbox>
   </groupbox>
 
