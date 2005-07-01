@@ -361,7 +361,7 @@ function LoadParagraphMode() {
 
   // Get the vertical margin pref for paragraphs we add
   // We use global variables in order to avoid different margins in the same document
-  gParagraphVerticalMargin = getParagraphMarginFromPref("editor.paragraph.vertical_margins");
+  gParagraphVerticalMargin = getParagraphMarginFromPref("mailnews.paragraph.vertical_margin");
 
   // our extension likes paragraph text entry, not 'body text' - since
   // paragraph are block elements, with a direction setting
