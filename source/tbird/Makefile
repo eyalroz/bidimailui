@@ -20,4 +20,4 @@ ${XPI_FILENAME}: subdirs
 	zip $@ \
 		chrome/bidimailpack.jar \
 		install.rdf \
-                chrome.manifest \
+        chrome.manifest \
