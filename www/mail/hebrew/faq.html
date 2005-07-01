@@ -48,20 +48,20 @@
 <div class="question">כשאני עונה להודעה הכתובה מימין לשמאל, קו ציון הציטוט ממשיך להופיע משמאל לתוכן ההודעה המקורית, ולא עובר לצד ימין. האם אפשר לגרום לו להתנהג אחרת?</div>
 <div class="answer">
 <p>בעייה זו נפתרה בגירסה 0.5.1 של התוסף.</p>
-<p>אם תרצה/י, הנה כמה חוקים להוספה ל-<code>userContent.css</code> אשר ישנו את צבע קו הציטוט בהתאם לעומק הציטוט:</p>
-<div class="code-segment">blockquote[type=cite] {
+<p>אם תרצה/י, הנה כמה חוקים להוספה ל-<code>userContent.css</code> אשר ישנו את צבע מלל הציטוט בהתאם לעומק הציטוט:</p>
+<div class="code-segment">blockquote[type="cite"] {
   color: #660066 !important;
 }
-blockquote[type=cite] blockquote {
+blockquote[type="cite"] blockquote {
   color: #007777 !important;
 }
-blockquote[type=cite] blockquote blockquote {
+blockquote[type="cite"] blockquote blockquote {
   color: #990000 !important;
 }
-blockquote[type=cite] blockquote blockquote blockquote {
+blockquote[type="cite"] blockquote blockquote blockquote {
   color: #000099 !important;
 }
-blockquote[type=cite] blockquote blockquote blockquote blockquote {
+blockquote[type="cite"] blockquote blockquote blockquote blockquote {
   color: #bb6600 !important;
 }
 </div>
@@ -72,21 +72,12 @@ blockquote[type=cite] blockquote blockquote blockquote blockquote {
 <hr>
 </div>
 
-<div class="faq-item">
-<div class="question">כשאני עונה להודעה הכתובה מימין לשמאל, חלון חיבור התשובה לא מיושר תמיד לימין כשהוא נפתח.</div>
-<div class="answer">
-<p>זוהי בעייה ידועה במצבים מסויימים. היא תתוקן כשנגלה מה הסיבה לה.</p>
-</div>
-<hr>
-</div>
-
-
 <h3><a name="miscellany">שונות</a></h3>
 
 <div class="faq-item">
 <div class="question">שמתי לב שחלק מקוד-המקור שבהרחבה BiDi Browser UI מצא את דרכו לבסיס-הקוד של מוזילה. האם נוכל לצפות שכך יקרה גם בהרחבה הזו? מתי צפוי הדבר להתרחש?</div>
 <div class="answer">
-<p>איזו דקות-אבחנה מרשימה... ובכן, ייתכן שחלק מן הקוד של ההרחבה יאומץ, אבל אין תוכניות מיידיות לכך. אם את/ה רוצה להציק למישהו בעל יותר סמכות בנידון, נסה/י אחד מן <a href="http://www.mozilla.org/owners.html">הבעלים או השותפים-לבעלות</a> של אחד המודולים <a href="http://www.mozilla.org/owners.html#Mail/News">Mail/News</a>, <a href="http://www.mozilla.org/owners.html#Standalone%20Mail">Standalone Mail</a>, או <a href="http://www.mozilla.org/owners.html#Composer">Composer</a>.</p>
+<p>איזו דקות-אבחנה מרשימה... ובכן, ייתכן שחלק מן הקוד של ההרחבה יאומץ בשל כלשהוא בעתיד. הנושא פתוח לדיון בערוץ ה-IRC <a href="irc://moznet/bidi">#bidi@moznet</a>.</p>
 </div>
 <hr>
 </div>

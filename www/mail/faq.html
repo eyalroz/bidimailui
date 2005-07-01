@@ -49,19 +49,19 @@
 <div class="answer">
 <p>This issue has been fixed in version 0.5.1 .</p>
 <p>Also, here are some extra rules for <code>userContent.css</code> which will change the color of quoted text based on the quote depth:</p>
-<div class="code-segment">blockquote[type=cite] {
+<div class="code-segment">blockquote[type="cite"] {
   color: #660066 !important;
 }
-blockquote[type=cite] blockquote {
+blockquote[type="cite"] blockquote {
   color: #007777 !important;
 }
-blockquote[type=cite] blockquote blockquote {
+blockquote[type="cite"] blockquote blockquote {
   color: #990000 !important;
 }
-blockquote[type=cite] blockquote blockquote blockquote {
+blockquote[type="cite"] blockquote blockquote blockquote {
   color: #000099 !important;
 }
-blockquote[type=cite] blockquote blockquote blockquote blockquote {
+blockquote[type="cite"] blockquote blockquote blockquote blockquote {
   color: #bb6600 !important;
 }
 </div>
@@ -72,21 +72,12 @@ blockquote[type=cite] blockquote blockquote blockquote blockquote {
 <hr>
 </div>
 
-<div class="faq-item">
-<div class="question">When I reply to a Right-to-Left message, the reply composer is not always aligned to the right when it opens.</div>
-<div class="answer">
-<p>This is a known issue in some configurations. It will be fixed when we figure out the cause of this failure.</p>
-</div>
-<hr>
-</div>
-
-
 <h3><a name="miscellany">Miscellany</a></h3>
 
 <div class="faq-item">
 <div class="question">I noticed that some code from the BiDi Browser UI extension was incorporated into the Mozilla codebase. Can we expect this to happen with this extension also? How soon?</div>
 <div class="answer">
-<p>That's a very perceptive question... it is possible that code adoption will also happen with this extension, but there are no immediate plans for something like this. If you want to pester somebody more authoritative on this issue, take it up with one of the <a href="http://www.mozilla.org/owners.html">owners or peers</a> of the <a href="http://www.mozilla.org/owners.html#Mail/News">Mail/News</a>, <a href="http://www.mozilla.org/owners.html#Standalone%20Mail">Standalone Mail</a>, or <a href="http://www.mozilla.org/owners.html#Composer">Composer</a> modules.</p>
+<p>That's a very perceptive question... it is possible that code adoption will also happen with this extension at some point in the future. This issue is open for discussion on the IRC channel <a href="irc://moznet/bidi">#bidi@moznet</a>.</p>
 </div>
 <hr>
 </div>
