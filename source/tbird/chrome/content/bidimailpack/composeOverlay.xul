@@ -11,7 +11,7 @@
   <script type="application/x-javascript" src="bidimailpack-common.js"/>
   <script type="application/x-javascript" src="bidimailpack-composer.js"/>
   <script type="application/x-javascript">
-    InstallComposeWindowEditorHandler();
+    InstallComposeWindowEventHandlers();
   </script>
 
 <broadcasterset>
