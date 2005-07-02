@@ -788,7 +788,7 @@ function isInList() {
 function getParagraphMarginFromPref(basePrefName) {
   var aValue, aScale;
   try {
-    aValue = gPrefService.getCharPref(basePrefName + ".value");
+    aValue = parseFloat(gPrefService.getCharPref(basePrefName + ".value")) / 2.0;
     aScale = gPrefService.getCharPref(basePrefName + ".scale");
   }
   catch (e) {
