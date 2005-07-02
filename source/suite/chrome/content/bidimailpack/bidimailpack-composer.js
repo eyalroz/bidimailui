@@ -676,7 +676,6 @@ function onKeyPress(ev) {
       // Do whatever it takes to prevent the editor from inserting a BR
       ev.preventDefault();
       ev.stopPropagation();
-      ev.initKeyEvent("keypress", false, true, null, false, false, false, false, 0, 0);
   
       // ... and insert a paragraph break instead
       InsertParagraph();
