@@ -90,15 +90,34 @@ function browserOnLoadHandler() {
       return;
   } catch(e) { } // preference is not set.  
   
-  // at this point, either the preference specifies autodetection or there
-  // is no preference, and autodetection is the default behavior
+  if (bodyIsPlainText) {
+    if (canBeAssumedRTL(body)) {
+      SetMessageDirection('rtl');
+    }
+    return;
+  }
+  
+  // It's an HTML message
 
-  // TODO: consider changing the following condition so as to also set the
-  // direction of non-plain-text HTML messages without a preset direction
-         
-  if (bodyIsPlainText && canBeAssumedRTL(body))
-  {
-    SetMessageDirection('rtl');
+  if (!body.getAttribute('dir')) {
+    if (canBeAssumedRTL(body)) {
+      // the body is has no DIR attribute, but it looks RTLish
+      // so let's add an initial stylesheet saying it's RTL,
+      // which will be overridden by any other stylesheets within 
+      // the document itself
+  
+      var newSS;
+      newSS = this.docShell.contentViewer.DOMDocument.createElement("link");
+      newSS.rel  = "stylesheet";
+      newSS.type = "text/css";
+      newSS.href = "chrome://bidimailpack/content/weakrtl.css";
+      head = this.docShell.contentViewer.DOMDocument.getElementsByTagName("head")[0];
+      if (head) {
+        if (head.firstChild)
+          head.insertBefore(newSS,head.firstChild);
+        else head.appendChild(newSS);
+      }
+    }
   }
 }
 
