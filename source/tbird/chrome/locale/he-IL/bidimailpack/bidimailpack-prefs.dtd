@@ -14,7 +14,7 @@
 <!ENTITY display-buttons.label                   "הצג כפתורי כיווניות">
 <!ENTITY display-buttons.accesskey               "ה">
 
-<!ENTITY verticalParagraphMargins.label          "שולי פסקה אנכיים:">
+<!ENTITY verticalParagraphMargins.label          "מרווח בין פיסקאות:">
 <!ENTITY cmScale.label                           "סנטימטר">
 <!ENTITY cmScale.accesskey                       "ס">
 <!ENTITY pixelScale.label                        "פיקסלים">
