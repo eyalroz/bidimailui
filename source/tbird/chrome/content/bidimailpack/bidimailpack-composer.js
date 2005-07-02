@@ -431,14 +431,7 @@ function SetInitialMessageDirection(messageParams) {
           SetDocumentDirection('rtl');
         else
           SetDocumentDirection('ltr');
-
-        LoadParagraphMode();
-        // the initial setting; perhaps instead of this
-        // we should have an 'init' method for the controller?
-        directionSwitchController.setAllCasters();
-
         return;
-
       } catch(e1) {} // send_default_direction is not set
     }
   } catch(e2) {} // reply_in_default_direction is not set
