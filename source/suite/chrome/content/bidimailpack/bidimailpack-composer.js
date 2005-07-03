@@ -663,7 +663,6 @@ function onKeyPress(ev) {
     if ((ev.keyCode == KeyEvent.DOM_VK_HOME) || (ev.keyCode == KeyEvent.DOM_VK_END)) {
       ev.preventDefault();
       ev.stopPropagation();
-      ev.initKeyEvent("keypress", false, true, null, false, false, false, false, 0, 0);
     }
   }
 
@@ -752,7 +751,6 @@ function onKeyPress(ev) {
              
           ev.preventDefault();
           ev.stopPropagation();
-          ev.initKeyEvent("keypress", false, true, null, false, false, false, false, 0, 0);
         }
       }  
     }
