@@ -3,6 +3,10 @@
 // - We do not set a document attribute which affects the behavior
 //   of the default theme, so no LoadOSAttributeOnWindow() function
 
+// Common Globals
+gPrefService = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+
+
 function misdetectedRTLCodePage(element) {
   var misdetectedCodePageSequence = "([\\u00BF-\\u00FF]{2,}|\\uFFFD{2,})";
   var normalIgnore = "(\\s|[<>\\.;,:0-9\"'])";
