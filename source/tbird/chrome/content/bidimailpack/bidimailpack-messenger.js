@@ -49,20 +49,18 @@ function browserOnLoadHandler() {
   if (head)
     head.appendChild(newSS);
 
-  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-
   // Auto-detect some mis-decoded messages
   try {
     var forcePref = false, charsetPref = null;
     var misdecodeAutodetectPref = true;
     try {
-      forcePref = prefs.getBoolPref("mailnews.force_charset_override");
+      forcePref = gPrefService.getBoolPref("mailnews.force_charset_override");
     } catch(e) {}
     try {
-      charsetPref = prefs.getCharPref("mailnews.view_default_charset");
+      charsetPref = gPrefService.getCharPref("mailnews.view_default_charset");
     } catch(e) {}
     try {
-      misdecodeAutodetectPref = prefs.getBoolPref("mailnews.message_display.autodetect_bidi_misdecoding");
+      misdecodeAutodetectPref = gPrefService.getBoolPref("mailnews.message_display.autodetect_bidi_misdecoding");
     } catch(e) {}
      
     // When shall we attempt re-detection and overriding of the character set?
@@ -92,9 +90,9 @@ function browserOnLoadHandler() {
   } catch(e) {}
 
   // Auto detect plain text direction
-  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+  var gPrefService = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
   try {
-    if (!prefs.getBoolPref("mailnews.message_display.autodetect_direction"))
+    if (!gPrefService.getBoolPref("mailnews.message_display.autodetect_direction"))
       return;
   } catch(e) { } // preference is not set.  
 
