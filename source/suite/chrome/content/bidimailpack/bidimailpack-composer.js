@@ -850,8 +850,13 @@ function InsertParagraph() {
   var isStyleFontSize = { value: false };
   var styleFontSize;
   try {
-    styleFontSize = document.defaultView.getComputedStyle(editor.getSelectionContainer(), "").getPropertyValue("font-size");
-    isStyleFontSize.value = (styleFontSize != document.defaultView.getComputedStyle(findClosestBlockElement(editor.getSelectionContainer()), "").getPropertyValue("font-size"));
+    styleFontSize = document.defaultView
+                            .getComputedStyle(editor.getSelectionContainer(), "")
+                            .getPropertyValue("font-size");
+    var elt = findClosestBlockElement(editor.getSelectionContainer());
+    isStyleFontSize.value = (styleFontSize != document.defaultView
+                                                      .getComputedStyle(elt, "")
+                                                      .getPropertyValue("font-size"));
   }
   catch (e) {}
   // ------------------------------- "remember old style" ------
