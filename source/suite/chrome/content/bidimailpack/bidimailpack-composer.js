@@ -281,8 +281,10 @@ function ComposeWindowOnLoad() {
 
     // Decide which direction switch item should appear in the context menu -
     // the switch for the whole document or for the current paragraph
-    document.getElementById('contextSwitchParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');
-    document.getElementById('contextBodyDirectionItem').setAttribute('hidden', editorType == 'htmlmail');
+    document.getElementById('contextSwitchParagraphDirectionItem')
+            .setAttribute('hidden', editorType != 'htmlmail');
+    document.getElementById('contextBodyDirectionItem')
+            .setAttribute('hidden', editorType == 'htmlmail');
   }
   else ComposeWindowOnActualLoad();
 }
@@ -313,16 +315,23 @@ function HandleDirectionButtons() {
   catch(e) { } // preference is not set.
 
   if (editorType == 'htmlmail') {
-    document.getElementById('ltr-paragraph-direction-broadcaster').setAttribute('hidden',hiddenButtons);
-    document.getElementById('rtl-paragraph-direction-broadcaster').setAttribute('hidden',hiddenButtons);
-    document.getElementById('directionality-separator-formatting-bar').setAttribute('hidden',hiddenButtons);
-    document.getElementById('ltr-document-direction-broadcaster').setAttribute('hidden',true);
-    document.getElementById('rtl-document-direction-broadcaster').setAttribute('hidden',true);
+    document.getElementById('ltr-paragraph-direction-broadcaster')
+            .setAttribute('hidden', hiddenButtons);
+    document.getElementById('rtl-paragraph-direction-broadcaster')
+            .setAttribute('hidden', hiddenButtons);
+    document.getElementById('directionality-separator-formatting-bar')
+            .setAttribute('hidden', hiddenButtons);
+    document.getElementById('ltr-document-direction-broadcaster')
+            .setAttribute('hidden', true);
+    document.getElementById('rtl-document-direction-broadcaster')
+            .setAttribute('hidden', true);
   }
   else {
     // plain text mail
-    document.getElementById('ltr-document-direction-broadcaster').setAttribute('hidden',hiddenButtons);
-    document.getElementById('rtl-document-direction-broadcaster').setAttribute('hidden',hiddenButtons);
+    document.getElementById('ltr-document-direction-broadcaster')
+            .setAttribute('hidden',hiddenButtons);
+    document.getElementById('rtl-document-direction-broadcaster')
+            .setAttribute('hidden',hiddenButtons);
   }
 }
 
@@ -495,7 +504,8 @@ function InstallComposeWindowEventHandlers() {
   // instead of a load event
 
   document.addEventListener('load', ComposeWindowOnLoad, true);
-  document.addEventListener('compose-window-reopen',ComposeWindowOnActualLoad, true);
+  document.addEventListener('compose-window-reopen',
+                            ComposeWindowOnActualLoad, true);
   document.addEventListener('keypress', onKeyPress, true);
 }
 
@@ -506,7 +516,7 @@ function findClosestBlockElement(node) {
     if (node.nodeType == node.ELEMENT_NODE) {
       var display = v.getComputedStyle(node, "").getPropertyValue('display');
       if (display == 'block' || display == 'table-cell' || 
-            display == 'table-caption' || display == 'list-item')
+          display == 'table-caption' || display == 'list-item')
         return node;
     }
     node = node.parentNode;
@@ -602,8 +612,10 @@ function SetParagraphDirection(dir) {
 
 function SwitchParagraphDirection() {
   var evalStr =
-    'var dir = (closestBlockElement.ownerDocument.defaultView.getComputedStyle(closestBlockElement, "").getPropertyValue("direction") == "rtl"? "ltr" : "rtl");' +
-    'editor.setAttribute(closestBlockElement, \'dir\', dir);';
+    'var dir = (closestBlockElement.ownerDocument.defaultView' +
+                                   '.getComputedStyle(closestBlockElement, "")' +
+                                   '.getPropertyValue("direction") == "rtl"? "ltr" : "rtl");' +
+    'editor.setAttribute(closestBlockElement, "dir", dir);';
   ApplyToSelectionBlockElements(evalStr);
 }
 
@@ -955,7 +967,10 @@ var directionSwitchController = {
         command = 'cmd_ltr_document';
         casterID = 'ltr-document-direction-broadcaster';
         oppositeCasterID = 'rtl-document-direction-broadcaster';
-        direction = document.defaultView.getComputedStyle(document.getElementById('content-frame').contentDocument.body, "").getPropertyValue("direction");
+        direction = document.defaultView
+                            .getComputedStyle(document.getElementById('content-frame')
+                                                      .contentDocument.body, "")
+                                                      .getPropertyValue("direction");
         break;
       case 'paragraph':
         command = 'cmd_ltr_paragraph';
