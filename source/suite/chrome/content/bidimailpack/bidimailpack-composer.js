@@ -265,8 +265,8 @@ function ComposeWindowOnLoad() {
   gLoadEventCount += 1;
   if (gLoadEventCount == 1) {
     gLastWindowToHaveFocus = null;
-    gPrefService = Components.classes["@mozilla.org/preferences-service;1"].getService
-                           (Components.interfaces.nsIPrefBranch);
+    gPrefService = Components.classes["@mozilla.org/preferences-service;1"]
+                             .getService(Components.interfaces.nsIPrefBranch);
 
     var re = /rv:([0-9.]+).*Gecko\/([0-9]+)/;
     var arr = re.exec(navigator.userAgent);
@@ -385,7 +385,8 @@ function GetMessageDisplayDirection(messageURI) {
 
   var win,loadedMessageURI,brwsr,winBody,retVal;
 
-  var windowManager = Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(nsIWindowMediator);
+  var windowManager = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+                                .getService(nsIWindowMediator);
   var messengerWindowList = windowManager.getEnumerator("mail:3pane");
   var messageWindowList = windowManager.getEnumerator("mail:messageWindow");
 
