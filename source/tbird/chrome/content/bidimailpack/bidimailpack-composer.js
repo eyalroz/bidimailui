@@ -15,7 +15,7 @@ var gLoadEventCount = 0;    // see comment in InstallComposeWindowEventHandlers(
                             // and the use of this variable in ComposeWindowOnLoad()
 var gLastWindowToHaveFocus; // used to prevent doing unncessary work when a focus
                             // 'changes' to the same window which is already in focus
-var gAlternativeEnterBehavior = true;
+var gAlternativeEnterBehavior;
                             // The default behavior of the Enter key in HTML mail messages
                             // is to insert a <br>; the alternative behavior we implement
                             // is to close a paragraph and begin a new one
@@ -299,12 +299,8 @@ function HandleDirectionButtons() {
   var editorType = GetCurrentEditorType();
 
   if (editorType == 'htmlmail') {
-    var hiddenbuttons = false;
-    try {
-      if (!gPrefService.getBoolPref('mail.compose.show_direction_buttons'))
-        hiddenbuttons = true;
-    }
-    catch(e) { } // preference is not set.
+    var hiddenbuttons = GetBoolPrefWithDefault("mail.compose.show_direction_buttons",
+                                               false);
 
     // Note: the main toolbar buttons are never hidden, since that toolbar
     //       is customizable in tbird anyway
@@ -326,11 +322,8 @@ function LoadParagraphMode() {
     return;
 
   // Determine Enter key behavior
-  try {
-    gAlternativeEnterBehavior =
-        gPrefService.getBoolPref("mailnews.alternative_enter_behavior");
-  }
-  catch(e) {} // pref probably not set
+  gAlternativeEnterBehavior = GetBoolPrefWithDefault("mailnews.alternative_enter_behavior",
+                                                     true);
 
   if (!gAlternativeEnterBehavior)
     return;
@@ -427,19 +420,18 @@ function DetermineNewMessageParams(messageParams) {
 }
 
 function SetInitialMessageDirection(messageParams) {
-  try {
-    if ((!messageParams.isReply && messageParams.isEmpty) ||
-        (messageParams.isReply && gPrefService.getBoolPref("mailnews.reply_in_default_direction")) ) {
-      try {
-        var defaultDirection = gPrefService.getCharPref("mailnews.send_default_direction");
-        if ((defaultDirection == 'rtl') || (defaultDirection == 'RTL'))
-          SetDocumentDirection('rtl');
-        else
-          SetDocumentDirection('ltr');
-        return;
-      } catch(e1) {} // send_default_direction is not set
-    }
-  } catch(e2) {} // reply_in_default_direction is not set
+  if ((!messageParams.isReply && messageParams.isEmpty) ||
+      (messageParams.isReply &&
+      GetBoolPrefWithDefault("mailnews.reply_in_default_direction", false))) {
+    var defaultDirection = GetCharPrefWithDefault("mailnews.send_default_direction",
+                                                  "ltr");
+    if ((defaultDirection == 'rtl') || (defaultDirection == 'RTL'))
+      SetDocumentDirection('rtl');
+    else
+      SetDocumentDirection('ltr');
+
+    return;
+  }
 
   if (messageParams.originalDisplayDirection)
     SetDocumentDirection(messageParams.originalDisplayDirection);
@@ -623,7 +615,7 @@ function onKeyPress(ev) {
 
     // move the caret ourselves if necessary ...
     if (ev.keyCode == KeyEvent.DOM_VK_HOME) {
-      var node = document.getElementById('content-frame').contentDocument.body;;
+      var node = document.getElementById('content-frame').contentDocument.body;
       do {
         node = node.firstChild;
       } while (node.hasChildNodes());
@@ -779,17 +771,10 @@ function isInList() {
 }
 
 function getParagraphMarginFromPref(basePrefName) {
-  var aValue, aScale;
-  try {
-    aValue = gPrefService.getCharPref(basePrefName + ".value");
-    aScale = gPrefService.getCharPref(basePrefName + ".scale");
-  }
-  catch (e) {
-    // default values:
-    aValue = "0"; aScale = "cm";                   
-  }
-  
-  return (aValue+aScale);
+  var aValue = GetCharPrefWithDefault(basePrefName + ".value", "0")
+  var aScale = GetCharPrefWithDefault(basePrefName + ".scale", "cm")
+
+  return (aValue + aScale);
 }
 
 // This function attempts to break off the remainder of the current
@@ -1009,7 +994,8 @@ var directionSwitchController = {
         ClearParagraphDirection();
         break;
       default:
-        dump("The command \"" + command + "\" isn't supported by the direction switch controller\n");
+        dump("The command \"" + command +
+             "\" isn't supported by the direction switch controller\n");
         return false;
     }
     this.setAllCasters();
