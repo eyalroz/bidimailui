@@ -272,8 +272,10 @@ function ComposeWindowOnLoad() {
 
     // Decide which direction switch item should appear in the context menu -
     // the switch for the whole document or for the current paragraph
-    document.getElementById('contextSwitchParagraphDirectionItem').setAttribute('hidden', editorType != 'htmlmail');
-    document.getElementById('contextBodyDirectionItem').setAttribute('hidden', editorType == 'htmlmail');
+    document.getElementById('contextSwitchParagraphDirectionItem')
+            .setAttribute('hidden', editorType != 'htmlmail');
+    document.getElementById('contextBodyDirectionItem')
+            .setAttribute('hidden', editorType == 'htmlmail');
 
   }
   else ComposeWindowOnActualLoad();
@@ -305,9 +307,12 @@ function HandleDirectionButtons() {
 
     // Note: the main toolbar buttons are never hidden, since that toolbar
     //       is customizable in tbird anyway
-    document.getElementById('ltr-paragraph-direction-broadcaster').setAttribute('hidden',hiddenbuttons);
-    document.getElementById('rtl-paragraph-direction-broadcaster').setAttribute('hidden',hiddenbuttons);
-    document.getElementById('directionality-separator-formatting-bar').setAttribute('hidden',hiddenbuttons);   
+    document.getElementById('ltr-paragraph-direction-broadcaster')
+            .setAttribute('hidden', hiddenbuttons);
+    document.getElementById('rtl-paragraph-direction-broadcaster')
+            .setAttribute('hidden', hiddenbuttons);
+    document.getElementById('directionality-separator-formatting-bar')
+            .setAttribute('hidden', hiddenbuttons);   
   }
 
   // TB ONLY: allow mac-specific style-rules (see bidimailpack.css in skin/classic/)
@@ -483,7 +488,8 @@ function InstallComposeWindowEventHandlers() {
   // instead of a load event
 
   document.addEventListener('load', ComposeWindowOnLoad, true);
-  document.addEventListener('compose-window-reopen',ComposeWindowOnActualLoad, true);
+  document.addEventListener('compose-window-reopen', 
+                            ComposeWindowOnActualLoad, true);
   document.addEventListener('keypress', onKeyPress, true);
 }
 
@@ -494,7 +500,7 @@ function findClosestBlockElement(node) {
     if (node.nodeType == node.ELEMENT_NODE) {
       var display = v.getComputedStyle(node, "").getPropertyValue('display');
       if (display == 'block' || display == 'table-cell' || 
-             display == 'table-caption' || display == 'list-item')
+          display == 'table-caption' || display == 'list-item')
         return node;
     }
     node = node.parentNode;
@@ -590,8 +596,10 @@ function SetParagraphDirection(dir) {
 
 function SwitchParagraphDirection() {
   var evalStr =
-    'var dir = (closestBlockElement.ownerDocument.defaultView.getComputedStyle(closestBlockElement, "").getPropertyValue("direction") == "rtl"? "ltr" : "rtl");' +
-    'editor.setAttribute(closestBlockElement, \'dir\', dir);';
+    'var dir = (closestBlockElement.ownerDocument.defaultView' +
+                                   '.getComputedStyle(closestBlockElement, "")' +
+                                   '.getPropertyValue("direction") == "rtl"? "ltr" : "rtl");' +
+    'editor.setAttribute(closestBlockElement, "dir", dir);';
   ApplyToSelectionBlockElements(evalStr);
 }
 
@@ -825,8 +833,13 @@ function InsertParagraph() {
   var isStyleFontSize = { value: false };
   var styleFontSize;
   try {
-    styleFontSize = document.defaultView.getComputedStyle(editor.getSelectionContainer(), "").getPropertyValue("font-size");
-    isStyleFontSize.value = (styleFontSize != document.defaultView.getComputedStyle(findClosestBlockElement(editor.getSelectionContainer()), "").getPropertyValue("font-size"));
+    styleFontSize = document.defaultView
+                            .getComputedStyle(editor.getSelectionContainer(), "")
+                            .getPropertyValue("font-size");
+    var elt = findClosestBlockElement(editor.getSelectionContainer());
+    isStyleFontSize.value = (styleFontSize != document.defaultView
+                                                      .getComputedStyle(elt, "")
+                                                      .getPropertyValue("font-size"));
   }
   catch (e) {}
   // ------------------------------- "remember old style" ------
@@ -943,7 +956,10 @@ var directionSwitchController = {
         command = 'cmd_ltr_document';
         casterID = 'ltr-document-direction-broadcaster';
         oppositeCasterID = 'rtl-document-direction-broadcaster';
-        direction = document.defaultView.getComputedStyle(document.getElementById('content-frame').contentDocument.body, "").getPropertyValue("direction");
+        var body = document.getElementById('content-frame').contentDocument.body;
+        direction = document.defaultView
+                            .getComputedStyle(body, "")
+                            .getPropertyValue("direction");
         break;
       case 'paragraph':
         command = 'cmd_ltr_paragraph';
