@@ -251,12 +251,10 @@ function InsertControlCharacter(controlCharacter) {
 }
 
 function SwitchDocumentDirection() {
-  var currentDir;
-
   var body = document.getElementById('content-frame').contentDocument.body;
-  currentDir = body.getAttribute("dir");
+  var currentDir = window.getComputedStyle(body, null).direction;
 
-  if ((currentDir == 'rtl') || (currentDir == 'RTL'))
+  if (currentDir == "rtl")
     directionSwitchController.doCommand("cmd_ltr_document");
   else
     directionSwitchController.doCommand("cmd_rtl_document");
