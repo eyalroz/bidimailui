@@ -343,7 +343,7 @@ function LoadParagraphMode() {
   if (!gAlternativeEnterBehavior)
     return;
 
-  // Get the vertical margin pref for paragraphs we add
+  // Get the desired space between the paragraphs we add
   // We use global variables in order to avoid different margins in the same document
   gParagraphVerticalMargin = getParagraphMarginFromPref("mailnews.paragraph.vertical_margin");
 
@@ -353,11 +353,11 @@ function LoadParagraphMode() {
     var editor = GetCurrentEditor();
     if (editor) {
       editor.setParagraphFormat("p");
-      // as we don't use doStatefulCommand, we need to update the command state attribute...
+      // as we don't use doStatefulCommand, we need to update the command
+      // state attribute...
       document.getElementById('cmd_paragraphState').setAttribute("state", "p");
       var par = findClosestBlockElement(editor.selection.focusNode);
-      // Set Paragraph Margins
-      par.style.marginTop    = gParagraphVerticalMargin;
+      // Set the paragraph bottom margin
       par.style.marginBottom = gParagraphVerticalMargin;
     }
   } catch(e) {
@@ -787,14 +787,14 @@ function isInList() {
 function getParagraphMarginFromPref(basePrefName) {
   var aValue, aScale;
   try {
-    aValue = parseFloat(gPrefService.getCharPref(basePrefName + ".value")) / 2.0;
+    aValue = gPrefService.getCharPref(basePrefName + ".value");
     aScale = gPrefService.getCharPref(basePrefName + ".scale");
   }
   catch (e) {
     // default values:
     aValue = "0"; aScale = "cm";                   
   }
-  
+
   return (aValue+aScale);
 }
 
@@ -863,8 +863,7 @@ function InsertParagraph() {
         (node.tagName.toLowerCase() == "br") && prevPar.firstChild != node)
     editor.deleteNode(node);
 
-  // Set Paragraph Margins
-  par.style.marginTop    = gParagraphVerticalMargin;
+  // Set the paragraph bottom margin
   par.style.marginBottom = gParagraphVerticalMargin;
 
   editor.endTransaction();
