@@ -1,6 +1,5 @@
 // Common Globals
-gPrefService = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-
+var gPrefService = null;
 
 function misdetectedRTLCodePage(element) {
   var misdetectedCodePageSequence = "([\\u00BF-\\u00FF]{2,}|\\uFFFD{2,})";
@@ -36,7 +35,8 @@ function canBeAssumedRTL(element) {
 function matchInText(element, normalExpression, htmlizedExpression) {
   try {
     var iterator = new XPathEvaluator();
-    var path = iterator.evaluate("//text()", element, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+    var path = iterator.evaluate("//text()", element, null,
+                                 XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
     for (var node = path.iterateNext(); node; node = path.iterateNext())
     {
       if (normalExpression.test(node.data))
@@ -63,4 +63,34 @@ function LoadOSAttributeOnWindow() {
     aSystem = "not_mac";
   
   document.documentElement.setAttribute("system", aSystem);
+}
+
+// Prefs helpers
+function LoadPrefService() {
+  gPrefService = Components.classes["@mozilla.org/preferences-service;1"]
+                           .getService(Components.interfaces.nsIPrefBranch);
+}
+
+function GetBoolPrefWithDefault(prefname, defaultValue) {
+  try {
+    if (!gPrefService)
+      LoadPrefService();
+
+    return gPrefService.getBoolPref(prefname);
+  }
+  catch(er) {
+    return defaultValue;
+  }
+}
+
+function GetCharPrefWithDefault(prefname, defaultValue) {
+  try {
+    if (!gPrefService)
+      LoadPrefService();
+
+    return gPrefService.getCharPref(prefname);
+  }
+  catch(er) {
+    return defaultValue;
+  }
 }

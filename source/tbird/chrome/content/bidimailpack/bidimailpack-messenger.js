@@ -90,11 +90,9 @@ function browserOnLoadHandler() {
   } catch(e) {}
 
   // Auto detect plain text direction
-  var gPrefService = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-  try {
-    if (!gPrefService.getBoolPref("mailnews.message_display.autodetect_direction"))
-      return;
-  } catch(e) { } // preference is not set.  
+  if (!GetBoolPrefWithDefault("mailnews.message_display.autodetect_direction", 
+                              "true"))
+    return; 
 
   if (bodyIsPlainText) {
     if (canBeAssumedRTL(body)) {
@@ -119,7 +117,8 @@ function browserOnLoadHandler() {
       newSS.rel  = "stylesheet";
       newSS.type = "text/css";
       newSS.href = "chrome://bidimailpack/content/weakrtl.css";
-      head = this.docShell.contentViewer.DOMDocument.getElementsByTagName("head")[0];
+      head = this.docShell.contentViewer.DOMDocument
+                          .getElementsByTagName("head")[0];
       if (head) {
         if (head.firstChild)
           head.insertBefore(newSS,head.firstChild);
