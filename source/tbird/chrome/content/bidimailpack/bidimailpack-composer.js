@@ -11,7 +11,6 @@
 
 
 // Globals
-var gPrefService = null;
 var gLoadEventCount = 0;    // see comment in InstallComposeWindowEventHandlers()
                             // and the use of this variable in ComposeWindowOnLoad()
 var gLastWindowToHaveFocus; // used to prevent doing unncessary work when a focus
@@ -260,8 +259,6 @@ function ComposeWindowOnLoad() {
   gLoadEventCount += 1;
   if (gLoadEventCount == 1) {
     gLastWindowToHaveFocus = null;
-    gPrefService = Components.classes["@mozilla.org/preferences-service;1"]
-                             .getService(Components.interfaces.nsIPrefBranch);
 
     var re = /rv:([0-9.]+).*Gecko\/([0-9]+)/;
     var arr = re.exec(navigator.userAgent);
