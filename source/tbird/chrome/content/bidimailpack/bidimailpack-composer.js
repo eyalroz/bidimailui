@@ -299,8 +299,8 @@ function HandleDirectionButtons() {
   var editorType = GetCurrentEditorType();
 
   if (editorType == 'htmlmail') {
-    var hiddenbuttons = GetBoolPrefWithDefault("mail.compose.show_direction_buttons",
-                                               false);
+    var hiddenbuttons = !(GetBoolPrefWithDefault("mail.compose.show_direction_buttons",
+                                               false));
 
     // Note: the main toolbar buttons are never hidden, since that toolbar
     //       is customizable in tbird anyway
