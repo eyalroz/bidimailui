@@ -4,7 +4,9 @@
          xmlns:chrome="http://www.mozilla.org/rdf/chrome#">
 
   <RDF:Seq about="urn:mozilla:locale:root">
-    <RDF:li resource="urn:mozilla:locale:en-US"/>
+    <RDF:li resource="urn:mozilla:locale:en-US">
+      <RDF:Description about="urn:mozilla:locale:en-US" chrome:displayName="English (US)" chrome:name="en-US">
+    </RDF>
   </RDF:Seq>
 
   <RDF:Description about="urn:mozilla:locale:en-US">
