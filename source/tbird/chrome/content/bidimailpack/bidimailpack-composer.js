@@ -345,8 +345,9 @@ function LoadParagraphMode()
       // state attribute...
       document.getElementById("cmd_paragraphState").setAttribute("state", "p");
       var par = findClosestBlockElement(editor.selection.focusNode);
-      // Set the paragraph bottom margin
+      // Set "Space between paragraphs"
       par.style.marginBottom = gParagraphVerticalMargin;
+      par.style.marginTop = 0;
     }
   } catch(ex) {
     // since the window is not 'ready', something might throw
@@ -831,8 +832,9 @@ function InsertParagraph()
           (node.tagName.toLowerCase() == "br") && prevPar.firstChild != node)
    editor.deleteNode(node);
 
-  // Set the paragraph bottom margin
+  // Set "Space Between Paragraphs"
   par.style.marginBottom = gParagraphVerticalMargin;
+  par.style.marginTop = 0;
 
   editor.endTransaction();
 
