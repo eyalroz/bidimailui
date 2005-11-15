@@ -1,7 +1,8 @@
 // Common Globals
 var gPrefService = null;
 
-function misdetectedRTLCodePage(element) {
+function misdetectedRTLCodePage(element)
+{
   var misdetectedCodePageSequence = "([\\u00BF-\\u00FF]{2,}|\\uFFFD{2,})";
   var normalIgnore = "(\\s|[<>\\.;,:0-9\"'])";
   var normalExpression = new RegExp ("(^|" + normalIgnore + "+)" + misdetectedCodePageSequence + "("+ normalIgnore + "+|$)");
@@ -11,8 +12,8 @@ function misdetectedRTLCodePage(element) {
   return matchInText(element, normalExpression, htmlizedExpression);
 }
 
-function canBeAssumedRTL(element) {
-
+function canBeAssumedRTL(element)
+{
   // we check whether there exists a line which either begins
   // with a word consisting solely of characters of an RTL script,
   // or ends with two such words (excluding any punctuation/spacing/
@@ -32,7 +33,8 @@ function canBeAssumedRTL(element) {
   return matchInText(element, normalExpression, htmlizedExpression);
 }
 
-function matchInText(element, normalExpression, htmlizedExpression) {
+function matchInText(element, normalExpression, htmlizedExpression)
+{
   try {
     var iterator = new XPathEvaluator();
     var path = iterator.evaluate("//text()", element, null,
@@ -42,7 +44,8 @@ function matchInText(element, normalExpression, htmlizedExpression) {
       if (normalExpression.test(node.data))
       return true;
     }
-  } catch (e) {
+  }
+  catch (ex) {
     // 'new XPathEvaluator()' doesn't work for some reason, so we have
     // to test the HTMLized message rather than the bare text lines;
     // the regexp must change accordingly
@@ -53,44 +56,43 @@ function matchInText(element, normalExpression, htmlizedExpression) {
   return false;
 }
 
-function LoadOSAttributeOnWindow() {
-  // We use different style rules on mac pinstripe theme
-  var aSystem;
-
-  if (navigator.platform == "MacPPC")
-    aSystem = "mac";
-  else
-    aSystem = "not_mac";
-  
-  document.documentElement.setAttribute("system", aSystem);
+function LoadOSAttributeOnWindow()
+{
+  // We use different style rules on mac
+  document.documentElement
+          .setAttribute("system",
+                        /Mac/.test(navigator.platform) ? "mac" : "not_mac");
 }
 
 // Prefs helpers
-function LoadPrefService() {
+function LoadPrefService()
+{
   gPrefService = Components.classes["@mozilla.org/preferences-service;1"]
                            .getService(Components.interfaces.nsIPrefBranch);
 }
 
-function GetBoolPrefWithDefault(prefname, defaultValue) {
+function GetBoolPrefWithDefault(prefname, defaultValue)
+{
   try {
     if (!gPrefService)
       LoadPrefService();
 
     return gPrefService.getBoolPref(prefname);
   }
-  catch(er) {
+  catch (ex) {
     return defaultValue;
   }
 }
 
-function GetCharPrefWithDefault(prefname, defaultValue) {
+function GetCharPrefWithDefault(prefname, defaultValue)
+{
   try {
     if (!gPrefService)
       LoadPrefService();
 
     return gPrefService.getCharPref(prefname);
   }
-  catch(er) {
+  catch (ex) {
     return defaultValue;
   }
 }
