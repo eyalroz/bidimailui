@@ -325,15 +325,16 @@ function LoadParagraphMode()
     return;
 
   // Determine Enter key behavior
-  gAlternativeEnterBehavior = GetBoolPrefWithDefault("mailnews.alternative_enter_behavior",
-                                                     true);
+  gAlternativeEnterBehavior =
+    GetBoolPrefWithDefault("mailnews.alternative_enter_behavior", true);
 
   if (!gAlternativeEnterBehavior)
     return;
 
   // Get the desired space between the paragraphs we add
   // We use global variables in order to avoid different margins in the same document
-  gParagraphVerticalMargin = GetParagraphMarginFromPref("mailnews.paragraph.vertical_margin");
+  gParagraphVerticalMargin =
+    GetParagraphMarginFromPref("mailnews.paragraph.vertical_margin");
 
   // our extension likes paragraph text entry, not 'body text' - since
   // paragraph are block elements, with a direction setting
@@ -349,7 +350,7 @@ function LoadParagraphMode()
       par.style.marginBottom = gParagraphVerticalMargin;
       par.style.marginTop = 0;
     }
-  } catch(ex) {
+  } catch (ex) {
     // since the window is not 'ready', something might throw
     // an exception here, like inability to focus etc.
     dump(ex);
@@ -404,7 +405,8 @@ function DetermineNewMessageParams(messageParams)
   try {
     messageParams.isReply = (gMsgCompose.originalMsgURI.length > 0);
   }
-  catch(e) {};
+  catch (ex) { };
+
   try {
     if (!body.hasChildNodes()) 
       messageParams.isEmpty = true;
@@ -421,7 +423,7 @@ function DetermineNewMessageParams(messageParams)
         messageParams.isEmpty = true;
     }
   }
-  catch(e) {
+  catch (ex) {
     // can't get elements - must be empty...
     messageParams.isEmpty = true;
   }
