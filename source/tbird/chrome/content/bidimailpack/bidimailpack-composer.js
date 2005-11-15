@@ -62,7 +62,7 @@ function GetCurrentSelectionDirection()
 
     cac = range.commonAncestorContainer;
 
-    cbe = findClosestBlockElement(cac);
+    cbe = FindClosestBlockElement(cac);
     switch (view.getComputedStyle(cbe, "").getPropertyValue("direction")) {
       case "ltr":
         cacIsLTR = true;
@@ -345,7 +345,7 @@ function LoadParagraphMode()
       // as we don't use doStatefulCommand, we need to update the command
       // state attribute...
       document.getElementById("cmd_paragraphState").setAttribute("state", "p");
-      var par = findClosestBlockElement(editor.selection.focusNode);
+      var par = FindClosestBlockElement(editor.selection.focusNode);
       // Set "Space between paragraphs"
       par.style.marginBottom = gParagraphVerticalMargin;
       par.style.marginTop = 0;
@@ -501,7 +501,7 @@ function InstallComposeWindowEventHandlers()
   document.addEventListener("keypress", onKeyPress, true);
 }
 
-function findClosestBlockElement(node)
+function FindClosestBlockElement(node)
 {
   // Try to locate the closest ancestor with display:block
   var v = node.ownerDocument.defaultView;
@@ -551,7 +551,7 @@ function ApplyToSelectionBlockElements(evalStr)
         do {
           // jsConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
 
-          var closestBlockElement = findClosestBlockElement(node);
+          var closestBlockElement = FindClosestBlockElement(node);
           if (closestBlockElement) {
             // jsConsoleService.logStringMessage('found closestBlockElement:' + closestBlockElement + "\ntype: " + closestBlockElement.nodeType + "\nHTML:\n" + closestBlockElement.innerHTML + "\nvalue:\n" + closestBlockElement.nodeValue);
             eval(evalStr);
@@ -657,7 +657,7 @@ function onKeyPress(ev)
     // (NOT: <p>[p1 content]<br>[p2 content]</p> as nsIHTMLEditor's impl')
     else if (ev.keyCode == KeyEvent.DOM_VK_BACK_SPACE) {
       if (editor.selection.isCollapsed) {
-        var par = findClosestBlockElement(editor.selection.focusNode);
+        var par = FindClosestBlockElement(editor.selection.focusNode);
         var prevPar = par.previousSibling;
         if ( (par) && (prevPar) &&
              (prevPar.tagName.toLowerCase() == "p") &&
@@ -808,7 +808,7 @@ function InsertParagraph()
     styleFontSize = document.defaultView
                             .getComputedStyle(editor.getSelectionContainer(), "")
                             .getPropertyValue("font-size");
-    var elt = findClosestBlockElement(editor.getSelectionContainer());
+    var elt = FindClosestBlockElement(editor.getSelectionContainer());
     isStyleFontSize.value = (styleFontSize != document.defaultView
                                                       .getComputedStyle(elt, "")
                                                       .getPropertyValue("font-size"));
@@ -818,7 +818,7 @@ function InsertParagraph()
 
   editor.insertLineBreak();
   editor.setParagraphFormat("p");
-  var par = findClosestBlockElement(editor.selection.focusNode);
+  var par = FindClosestBlockElement(editor.selection.focusNode);
   var prevPar = par.previousSibling;
 
   // Hunt down and shoot the extra BR. We don't want it.
