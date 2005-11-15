@@ -1,39 +1,42 @@
-function SetMessageDirection(dir) {
+function SetMessageDirection(dir)
+{
   var brwsr = getMessageBrowser();
-  if (!brwsr) return;
+  if (!brwsr)
+    return;
+
   var body = brwsr.docShell.contentViewer.DOMDocument.body;
   body.setAttribute('dir', dir);
   // TB only
   UpdateDirectionButtons(dir);
 }
 
-function SwitchMessageDirection() {
+function SwitchMessageDirection()
+{
   var brwsr = getMessageBrowser();
-  if (!brwsr) return;
-  var body = brwsr.docShell.contentViewer.DOMDocument.body;
-  var currentDir = window.getComputedStyle(body, null).direction;
+  if (!brwsr)
+    return;
 
-  if (currentDir == 'rtl') {
-    body.setAttribute('dir', 'ltr');
-    UpdateDirectionButtons('ltr');
-  } 
-  else {
-    body.setAttribute('dir', 'rtl');
-    UpdateDirectionButtons('rtl');
-  }
+  var body = brwsr.docShell.contentViewer.DOMDocument.body;
+  var oppositeDirection =
+    window.getComputedStyle(body, null).direction == "ltr" ? "rtl" : "ltr";
+
+  body.setAttribute("dir", oppositeDirection);
+  UpdateDirectionButtons(oppositeDirection);
 }
 
 // TB only - update optional direction buttons status
-function UpdateDirectionButtons(direction) {
+function UpdateDirectionButtons(direction)
+{
   var caster = document.getElementById("ltr-document-direction-broadcaster");
   caster.setAttribute("checked", direction == "ltr");
   caster = document.getElementById("rtl-document-direction-broadcaster");
   caster.setAttribute("checked", direction == "rtl");
 }
 
-function browserOnLoadHandler() {
+function browserOnLoadHandler()
+{
   // just in case, load attributes on elements after the dom tree is ready
-  setTimeout('LoadOSAttributeOnWindow();', 0);
+  setTimeout(LoadOSAttributeOnWindow, 0);
   
   var body = this.docShell.contentViewer.DOMDocument.body;
   var bodyIsPlainText = body.childNodes.length > 1
@@ -96,16 +99,18 @@ function browserOnLoadHandler() {
 
   if (bodyIsPlainText) {
     if (canBeAssumedRTL(body)) {
-      SetMessageDirection('rtl');
-      UpdateDirectionButtons('rtl');
+      SetMessageDirection("rtl");
+      UpdateDirectionButtons("rtl");
     }
-    else UpdateDirectionButtons('ltr');
+    else
+      UpdateDirectionButtons("ltr");
+
     return;
   }
   
   // It's an HTML message
 
-  if (!body.getAttribute('dir')) {
+  if (!body.getAttribute("dir")) {
     if (canBeAssumedRTL(body)) {
       // the body is has no DIR attribute, but it looks RTLish
       // so let's add an initial stylesheet saying it's RTL,
@@ -125,11 +130,14 @@ function browserOnLoadHandler() {
         else head.appendChild(newSS);
         UpdateDirectionButtons('rtl');
       }
-      else UpdateDirectionButtons('ltr');
+      else
+        UpdateDirectionButtons("ltr");
     }
-    else UpdateDirectionButtons('ltr');
+    else
+      UpdateDirectionButtons("ltr");
   }
-  else UpdateDirectionButtons('ltr');
+  else
+    UpdateDirectionButtons("ltr");
 }
 
 function OnLoadHandler() {
