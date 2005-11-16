@@ -104,34 +104,30 @@ function browserOnLoadHandler()
   
   // It's an HTML message
 
-  if (!body.getAttribute("dir")) {
-    if (canBeAssumedRTL(body)) {
-      // the body has no DIR attribute, but it looks RTLish
-      // so let's add an initial stylesheet saying it's RTL,
-      // which will be overridden by any other stylesheets within 
-      // the document itself
+  if (!body.hasAttribute("dir") &&
+      window.getComputedStyle(body, null).direction == "ltr" &&
+      canBeAssumedRTL(body)) {
+    // the body has no DIR attribute and isn't already set to be RTLed,
+    // but it looks RTLish, so let's add an initial stylesheet saying it's RTL,
+    // which will be overridden by any other stylesheets within 
+    // the document itself
 
+    head = this.docShell.contentViewer.DOMDocument
+                        .getElementsByTagName("head")[0];
+    if (head) {
       var newSS;
       newSS = this.docShell.contentViewer.DOMDocument.createElement("link");
       newSS.rel  = "stylesheet";
       newSS.type = "text/css";
       newSS.href = "chrome://bidimailpack/content/weakrtl.css";
-      head = this.docShell.contentViewer.DOMDocument
-                          .getElementsByTagName("head")[0];
-      if (head) {
-        if (head.firstChild)
-          head.insertBefore(newSS,head.firstChild);
-        else head.appendChild(newSS);
-        UpdateDirectionButtons("rtl");
-      }
+      if (head.firstChild)
+        head.insertBefore(newSS,head.firstChild);
       else
-        UpdateDirectionButtons("ltr");
+        head.appendChild(newSS);
     }
-    else
-      UpdateDirectionButtons("ltr");
   }
-  else
-    UpdateDirectionButtons("ltr");
+
+  UpdateDirectionButtons(window.getComputedStyle(body, null).direction);
 }
 
 function OnLoadHandler() {
