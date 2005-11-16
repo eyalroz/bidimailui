@@ -302,8 +302,8 @@ function HandleComposeReplyCSS()
 function HandleDirectionButtons()
 {
   if (GetCurrentEditorType() == "htmlmail") {
-    var hiddenbuttons = !(GetBoolPrefWithDefault("mail.compose.show_direction_buttons",
-                                               false));
+    var hiddenbuttons =
+      !gBDMPrefs.getBoolPref("compose.show_direction_buttons", true);
 
     // Note: the main toolbar buttons are never hidden, since that toolbar
     //       is customizable in tbird anyway
@@ -326,7 +326,7 @@ function LoadParagraphMode()
 
   // Determine Enter key behavior
   gAlternativeEnterBehavior =
-    GetBoolPrefWithDefault("mailnews.alternative_enter_behavior", true);
+    gBDMPrefs.getBoolPref("compose.alternative_enter_behavior", true);
 
   if (!gAlternativeEnterBehavior)
     return;
@@ -334,7 +334,7 @@ function LoadParagraphMode()
   // Get the desired space between the paragraphs we add
   // We use global variables in order to avoid different margins in the same document
   gParagraphVerticalMargin =
-    GetParagraphMarginFromPref("mailnews.paragraph.vertical_margin");
+    GetParagraphMarginFromPref("compose.space_between_paragraphs");
 
   // our extension likes paragraph text entry, not 'body text' - since
   // paragraph are block elements, with a direction setting
@@ -438,11 +438,12 @@ function DetermineNewMessageParams(messageParams)
 
 function SetInitialMessageDirection(messageParams)
 {
-  if ((!messageParams.isReply && messageParams.isEmpty) ||
-      (messageParams.isReply &&
-      GetBoolPrefWithDefault("mailnews.reply_in_default_direction", false))) {
-    var defaultDirection = GetCharPrefWithDefault("mailnews.send_default_direction",
-                                                  "ltr").toLowerCase();
+  if ( (!messageParams.isReply && messageParams.isEmpty) ||
+       (messageParams.isReply &&
+        gBDMPrefs.getBoolPref("compose.reply_in_default_direction", false)) ) {
+    var defaultDirection =
+      gBDMPrefs.getCharPref("compose.default_direction",
+                             "ltr").toLowerCase();
     SetDocumentDirection(defaultDirection == "rtl" ? "rtl" : "ltr");
     return;
   }
@@ -757,10 +758,8 @@ function isInList()
 
 function GetParagraphMarginFromPref(basePrefName)
 {
-  var aValue = GetCharPrefWithDefault(basePrefName + ".value", "0")
-  var aScale = GetCharPrefWithDefault(basePrefName + ".scale", "cm")
-
-  return (aValue + aScale);
+  return (gBDMPrefs.getCharPref(basePrefName + ".value", "0") +
+          gBDMPrefs.getCharPref(basePrefName + ".scale", "cm"))
 }
 
 // This function attempts to break off the remainder of the current
