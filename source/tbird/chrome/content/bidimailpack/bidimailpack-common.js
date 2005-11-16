@@ -1,6 +1,3 @@
-// Common Globals
-var gPrefService = null;
-
 function misdetectedRTLCodePage(element)
 {
   var misdetectedCodePageSequence = "([\\u00BF-\\u00FF]{2,}|\\uFFFD{2,})";
@@ -64,35 +61,53 @@ function LoadOSAttributeOnWindow()
                         /Mac/.test(navigator.platform) ? "mac" : "not_mac");
 }
 
-// Prefs helpers
-function LoadPrefService()
-{
-  gPrefService = Components.classes["@mozilla.org/preferences-service;1"]
-                           .getService(Components.interfaces.nsIPrefBranch);
-}
+// Prefs helper
+var gBDMPrefs = {
+  _prefService: null,
 
-function GetBoolPrefWithDefault(prefname, defaultValue)
-{
-  try {
-    if (!gPrefService)
-      LoadPrefService();
+  get prefService()
+  {
+    if (!this._prefService) 
+      this._prefService =
+        Components.classes["@mozilla.org/preferences-service;1"]
+                  .getService(Components.interfaces.nsIPrefBranch2);
 
-    return gPrefService.getBoolPref(prefname);
-  }
-  catch (ex) {
-    return defaultValue;
-  }
-}
+    return this._prefService;
+  },
 
-function GetCharPrefWithDefault(prefname, defaultValue)
-{
-  try {
-    if (!gPrefService)
-      LoadPrefService();
+  getBoolPref: function(prefName, defaultValue) {
+    try {
+      return this.prefService.getBoolPref("bidiui.mail." + prefName);
+    }
+    catch (ex) {
+      if (defaultValue != undefined)
+        return defaultValue;
 
-    return gPrefService.getCharPref(prefname);
-  }
-  catch (ex) {
-    return defaultValue;
+      throw(ex);
+    }
+  },
+
+  getCharPref: function(prefName, defaultValue) {
+    try {
+      return this.prefService.getCharPref("bidiui.mail." + prefName);
+    }
+    catch (ex) {
+      if (defaultValue != undefined)
+        return defaultValue;
+
+      throw(ex);
+    }
+  },
+
+  getIntPref: function(prefName, defaultValue) {
+    try {
+      return this.prefService.getIntPref("bidiui.mail." + prefName);
+    }
+    catch (ex) {
+      if (defaultValue != undefined)
+        return defaultValue;
+
+      throw(ex);
+    }
   }
 }

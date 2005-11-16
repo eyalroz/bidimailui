@@ -52,50 +52,44 @@ function browserOnLoadHandler()
   if (head)
     head.appendChild(newSS);
 
-  // Auto-detect some mis-decoded messages
+  // -- Auto-detect some mis-decoded messages
+  // When shall we attempt re-detection and overriding of the character set?
+  // not if the encoding has _already_ been overridden (either due to the pref
+  // or not) and not if the default charset is not one of the 256-char codepages
+  // we expect get mangled, and then only when the charset is reported as one of
+  // the defaultish ones (or not reported at all)?
+  // Note that this means we don't detect 'false positives' e.g. of
+  // identifying a non-windows-1255 as windows-1255
+
+  var charsetPref = null;
   try {
-    var forcePref = false, charsetPref = null;
-    var misdecodeAutodetectPref = true;
-    try {
-      forcePref = gPrefService.getBoolPref("mailnews.force_charset_override");
-    } catch(e) {}
-    try {
-      charsetPref = gPrefService.getCharPref("mailnews.view_default_charset");
-    } catch(e) {}
-    try {
-      misdecodeAutodetectPref = gPrefService.getBoolPref("mailnews.message_display.autodetect_bidi_misdecoding");
-    } catch(e) {}
-     
-    // When shall we attempt re-detection and overriding of the character set?
-    // not if the encoding has _already_ been overridden (either due to the pref or not)
-    // and not if the default charset is not one of the 256-char codepages we expect get
-    // mangled, and then only when the charset is reported as one of the defaultish ones
-    // (or not reported at all)?
-    // Note that this means we don't detect 'false positives' e.g. of
-    // identifying a non-windows-1255 as windows-1255
-      
-    if ( misdecodeAutodetectPref && charsetPref &&
-         ((charsetPref == 'windows-1255') ||
-          (charsetPref == 'windows-1256')) &&
-         (!msgWindow.charsetOverride) &&
-         ((!msgWindow.mailCharacterSet) ||
-          (msgWindow.mailCharacterSet == 'US-ASCII') ||
-          (msgWindow.mailCharacterSet == 'ISO-8859-1') ||
-          (msgWindow.mailCharacterSet == 'windows-1252') ||
-          (msgWindow.mailCharacterSet == '')) ) {
+    charsetPref =
+      gBDMPrefs.prefService.getCharPref("mailnews.view_default_charset");
+  }
+  catch (ex) { }
+
+  if (charsetPref) {
+    var misdecodeAutodetectPref =
+      gBDMPrefs.getBoolPref("display.autodetect_bidi_misdecoding", true);
+    if ( misdecodeAutodetectPref &&
+         (charsetPref == "windows-1255" || charsetPref == "windows-1256") &&
+         !msgWindow.charsetOverride &&
+         (!msgWindow.mailCharacterSet ||
+          msgWindow.mailCharacterSet == "US-ASCII" ||
+          msgWindow.mailCharacterSet == "ISO-8859-1" ||
+          msgWindow.mailCharacterSet == "windows-1252" ||
+          msgWindow.mailCharacterSet == "") ) {
       if (misdetectedRTLCodePage(body)) {
         messenger.SetDocumentCharset(charsetPref);
         msgWindow.mailCharacterSet = charsetPref;
         msgWindow.charsetOverride = true;
       }
     }
-
-  } catch(e) {}
+  } 
 
   // Auto detect plain text direction
-  if (!GetBoolPrefWithDefault("mailnews.message_display.autodetect_direction", 
-                              "true"))
-    return; 
+  if (!gBDMPrefs.getBoolPref("display.autodetect_direction", true))
+    return;
 
   if (bodyIsPlainText) {
     if (canBeAssumedRTL(body)) {
@@ -112,11 +106,11 @@ function browserOnLoadHandler()
 
   if (!body.getAttribute("dir")) {
     if (canBeAssumedRTL(body)) {
-      // the body is has no DIR attribute, but it looks RTLish
+      // the body has no DIR attribute, but it looks RTLish
       // so let's add an initial stylesheet saying it's RTL,
       // which will be overridden by any other stylesheets within 
       // the document itself
-  
+
       var newSS;
       newSS = this.docShell.contentViewer.DOMDocument.createElement("link");
       newSS.rel  = "stylesheet";
@@ -128,7 +122,7 @@ function browserOnLoadHandler()
         if (head.firstChild)
           head.insertBefore(newSS,head.firstChild);
         else head.appendChild(newSS);
-        UpdateDirectionButtons('rtl');
+        UpdateDirectionButtons("rtl");
       }
       else
         UpdateDirectionButtons("ltr");
