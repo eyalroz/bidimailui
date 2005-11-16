@@ -4,8 +4,8 @@ function initValues()
 
   // Default composing direction for a new message. Default: LTR.
   var prefDir = GetCharPrefWithDefault("mailnews.send_default_direction",
-                                       "LTR");
-  if ( (prefDir == 'RTL') || (prefDir == 'rtl') )
+                                       "ltr").toLowerCase();
+  if (prefDir == "rtl")
     document.getElementById('bidimailpack-default-dir').selectedIndex = 1;
   else
     document.getElementById('bidimailpack-default-dir').selectedIndex = 0;
