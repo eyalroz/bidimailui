@@ -1,49 +1,84 @@
 <?xml version="1.0"?>
 
-<?xml-stylesheet href="chrome://communicator/skin/" type="text/css"?>
-<?xml-stylesheet href="chrome://messenger/skin/prefPanels.css" type="text/css"?>
+<?xml-stylesheet href="chrome://global/skin/"?>
+<?xml-stylesheet href="chrome://messenger/skin/preferences/preferences.css"?>
 
-<!DOCTYPE page SYSTEM "chrome://bidimailpack/locale/bidimailpack-prefs.dtd">
+<!DOCTYPE prefwindow [
+  <!ENTITY % bdmDTD SYSTEM
+             "chrome://bidimailpack/locale/bidimailpack-prefs.dtd">
+  %bdmDTD;
+]>
 
-<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-        onload="initPane();"
-        persist="screenX screenY"
-        title="&bidimailpack-settings;"
-        buttons="accept,cancel,help"
-        helplink="&guide-url;"
-        ondialogaccept="return dialogAccept();"
-        ondialoghelp="openURL(document.documentElement.getAttribute('helplink'));">
+<prefwindow xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+            title="&bidimailpack-settings;"
+            dlgbuttons="accept,cancel">
+  <prefpane id="bidiMailUIPrefPane"
+            helpURI="&guide-url;"
+            onpaneload="gBDMPrefPane.init();">
+    <preferences id="bidiMailUIPrefs">
+      <preference id="bidiui.mail.compose.default_direction"
+                  name="bidiui.mail.compose.default_direction"
+                  type="string"/>
+      <preference id="bidiui.mail.compose.reply_in_default_direction"
+                  name="bidiui.mail.compose.reply_in_default_direction"
+                  type="bool"/>
+      <preference id="bidiui.mail.compose.show_direction_buttons"
+                  name="bidiui.mail.compose.show_direction_buttons"
+                  type="bool"/>
+      <preference id="bidiui.mail.compose.space_between_paragraphs.value"
+                  name="bidiui.mail.compose.space_between_paragraphs.value"
+                  type="string"/>
+      <preference id="bidiui.mail.compose.space_between_paragraphs.scale"
+                  name="bidiui.mail.compose.space_between_paragraphs.scale"
+                  type="string"
+                  onchange="gBDMPrefPane.updateSpaceBetweenParagraphsValue();"/>
+    </preferences>
 
-  <script type="application/x-javascript" src="chrome://bidimailpack/content/bidimailpack-common.js"/>
-  <script type="application/x-javascript" src="chrome://bidimailpack/content/bidimailpack-prefs.js"/>
-  <script type="application/x-javascript" src="chrome://mozapps/content/extensions/extensions.js"/>
+    <script type="application/x-javascript"
+            src="chrome://bidimailpack/content/bidimailpack-prefs.js"/>
 
-  <description>&default-dir;</description>
-  <hbox class="indent">
-    <radiogroup id="bidimailpack-default-dir">
-      <radio id="bidimailpack-default-dir-ltr" value="ltr" label="&ltr.label;" accesskey="&ltr.accesskey;" />
-      <radio id="bidimailpack-default-dir-rtl" value="rtl" label="&rtl.label;" accesskey="&rtl.accesskey;" />
-    </radiogroup>
-  </hbox>
+    <description>&default-dir;</description>
+    <hbox class="indent">
+      <radiogroup preference="bidiui.mail.compose.default_direction">
+        <radio value="ltr" label="&ltr.label;" accesskey="&ltr.accesskey;"/>
+        <radio value="rtl" label="&rtl.label;" accesskey="&rtl.accesskey;"/>
+      </radiogroup>
+    </hbox>
 
-  <spacer style="height: 0.75em;" />
+    <spacer style="height: 0.75em;" />
 
-  <checkbox id="bidimailpack-reply-in-default-dir" 
-            checked="false" label="&always-reply-in-default-dir.label;" accesskey="&always-reply-in-default-dir.accesskey;"
-            autostretch="never" />
-  <checkbox id="bidimailpack-display-buttons"
-            checked="true" label="&display-buttons.label;" accesskey="&display-buttons.accesskey;"
-            autostretch="never" />
+    <checkbox preference="bidiui.mail.compose.reply_in_default_direction"
+              checked="false"
+              label="&always-reply-in-default-dir.label;"
+              accesskey="&always-reply-in-default-dir.accesskey;"
+              autostretch="never"/>
+    <checkbox preference="bidiui.mail.compose.show_direction_buttons"
+              checked="true"
+              label="&display-buttons.label;"
+              accesskey="&display-buttons.accesskey;"
+              autostretch="never"/>
 
-  <spacer style="height: 0.75em;" />
-
-  <hbox align="center">
-    <description>&verticalParagraphMargins.label;</description>
-    <hbox id="paragraph_vertical_margin"
-          style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
-          class="indent"
-          prefbase="mailnews.paragraph.vertical_margin"/>
-  </hbox>
-
-  <spacer style="height: 0.5em;" />
-</dialog>
+    <spacer style="height: 0.75em;"/>
+    <hbox align="center">
+      <description>&verticalParagraphMargins.label;</description>
+      <textbox id="space_between_paragraphs_value_text"
+               size="4"
+               preference="bidiui.mail.compose.space_between_paragraphs.value"
+               onsynctopreference="return 
+                                   gBDMPrefPane.getSpaceBetweenParagraphsValue();"/>
+      <menulist preference="bidiui.mail.compose.space_between_paragraphs.scale">
+        <menupopup>
+          <menuitem value="cm"
+                    label="&cmScale.label;"
+                    accesskey="&cmScale.accesskey;"/>
+          <menuitem value="px"
+                    label="&pixelScale.label;" 
+                    accesskey="&pixelScale.accesskey;"/>
+          <menuitem value="pt"
+                    label="&ptScale.label;"
+                    accesskey="&ptScale.accesskey;"/>
+        </menupopup>
+      </menulist>
+    </hbox>
+  </prefpane>
+</prefwindow>
