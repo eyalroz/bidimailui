@@ -24,7 +24,7 @@ var gLoadEventCount = 0;    // see comment in InstallComposeWindowEventHandlers(
                             // and the use of this variable in ComposeWindowOnLoad()
 var gLastWindowToHaveFocus; // used to prevent doing unncessary work when a focus
                             // 'changes' to the same window which is already in focus
-var gAlternativeEnterBehavior = true;
+var gAlternativeEnterBehavior;
                             // The default behavior of the Enter key in HTML mail messages
                             // is to insert a <br>; the alternative behavior we implement
                             // is to close a paragraph and begin a new one
@@ -55,7 +55,7 @@ function GetCurrentSelectionDirection()
   }
   catch(ex) {
     // the editor is apparently unavailable... although it should be available!
-    dump(ex)
+    dump(ex);
     return null;
   }
 
@@ -233,7 +233,7 @@ function GetCurrentSelectionDirection()
         // jsConsoleService.logStringMessage('moving back up');
       } while (node != cac);
 
-     } while (node != cac);
+    } while (node != cac);
 
   } // end of the 'for' over the different selection ranges
 
@@ -264,7 +264,7 @@ function InsertControlCharacter(controlCharacter)
 
 function SwitchDocumentDirection()
 {
-  var body = document.getElementById('content-frame').contentDocument.body;
+  var body = document.getElementById("content-frame").contentDocument.body;
   var currentDir = window.getComputedStyle(body, null).direction;
 
   if (currentDir == "rtl")
@@ -287,10 +287,10 @@ function ComposeWindowOnLoad()
 
     // Decide which direction switch item should appear in the context menu -
     // the switch for the whole document or for the current paragraph
-    document.getElementById('contextSwitchParagraphDirectionItem')
-            .setAttribute('hidden', editorType != "htmlmail");
-    document.getElementById('contextBodyDirectionItem')
-            .setAttribute('hidden', editorType == "htmlmail");
+    document.getElementById("contextSwitchParagraphDirectionItem")
+            .setAttribute("hidden", editorType != "htmlmail");
+    document.getElementById("contextBodyDirectionItem")
+            .setAttribute("hidden", editorType == "htmlmail");
   }
   else
     ComposeWindowOnActualLoad();
@@ -298,7 +298,6 @@ function ComposeWindowOnLoad()
 
 function HandleComposeReplyCSS()
 {
-  var editorType = GetCurrentEditorType();
   if (GetCurrentEditorType() == "htmlmail") {
     var editor = GetCurrentEditor();
     if (!editor) {
@@ -365,13 +364,14 @@ function LoadParagraphMode()
       // state attribute...
       document.getElementById("cmd_paragraphState").setAttribute("state", "p");
       var par = FindClosestBlockElement(editor.selection.focusNode);
-      // Set "Space Between Paragraphs"
+      // Set "Space between paragraphs"
       par.style.marginBottom = gParagraphVerticalMargin;
       par.style.marginTop = 0;
     }
   } catch(ex) {
     // since the window is not 'ready', something might throw
     // an exception here, like inability to focus etc.
+    dump(ex);
   }
 }
 
@@ -423,7 +423,10 @@ function DetermineNewMessageParams(messageParams)
   try {
     messageParams.isReply = (gMsgCompose.originalMsgURI.length > 0);
   }
-  catch(e) {};
+  catch(ex) {
+    dump(ex);
+  };
+
   try {
     if (!body.hasChildNodes()) 
       messageParams.isEmpty = true;
@@ -446,8 +449,10 @@ function DetermineNewMessageParams(messageParams)
   }
  
   if (messageParams.isReply || !messageParams.isEmpty) {
-    // XXX TODO - this doesn't work for drafts; they have no gMsgCompose.originalMsgURI
-    messageParams.originalDisplayDirection = GetMessageDisplayDirection(gMsgCompose.originalMsgURI);
+    // XXX TODO - this doesn't work for drafts;
+    // they have no gMsgCompose.originalMsgURI
+    messageParams.originalDisplayDirection =
+      GetMessageDisplayDirection(gMsgCompose.originalMsgURI);
   }
 }
 
@@ -469,8 +474,8 @@ function SetInitialMessageDirection(messageParams)
     // we shouldn't be able to get here - when replying, the original
     // window should be in existence
     // XXX TODO: but we do get here for drafts
-    if (canBeAssumedRTL(document.getElementById("content-frame").contentDocument
-                                                                .body))
+    if (canBeAssumedRTL(document.getElementById("content-frame")
+                                .contentDocument.body))
       SetDocumentDirection("rtl");
     else
       SetDocumentDirection("ltr");
@@ -753,7 +758,8 @@ function isFirstTextNode(blockElement, node, found)
   return (isFirstTextNode(blockElement, parentNode, found)); 
 }
 
-function isInList() {
+function isInList()
+{
   var editor = GetCurrentEditor();
   editor.beginTransaction();
 
@@ -770,7 +776,8 @@ function isInList() {
     return false;
 }
 
-function GetParagraphMarginFromPref(basePrefName) {
+function GetParagraphMarginFromPref(basePrefName)
+{
   return (gBDMPrefs.getCharPref(basePrefName + ".value", "0") +
           gBDMPrefs.getCharPref(basePrefName + ".scale", "cm"))
 }
@@ -825,7 +832,7 @@ function InsertParagraph()
                                                       .getComputedStyle(elt, "")
                                                       .getPropertyValue("font-size"));
   }
-  catch (e) {}
+  catch(ex) { }
   // ------------------------------- "remember old style" ------
 
   editor.insertLineBreak();
@@ -842,11 +849,11 @@ function InsertParagraph()
   // 2. It's not the special case of the BR being an only child (thus
   //    not a candidate for removal -- we need it to keep the P
   //    from becoming empty)
-  if (node && (node.nodeType == node.ELEMENT_NODE) &&
-        (node.tagName.toLowerCase() == "br") && prevPar.firstChild != node)
+  if (node && node.nodeType == node.ELEMENT_NODE &&
+      node.tagName.toLowerCase() == "br" && prevPar.firstChild != node)
     editor.deleteNode(node);
 
-  // Set "Space Between Paragraphs"
+  // Set "Space between paragraphs"
   par.style.marginBottom = gParagraphVerticalMargin;
   par.style.marginTop = 0;
 
@@ -912,14 +919,14 @@ var directionSwitchController = {
         break;
 
       case "cmd_ltr_document":
-        this.setCasterGroup('document');
+        this.setCasterGroup("document");
       case "cmd_rtl_document":
         // necessary side-effects performed when
         // isCommandEnabled is called for cmd_ltr_document
         break;
       
       case "cmd_ltr_paragraph":
-        this.setCasterGroup('paragraph');
+        this.setCasterGroup("paragraph");
       case "cmd_rtl_paragraph":
         // necessary side-effects performed when
         // isCommandEnabled is called for cmd_ltr_paragraph
@@ -941,10 +948,10 @@ var directionSwitchController = {
         command = "cmd_ltr_document";
         casterID = "ltr-document-direction-broadcaster";
         oppositeCasterID = "rtl-document-direction-broadcaster";
-        direction = document.defaultView
-                            .getComputedStyle(document.getElementById('content-frame')
-                                                      .contentDocument.body, "")
-                                                      .getPropertyValue("direction");
+        direction =
+          document.defaultView
+                  .getComputedStyle(document.getElementById("content-frame")
+                  .contentDocument.body, "").getPropertyValue("direction");
         break;
       case "paragraph":
         command = "cmd_ltr_paragraph";
@@ -962,7 +969,6 @@ var directionSwitchController = {
     caster.setAttribute("disabled", !enabled);
     oppositeCaster.setAttribute("checked", direction == "rtl");
     oppositeCaster.setAttribute("disabled", !enabled);
-
   },
 
   setAllCasters: function() {
@@ -994,16 +1000,18 @@ var directionSwitchController = {
         ClearParagraphDirection();
         break;
       default:
-        dump("The command \"" + command + "\" isn't supported by the direction switch controller\n");
+        dump("The command \"" + command +
+             "\" isn't supported by the direction switch controller\n");
         return false;
     }
     this.setAllCasters();
   }
 }
 
-function CommandUpdate_MsgComposeDirection() {
+function CommandUpdate_MsgComposeDirection()
+{
   var focusedWindow = top.document.commandDispatcher.focusedWindow;
- 
+
   // we're just setting focus to where it was before
   if (focusedWindow == gLastWindowToHaveFocus)
     return;
