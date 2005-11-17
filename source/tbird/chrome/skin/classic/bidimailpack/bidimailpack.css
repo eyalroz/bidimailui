@@ -152,20 +152,3 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
 #button-direction-rtl-formatting-bar[disabled="true"] {
   -moz-image-region: rect(0px 38px 18px 19px) !important;
 }
-
-/* Options Panel */
-
-
-#paragraph_vertical_margin[system="not_mac"][status="non_valid_value"] *
-{
-  background-color: #FF6666;
-  color: #FFFFFF;
-}
-
-#paragraph_vertical_margin[system="mac"][status="non_valid_value"] > textbox {
-  color: darkred;
-}
-
-#paragraph_vertical_margin[status="non_valid_value"] > textbox {
-  font-weight: bold;
-}

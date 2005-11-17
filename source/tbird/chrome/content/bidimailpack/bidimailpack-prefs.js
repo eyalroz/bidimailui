@@ -1,73 +1,56 @@
-function initValues()
-{
-  var element;
+var gBDMPrefPane = {
+  init: function() {
+    window.addEventListener("dialoghelp", this.openGuide, true);
+  },
 
-  // Default composing direction for a new message. Default: LTR.
-  var prefDir = GetCharPrefWithDefault("mailnews.send_default_direction",
-                                       "ltr").toLowerCase();
-  if (prefDir == "rtl")
-    document.getElementById('bidimailpack-default-dir').selectedIndex = 1;
-  else
-    document.getElementById('bidimailpack-default-dir').selectedIndex = 0;
+  openGuide: function(aEvent) {
+    try {
+      // Open the user guide in the default browser.
+      var helpLink = document.getElementById("bidiMailUIPrefPane")
+                             .getAttribute("helpURI");
+      var uri = Components.classes["@mozilla.org/network/io-service;1"]
+                          .getService(Components.interfaces.nsIIOService)
+                          .newURI(helpLink, null, null);
+      var protocolSvc =
+        Components.classes["@mozilla.org/uriloader/external-protocol-service;1"]
+                  .getService(Components.interfaces.nsIExternalProtocolService);
+      protocolSvc.loadUrl(uri);
+    }
+    catch(ex) {
+      dump(ex);
+    }
 
-  // Reply direction options: 
-  //   - same direction as the orginal message, or
-  //   - force default direction
-  // Default: same direction as the original message
-  element = document.getElementById("bidimailpack-reply-in-default-dir");
-  element.checked = GetBoolPrefWithDefault("mailnews.reply_in_default_direction",
-                                           false);
+    // Prevent the default help button behavior
+    aEvent.preventDefault();
+    aEvent.stopPropagation();
+  },
 
-  // Show direction control button when composing a message? Default: True
-  element = document.getElementById('bidimailpack-display-buttons');
-  element.checked = GetBoolPrefWithDefault("mail.compose.show_direction_buttons",
-                                           true);
-}
+  _getBDMPrefElement: function(prefName) {
+    return document.getElementById("bidiui.mail." + prefName);
+  },
 
-function initPane()
-{
-  var dialog = document.documentElement;
-  dialog.getButton("help").hidden = false;
-  initValues();
-}
+  getSpaceBetweenParagraphsValue: function() {
+    var txtBoxValue =
+      document.getElementById("space_between_paragraphs_value_text").value;
+    var rv = 0;
 
-function saveValues()
-{
-    var element;
+    if (this._getBDMPrefElement("compose.space_between_paragraphs.scale")
+            .value == "cm") {
+      var floatVal = parseFloat(txtBoxValue, 10);
+      if (!isNaN(floatVal))
+        rv = floatVal;
+    }
+    else {
+      var intVal = parseInt(txtBoxValue, 10);
+      if (!isNaN(intVal))
+        rv = intVal;
+    }
 
-    element = document.getElementById('bidimailpack-default-dir');
-    gPrefService.setCharPref('mailnews.send_default_direction', element.value);
+    return rv;
+  },
 
-    element = document.getElementById('bidimailpack-reply-in-default-dir');
-    gPrefService.setBoolPref('mailnews.reply_in_default_direction', element.checked);
-
-    element = document.getElementById('bidimailpack-display-buttons');
-    gPrefService.setBoolPref('mail.compose.show_direction_buttons', element.checked);
-    
-    document.getElementById('paragraph_vertical_margin').saveToPrefs();
-}
-
-function dialogAccept()
-{
-  var rv = false;
-
-  if (!document.getElementById('paragraph_vertical_margin').validateData())
-    document.getElementById('paragraph_vertical_margin').focus();
-  else {
-    saveValues();
-    rv = true;
+  updateSpaceBetweenParagraphsValue: function() {
+    this._getBDMPrefElement("compose.space_between_paragraphs.value").value = 
+      this.getSpaceBetweenParagraphsValue();
   }
-  
-  return rv;
-}
-
-function openURL(aURL)
-{
-  var uri = Components.classes["@mozilla.org/network/standard-url;1"]
-                      .createInstance(Components.interfaces.nsIURI);
-  uri.spec = aURL;
-
-  var protocolSvc = Components.classes["@mozilla.org/uriloader/external-protocol-service;1"]
-                              .getService(Components.interfaces.nsIExternalProtocolService);
-  protocolSvc.loadUrl(uri);
-}
+};
