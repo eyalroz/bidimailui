@@ -11,11 +11,12 @@
       headertitle    = "&bidimailpack-preftree-label;">
 
   <script type="application/x-javascript" src="chrome://global/content/globalOverlay.js"/>
+  <script type="application/x-javascript" src="chrome://bidimailpack/content/bidimailpack-common.js"/>
   <script type="application/x-javascript" src="chrome://bidimailpack/content/bidimailpack-prefs.js"/>
   <script type="application/x-javascript">
     function init()
     {
-      parent.initPanel('chrome://bidimailpack/content/bidimailpack-prefs.xul');
+      parent.initPanel("chrome://bidimailpack/content/bidimailpack-prefs.xul");
       const header = top.document.getElementById("header");
       if (header)
       {
@@ -28,34 +29,49 @@
   </script>
 
   <groupbox>
-    <caption label = "&message-composition-groupbox-caption;"/>
+    <caption label="&message-composition-groupbox-caption;"/>
     <description>&default-dir;</description>
       <hbox class="indent">
         <radiogroup id="bidimailpack-default-dir">
-          <radio id="bidimailpack-default-dir-ltr" value="ltr" label="&ltr.label;" accesskey="&ltr.accesskey;" selected="true" />
-          <radio id="bidimailpack-default-dir-rtl" value="rtl" label="&rtl.label;" accesskey="&rtl.accesskey;" />
+          <radio id="bidimailpack-default-dir-ltr"
+                 value="ltr"
+                 label="&ltr.label;"
+                 accesskey="&ltr.accesskey;"/>
+          <radio id="bidimailpack-default-dir-rtl"
+                 value="rtl"
+                 label="&rtl.label;"
+                 accesskey="&rtl.accesskey;"/>
         </radiogroup>
       </hbox>
-      <spacer />
-      <checkbox id="bidimailpack-reply-in-default-dir" checked="false" label="&always-reply-in-default-dir.label;" accesskey="&always-reply-in-default-dir.accesskey;" autostretch="never" />
-      <checkbox id="bidimailpack-display-buttons" checked="false" label="&display-buttons.label;" accesskey="&display-buttons.accesskey;" autostretch="never" />
+      <spacer/>
+      <checkbox id="bidimailpack-reply-in-default-dir"
+                label="&always-reply-in-default-dir.label;"
+                accesskey="&always-reply-in-default-dir.accesskey;"
+                autostretch="never"/>
+      <checkbox id="bidimailpack-display-buttons"
+                label="&display-buttons.label;"
+                accesskey="&display-buttons.accesskey;"
+                autostretch="never"/>
 
-    <spacer style="height: 1em" />
+    <spacer style="height: 1em"/>
+
     <hbox align="center">
       <description>&verticalParagraphMargins.label;</description>
       <hbox id="paragraph_vertical_margin"
             style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
             class="indent"
-            prefbase="mailnews.paragraph.vertical_margin"/>
+            prefbase="bidiui.mail.compose.space_between_paragraphs"/>
     </hbox>
   </groupbox>
 
-  <spacer style="height: 1em" />
+  <spacer style="height: 1em"/>
 
   <description>
     <hbox>
-      <label value="&more-info;" />
-      <html:a href="&guide-url;" onclick="open(this.href, '_new');return false;" style="cursor: pointer; color: blue;">&guide-link-text;</html:a>
+      <label value="&more-info;"/>
+      <html:a href="&guide-url;"
+              onclick="open(this.href, '_new'); return false;"
+              style="cursor: pointer; color: blue;">&guide-link-text;</html:a>
     </hbox>
   </description>
 </page>
