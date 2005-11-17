@@ -20,4 +20,5 @@ ${XPI_FILENAME}: subdirs
 	zip $@ \
 		chrome/bidimailpack.jar \
 		install.js \
-        install.rdf
+		bidimailui.js \
+		install.rdf

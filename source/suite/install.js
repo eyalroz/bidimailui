@@ -43,18 +43,25 @@ if(retval == SUCCESS)
     registerChrome(localeFlag, folder, "locale/ar-SA/" + name + "/");
     registerChrome(skinFlag, folder, "skin/classic/" + name + "/");
     registerChrome(skinFlag, folder, "skin/modern/" + name + "/");
-    
-    retval = performInstall();
 
-    if ((retval != SUCCESS) && (retval != 999) && (retval != -239))
+    // Default Prefs File
+    var componentsDir = getFolder("Program", "components");
+    var prefDir = getFolder("Program", "defaults/pref");
+    retval = addFile( "", "bidimailui.js", prefDir, "");
+    if (retval == SUCCESS) {
+        retval = performInstall();
+
+        if ((retval != SUCCESS) && (retval != 999) && (retval != -239))
+        {
+            explainInstallRetval(retval,false);
+            cancelInstall(retval);
+        }
+    }
+    else
     {
         explainInstallRetval(retval,false);
         cancelInstall(retval);
     }
-    //else
-    //{
-    //    explainInstallRetval(retval,true);
-    //}
 }
 else
 {
