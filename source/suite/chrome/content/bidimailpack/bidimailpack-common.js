@@ -3,11 +3,8 @@
 // - We do not set a document attribute which affects the behavior
 //   of the default theme, so no LoadOSAttributeOnWindow() function
 
-// Common Globals
-gPrefService = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-
-
-function misdetectedRTLCodePage(element) {
+function misdetectedRTLCodePage(element)
+{
   var misdetectedCodePageSequence = "([\\u00BF-\\u00FF]{2,}|\\uFFFD{2,})";
   var normalIgnore = "(\\s|[<>\\.;,:0-9\"'])";
   var normalExpression = new RegExp ("(^|" + normalIgnore + "+)" + misdetectedCodePageSequence + "("+ normalIgnore + "+|$)");
@@ -17,8 +14,8 @@ function misdetectedRTLCodePage(element) {
   return matchInText(element, normalExpression, htmlizedExpression);
 }
 
-function canBeAssumedRTL(element) {
-
+function canBeAssumedRTL(element)
+{
   // we check whether there exists a line which either begins
   // with a word consisting solely of characters of an RTL script,
   // or ends with two such words (excluding any punctuation/spacing/
@@ -38,7 +35,8 @@ function canBeAssumedRTL(element) {
   return matchInText(element, normalExpression, htmlizedExpression);
 }
 
-function matchInText(element, normalExpression, htmlizedExpression) {
+function matchInText(element, normalExpression, htmlizedExpression)
+{
   try {
     var iterator = new XPathEvaluator();
     var path = iterator.evaluate("//text()", element, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
@@ -47,7 +45,7 @@ function matchInText(element, normalExpression, htmlizedExpression) {
       if (normalExpression.test(node.data))
       return true;
     }
-  } catch (e) {
+  } catch(ex) {
     // 'new XPathEvaluator()' doesn't work for some reason, so we have
     // to test the HTMLized message rather than the bare text lines;
     // the regexp must change accordingly
@@ -56,4 +54,67 @@ function matchInText(element, normalExpression, htmlizedExpression) {
       return true;
   }
   return false;
+}
+
+// Prefs helper
+var gBDMPrefs = {
+  _prefService: null,
+
+  get prefService()
+  {
+    if (!this._prefService) 
+      this._prefService =
+        Components.classes["@mozilla.org/preferences-service;1"]
+                  .getService(Components.interfaces.nsIPrefBranch2);
+
+    return this._prefService;
+  },
+
+  getBoolPref: function(prefName, defaultValue) {
+    try {
+      return this.prefService.getBoolPref("bidiui.mail." + prefName);
+    }
+    catch(ex) {
+      if (defaultValue != undefined)
+        return defaultValue;
+
+      throw(ex);
+    }
+  },
+
+  getCharPref: function(prefName, defaultValue) {
+    try {
+      return this.prefService.getCharPref("bidiui.mail." + prefName);
+    }
+    catch(ex) {
+      if (defaultValue != undefined)
+        return defaultValue;
+
+      throw(ex);
+    }
+  },
+
+  getIntPref: function(prefName, defaultValue) {
+    try {
+      return this.prefService.getIntPref("bidiui.mail." + prefName);
+    }
+    catch(ex) {
+      if (defaultValue != undefined)
+        return defaultValue;
+
+      throw(ex);
+    }
+  },
+
+  setBoolPref: function(prefName, val) {
+    this.prefService.setBoolPref("bidiui.mail." + prefName, val);
+  },
+
+  setCharPref: function(prefName, val) {
+    this.prefService.setCharPref("bidiui.mail." + prefName, val);
+  },
+
+  setIntPref: function(prefName, val) {
+    this.prefService.setIntPref("bidiui.mail." + prefName, val);
+  }
 }
