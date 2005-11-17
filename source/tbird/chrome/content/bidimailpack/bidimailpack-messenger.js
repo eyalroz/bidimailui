@@ -5,7 +5,7 @@ function SetMessageDirection(dir)
     return;
 
   var body = brwsr.docShell.contentViewer.DOMDocument.body;
-  body.setAttribute('dir', dir);
+  body.setAttribute("dir", dir);
   // TB only
   UpdateDirectionButtons(dir);
 }
@@ -40,7 +40,7 @@ function browserOnLoadHandler()
   
   var body = this.docShell.contentViewer.DOMDocument.body;
   var bodyIsPlainText = body.childNodes.length > 1
-    && body.childNodes[1].className != 'moz-text-html'; // either '*-plain' or '*-flowed'
+    && body.childNodes[1].className != "moz-text-html"; // either '*-plain' or '*-flowed'
 
   // quote bar css
   var newSS;
