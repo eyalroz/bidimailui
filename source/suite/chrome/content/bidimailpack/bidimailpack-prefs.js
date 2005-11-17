@@ -1,61 +1,43 @@
 function initValues()
 {
-  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-  var element;
-
   // Default composing direction for a new message. Default: LTR.
-  try {
-    var prefDir = prefs.getCharPref('mailnews.send_default_direction');
-    if ( (prefDir == 'RTL') || (prefDir == 'rtl') )
-      document.getElementById('bidimailpack-default-dir').selectedIndex = 1;
-    else
-      document.getElementById('bidimailpack-default-dir').selectedIndex = 0;
-  } catch(e) {
-    // the LTR default it is marked selected in the XUL
-  };
+  document.getElementById("bidimailpack-default-dir").value =
+    gBDMPrefs.getCharPref("compose.default_direction", "ltr").toLowerCase();
 
   // Reply direction options: 
   //   - same direction as the orginal message, or
   //   - force default direction
   // Default: same direction as the original message
-  try {
-    element = document.getElementById('bidimailpack-reply-in-default-dir');
-    element.checked = prefs.getBoolPref('mailnews.reply_in_default_direction');
-  } catch(e) {};
+  document.getElementById("bidimailpack-reply-in-default-dir").checked =
+    gBDMPrefs.getBoolPref("compose.reply_in_default_direction", false);
 
   // Show direction control button when composing a message? Default: True
-  try {
-    element = document.getElementById('bidimailpack-display-buttons');
-    element.checked = prefs.getBoolPref('mail.compose.show_direction_buttons');
-  } catch(e) {
-    element.checked = true;
-  };
-
+  document.getElementById("bidimailpack-display-buttons").checked =
+    gBDMPrefs.getBoolPref("compose.show_direction_buttons", true);
 }
 
 function saveValues()
 {
-  var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
   var element;
 
-  element = document.getElementById('bidimailpack-default-dir');
-  prefs.setCharPref('mailnews.send_default_direction', element.value);
+  element = document.getElementById("bidimailpack-default-dir");
+  gBDMPrefs.setCharPref("compose.default_direction", element.value);
 
-  element = document.getElementById('bidimailpack-reply-in-default-dir');
-  prefs.setBoolPref('mailnews.reply_in_default_direction', element.checked);
+  element = document.getElementById("bidimailpack-reply-in-default-dir");
+  gBDMPrefs.setBoolPref("compose.reply_in_default_direction", element.checked);
 
-  element = document.getElementById('bidimailpack-display-buttons');
-  prefs.setBoolPref('mail.compose.show_direction_buttons', element.checked);
+  element = document.getElementById("bidimailpack-display-buttons");
+  gBDMPrefs.setBoolPref("compose.show_direction_buttons", element.checked);
 
-  document.getElementById('paragraph_vertical_margin').saveToPrefs();
+  document.getElementById("paragraph_vertical_margin").saveToPrefs();
 }
 
 function dialogAccept()
 {
   var rv = false;
 
-  if (!document.getElementById('paragraph_vertical_margin').validateData())
-    document.getElementById('paragraph_vertical_margin').focus();
+  if (!document.getElementById("paragraph_vertical_margin").validateData())
+    document.getElementById("paragraph_vertical_margin").focus();
   else {
     saveValues();
     rv = true;
