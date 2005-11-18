@@ -53,14 +53,6 @@ function matchInText(element, normalExpression, htmlizedExpression)
   return false;
 }
 
-function LoadOSAttributeOnWindow()
-{
-  // We use different style rules on mac
-  document.documentElement
-          .setAttribute("system",
-                        /Mac/.test(navigator.platform) ? "mac" : "not_mac");
-}
-
 // Prefs helper
 var gBDMPrefs = {
   _prefService: null,

@@ -1,77 +1,31 @@
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
 /* Notes:
-   1. The syntax for -moz-image-region is
-
+   1. The syntax for -moz-image-region is:
          rect(first row coordinate of the image,
               first column coordinate after the image,
               first row coordinate after the image,
               first column coordinate of the image);
 	
-	2. Currently, the size of Mozilla FF/TB toolbar icons is:
-	  
+	2. Currently, the sizes of the toolbar icons in Qute are:
 	      main toolbar                    24px width x 24px height
-	      main toolbar on mac             32px width x 32px height
 	      main toolbar small mode         16px width x 16px height
-	      main toolbar small mode on mac  24px width x 24px height
 
           formatting/styling toolbar    ??px width x ??px height
 */				  
 
-
-/* Main Toolbar - small icons for mac */
-
-[system="mac"] toolbar[iconsize="small"] #button-direction-ltr-main-bar {
-  list-style-image: url("chrome://bidimailpack/skin/pinstripe-ltr-main-bar-24x24.png");
-  -moz-image-region: rect(0px 24px 24px 0px);
-}
-
-[system="mac"] toolbar[iconsize="small"] #button-direction-ltr-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 48px 24px 24px) !important;
-}
-
-[system="mac"] toolbar[iconsize="small"] #button-direction-rtl-main-bar {
-  list-style-image: url("chrome://bidimailpack/skin/pinstripe-rtl-main-bar-24x24.png");
-  -moz-image-region: rect(0px 24px 24px 0px);
-}
-
-[system="mac"] toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 48px 24px 24px) !important;
-}
-
-
-/* Main Toolbar - large icons for mac */
-
-[system="mac"] #button-direction-ltr-main-bar {
-  list-style-image: url("chrome://bidimailpack/skin/pinstripe-ltr-main-bar-32x32.png");
-  -moz-image-region: rect(0px 32px 32px 0px);
-}
-
-[system="mac"] #button-direction-ltr-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 64px 32px 32px) !important;
-}
-
-[system="mac"] #button-direction-rtl-main-bar {
-  list-style-image: url("chrome://bidimailpack/skin/pinstripe-rtl-main-bar-32x32.png");
-  -moz-image-region: rect(0px 32px 32px 0px);
-}
-
-[system="mac"] #button-direction-rtl-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 64px 32px 32px) !important;
-}
-
-/* Main Toolbar: small icons for winstripe */
+/* Main Toolbar - small icons */
 
 toolbar[iconsize="small"] #button-direction-ltr-main-bar {
   list-style-image: url("chrome://bidimailpack/skin/winstripe-ltr-main-bar-16x16.png");
   -moz-image-region: rect(0px 16px 16px 0px);
 }
 
-[system="not_mac"] toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover {
+toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover {
   -moz-image-region: rect(0px 32px 16px 16px);
 }
 
-[system="not_mac"] toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover:active {
+toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover:active {
   -moz-image-region: rect(0px 48px 16px 32px);
 }
 
@@ -84,11 +38,11 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar {
   -moz-image-region: rect(0px 16px 16px 0px);
 }
 
-[system="not_mac"] toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover {
+toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover {
   -moz-image-region: rect(0px 32px 16px 16px);
 }
 
-[system="not_mac"] toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover:active {
+toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover:active {
   -moz-image-region: rect(0px 48px 16px 32px);
 }
 
@@ -97,18 +51,18 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
 }
 
 
-/* Main Toolbar Buttons - large icons for winstripe */
+/* Main Toolbar Buttons - large icons */
 
 #button-direction-ltr-main-bar {
   list-style-image: url("chrome://bidimailpack/skin/winstripe-ltr-main-bar-24x24.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
-[system="not_mac"] #button-direction-ltr-main-bar:hover {
+#button-direction-ltr-main-bar:hover {
   -moz-image-region: rect(0px 48px 24px 24px);
 }
 
-[system="not_mac"] #button-direction-ltr-main-bar:hover:active {
+#button-direction-ltr-main-bar:hover:active {
   -moz-image-region: rect(0px 72px 24px 48px);
 }
 
@@ -121,11 +75,11 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
-[system="not_mac"] #button-direction-rtl-main-bar:hover {
+#button-direction-rtl-main-bar:hover {
   -moz-image-region: rect(0px 48px 24px 24px);
 }
 
-[system="not_mac"] #button-direction-rtl-main-bar:hover:active {
+#button-direction-rtl-main-bar:hover:active {
   -moz-image-region: rect(0px 72px 24px 48px);
 }
 
