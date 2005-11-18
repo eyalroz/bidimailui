@@ -1,0 +1,77 @@
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* Notes:
+   1. The syntax for -moz-image-region is:
+         rect(first row coordinate of the image,
+              first column coordinate after the image,
+              first row coordinate after the image,
+              first column coordinate of the image);
+	
+	2. Currently, the sizes of the toolbar icons in Pinstripe are:
+	      main toolbar on                 32px width x 32px height
+	      main toolbar small mode         24px width x 24px height
+
+          formatting/styling toolbar      ??px width x ??px height
+*/
+
+
+/* Main Toolbar - small icons */
+
+toolbar[iconsize="small"] #button-direction-ltr-main-bar {
+  list-style-image: url("chrome://bidimailpack/skin/pinstripe-ltr-main-bar-24x24.png");
+  -moz-image-region: rect(0px 24px 24px 0px);
+}
+
+toolbar[iconsize="small"] #button-direction-ltr-main-bar[disabled="true"] {
+  -moz-image-region: rect(0px 48px 24px 24px) !important;
+}
+
+toolbar[iconsize="small"] #button-direction-rtl-main-bar {
+  list-style-image: url("chrome://bidimailpack/skin/pinstripe-rtl-main-bar-24x24.png");
+  -moz-image-region: rect(0px 24px 24px 0px);
+}
+
+toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
+  -moz-image-region: rect(0px 48px 24px 24px) !important;
+}
+
+
+/* Main Toolbar - large icons */
+
+#button-direction-ltr-main-bar {
+  list-style-image: url("chrome://bidimailpack/skin/pinstripe-ltr-main-bar-32x32.png");
+  -moz-image-region: rect(0px 32px 32px 0px);
+}
+
+#button-direction-ltr-main-bar[disabled="true"] {
+  -moz-image-region: rect(0px 64px 32px 32px) !important;
+}
+
+#button-direction-rtl-main-bar {
+  list-style-image: url("chrome://bidimailpack/skin/pinstripe-rtl-main-bar-32x32.png");
+  -moz-image-region: rect(0px 32px 32px 0px);
+}
+
+#button-direction-rtl-main-bar[disabled="true"] {
+  -moz-image-region: rect(0px 64px 32px 32px) !important;
+}
+
+/* Formatting Bar Buttons */
+
+#button-direction-ltr-formatting-bar {
+  list-style-image: url("chrome://bidimailpack/skin/ltr-formatting-bar.png");
+  -moz-image-region: rect(0px 19px 18px 0px);
+}
+
+#button-direction-ltr-formatting-bar[disabled="true"] {
+  -moz-image-region: rect(0px 38px 18px 19px) !important;
+}
+
+#button-direction-rtl-formatting-bar {
+  list-style-image: url("chrome://bidimailpack/skin/rtl-formatting-bar.png");
+  -moz-image-region: rect(0px 19px 18px 0px);
+}
+
+#button-direction-rtl-formatting-bar[disabled="true"] {
+  -moz-image-region: rect(0px 38px 18px 19px) !important;
+}

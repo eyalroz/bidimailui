@@ -1,4 +1,4 @@
-SUBDIRS = chrome
+SUBDIRS = chrome platform/Darwin/chrome
 XPI_FILENAME = bidimailui_tbird.xpi
 .PHONY: all clean subdirs ${SUBDIRS}
 
@@ -18,7 +18,9 @@ ${SUBDIRS}:
 ${XPI_FILENAME}: subdirs
 	rm -rf $@; \
 	zip $@ \
+	    install.rdf \
+		chrome.manifest \
 		chrome/bidimailpack.jar \
+		platform/Darwin/chrome.manifest \
+		platform/Darwin/chrome/bidimailpack-mac-skin.jar \
 		defaults/preferences/bidimailui.js \
-		install.rdf \
-        chrome.manifest \
