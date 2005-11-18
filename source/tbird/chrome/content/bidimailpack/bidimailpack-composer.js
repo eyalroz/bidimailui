@@ -315,9 +315,6 @@ function HandleDirectionButtons()
     document.getElementById("directionality-separator-formatting-bar")
             .setAttribute("hidden", hiddenButtons);
   }
-
-  // TB ONLY: allow mac-specific style-rules (see bidimailpack.css in skin/classic/)
-  LoadOSAttributeOnWindow();
 }
 
 function LoadParagraphMode()
