@@ -7,4 +7,4 @@ clean:
 	rm ${JAR_FILENAME} 2>/dev/null; true
 
 ${JAR_FILENAME}:  skin
-	rm $@ 2>/dev/null; zip $@ -r $^ -x '*/CVS/*'
+	rm $@ 2>/dev/null; zip $@ -r $^ -x '*/CVS/*' '*/.DS_Store' '*/TODO.txt'
