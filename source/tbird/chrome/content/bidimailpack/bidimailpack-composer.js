@@ -758,8 +758,20 @@ function isInList()
 
 function GetParagraphMarginFromPref(basePrefName)
 {
-  return (gBDMPrefs.getCharPref(basePrefName + ".value", "0") +
-          gBDMPrefs.getCharPref(basePrefName + ".scale", "cm"))
+  var marginScale = gBDMPrefs.getCharPref(basePrefName + ".scale", "cm");
+  var marginVal;
+  if (marginScale != "px") {
+    marginVal =
+      parseFloat(gBDMPrefs.getCharPref(basePrefName + ".value", "0"), 10);
+  }
+  else {
+    marginVal =
+      parseInt(gBDMPrefs.getCharPref(basePrefName + ".value", "0"), 10);
+  }
+  if (isNaN(marginVal))
+    marginVal = "0";
+
+  return (marginVal + marginScale);
 }
 
 // This function attempts to break off the remainder of the current

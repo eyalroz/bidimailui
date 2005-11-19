@@ -35,7 +35,7 @@ var gBDMPrefPane = {
     var rv = 0;
 
     if (this._getBDMPrefElement("compose.space_between_paragraphs.scale")
-            .value == "cm") {
+            .value != "px") {
       var floatVal = parseFloat(txtBoxValue, 10);
       if (!isNaN(floatVal))
         rv = floatVal;
