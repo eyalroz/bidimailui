@@ -4,35 +4,29 @@
 
 <!DOCTYPE page SYSTEM "chrome://bidimailpack/locale/bidimailpack-prefs.dtd">
 
-<page xmlns          = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-      xmlns:html     = "http://www.w3.org/1999/xhtml"
-      onload         = "init();"
-      onunload       = "return dialogAccept();"
-      headertitle    = "&bidimailpack-preftree-label;">
+<page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      onload="parent.initPanel(panel);"
+      headertitle="&bidimailpack-preftree-label;">
 
-  <script type="application/x-javascript" src="chrome://global/content/globalOverlay.js"/>
-  <script type="application/x-javascript" src="chrome://bidimailpack/content/bidimailpack-common.js"/>
-  <script type="application/x-javascript" src="chrome://bidimailpack/content/bidimailpack-prefs.js"/>
+  <script type="application/x-javascript"
+          src="chrome://bidimailpack/content/bidimailpack-common.js"/>
+  <script type="application/x-javascript"
+          src="chrome://bidimailpack/content/bidimailpack-prefs.js"/>
   <script type="application/x-javascript">
-    function init()
-    {
-      parent.initPanel("chrome://bidimailpack/content/bidimailpack-prefs.xul");
-      const header = top.document.getElementById("header");
-      if (header)
-      {
-        // TODO: find a more respectable place for the version string
-        const version = 'v' + '0.7';
-        header.setAttribute("description", version);
-      }
-      initValues();
-    }
+    var panel = "chrome://bidimailpack/content/bidimailpack-prefs.xul";
+    var _elementIDs = ["bidimailpack-default-dir",
+                       "bidimailpack-reply-in-default-dir",
+                       "bidimailpack-display-buttons"];
   </script>
 
   <groupbox>
     <caption label="&message-composition-groupbox-caption;"/>
     <description>&default-dir;</description>
       <hbox class="indent">
-        <radiogroup id="bidimailpack-default-dir">
+        <radiogroup id="bidimailpack-default-dir"
+                    prefstring="bidiui.mail.compose.default_direction"
+                    preftype="string">
           <radio id="bidimailpack-default-dir-ltr"
                  value="ltr"
                  label="&ltr.label;"
@@ -45,10 +39,12 @@
       </hbox>
       <spacer/>
       <checkbox id="bidimailpack-reply-in-default-dir"
+                prefstring="bidiui.mail.compose.reply_in_default_direction"
                 label="&always-reply-in-default-dir.label;"
                 accesskey="&always-reply-in-default-dir.accesskey;"
                 autostretch="never"/>
       <checkbox id="bidimailpack-display-buttons"
+                prefstring="bidiui.mail.compose.show_direction_buttons"
                 label="&display-buttons.label;"
                 accesskey="&display-buttons.accesskey;"
                 autostretch="never"/>
@@ -57,10 +53,20 @@
 
     <hbox align="center">
       <description>&verticalParagraphMargins.label;</description>
-      <hbox id="paragraph_vertical_margin"
-            style="-moz-binding: url('chrome://bidimailpack/content/marginsBinding.xml#marginsBinding');"
-            class="indent"
-            prefbase="bidiui.mail.compose.space_between_paragraphs"/>
+      <textbox id="bidimailpack-space-between-paragraphs-value" size="4"/>
+      <menulist id="bidimailpack-space-between-paragraphs-scale">
+        <menupopup>
+          <menuitem value="cm"
+                    label="&cmScale.label;"
+                    accesskey="&cmScale.accesskey;"/>
+          <menuitem value="px"
+                    label="&pixelScale.label;" 
+                    accesskey="&pixelScale.accesskey;"/>
+          <menuitem value="pt"
+                    label="&ptScale.label;"
+                    accesskey="&ptScale.accesskey;"/>
+        </menupopup>
+      </menulist>
     </hbox>
   </groupbox>
 
