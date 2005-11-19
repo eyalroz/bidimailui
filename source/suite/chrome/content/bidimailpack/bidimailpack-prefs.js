@@ -1,47 +1,60 @@
-function initValues()
-{
-  // Default composing direction for a new message. Default: LTR.
-  document.getElementById("bidimailpack-default-dir").value =
-    gBDMPrefs.getCharPref("compose.default_direction", "ltr").toLowerCase();
-
-  // Reply direction options: 
-  //   - same direction as the orginal message, or
-  //   - force default direction
-  // Default: same direction as the original message
-  document.getElementById("bidimailpack-reply-in-default-dir").checked =
-    gBDMPrefs.getBoolPref("compose.reply_in_default_direction", false);
-
-  // Show direction control button when composing a message? Default: True
-  document.getElementById("bidimailpack-display-buttons").checked =
-    gBDMPrefs.getBoolPref("compose.show_direction_buttons", true);
+function Startup() {
+  gBDMPrefPane.init();
 }
 
-function saveValues()
-{
-  var element;
+var gBDMPrefPane = {
+  // TODO: find a more respectable place for the version string
+  _extVersion: "0.7",
 
-  element = document.getElementById("bidimailpack-default-dir");
-  gBDMPrefs.setCharPref("compose.default_direction", element.value);
+  get spaceBetweenParagraphsValue()
+  {
+    return document.getElementById("bidimailpack-space-between-paragraphs-value").value;
+  },
 
-  element = document.getElementById("bidimailpack-reply-in-default-dir");
-  gBDMPrefs.setBoolPref("compose.reply_in_default_direction", element.checked);
+  set spaceBetweenParagraphsValue(val)
+  {
+    document.getElementById("bidimailpack-space-between-paragraphs-value").value = val;
+    return val;
+  },
 
-  element = document.getElementById("bidimailpack-display-buttons");
-  gBDMPrefs.setBoolPref("compose.show_direction_buttons", element.checked);
+  get spaceBetweenParagraphsScale()
+  {
+    return document.getElementById("bidimailpack-space-between-paragraphs-scale").value;
+  },
 
-  document.getElementById("paragraph_vertical_margin").saveToPrefs();
-}
+  set spaceBetweenParagraphsScale(val)
+  {
+    document.getElementById("bidimailpack-space-between-paragraphs-scale").value = val;
+    return val;
+  },
 
-function dialogAccept()
-{
-  var rv = false;
+  init: function() {
+    // Expose the extension version
+    var header = top.document.getElementById("header");
+    if (header)
+      header.setAttribute("description", this._extVersion);
 
-  if (!document.getElementById("paragraph_vertical_margin").validateData())
-    document.getElementById("paragraph_vertical_margin").focus();
-  else {
-    saveValues();
-    rv = true;
+    parent.hPrefWindow
+          .registerOKCallbackFunc(gBDMPrefPane.saveSpaceBetweenParagraphsPrefs);
+
+    this.spaceBetweenParagraphsValue =
+      gBDMPrefs.getCharPref("compose.space_between_paragraphs.value");
+    this.spaceBetweenParagraphsScale =
+      gBDMPrefs.getCharPref("compose.space_between_paragraphs.scale");
+  },
+
+  saveSpaceBetweenParagraphsPrefs: function() {
+    // Save these prefs only if they're valid:
+    var newScale = gBDMPrefPane.spaceBetweenParagraphsScale;
+    var newValue;
+    if (newScale == "cm")
+      newValue = parseFloat(gBDMPrefPane.spaceBetweenParagraphsValue, 10);
+    else
+      newValue = parseInt(gBDMPrefPane.spaceBetweenParagraphsValue, 10);
+
+    if (!isNaN(newValue)) {
+      gBDMPrefs.setCharPref("compose.space_between_paragraphs.scale", newScale);
+      gBDMPrefs.setCharPref("compose.space_between_paragraphs.value", newValue);
+    }
   }
-  
-  return rv;
-}
+};

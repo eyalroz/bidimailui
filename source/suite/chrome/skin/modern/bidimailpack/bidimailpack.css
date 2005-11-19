@@ -112,10 +112,3 @@
 #button-direction-rtl-formatting-bar[checked="true"] {
   -moz-image-region: rect(0px 110px 17px 88px);
 }
-
-#paragraph_vertical_margin[status="non_valid_value"] > textbox
-{
-  background-color: darkred;
-  color: #FFFFFF;
-  font-weight: bold;
-}
