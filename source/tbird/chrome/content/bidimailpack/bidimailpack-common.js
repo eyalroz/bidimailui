@@ -149,7 +149,7 @@ var gBDMPrefs = {
           this.prefService
               .getCharPref("mailnews.paragraph.vertical_margin.scale");
         var newValue;
-        if (scale == "cm")
+        if (scale != "px")
           newValue = parseFloat(oldValue, 10) * 2;
         else
           newValue = parseInt(oldValue, 10) * 2;
