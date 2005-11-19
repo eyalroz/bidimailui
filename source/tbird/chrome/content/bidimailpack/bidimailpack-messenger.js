@@ -127,8 +127,8 @@ function browserOnLoadHandler()
   UpdateDirectionButtons(window.getComputedStyle(body, null).direction);
 }
 
-function OnLoadHandler() {
+function InstallBrowserHandler() {
   var browser = getMessageBrowser();
   if (browser)
-    browser.addEventListener('load', browserOnLoadHandler, true);
+    browser.addEventListener("load", browserOnLoadHandler, true);
 }
