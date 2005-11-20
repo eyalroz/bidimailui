@@ -115,7 +115,7 @@
       <menuitem id="contextInsertLRM"
                 oncommand="InsertControlCharacter('\u200e');"
                 label="&menu-bidimail-lrm.label;"
-                accesskey="&menu-bidimail-rlm.accesskey;" />
+                accesskey="&menu-bidimail-lrm.accesskey;" />
       <menuitem id="contextInsertRLM"
                 oncommand="InsertControlCharacter('\u200f');"
                 label="&menu-bidimail-rlm.label;"
