@@ -52,7 +52,9 @@
     <spacer style="height: 1em"/>
 
     <hbox align="center">
-      <description>&verticalParagraphMargins.label;</description>
+      <label value="&spaceBetweenParagraphs.label;"
+             accesskey="&spaceBetweenParagraphs.accesskey;"
+             control="bidimailpack-space-between-paragraphs-value"/>
       <textbox id="bidimailpack-space-between-paragraphs-value" size="4"/>
       <menulist id="bidimailpack-space-between-paragraphs-scale">
         <menupopup>
