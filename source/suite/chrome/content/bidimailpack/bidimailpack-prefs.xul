@@ -6,7 +6,7 @@
 
 <page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
       xmlns:html="http://www.w3.org/1999/xhtml"
-      onload="parent.initPanel(panel);"
+      onload="gBDMPrefs.migrateOldPrefs(); parent.initPanel(panel);"
       headertitle="&bidimailpack-preftree-label;">
 
   <script type="application/x-javascript"

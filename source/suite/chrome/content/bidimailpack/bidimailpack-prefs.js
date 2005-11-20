@@ -47,7 +47,7 @@ var gBDMPrefPane = {
     // Save these prefs only if they're valid:
     var newScale = gBDMPrefPane.spaceBetweenParagraphsScale;
     var newValue;
-    if (newScale == "cm")
+    if (newScale != "px")
       newValue = parseFloat(gBDMPrefPane.spaceBetweenParagraphsValue, 10);
     else
       newValue = parseInt(gBDMPrefPane.spaceBetweenParagraphsValue, 10);
