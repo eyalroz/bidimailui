@@ -3,7 +3,7 @@
 <!ENTITY default-dir                             "الاتّجاه الافتراضي:">
 <!ENTITY ltr.label                               "يسار إلى يمين">
 <!ENTITY ltr.accesskey                           "ر">
-<!ENTITY rtl.label                              "يمين إلى يسار">
+<!ENTITY rtl.label                               "يمين إلى يسار">
 <!ENTITY rtl.accesskey                           "م">
 <!ENTITY always-reply-in-default-dir.label       "الرّد دائماً بالاتّجاه التّلقائي">
 <!ENTITY always-reply-in-default-dir.accesskey   "ت">
