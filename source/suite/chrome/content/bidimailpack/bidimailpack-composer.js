@@ -18,6 +18,7 @@
 // here is an example of a console log message describing a DOM node:
 // jsConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
 
+const nsISelectionController = Components.interfaces.nsISelectionController;
 
 // Globals
 var gLoadEventCount = 0;    // see comment in InstallComposeWindowEventHandlers()
@@ -889,12 +890,23 @@ function InsertParagraph()
     EditorSetTextProperty("span", "style", "font-size: " + styleFontSize);
 
   // If the previous paragraph has a dir attribute, apply it to the new paragraph
-  try {
-    if (prevPar.hasAttribute("dir"))
-      editor.setAttribute(par, "dir", prevPar.getAttribute("dir"));
-  }
-  catch (er) {}
+  if (prevPar.hasAttribute("dir"))
+    editor.setAttribute(par, "dir", prevPar.getAttribute("dir"));
   // ------------------------------- "set old style" ------
+
+  // Make sure the line in which the caret is in is visible
+  try {
+    var selCon = editor.selectionController;
+    if (selCon) {
+      selCon.scrollSelectionIntoView(
+        nsISelectionController.SELECTION_NORMAL,
+        nsISelectionController.SELECTION_FOCUS_REGION,
+        true);
+    }
+  }
+  catch(ex) {
+    dump(ex);
+  }
 }
 
 var directionSwitchController = {
