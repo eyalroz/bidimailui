@@ -14,7 +14,8 @@
 <!ENTITY display-buttons.label                   "عرض أزرار إعداد الاتّجاه">
 <!ENTITY display-buttons.accesskey               "ع">
 
-<!ENTITY verticalParagraphMargins.label          "هوامش الفقرة العموديّة:">
+<!ENTITY spaceBetweenParagraphs.label            "هوامش الفقرة العموديّة:">
+<!ENTITY spaceBetweenParagraphs.accesskey        "هو">
 <!ENTITY cmScale.label                           "سم">
 <!ENTITY cmScale.accesskey                       "س">
 <!ENTITY pixelScale.label                        "بكسل">
