@@ -94,18 +94,6 @@ var gBDMPrefs = {
     }
   },
 
-  getIntPref: function(prefName, defaultValue) {
-    try {
-      return this.prefService.getIntPref("bidiui.mail." + prefName);
-    }
-    catch(ex) {
-      if (defaultValue != undefined)
-        return defaultValue;
-
-      throw(ex);
-    }
-  },
-
   setBoolPref: function(prefName, val) {
     this.prefService.setBoolPref("bidiui.mail." + prefName, val);
   },
@@ -114,7 +102,74 @@ var gBDMPrefs = {
     this.prefService.setCharPref("bidiui.mail." + prefName, val);
   },
 
-  setIntPref: function(prefName, val) {
-    this.prefService.setIntPref("bidiui.mail." + prefName, val);
+  // Prefs Migrator:
+  _shouldMigrate: function(extVersion) {
+    return !this.getBoolPref("migrated" + extVersion, false);
+  },
+
+  _setMigrated: function(extVersion) {
+    this.setBoolPref("migrated" + extVersion, true);
+  },
+
+  migrateOldPrefs: function() {
+    // Migrate 0.6.7 prefs
+    if (!this._shouldMigrate("067"))
+      return;
+
+    // NOTE: Hidden prefs aren't migrated.
+    try {
+      if (!this.prefService.getBoolPref("mail.compose.show_direction_buttons"))
+        this.setBoolPref("compose.show_direction_buttons", false);
+
+      this.prefService.clearUserPref("mail.compose.show_direction_buttons");
+    }
+    catch(ex) { }
+
+    try {
+      if (this.prefService
+              .getCharPref("mailnews.send_default_direction")
+              .toLowerCase() != "ltr")
+        this.setCharPref("compose.default_direction", "rtl");
+
+      this.prefService.clearUserPref("mailnews.send_default_direction");
+    }
+    catch(ex) { }
+
+    try {
+      if (this.prefService.getBoolPref("mailnews.reply_in_default_direction"))
+        this.setBoolPref("compose.reply_in_default_direction", true);
+
+      this.prefService.clearUserPref("mailnews.reply_in_default_direction");
+    }
+    catch(ex) { }
+
+    try {
+      var oldValue =
+        this.prefService
+            .getCharPref("editor.paragraph.vertical_margins.value");
+      if (oldValue != "0") {
+        var scale =
+          this.prefService
+              .getCharPref("editor.paragraph.vertical_margins.scale");
+        var newValue;
+        if (scale != "px")
+          newValue = parseFloat(oldValue, 10) * 2;
+        else
+          newValue = parseInt(oldValue, 10) * 2;
+
+        if (!isNaN(newValue)) {
+          this.setCharPref("compose.space_between_paragraphs.value", newValue);
+          this.setCharPref("compose.space_between_paragraphs.scale", scale);
+        }
+      }
+
+      this.prefService
+          .clearUserPref("editor.paragraph.vertical_margins.value");
+      this.prefService
+          .clearUserPref("editor.paragraph.vertical_margins.scale");
+    }
+    catch(ex) { }
+
+    this._setMigrated("067");
   }
 }
