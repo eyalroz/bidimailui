@@ -60,7 +60,9 @@
 
     <spacer style="height: 0.75em;"/>
     <hbox align="center">
-      <description>&verticalParagraphMargins.label;</description>
+      <label value="&spaceBetweenParagraphs.label;"
+             accesskey="&spaceBetweenParagraphs.accesskey;"
+             control="space_between_paragraphs_value_text"/>
       <textbox id="space_between_paragraphs_value_text"
                size="4"
                preference="bidiui.mail.compose.space_between_paragraphs.value"

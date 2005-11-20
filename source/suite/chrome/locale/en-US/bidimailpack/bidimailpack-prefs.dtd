@@ -14,7 +14,8 @@
 <!ENTITY display-buttons.label                   "Display direction setting buttons">
 <!ENTITY display-buttons.accesskey               "D">
 
-<!ENTITY verticalParagraphMargins.label          "Space between paragraphs:">
+<!ENTITY spaceBetweenParagraphs.label            "Space between paragraphs:">
+<!ENTITY spaceBetweenParagraphs.accesskey        "S">
 <!ENTITY cmScale.label                           "cm">
 <!ENTITY cmScale.accesskey                       "c">
 <!ENTITY pixelScale.label                        "pixels">
