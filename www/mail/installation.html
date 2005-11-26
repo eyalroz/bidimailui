@@ -6,7 +6,7 @@
 
 <h3><a name="Prerequisites"> Prerequisites </a></h3>
 <p>BiDi Mail UI supports Thunderbird v0.7.x - v1.0.x, as well as Mozilla
-Suite Mail&amp;News v1.7.x - v1.8.x. It has been successfully tested
+Suite Mail&amp;News v1.7.x - v1.8.x and Seamonkey Mail&News. It has been successfully tested
 under Windows, Mac OS X and Linux+X.Org. It is most likely, though we
 can't guarantee it, to work fine with other versions and operating
 systems.</p>
@@ -28,11 +28,11 @@ then confirm</li>
   <li>Restart Thunderbird when prompted</li>
 </ol>
 
-<a href="http://downloads.mozdev.org/bidiui/latest/bidimailui_tbird.xpi" class="download-xpi">The Thunderbird Extension 
+<a href="http://downloads.mozdev.org/bidiui/latest/bidimailui_tbird.xpi" class="download-xpi">The Thunderbird Extension
 (version 0.6.7)</a>
 
 </p>
-<h3><a name="InstalltionUnderMozilla"> Installation under Mozilla<br>
+<h3><a name="InstalltionUnderMozilla"> Installation under Seamonkey/Mozilla Suite<br>
 </a></h3>
 <ol>
   <li>If previous BiDi Mail UI versions are installed, make sure to remove
@@ -45,10 +45,10 @@ them as described in section 3</li>
 personal profile folder or globally, in the application folder.
 Installation in the profile folder has a few advantages: There is no
 need to have root user privileges (in operating systems such as Linux)
-and there is no need to reinstall the extension after updating Mozilla
+and there is no need to reinstall the extension after updating Seamonkey
 to a new version. However, with operating systems that are oriented
 toward single user mode (such as Windows 98), but that are accessed by
-several users, it is preferable to install BiDi Mail UI in the Mozilla
+several users, it is preferable to install BiDi Mail UI in the Seamonkey
 application folder, so that everyone can utilize it. This global
 installation may require root privileges in some operating systems.
 Note that installing the extension as root also requires to restart
@@ -59,7 +59,7 @@ sure to close all the program's windows - Browser, Mail&amp;News,
 Composer et cetera.</li>
 </ol>
 <p>
-<a href="http://downloads.mozdev.org/bidiui/latest/bidimailui_suite.xpi" class="download-xpi">The Mozilla Extension 
+<a href="http://downloads.mozdev.org/bidiui/latest/bidimailui_suite.xpi" class="download-xpi">The Seamonkey/Mozilla Suite Extension
 (version 0.6.7)</a> </p>
 
 <p>To overcome possible difficulties in step #3, it may be worthwhile
@@ -71,7 +71,7 @@ it to your hard drive and double click it to start the installation.<br>
 <span style="font-weight: bold;"></span>
 <h3><a name="BrowserExtensionInstallation">Installation of the previous
 BiDi Browser UI </a></h3>
-<p>Users of old versions of Mozilla, Firefox and Netscape may be
+<p>Users of old versions of Mozilla Suite, Firefox and Netscape may be
 interested in the previous (browser-oriented) extension:<br>
 </p>
 
@@ -91,7 +91,7 @@ please let us know. You can find our contact details above.</p>
 <p>Open the Extensions manager (<code>Tools | Extensions</code> menu item).
 Locate the BiDi Mail UI entry and click the Uninstall button.</p>
 
-<h3><a name="RemovalFromMozilla"> Removal from the Mozilla Suite</a></h3>
+<h3><a name="RemovalFromMozilla"> Removal from Seamonkey/Mozilla Suite</a></h3>
 
 <p>The Mozilla suite does not have a built-in uninstaller for extensions, but you can try using Jeremy Gillick's <a href="http://jgillick.nettripper.com/extuninstaller">Extension Uninstaller</a>; this should probably work.</p>
 
@@ -100,35 +100,35 @@ follow the instructions that correspond to your chosen
 installation method (i.e. application folder or profile folder).</p>
 
 <h4><a name="ManualRemovalFromMozilla"> Manual
-Removal from the Mozilla Suite application folder </a></h4>
+Removal from the Seamonkey/Mozilla Suite application folder </a></h4>
 
-<p>The following instructions only apply to Mozilla, not to Thunderbird.</p>
+<p>The following instructions only apply to Seamonkey, not to Thunderbird.</p>
 <p><em>Note: This procedure must be followed carefully, since manually deleting
 or modifying files in the applicationdirectory can be dangerous. Do not delete
 or modify anything you are not <strong>absolutely</strong> certain you should
 be deleting or modifying!</em></p>
 <ol>
-  <li>Close Mozilla.</li>
-  <li>Open Mozilla's <code>chrome</code> folder</li>
+  <li>Close Seamonkey.</li>
+  <li>Open Seamonkey's <code>chrome</code> folder</li>
   <li>Edit the file installed-chrome.txt and delete any line that
 contains the string <code>bidimailpack.jar</code>.</li>
   <li>Delete the file <code>bidimailpack.jar</code> .</li>
   <li>Delete the folder <code>overlayinfo</code> and everyting it contains.</li>
   <li>Delete the file <code>chrome.rdf</code> .</li>
-  <li>Start Mozilla again (in Linux, do it as root if needed). Mozilla
+  <li>Start Seamonkey again (in Linux, do it as root if needed). Seamonkey
 will now regenerate the deleted <code>overlayinfo</code> folder and the <code>chrome.rdf</code> file.
 </ol>
 
 <h4><a name="ManualRemovalFromMozillaProfile"> Manual
 Removal from the Your User Profile Folder </a></h4>
 <p>
-The following instructions only apply to Mozilla, not to Thunderbird.</p>
+The following instructions only apply to Seamonkey/Mozilla Suite, not to Thunderbird.</p>
 <p><em>Note: This procedure must be followed carefully, since manually deleting
 or modifying files in your profile directory can be dangerous. Do not delete
 or modify anything you are not <strong>absolutely</strong> certain you should
 be deleting or modifying!</em></p>
 <ol>
-  <li>Close Mozilla.</li>
+  <li>Close Seamonkey.</li>
   <li>Open your profile's <code>chrome</code> folder - the files mentioned
   below are all located there.</li>
   <li>Delete the file <code>bidimailpack.jar</code>.</li>
@@ -140,7 +140,7 @@ that contain the word <code>bidimailpack</code> (note these may be multi-line ta
 the lines that begin with <code>RDF:li</code> and contain the word <code>bidimailpack</code> (not the tags containing them, just the lines themselves); also, delete the tags that begin with <code>&lt;RDF:Seq RDF:about</code> and contain the word <code>bid
 
 imailpack</code> (these too may be multi-line).</li>
-  <li>Start Mozilla again.</li>
+  <li>Start Seamonkey again.</li>
 </ol>
 
 <hr>
