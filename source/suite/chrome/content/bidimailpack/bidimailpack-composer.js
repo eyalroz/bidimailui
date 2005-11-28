@@ -281,17 +281,8 @@ function ComposeWindowOnLoad()
   if (gLoadEventCount == 1) {
     gLastWindowToHaveFocus = null;
 
-    var editorType = GetCurrentEditorType();
-
     // Direction Controller
     top.controllers.insertControllerAt(1, directionSwitchController);
-
-    // Decide which direction switch item should appear in the context menu -
-    // the switch for the whole document or for the current paragraph
-    document.getElementById("contextSwitchParagraphDirectionItem")
-            .setAttribute("hidden", editorType != "htmlmail");
-    document.getElementById("contextBodyDirectionItem")
-            .setAttribute("hidden", editorType == "htmlmail");
   }
   else
     ComposeWindowOnActualLoad();
@@ -299,7 +290,7 @@ function ComposeWindowOnLoad()
 
 function HandleComposeReplyCSS()
 {
-  if (GetCurrentEditorType() == "htmlmail") {
+  if (IsHTMLEditor()) {
     var editor = GetCurrentEditor();
     if (!editor) {
       alert("Could not acquire editor object.");
@@ -317,7 +308,7 @@ function HandleDirectionButtons()
   var hiddenButtons =
     !gBDMPrefs.getBoolPref("compose.show_direction_buttons", true);
 
-  if (GetCurrentEditorType() == "htmlmail") {
+  if (IsHTMLEditor()) {
     document.getElementById("ltr-paragraph-direction-broadcaster")
             .setAttribute("hidden", hiddenButtons);
     document.getElementById("rtl-paragraph-direction-broadcaster")
@@ -340,16 +331,6 @@ function HandleDirectionButtons()
 
 function LoadParagraphMode()
 {
-  if (GetCurrentEditorType() != "htmlmail")
-    return;
-
-  // Determine Enter key behavior
-  gAlternativeEnterBehavior =
-    gBDMPrefs.getBoolPref("compose.alternative_enter_behavior", true);
-
-  if (!gAlternativeEnterBehavior)
-    return;
-
   // Get the desired space between the paragraphs we add
   // We use global variables in order to avoid different margins in the same document
   gParagraphVerticalMargin =
@@ -502,8 +483,24 @@ function ComposeWindowOnActualLoad()
     
   DetermineNewMessageParams(messageParams);
   SetInitialMessageDirection(messageParams);
-  
-  LoadParagraphMode();
+
+  var isHTMLEditor = IsHTMLEditor();
+
+  // Decide which direction switch item should appear in the context menu -
+  // the switch for the whole document or for the current paragraph
+  document.getElementById("contextSwitchParagraphDirectionItem")
+          .hidden = !isHTMLEditor;
+  document.getElementById("contextBodyDirectionItem")
+          .hidden = isHTMLEditor;
+
+  if (isHTMLEditor) {
+    // Determine Enter key behavior
+    gAlternativeEnterBehavior =
+      gBDMPrefs.getBoolPref("compose.alternative_enter_behavior", true);
+    if (gAlternativeEnterBehavior)
+      LoadParagraphMode();
+  }
+
   directionSwitchController.setAllCasters();
 }
 
@@ -642,7 +639,7 @@ function SwitchParagraphDirection()
 function onKeyPress(ev)
 {
   // Don't change the behavior for text-plain messages
-  if (GetCurrentEditorType() != "htmlmail")
+  if (!IsHTMLEditor())
     return;
 
   // Don't change the behavior outside the message content
