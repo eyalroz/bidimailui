@@ -123,7 +123,7 @@ main toolbar buttons are whole-document direction controls -->
             accesskey="&menu-bidimail-switch-paragraph-direction.accesskey;"/>
   <menuitem id="contextBodyDirectionItem"
             command="cmd_switch_document"
-            label="&menu-bidimail-switch-document-direction.label;"
+            label="&menu-bidimail-switch-message-direction.label;"
             accesskey="&menu-bidimail-switch-document-direction.accesskey;"/>
   <menu id="menu_Context_ControlCharacters"
         label="&menu-bidimail-insert-contol-character.label;"
@@ -145,14 +145,14 @@ main toolbar buttons are whole-document direction controls -->
   <menupopup id="menu_View_Popup">
     <menuitem command="cmd_switch_document"
               key="key-switch-document-direction"
-              label="&menu-bidimail-switch-document-direction.label;"
+              label="&menu-bidimail-switch-message-direction.label;"
               accesskey="&menu-bidimail-switch-document-direction.accesskey;"/>
   </menupopup>
 </menu>
 
 <menu id="formatMenu">
   <menupopup id="formatMenuPopup">
-    <menuseparator />
+    <menuseparator/>
     <menuitem id="formatSwitchParagraphDirectionItem"
               command="cmd_switch_paragraph"
               key="key-switch-paragraph-direction"

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % bidimailpackDTD SYSTEM "chrome://bidimailpack/locale/bidimailpack.dtd">
+%bidimailpackDTD;
+]>
+
+<overlay
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<popup id="editorContentContext">
+  <menuseparator/>
+  <menuitem id="contextSwitchParagraphDirectionItem"
+            command="cmd_switch_paragraph"
+            label="&menu-bidimail-switch-paragraph-direction.label;"
+            accesskey="&menu-bidimail-switch-paragraph-direction.accesskey;"/>
+  <menu id="menu_Context_ControlCharacters"
+        label="&menu-bidimail-insert-contol-character.label;"
+        accesskey="&menu-bidimail-insert-contol-character.accesskey;">
+   <menupopup id="menu_Context_ControlCharacters_Popup">
+     <menuitem id="contextInsertLRM"
+               oncommand="InsertControlCharacter('\u200e');"
+               accesskey="&menu-bidimail-lrm.accesskey;"
+               label="&menu-bidimail-lrm.label;"/>
+     <menuitem id="contextInsertRLM"
+               oncommand="InsertControlCharacter('\u200f');"
+               accesskey="&menu-bidimail-rlm.accesskey;"
+               label="&menu-bidimail-rlm.label;"/>
+   </menupopup>
+  </menu>
+</popup>
+
+</overlay>
