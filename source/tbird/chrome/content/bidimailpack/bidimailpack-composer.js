@@ -418,8 +418,13 @@ function DetermineNewMessageParams(messageParams)
   }
 }
 
-function SetInitialMessageDirection(messageParams)
+function SetInitialDocumentDirection(messageParams)
 {
+  // determine whether we need to use the default direction;
+  // this happens for new documents (e.g. new e-mail message,
+  // or new composer page), and also for mail/news replies if the
+  // prefs say we force the direction/ of replies to the default
+  // direction for new messages
   if ( (!messageParams.isReply && messageParams.isEmpty) ||
        (messageParams.isReply &&
         gBDMPrefs.getBoolPref("compose.reply_in_default_direction", false)) ) {
@@ -462,7 +467,7 @@ function ComposeWindowOnActualLoad()
   };
     
   DetermineNewMessageParams(messageParams);
-  SetInitialMessageDirection(messageParams);
+  SetInitialDocumentDirection(messageParams);
 
   var isHTMLEditor = IsHTMLEditor();
 
