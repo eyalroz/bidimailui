@@ -27,28 +27,28 @@
            oncommand="goDoCommand('cmd_rtl_paragraph');"
            commandupdater="true"
            events="focus"
-           oncommandupdate="CommandUpdate_MsgComposeDirection()" />
+           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
   <command id="cmd_ltr_paragraph"
            oncommand="goDoCommand('cmd_ltr_paragraph');"
            commandupdater="true"
            events="focus"
-           oncommandupdate="CommandUpdate_MsgComposeDirection()" />
+           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
   <command id="cmd_switch_paragraph"
            oncommand="goDoCommand('cmd_switch_paragraph');"
            commandupdater="true"
            events="focus"
-           oncommandupdate="CommandUpdate_MsgComposeDirection()" />
+           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
   <command id="cmd_rtl_document"
-           oncommand="goDoCommand('cmd_rtl_document');" />
+           oncommand="goDoCommand('cmd_rtl_document');"/>
   <command id="cmd_ltr_document"
-           oncommand="goDoCommand('cmd_ltr_document');" />
+           oncommand="goDoCommand('cmd_ltr_document');"/>
   <command id="cmd_switch_document"
-           oncommand="goDoCommand('cmd_switch_document');" />
+           oncommand="goDoCommand('cmd_switch_document');"/>
   <command id="cmd_clear_paragraph_dir"
            oncommand="goDoCommand('cmd_clear_paragraph_dir');"
            commandupdater="true"
            events="focus"
-           oncommandupdate="CommandUpdate_MsgComposeDirection()" />
+           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
 </commandset>
 
 <toolbarpalette id="MsgComposeToolbarPalette">
@@ -57,32 +57,34 @@
                  command="cmd_ltr_document"
                  observes="ltr-document-direction-broadcaster"
                  label="&bidimail-ltr-button.label;"
-                 tooltiptext="&bidimail-ltr-button.tip;" />
+                 tooltiptext="&bidimail-ltr-button.tip;"/>
   <toolbarbutton id="button-direction-rtl-main-bar"
                  class="toolbarbutton-1"
                  command="cmd_rtl_document"
                  observes="rtl-document-direction-broadcaster"
                  label="&bidimail-rtl-button.label;"
-                 tooltiptext="&bidimail-rtl-button.tip;" />
+                 tooltiptext="&bidimail-rtl-button.tip;"/>
 </toolbarpalette>
 
 <toolbox id="headers-box" class="toolbox-top" mode="icons"> 
   <toolbar id="FormatToolbar">
-    <hbox id="directionality-toolbar-section" insertafter="IncreaseFontSizeButton" dir="ltr">
+    <hbox id="directionality-toolbar-section"
+          insertafter="IncreaseFontSizeButton"
+          dir="ltr">
       <toolbarseparator id="directionality-separator-formatting-bar"
-                        class="toolbarseparator-standard" />
+                        class="toolbarseparator-standard"/>
       <toolbarbutton id="button-direction-ltr-formatting-bar"
                      command="cmd_ltr_paragraph"
                      observes="ltr-paragraph-direction-broadcaster"
                      tooltiptext="&bidimail-ltr-button.tip;"
                      checked="false"
-                     hidden="true" />
+                     hidden="true"/>
       <toolbarbutton id="button-direction-rtl-formatting-bar"
                      command="cmd_rtl_paragraph"
                      observes="rtl-paragraph-direction-broadcaster"
                      tooltiptext="&bidimail-rtl-button.tip;"
                      checked="false"
-                     hidden="true" />
+                     hidden="true"/>
     </hbox>
   </toolbar>
 </toolbox>
@@ -103,11 +105,11 @@
   <menuitem id="contextSwitchParagraphDirectionItem"
             command="cmd_switch_paragraph"
             label="&menu-bidimail-switch-paragraph-direction.label;"
-            accesskey="&menu-bidimail-switch-paragraph-direction.accesskey;" />
+            accesskey="&menu-bidimail-switch-paragraph-direction.accesskey;"/>
   <menuitem id="contextBodyDirectionItem"
             command="cmd_switch_document"
             label="&menu-bidimail-switch-document-direction.label;"
-            accesskey="&menu-bidimail-switch-document-direction.accesskey;" />
+            accesskey="&menu-bidimail-switch-document-direction.accesskey;"/>
   <menu id="menu_Context_ControlCharacters"
         label="&menu-bidimail-insert-contol-character.label;"
         accesskey="&menu-bidimail-insert-contol-character.accesskey;">
@@ -115,11 +117,11 @@
       <menuitem id="contextInsertLRM"
                 oncommand="InsertControlCharacter('\u200e');"
                 label="&menu-bidimail-lrm.label;"
-                accesskey="&menu-bidimail-lrm.accesskey;" />
+                accesskey="&menu-bidimail-lrm.accesskey;"/>
       <menuitem id="contextInsertRLM"
                 oncommand="InsertControlCharacter('\u200f');"
                 label="&menu-bidimail-rlm.label;"
-                accesskey="&menu-bidimail-rlm.accesskey;" />
+                accesskey="&menu-bidimail-rlm.accesskey;"/>
     </menupopup>
   </menu>
 </popup>
@@ -127,9 +129,9 @@
 <menu id="menu_View">
   <menupopup id="menu_View_Popup">
     <menuitem command="cmd_switch_document"
-    key="key-switch-document-direction"
+              key="key-switch-document-direction"
               label="&menu-bidimail-switch-document-direction.label;"
-              accesskey="&menu-bidimail-switch-document-direction.accesskey;" />
+              accesskey="&menu-bidimail-switch-document-direction.accesskey;"/>
   </menupopup>
 </menu>
 
@@ -140,11 +142,11 @@
               command="cmd_switch_paragraph"
               key="key-switch-paragraph-direction"
               label="&menu-bidimail-switch-paragraph-direction.label;"
-              accesskey="&menu-bidimail-switch-paragraph-direction.accesskey;" />
+              accesskey="&menu-bidimail-switch-paragraph-direction.accesskey;"/>
     <menuitem id="format_ClearParagraphDirectionItem"
               command="cmd_clear_paragraph_dir"
               label="&menu-bidimail-clear-paragraph-direction.label;"
-              accesskey="&menu-bidimail-clear-paragraph-direction.accesskey;" />
+              accesskey="&menu-bidimail-clear-paragraph-direction.accesskey;"/>
   </menupopup>
 </menu>
 
