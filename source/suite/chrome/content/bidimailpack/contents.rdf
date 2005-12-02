@@ -20,7 +20,9 @@
     <RDF:li resource="chrome://messenger/content/mailWindowOverlay.xul"/>
     <RDF:li resource="chrome://messenger/content/messengercompose/messengercompose.xul"/>
     <RDF:li resource="chrome://communicator/content/pref/preftree.xul"/>
+    <RDF:li resource="chrome://editor/content/editor.xul"/>
     <RDF:li resource="chrome://editor/content/editorOverlay.xul"/>
+    <RDF:li resource="chrome://editor/content/EditorContextMenuOverlay.xul"/>
   </RDF:Seq>
 
   <RDF:Seq about="chrome://messenger/content/mailWindowOverlay.xul">
@@ -40,6 +42,14 @@
       is still empty -->
   <RDF:Seq about="chrome://editor/content/editorOverlay.xul">
     <RDF:li>chrome://bidimailpack/content/insertMenuOverlay.xul</RDF:li>
+  </RDF:Seq>
+
+  <RDF:Seq about="chrome://editor/content/editor.xul">
+    <RDF:li>chrome://bidimailpack/content/editorOverlay.xul</RDF:li>
+  </RDF:Seq>
+
+  <RDF:Seq about="chrome://editor/content/EditorContextMenuOverlay.xul">
+    <RDF:li>chrome://bidimailpack/content/editorContextMenuOverlayOverlay.xul</RDF:li>
   </RDF:Seq>
 
 </RDF:RDF>

@@ -53,7 +53,10 @@ function browserOnLoadHandler()
   }
   catch (ex) { }
 
-  if (charsetPref) {
+  var msgWindow = Components.classes[msgWindowContractID].createInstance();
+  msgWindow = msgWindow.QueryInterface(Components.interfaces.nsIMsgWindow);
+
+  if (charsetPref && msgWindow) {
     var misdecodeAutodetectPref =
       gBDMPrefs.getBoolPref("display.autodetect_bidi_misdecoding", true);
     if ( misdecodeAutodetectPref &&
