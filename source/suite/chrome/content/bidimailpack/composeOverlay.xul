@@ -27,31 +27,31 @@
 
 <commandset id="composerStyleMenuItems">
   <command id="cmd_rtl_document"
-           oncommand="goDoCommand('cmd_rtl_document');" />
+           oncommand="goDoCommand('cmd_rtl_document');"/>
   <command id="cmd_ltr_document"
-           oncommand="goDoCommand('cmd_ltr_document');" />
+           oncommand="goDoCommand('cmd_ltr_document');"/>
   <command id="cmd_switch_document"
-           oncommand="goDoCommand('cmd_switch_document');" />
+           oncommand="goDoCommand('cmd_switch_document');"/>
   <command id="cmd_rtl_paragraph"
            oncommand="goDoCommand('cmd_rtl_paragraph');"
            commandupdater="true"
            events="focus"
-           oncommandupdate="CommandUpdate_MsgComposeDirection()" />
+           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
   <command id="cmd_ltr_paragraph"
            oncommand="goDoCommand('cmd_ltr_paragraph');"
            commandupdater="true"
            events="focus"
-           oncommandupdate="CommandUpdate_MsgComposeDirection()" />
+           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
   <command id="cmd_switch_paragraph"
            oncommand="goDoCommand('cmd_switch_paragraph');"
            commandupdater="true"
            events="focus"
-           oncommandupdate="CommandUpdate_MsgComposeDirection()" />
+           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
   <command id="cmd_clear_paragraph_dir"
            oncommand="goDoCommand('cmd_clear_paragraph_dir');"
            commandupdater="true"
            events="focus"
-           oncommandupdate="CommandUpdate_MsgComposeDirection()" />
+           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
 </commandset>
 
 <!-- there are two button sets, on two different toolbars; the
@@ -65,19 +65,19 @@ main toolbar buttons are whole-document direction controls -->
             insertafter="button-save"
             dir="ltr">
        <toolbarseparator id="directionality-separator-main-bar"
-                         class="toolbarseparator-primary" />
+                         class="toolbarseparator-primary"/>
          <toolbarbutton id="button-direction-ltr-main-bar"
                         command="cmd_ltr_document"
                         observes="ltr-document-direction-broadcaster"
                         class="toolbarbutton-1"
                         label="&bidimail-ltr-button.label;"
-                        tooltiptext="&bidimail-ltr-button.tip;" />
+                        tooltiptext="&bidimail-ltr-button.tip;"/>
          <toolbarbutton id="button-direction-rtl-main-bar"
                         command="cmd_rtl_document"
                         observes="rtl-document-direction-broadcaster"
                         class="toolbarbutton-1"
                         label="&bidimail-rtl-button.label;"
-                        tooltiptext="&bidimail-rtl-button.tip;" />
+                        tooltiptext="&bidimail-rtl-button.tip;"/>
       </hbox>
     </hbox>
   </toolbar>
@@ -90,15 +90,15 @@ main toolbar buttons are whole-document direction controls -->
                       command="cmd_ltr_paragraph"
                       observes="ltr-paragraph-direction-broadcaster"
                       checked="false" hidden="true"
-                      tooltiptext="&bidimail-ltr-button.tip;" />
+                      tooltiptext="&bidimail-ltr-button.tip;"/>
        <toolbarbutton id="button-direction-rtl-formatting-bar"
                       command="cmd_rtl_paragraph"
                       observes="rtl-paragraph-direction-broadcaster"
                       checked="false"
                       hidden="true"
-                      tooltiptext="&bidimail-rtl-button.tip;" />
+                      tooltiptext="&bidimail-rtl-button.tip;"/>
        <toolbarseparator id="directionality-separator-formatting-bar"
-                         class="toolbarseparator-standard" />
+                         class="toolbarseparator-standard"/>
      </hbox>
   </toolbar>
   
@@ -120,11 +120,11 @@ main toolbar buttons are whole-document direction controls -->
   <menuitem id="contextSwitchParagraphDirectionItem"
             command="cmd_switch_paragraph"
             label="&menu-bidimail-switch-paragraph-direction.label;"
-            accesskey="&menu-bidimail-switch-paragraph-direction.accesskey;" />
+            accesskey="&menu-bidimail-switch-paragraph-direction.accesskey;"/>
   <menuitem id="contextBodyDirectionItem"
             command="cmd_switch_document"
             label="&menu-bidimail-switch-document-direction.label;"
-            accesskey="&menu-bidimail-switch-document-direction.accesskey;" />
+            accesskey="&menu-bidimail-switch-document-direction.accesskey;"/>
   <menu id="menu_Context_ControlCharacters"
         label="&menu-bidimail-insert-contol-character.label;"
         accesskey="&menu-bidimail-insert-contol-character.accesskey;">
@@ -132,11 +132,11 @@ main toolbar buttons are whole-document direction controls -->
       <menuitem id="contextInsertLRM"
                 oncommand="InsertControlCharacter('\u200e');"
                 accesskey="&menu-bidimail-lrm.accesskey;"
-                label="&menu-bidimail-lrm.label;" />
+                label="&menu-bidimail-lrm.label;"/>
       <menuitem id="contextInsertRLM"
                 oncommand="InsertControlCharacter('\u200f');"
                 accesskey="&menu-bidimail-rlm.accesskey;"
-                label="&menu-bidimail-rlm.label;" />
+                label="&menu-bidimail-rlm.label;"/>
     </menupopup>
   </menu>
 </popup>
@@ -146,7 +146,7 @@ main toolbar buttons are whole-document direction controls -->
     <menuitem command="cmd_switch_document"
               key="key-switch-document-direction"
               label="&menu-bidimail-switch-document-direction.label;"
-              accesskey="&menu-bidimail-switch-document-direction.accesskey;" />
+              accesskey="&menu-bidimail-switch-document-direction.accesskey;"/>
   </menupopup>
 </menu>
 
@@ -157,11 +157,11 @@ main toolbar buttons are whole-document direction controls -->
               command="cmd_switch_paragraph"
               key="key-switch-paragraph-direction"
               label="&menu-bidimail-switch-paragraph-direction.label;"
-              accesskey="&menu-bidimail-switch-paragraph-direction.accesskey;" />
+              accesskey="&menu-bidimail-switch-paragraph-direction.accesskey;"/>
     <menuitem id="format_ClearParagraphDirectionItem"
               command="cmd_clear_paragraph_dir"
               label="&menu-bidimail-clear-paragraph-direction.label;"
-              accesskey="&menu-bidimail-clear-paragraph-direction.accesskey;" />
+              accesskey="&menu-bidimail-clear-paragraph-direction.accesskey;"/>
   </menupopup>
 </menu>
 
