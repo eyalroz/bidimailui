@@ -1,24 +1,26 @@
-<!ENTITY bidimailpack-settings                   "BiDi Mail UI إعدادات">
-<!ENTITY message-composition-groupbox-caption    "تأليف الرّسالة">
-<!ENTITY default-dir                             "الاتّجاه الافتراضي:">
-<!ENTITY ltr.label                               "يسار إلى يمين">
-<!ENTITY ltr.accesskey                           "ر">
-<!ENTITY rtl.label                               "يمين إلى يسار">
-<!ENTITY rtl.accesskey                           "م">
-<!ENTITY always-reply-in-default-dir.label       "الرّد دائماً بالاتّجاه التّلقائي">
-<!ENTITY always-reply-in-default-dir.accesskey   "ت">
-<!ENTITY more-info                               "لمزيد من المعلومات:">
-<!ENTITY guide-link-text                         "دليل المستخدم لـ BiDi Mail UI">
-<!ENTITY guide-url                               "http://bidiui.mozdev.org/mail/guide.html">
-<!ENTITY bidimailpack-preftree-label             "BiDi Mail UI">
-<!ENTITY display-buttons.label                   "عرض أزرار إعداد الاتّجاه">
-<!ENTITY display-buttons.accesskey               "ع">
+﻿<!ENTITY menu-bidimail-switch-message-direction.label          "تحويل اتّجاه الرّسالة">
+<!ENTITY menu-bidimail-switch-page-direction.label             "تحويل اتّجاه الصفحة">
+<!ENTITY menu-bidimail-switch-document-direction.accesskey     "ر">
+<!ENTITY key-bidimail-switch-document-direction.keycode        "X">
+<!ENTITY key-bidimail-switch-document-direction.modifiers             "accel,shift">
+<!ENTITY key-bidimail-switch-paragraph-direction.keycode       "E">
+<!ENTITY key-bidimail-switch-paragraph-direction.modifiers     "accel">
 
-<!ENTITY spaceBetweenParagraphs.label            "هوامش الفقرة العموديّة:">
-<!ENTITY spaceBetweenParagraphs.accesskey        "هو">
-<!ENTITY cmScale.label                           "سم">
-<!ENTITY cmScale.accesskey                       "س">
-<!ENTITY pixelScale.label                        "بكسل">
-<!ENTITY pixelScale.accesskey                    "ب">
-<!ENTITY ptScale.label                           "نقطة">
-<!ENTITY ptScale.accesskey                       "ن">
+<!ENTITY menu-bidimail-switch-paragraph-direction.label        "تحويل اتّجاه الفقرة">
+<!ENTITY menu-bidimail-switch-paragraph-direction.accesskey    "ف">
+<!ENTITY menu-bidimail-clear-paragraph-direction.label         "مسح اتّجاه الفقرة">
+<!ENTITY menu-bidimail-clear-paragraph-direction.accesskey     "م">
+
+<!ENTITY bidimail-ltr-button.label                             "يسار إلى يمين">
+<!ENTITY bidimail-ltr-button.tip                               "تحديد الاتّجاه يسار إلى يمين">
+<!ENTITY bidimail-rtl-button.label                             "يمين إلى يسار">
+<!ENTITY bidimail-rtl-button.tip                               "تحديد الاتّجاه يمين إلى يسار">
+
+<!ENTITY menu-bidimail-contol-character.label                  "رمز تحكّم">
+<!ENTITY menu-bidimail-contol-character.accesskey              "ت">
+<!ENTITY menu-bidimail-insert-contol-character.label           "إدراج رمز تحكّم">
+<!ENTITY menu-bidimail-insert-contol-character.accesskey       "ت">
+<!ENTITY menu-bidimail-lrm.label                               "علامة يسار إلى يمين">
+<!ENTITY menu-bidimail-lrm.accceskey                           "م">
+<!ENTITY menu-bidimail-rlm.label                               "علامة يمين إلى يسار">
+<!ENTITY menu-bidimail-rlm.accceskey                           "ر">
