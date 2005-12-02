@@ -1,4 +1,5 @@
-<!ENTITY menu-bidimail-switch-document-direction.label                "Switch Message Direction">
+<!ENTITY menu-bidimail-switch-message-direction.label                 "Switch Message Direction">
+<!ENTITY menu-bidimail-switch-page-direction.label                    "Switch Page Direction">
 <!ENTITY menu-bidimail-switch-document-direction.accesskey            "w">
 <!ENTITY key-bidimail-switch-document-direction.keycode               "X">
 <!ENTITY key-bidimail-switch-document-direction.modifiers             "accel,shift">
