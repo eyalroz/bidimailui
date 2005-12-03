@@ -68,9 +68,9 @@
                    checked="false"
                    hidden="true"
                    tooltiptext="&bidimail-rtl-button.tip;"/>
-    <toolbarseparator id="directionality-separator-formatting-bar"
-                      class="toolbarseparator-standard"/>
   </hbox>
+  <toolbarseparator class="toolbarseparator-standard"
+                    insertafter="IncreaseFontSizeButton"/>
 </toolbar>
 
 <menu id="viewMenu">
