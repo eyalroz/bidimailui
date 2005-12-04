@@ -18,8 +18,8 @@
 </script>
 
 <broadcasterset id="broadcasterset">
-  <broadcaster id="ltr-document-direction-broadcaster" checked="false" hidden="true"/>
-  <broadcaster id="rtl-document-direction-broadcaster" checked="false" hidden="true"/>
+  <broadcaster id="ltr-document-direction-broadcaster" checked="false"/>
+  <broadcaster id="rtl-document-direction-broadcaster" checked="false"/>
   <broadcaster id="ltr-paragraph-direction-broadcaster" checked="false"/>
   <broadcaster id="rtl-paragraph-direction-broadcaster" checked="false"/>
 </broadcasterset>
@@ -54,23 +54,23 @@
 </commandset>
 
 <toolbar id="FormatToolbar">
-  <hbox id="directionality-toolbar-section"
+  <hbox id="directionality-formatting-toolbar-section"
         insertafter="IncreaseFontSizeButton"
         dir="ltr">
     <toolbarbutton id="button-direction-ltr-formatting-bar"
                    command="cmd_ltr_paragraph"
                    observes="ltr-paragraph-direction-broadcaster"
-                   checked="false" hidden="true"
+                   checked="false"
                    tooltiptext="&bidimail-ltr-button.tip;"/>
     <toolbarbutton id="button-direction-rtl-formatting-bar"
                    command="cmd_rtl_paragraph"
                    observes="rtl-paragraph-direction-broadcaster"
                    checked="false"
-                   hidden="true"
                    tooltiptext="&bidimail-rtl-button.tip;"/>
   </hbox>
   <toolbarseparator class="toolbarseparator-standard"
-                    insertafter="IncreaseFontSizeButton"/>
+                    insertafter="IncreaseFontSizeButton"
+                    id="directionality-separator-formatting-bar"/>
 </toolbar>
 
 <menu id="viewMenu">

@@ -5,7 +5,7 @@ function EditorWindowOnLoad() {
 
   top.controllers.insertControllerAt(1, directionSwitchController);
 
-  HandleDirectionButtons();
+  HandleComposerDirectionButtons();
 
   var documentParams = {
     isEmpty: false
@@ -22,6 +22,16 @@ function EditorWindowOnLoad() {
   directionSwitchController.setAllCasters();
 }  
 
+function HandleComposerDirectionButtons()
+{
+  var hiddenButtonsPref =
+    !gBDMPrefs.getBoolPref("compose.show_direction_buttons", true);
+
+  document.getElementById("directionality-formatting-toolbar-section")
+          .setAttribute("hidden", hiddenButtonsPref);
+  document.getElementById("directionality-separator-formatting-bar")
+          .hidden = hiddenButtonsPref;
+}
 
 
 function InstallEditorWindowEventHandlers() {
