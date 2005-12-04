@@ -303,30 +303,22 @@ function HandleComposeReplyCSS()
 
 function HandleDirectionButtons()
 {
-  // decide which direction buttons are shown and which aren't
-
-  var hiddenButtons =
+  var hiddenButtonsPref =
     !gBDMPrefs.getBoolPref("compose.show_direction_buttons", true);
+  var isHTMLEditor = IsHTMLEditor();
 
-  if (IsHTMLEditor()) {
-    document.getElementById("ltr-paragraph-direction-broadcaster")
-            .setAttribute("hidden", hiddenButtons);
-    document.getElementById("rtl-paragraph-direction-broadcaster")
-            .setAttribute("hidden", hiddenButtons);
-    document.getElementById("directionality-separator-formatting-bar")
-            .setAttribute("hidden", hiddenButtons);
-    document.getElementById("ltr-document-direction-broadcaster")
-            .setAttribute("hidden", true);
-    document.getElementById("rtl-document-direction-broadcaster")
-            .setAttribute("hidden", true);
-  }
-  else {
-    // plain text mail
-    document.getElementById("ltr-document-direction-broadcaster")
-            .setAttribute("hidden", hiddenButtons);
-    document.getElementById("rtl-document-direction-broadcaster")
-            .setAttribute("hidden", hiddenButtons);
-  }
+  // decide which direction buttons are shown and which aren't
+  var hideMainToolbarButtons = hiddenButtonsPref || isHTMLEditor;
+  var hideFormattingToolbarButtons = hiddenButtonsPref || !isHTMLEditor;
+
+  document.getElementById("directionality-formatting-toolbar-section")
+          .setAttribute("hidden", hideFormattingToolbarButtons);
+  document.getElementById("directionality-separator-formatting-bar")
+          .hidden = hideFormattingToolbarButtons;
+  document.getElementById("directionality-main-toolbar-section")
+          .setAttribute("hidden", hideMainToolbarButtons);
+  document.getElementById("directionality-separator-main-bar")
+          .hidden = hideMainToolbarButtons;
 }
 
 function LoadParagraphMode()
