@@ -5,7 +5,8 @@
 %bidimailpackDTD;
 ]>
 
-<?xml-stylesheet href="chrome://bidimailpack/skin/bidimailpack.css" type="text/css"?>
+<?xml-stylesheet href="chrome://bidimailpack/skin/bidimailpack.css"
+                 type="text/css"?>
 
 <overlay
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -18,11 +19,10 @@
   </script>
 
 <broadcasterset>
-  <broadcaster id="ltr-document-direction-broadcaster" checked="false" hidden="true"/>
-  <broadcaster id="rtl-document-direction-broadcaster" checked="false" hidden="true"/>
+  <broadcaster id="ltr-document-direction-broadcaster" checked="false"/>
+  <broadcaster id="rtl-document-direction-broadcaster" checked="false"/>
   <broadcaster id="ltr-paragraph-direction-broadcaster" checked="false"/>
   <broadcaster id="rtl-paragraph-direction-broadcaster" checked="false"/>
-  <broadcaster id="rlm-lrm-broadcaster" hidden="false"/>
 </broadcasterset>
 
 <commandset id="composerStyleMenuItems">
@@ -58,51 +58,49 @@
 formatting toolbar buttons are per-paragraph direction controls, the
 main toolbar buttons are whole-document direction controls -->
 
-<toolbox class="toolbox-top" id="headers-box">
-  <toolbar id="composeToolbar">
-    <hbox id="toolbar_button_box">
-      <hbox id="directionality-toolbar-section"
-            insertafter="button-save"
-            dir="ltr">
-       <toolbarseparator id="directionality-separator-main-bar"
-                         class="toolbarseparator-primary"/>
-         <toolbarbutton id="button-direction-ltr-main-bar"
-                        command="cmd_ltr_document"
-                        observes="ltr-document-direction-broadcaster"
-                        class="toolbarbutton-1"
-                        label="&bidimail-ltr-button.label;"
-                        tooltiptext="&bidimail-ltr-button.tip;"/>
-         <toolbarbutton id="button-direction-rtl-main-bar"
-                        command="cmd_rtl_document"
-                        observes="rtl-document-direction-broadcaster"
-                        class="toolbarbutton-1"
-                        label="&bidimail-rtl-button.label;"
-                        tooltiptext="&bidimail-rtl-button.tip;"/>
-      </hbox>
+<toolbar id="composeToolbar">
+  <hbox id="toolbar_button_box">
+    <hbox id="directionality-main-toolbar-section"
+          insertafter="button-save"
+          dir="ltr">
+      <toolbarbutton id="button-direction-ltr-main-bar"
+                     command="cmd_ltr_document"
+                     observes="ltr-document-direction-broadcaster"
+                     class="toolbarbutton-1"
+                     label="&bidimail-ltr-button.label;"
+                     tooltiptext="&bidimail-ltr-button.tip;"/>
+      <toolbarbutton id="button-direction-rtl-main-bar"
+                     command="cmd_rtl_document"
+                     observes="rtl-document-direction-broadcaster"
+                     class="toolbarbutton-1"
+                     label="&bidimail-rtl-button.label;"
+                     tooltiptext="&bidimail-rtl-button.tip;"/>
     </hbox>
-  </toolbar>
+    <toolbarseparator id="directionality-separator-main-bar"
+                      insertafter="button-save"
+                      class="toolbarseparator-primary"/>
+  </hbox>
+</toolbar>
   
-   <toolbar id="FormatToolbar">
-     <hbox id="directionality-toolbar-section"
-           insertafter="IncreaseFontSizeButton"
-           dir="ltr">
-       <toolbarbutton id="button-direction-ltr-formatting-bar"
-                      command="cmd_ltr_paragraph"
-                      observes="ltr-paragraph-direction-broadcaster"
-                      checked="false" hidden="true"
-                      tooltiptext="&bidimail-ltr-button.tip;"/>
-       <toolbarbutton id="button-direction-rtl-formatting-bar"
-                      command="cmd_rtl_paragraph"
-                      observes="rtl-paragraph-direction-broadcaster"
-                      checked="false"
-                      hidden="true"
-                      tooltiptext="&bidimail-rtl-button.tip;"/>
-       <toolbarseparator id="directionality-separator-formatting-bar"
-                         class="toolbarseparator-standard"/>
-     </hbox>
-  </toolbar>
-  
-</toolbox>
+<toolbar id="FormatToolbar">
+  <hbox id="directionality-formatting-toolbar-section"
+        insertafter="IncreaseFontSizeButton"
+        dir="ltr">
+    <toolbarbutton id="button-direction-ltr-formatting-bar"
+                   command="cmd_ltr_paragraph"
+                   observes="ltr-paragraph-direction-broadcaster"
+                   checked="false"
+                   tooltiptext="&bidimail-ltr-button.tip;"/>
+    <toolbarbutton id="button-direction-rtl-formatting-bar"
+                   command="cmd_rtl_paragraph"
+                   observes="rtl-paragraph-direction-broadcaster"
+                   checked="false"
+                   tooltiptext="&bidimail-rtl-button.tip;"/>
+  </hbox>
+  <toolbarseparator class="toolbarseparator-standard"
+                    insertafter="IncreaseFontSizeButton"
+                    id="directionality-separator-formatting-bar"/>
+</toolbar>
 
 <keyset id="tasksKeys">
   <key id="key-switch-document-direction"
