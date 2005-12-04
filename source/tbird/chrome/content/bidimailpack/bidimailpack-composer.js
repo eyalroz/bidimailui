@@ -294,18 +294,14 @@ function HandleComposeReplyCSS()
 
 function HandleDirectionButtons()
 {
-  if (IsHTMLEditor()) {
-    var hiddenButtons =
-      !gBDMPrefs.getBoolPref("compose.show_direction_buttons", true);
-
+  if (IsHTMLEditor()  &&
+      !gBDMPrefs.getBoolPref("compose.show_direction_buttons", true)) {
     // Note: the main toolbar buttons are never hidden, since that toolbar
-    //       is customizable in tbird anyway
-    document.getElementById("ltr-paragraph-direction-broadcaster")
-            .setAttribute("hidden", hiddenButtons);
-    document.getElementById("rtl-paragraph-direction-broadcaster")
-            .setAttribute("hidden", hiddenButtons);
+    //       is customizable in Thunderbird anyway
+    document.getElementById("directionality-formatting-toolbar-section")
+            .setAttribute("hidden", true);
     document.getElementById("directionality-separator-formatting-bar")
-            .setAttribute("hidden", hiddenButtons);
+            .hidden = true;
   }
 }
 
