@@ -66,28 +66,25 @@
                  tooltiptext="&bidimail-rtl-button.tip;"/>
 </toolbarpalette>
 
-<toolbox id="headers-box" class="toolbox-top" mode="icons"> 
-  <toolbar id="FormatToolbar">
-    <hbox id="directionality-toolbar-section"
-          insertafter="IncreaseFontSizeButton"
-          dir="ltr">
-      <toolbarseparator id="directionality-separator-formatting-bar"
-                        class="toolbarseparator-standard"/>
-      <toolbarbutton id="button-direction-ltr-formatting-bar"
-                     command="cmd_ltr_paragraph"
-                     observes="ltr-paragraph-direction-broadcaster"
-                     tooltiptext="&bidimail-ltr-button.tip;"
-                     checked="false"
-                     hidden="true"/>
-      <toolbarbutton id="button-direction-rtl-formatting-bar"
-                     command="cmd_rtl_paragraph"
-                     observes="rtl-paragraph-direction-broadcaster"
-                     tooltiptext="&bidimail-rtl-button.tip;"
-                     checked="false"
-                     hidden="true"/>
-    </hbox>
-  </toolbar>
-</toolbox>
+<toolbar id="FormatToolbar">
+  <hbox id="directionality-formatting-toolbar-section"
+        insertafter="IncreaseFontSizeButton"
+        dir="ltr">
+    <toolbarbutton id="button-direction-ltr-formatting-bar"
+                   command="cmd_ltr_paragraph"
+                   observes="ltr-paragraph-direction-broadcaster"
+                   tooltiptext="&bidimail-ltr-button.tip;"
+                   checked="false"/>
+    <toolbarbutton id="button-direction-rtl-formatting-bar"
+                   command="cmd_rtl_paragraph"
+                   observes="rtl-paragraph-direction-broadcaster"
+                   tooltiptext="&bidimail-rtl-button.tip;"
+                   checked="false"/>
+  </hbox>
+  <toolbarseparator id="directionality-separator-formatting-bar"
+                    insertafter="IncreaseFontSizeButton"
+                    class="toolbarseparator-standard"/>
+</toolbar>
 
 <keyset id="tasksKeys">
   <key id="key-switch-document-direction"
