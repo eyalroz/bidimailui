@@ -464,6 +464,18 @@ function SetInitialDocumentDirection(messageParams)
 function ComposeWindowOnActualLoad()
 {
   HandleDirectionButtons();
+  // Track "Show Direction Buttons" pref.
+  try {
+    var pbi =
+      gBDMPrefs.prefService
+               .QueryInterface(Components.interfaces.nsIPrefBranchInternal);
+    pbi.addObserver(gDirectionButtonsPrefListener.domain,
+                    gDirectionButtonsPrefListener, false);
+  }
+  catch(ex) {
+    dump("Failed to observe prefs: " + ex + "\n");
+  }
+
   HandleComposeReplyCSS();
 
   // When this message is already on display in the main Mail&News window
@@ -501,6 +513,21 @@ function ComposeWindowOnActualLoad()
   directionSwitchController.setAllCasters();
 }
 
+function ComposeWindowOnUnload()
+{
+  // Stop tracking "Show Direction Buttons" pref.
+  try {
+    var pbi =
+      gBDMPrefs.prefService
+               .QueryInterface(Components.interfaces.nsIPrefBranchInternal);
+    pbi.removeObserver(gDirectionButtonsPrefListener.domain,
+                       gDirectionButtonsPrefListener);
+  }
+  catch(ex) {
+    dump("Failed to remove pref observer: " + ex + "\n");
+  }
+}
+
 function InstallComposeWindowEventHandlers()
 {
   // Note:
@@ -515,6 +542,7 @@ function InstallComposeWindowEventHandlers()
   document.addEventListener("load", ComposeWindowOnLoad, true);
   document.addEventListener("compose-window-reopen",
                             ComposeWindowOnActualLoad, true);
+  document.addEventListener("unload", ComposeWindowOnUnload, true);
   document.addEventListener("keypress", onKeyPress, true);
 }
 
@@ -1037,3 +1065,14 @@ function CommandUpdate_MsgComposeDirection()
   gLastWindowToHaveFocus = focusedWindow;
   directionSwitchController.setAllCasters();
 }
+
+const gDirectionButtonsPrefListener =
+{
+  domain: "bidiui.mail.compose.show_direction_buttons",
+  observe: function(subject, topic, prefName) {
+    if (topic != "nsPref:changed")
+      return;
+
+    HandleDirectionButtons();
+  }
+};

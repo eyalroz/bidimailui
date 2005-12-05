@@ -6,6 +6,17 @@ function EditorWindowOnLoad() {
   top.controllers.insertControllerAt(1, directionSwitchController);
 
   HandleComposerDirectionButtons();
+  // Track "Show Direction Buttons" pref.
+  try {
+    var pbi =
+      gBDMPrefs.prefService
+               .QueryInterface(Components.interfaces.nsIPrefBranchInternal);
+    pbi.addObserver(gEditorDirectionButtonsPrefListener.domain,
+                    gEditorDirectionButtonsPrefListener, false);
+  }
+  catch(ex) {
+    dump("Failed to observe prefs: " + ex + "\n");
+  }
 
   var documentParams = {
     isEmpty: false
@@ -22,6 +33,21 @@ function EditorWindowOnLoad() {
   directionSwitchController.setAllCasters();
 }  
 
+function EditorWindowOnUnload()
+{
+  // Stop tracking "Show Direction Buttons" pref.
+  try {
+    var pbi =
+      gBDMPrefs.prefService
+               .QueryInterface(Components.interfaces.nsIPrefBranchInternal);
+    pbi.removeObserver(gEditorDirectionButtonsPrefListener.domain,
+                       gEditorDirectionButtonsPrefListener);
+  }
+  catch(ex) {
+    dump("Failed to remove pref observer: " + ex + "\n");
+  }
+}
+
 function HandleComposerDirectionButtons()
 {
   var hiddenButtonsPref =
@@ -36,6 +62,7 @@ function HandleComposerDirectionButtons()
 
 function InstallEditorWindowEventHandlers() {
   document.addEventListener("load", EditorWindowOnLoad, true);
+  document.addEventListener("unload", EditorWindowOnUnload, true);
   document.addEventListener("keypress", onKeyPress, true);
 }
 
@@ -64,3 +91,14 @@ function DetermineNewDocumentParams(messageParams) {
     messageParams.isEmpty = true;
   }
 }
+
+const gEditorDirectionButtonsPrefListener =
+{
+  domain: "bidiui.mail.compose.show_direction_buttons",
+  observe: function(subject, topic, prefName) {
+    if (topic != "nsPref:changed")
+      return;
+
+    HandleComposerDirectionButtons();
+  }
+};
