@@ -1,11 +1,11 @@
 <!ENTITY bidimailpack-settings                   "אפשרויות BiDi Mail UI">
 <!ENTITY message-composition-groupbox-caption    "חיבור הודעות">
-<!ENTITY default-dir                             "כיוון ברירת-מחדל:">
-<!ENTITY ltr.label                               "משמאל לימין">
+<!ENTITY default-dir                             "כיוון ברירת־מחדל:">
+<!ENTITY ltr.label                               "משמאל־לימין">
 <!ENTITY ltr.accesskey                           "ש">
-<!ENTITY rtl.label                               "מימין לשמאל">
+<!ENTITY rtl.label                               "מימין־לשמאל">
 <!ENTITY rtl.accesskey                           "מ">
-<!ENTITY always-reply-in-default-dir.label       "ענה להודעות תמיד בכיוון ברירת-המחדל">
+<!ENTITY always-reply-in-default-dir.label       "ענה להודעות תמיד בכיוון ברירת־המחדל">
 <!ENTITY always-reply-in-default-dir.accesskey   "ע">
 <!ENTITY more-info                               "למידע נוסף:">
 <!ENTITY guide-link-text                         "המדריך למשתמש ב-BiDi Mail UI">
