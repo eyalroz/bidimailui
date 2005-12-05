@@ -5,7 +5,7 @@ function SetMessageDirection(dir)
     return;
 
   var body = brwsr.docShell.contentViewer.DOMDocument.body;
-  body.setAttribute("dir", dir);
+  body.style.direction = dir;
 }
 
 function SwitchMessageDirection()
@@ -18,7 +18,7 @@ function SwitchMessageDirection()
   var oppositeDirection =
     window.getComputedStyle(body, null).direction == "ltr" ? "rtl" : "ltr";
 
-  body.setAttribute("dir", oppositeDirection);
+  body.style.direction = oppositeDirection;
 }
 
 function browserOnLoadHandler()
