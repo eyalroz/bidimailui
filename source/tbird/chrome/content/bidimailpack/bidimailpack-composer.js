@@ -273,6 +273,7 @@ function ComposeWindowOnLoad()
     gLastWindowToHaveFocus = null;
 
     // Direction Controller
+    alert("moof");
     top.controllers.insertControllerAt(1, directionSwitchController);
   }
   else
