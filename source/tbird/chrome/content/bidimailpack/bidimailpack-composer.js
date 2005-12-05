@@ -447,7 +447,7 @@ function SetInitialDocumentDirection(messageParams)
 function ComposeWindowOnActualLoad()
 {
   HandleDirectionButtons();
-  // Track "Show Direction Buttons" pref.
+  // Stop tracking "Show Direction Buttons" pref.
   try {
     var pbi =
       gBDMPrefs.prefService
