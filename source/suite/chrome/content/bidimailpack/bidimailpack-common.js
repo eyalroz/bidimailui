@@ -65,7 +65,7 @@ var gBDMPrefs = {
     if (!this._prefService) 
       this._prefService =
         Components.classes["@mozilla.org/preferences-service;1"]
-                  .getService(Components.interfaces.nsIPrefBranch2);
+                  .getService(Components.interfaces.nsIPrefBranch);
 
     return this._prefService;
   },
