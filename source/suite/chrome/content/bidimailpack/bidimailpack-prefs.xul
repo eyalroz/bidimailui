@@ -77,9 +77,10 @@
   <description>
     <hbox>
       <label value="&more-info;"/>
-      <html:a href="&guide-url;"
-              onclick="open(this.href, '_new'); return false;"
-              style="cursor: pointer; color: blue;">&guide-link-text;</html:a>
+      <label class="text-link"
+             href="&guide-url;"
+             value="&guide-link-text;"
+             onclick="open(this.getAttribute('href'), '_new');"/>
     </hbox>
   </description>
 </page>
