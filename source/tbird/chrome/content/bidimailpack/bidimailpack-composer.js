@@ -868,8 +868,19 @@ function InsertParagraph()
   //    not a candidate for removal -- we need it to keep the P
   //    from becoming empty)
   if (node && node.nodeType == node.ELEMENT_NODE &&
-      node.tagName.toLowerCase() == "br" && prevPar.firstChild != node)
-    editor.deleteNode(node);
+      node.tagName.toLowerCase() == "br") {
+    var isFirstNode = false;
+    var firstNode = prevPar.firstChild;
+    while (firstNode) {
+      if (firstNode == node) {
+        isFirstNode = true;
+        break;
+      }
+      firstNode = firstNode.firstChild;
+    }
+    if (!isFirstNode)
+      editor.deleteNode(node);
+  }
 
   // Set "Space between paragraphs"
   par.style.marginBottom = gParagraphVerticalMargin;
