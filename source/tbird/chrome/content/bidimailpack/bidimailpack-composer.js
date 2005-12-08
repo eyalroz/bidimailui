@@ -816,6 +816,11 @@ function InsertParagraph()
   if (!editor.selection.isCollapsed)
     editor.deleteSelection(editor.eNone);
 
+  // this next line  has to come before trying to get the font
+  // size, otherwise we get a wrong font size, due to the editor 
+  // being broken
+  editor.insertLineBreak();
+
   // ------------------------------- "remember old style" ------
   // will be ignord
   var allHas = { value: false };
@@ -836,11 +841,6 @@ function InsertParagraph()
   var isStyleFontColor = { value: false };
   EditorGetTextProperty("font", "color", "", isStyleFontColor, anyHas, allHas);
   var styleFontColor = editor.getFontColorState(allHas);
-
-  // this next line  is not part of "remembering the old style", but it has
-  // to come before trying to get the font size, otherwise we get a wrong
-  // font size, due to the editor being broken
-  editor.insertLineBreak();
 
   // solution for <big>, <small> and font-face tags:
   // we compare the computed font-size of the selction to the font-size of
