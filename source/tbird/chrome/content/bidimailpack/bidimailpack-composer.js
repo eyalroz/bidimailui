@@ -294,14 +294,19 @@ function HandleComposeReplyCSS()
 
 function HandleDirectionButtons()
 {
-  var hideButtons = !gBDMPrefs.getBoolPref("compose.show_direction_buttons", true)
+  var hiddenButtonsPref =
+    !gBDMPrefs.getBoolPref("compose.show_direction_buttons", true);
+  var isHTMLEditor = IsHTMLEditor();
 
   // Note: the main toolbar buttons are never hidden, since that toolbar
   //       is customizable in Thunderbird anyway
+
+  var hideFormattingToolbarButtons = hiddenButtonsPref || !isHTMLEditor;
+ 
   document.getElementById("directionality-formatting-toolbar-section")
-          .setAttribute("hidden", hideButtons);
+          .setAttribute("hidden", hideFormattingToolbarButtons);
   document.getElementById("directionality-separator-formatting-bar")
-          .hidden = hideButtons;
+          .hidden = hideFormattingToolbarButtons;
 }
 
 function LoadParagraphMode()
@@ -393,10 +398,10 @@ function DetermineNewMessageParams(messageParams)
         messageParams.isEmpty = true;
     }
     else {
-      if ((body.firstChild == body.lastChild) &&
-          (body.firstChild.nodeName == "P") &&
-          (body.firstChild.firstChild.nodeName == "BR") &&
-          (body.firstChild.firstChild = body.firstChild.lastChild))
+      if (body.firstChild == body.lastChild &&
+          body.firstChild.nodeName == "P" &&
+          body.firstChild.firstChild.nodeName == "BR" &&
+          body.firstChild.firstChild == body.firstChild.lastChild)
         messageParams.isEmpty = true;
     }
   }
@@ -447,7 +452,7 @@ function SetInitialDocumentDirection(messageParams)
 function ComposeWindowOnActualLoad()
 {
   HandleDirectionButtons();
-  // Stop tracking "Show Direction Buttons" pref.
+  // Track "Show Direction Buttons" pref.
   try {
     var pbi =
       gBDMPrefs.prefService
@@ -498,7 +503,7 @@ function ComposeWindowOnActualLoad()
 
 function ComposeWindowOnUnload()
 {
-  // Track "Show Direction Buttons" pref.
+  // Stop tracking "Show Direction Buttons" pref.
   try {
     var pbi =
       gBDMPrefs.prefService
