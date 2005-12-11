@@ -1,12 +1,3 @@
-// Summary of differences from tbird version:
-// -------------------------------------------
-//
-// HandleDirectionButtons() : visibility is determined differently, since
-// the toolbar isn't customizable
-// HandleDirectionButtons() : no need for MacOS-specific style rules
-//
-// XUL differences have, for now, no reflection in script differences
-
 // A note for debugging the code
 // ---------------------------------------
 // the following 3 lines enable logging messages to the javascript console:
@@ -307,18 +298,19 @@ function HandleDirectionButtons()
     !gBDMPrefs.getBoolPref("compose.show_direction_buttons", true);
   var isHTMLEditor = IsHTMLEditor();
 
-  // decide which direction buttons are shown and which aren't
   var hideMainToolbarButtons = hiddenButtonsPref || isHTMLEditor;
-  var hideFormattingToolbarButtons = hiddenButtonsPref || !isHTMLEditor;
 
-  document.getElementById("directionality-formatting-toolbar-section")
-          .setAttribute("hidden", hideFormattingToolbarButtons);
-  document.getElementById("directionality-separator-formatting-bar")
-          .hidden = hideFormattingToolbarButtons;
   document.getElementById("directionality-main-toolbar-section")
           .setAttribute("hidden", hideMainToolbarButtons);
   document.getElementById("directionality-separator-main-bar")
           .hidden = hideMainToolbarButtons;
+
+  var hideFormattingToolbarButtons = hiddenButtonsPref || !isHTMLEditor;
+ 
+  document.getElementById("directionality-formatting-toolbar-section")
+          .setAttribute("hidden", hideFormattingToolbarButtons);
+  document.getElementById("directionality-separator-formatting-bar")
+          .hidden = hideFormattingToolbarButtons;
 }
 
 function LoadParagraphMode()
