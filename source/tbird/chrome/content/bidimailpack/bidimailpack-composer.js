@@ -982,8 +982,7 @@ var directionSwitchController = {
   },
 
   setCasterGroup: function(casterPair) {
-    var casterID, oppositeCasterID, command;
-    var direction = null;
+    var casterID, oppositeCasterID, command, direction;
     var enabled = (content == top.document.commandDispatcher.focusedWindow);
 
     switch (casterPair) {
