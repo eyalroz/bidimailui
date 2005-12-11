@@ -833,12 +833,10 @@ function InsertParagraph()
   if (!editor.selection.isCollapsed)
     editor.deleteSelection(editor.eNone);
 
-  // this next line  has to come before trying to get the font
-  // size, otherwise we get a wrong font size, due to the editor 
-  // being broken
   editor.insertLineBreak();
 
-  // ------------------------------- "remember old style" ------
+  // -- Remember the old style rules before we move into paragraph mode --
+
   // will be ignord
   var allHas = { value: false };
   var anyHas = { value: false };
@@ -874,7 +872,7 @@ function InsertParagraph()
                                                       .getPropertyValue("font-size"));
   }
   catch(ex) { }
-  // ------------------------------- "remember old style" ------
+  // -- "Remember old style"
 
   editor.setParagraphFormat("p");
   var par = FindClosestBlockElement(editor.selection.focusNode);
