@@ -1,0 +1,166 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % bidimailpackDTD SYSTEM "chrome://bidimailpack/locale/bidimailpack.dtd">
+%bidimailpackDTD;
+]>
+
+<?xml-stylesheet href="chrome://bidimailpack/skin/bidimailpack.css"
+                 type="text/css"?>
+
+<overlay
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/x-javascript" src="bidimailpack-common.js"/>
+  <script type="application/x-javascript" src="bidimailpack-composer.js"/>
+  <script type="application/x-javascript">
+    gBDMPrefs.migrateOldPrefs();
+    InstallComposeWindowEventHandlers();
+  </script>
+
+<broadcasterset>
+  <broadcaster id="ltr-document-direction-broadcaster" checked="false"/>
+  <broadcaster id="rtl-document-direction-broadcaster" checked="false"/>
+  <broadcaster id="ltr-paragraph-direction-broadcaster" checked="false"/>
+  <broadcaster id="rtl-paragraph-direction-broadcaster" checked="false"/>
+</broadcasterset>
+
+<commandset id="composerStyleMenuItems">
+  <command id="cmd_rtl_document"
+           oncommand="goDoCommand('cmd_rtl_document');"/>
+  <command id="cmd_ltr_document"
+           oncommand="goDoCommand('cmd_ltr_document');"/>
+  <command id="cmd_switch_document"
+           oncommand="goDoCommand('cmd_switch_document');"/>
+  <command id="cmd_rtl_paragraph"
+           oncommand="goDoCommand('cmd_rtl_paragraph');"
+           commandupdater="true"
+           events="focus"
+           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
+  <command id="cmd_ltr_paragraph"
+           oncommand="goDoCommand('cmd_ltr_paragraph');"
+           commandupdater="true"
+           events="focus"
+           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
+  <command id="cmd_switch_paragraph"
+           oncommand="goDoCommand('cmd_switch_paragraph');"
+           commandupdater="true"
+           events="focus"
+           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
+  <command id="cmd_clear_paragraph_dir"
+           oncommand="goDoCommand('cmd_clear_paragraph_dir');"
+           commandupdater="true"
+           events="focus"
+           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
+</commandset>
+
+<!-- there are two button sets, on two different toolbars; the
+formatting toolbar buttons are per-paragraph direction controls, the
+main toolbar buttons are whole-document direction controls -->
+
+<toolbar id="composeToolbar">
+  <hbox id="toolbar_button_box">
+    <hbox id="directionality-main-toolbar-section"
+          insertafter="button-save"
+          dir="ltr">
+      <toolbarbutton id="button-direction-ltr-main-bar"
+                     command="cmd_ltr_document"
+                     observes="ltr-document-direction-broadcaster"
+                     class="toolbarbutton-1"
+                     label="&bidimail-ltr-button.label;"
+                     tooltiptext="&bidimail-ltr-button.tip;"/>
+      <toolbarbutton id="button-direction-rtl-main-bar"
+                     command="cmd_rtl_document"
+                     observes="rtl-document-direction-broadcaster"
+                     class="toolbarbutton-1"
+                     label="&bidimail-rtl-button.label;"
+                     tooltiptext="&bidimail-rtl-button.tip;"/>
+    </hbox>
+    <toolbarseparator id="directionality-separator-main-bar"
+                      insertafter="button-save"
+                      class="toolbarseparator-primary"/>
+  </hbox>
+</toolbar>
+  
+<toolbar id="FormatToolbar">
+  <hbox id="directionality-formatting-toolbar-section"
+        insertafter="IncreaseFontSizeButton"
+        dir="ltr">
+    <toolbarbutton id="button-direction-ltr-formatting-bar"
+                   command="cmd_ltr_paragraph"
+                   observes="ltr-paragraph-direction-broadcaster"
+                   checked="false"
+                   tooltiptext="&bidimail-ltr-button.tip;"/>
+    <toolbarbutton id="button-direction-rtl-formatting-bar"
+                   command="cmd_rtl_paragraph"
+                   observes="rtl-paragraph-direction-broadcaster"
+                   checked="false"
+                   tooltiptext="&bidimail-rtl-button.tip;"/>
+  </hbox>
+  <toolbarseparator class="toolbarseparator-standard"
+                    insertafter="IncreaseFontSizeButton"
+                    id="directionality-separator-formatting-bar"/>
+</toolbar>
+
+<keyset id="tasksKeys">
+  <key id="key-switch-document-direction"
+       command="cmd_switch_document"
+       modifiers="&key-bidimail-switch-document-direction.modifiers;"
+       key="&key-bidimail-switch-document-direction.keycode;"/>
+  <key id="key-switch-paragraph-direction"
+       command="cmd_switch_paragraph"
+       modifiers="&key-bidimail-switch-paragraph-direction.modifiers;"
+       key="&key-bidimail-switch-paragraph-direction.keycode;"/>
+</keyset>
+
+<popup id="msgComposeContext">
+  <menuseparator/>
+  <menuitem id="contextSwitchParagraphDirectionItem"
+            command="cmd_switch_paragraph"
+            label="&menu-bidimail-switch-paragraph-direction.label;"
+            accesskey="&menu-bidimail-switch-paragraph-direction.accesskey;"/>
+  <menuitem id="contextBodyDirectionItem"
+            command="cmd_switch_document"
+            label="&menu-bidimail-switch-message-direction.label;"
+            accesskey="&menu-bidimail-switch-document-direction.accesskey;"/>
+  <menu id="menu_Context_ControlCharacters"
+        label="&menu-bidimail-insert-contol-character.label;"
+        accesskey="&menu-bidimail-insert-contol-character.accesskey;">
+    <menupopup id="menu_Context_ControlCharacters_Popup">
+      <menuitem id="contextInsertLRM"
+                oncommand="InsertControlCharacter('\u200e');"
+                accesskey="&menu-bidimail-lrm.accesskey;"
+                label="&menu-bidimail-lrm.label;"/>
+      <menuitem id="contextInsertRLM"
+                oncommand="InsertControlCharacter('\u200f');"
+                accesskey="&menu-bidimail-rlm.accesskey;"
+                label="&menu-bidimail-rlm.label;"/>
+    </menupopup>
+  </menu>
+</popup>
+
+<menu id="menu_View">
+  <menupopup id="menu_View_Popup">
+    <menuitem command="cmd_switch_document"
+              key="key-switch-document-direction"
+              label="&menu-bidimail-switch-message-direction.label;"
+              accesskey="&menu-bidimail-switch-document-direction.accesskey;"/>
+  </menupopup>
+</menu>
+
+<menu id="formatMenu">
+  <menupopup id="formatMenuPopup">
+    <menuseparator/>
+    <menuitem id="formatSwitchParagraphDirectionItem"
+              command="cmd_switch_paragraph"
+              key="key-switch-paragraph-direction"
+              label="&menu-bidimail-switch-paragraph-direction.label;"
+              accesskey="&menu-bidimail-switch-paragraph-direction.accesskey;"/>
+    <menuitem id="format_ClearParagraphDirectionItem"
+              command="cmd_clear_paragraph_dir"
+              label="&menu-bidimail-clear-paragraph-direction.label;"
+              accesskey="&menu-bidimail-clear-paragraph-direction.accesskey;"/>
+  </menupopup>
+</menu>
+
+</overlay>
