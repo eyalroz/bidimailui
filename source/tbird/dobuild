@@ -22,10 +22,10 @@ esac
 rm -rf $BUILDDIR
 mkdir $BUILDDIR
 
-../buildtools/preprocessor.pl -D$DEF jar.mn > $BUILDDIR/jar.mn
-../buildtools/make-jars.pl -v -z zip -p "../buildtools/preprocessor.pl -D$DEF -DVERSION=$VERSION"  -s . -d . < $BUILDDIR/jar.mn
+$BUILDTOOLSDIR/preprocessor.pl -D$DEF jar.mn > $BUILDDIR/jar.mn
+$BUILDTOOLSDIR/make-jars.pl -v -z zip -p "$BUILDTOOLSDIR/preprocessor.pl -D$DEF -DVERSION=$VERSION"  -s . -d . < $BUILDDIR/jar.mn
 echo -e "\nJAR files ready\n"
-../buildtools/preprocessor.pl -D$DEF "-DVERSION=$VERSION" install.rdf > $BUILDDIR/install.rdf
+$BUILDTOOLSDIR/preprocessor.pl -D$DEF "-DVERSION=$VERSION" install.rdf > $BUILDDIR/install.rdf
 rm -rf bidimailpack
 rm -rf bidimailpack-mac-skin
 rm -f installed-chrome.txt
@@ -54,7 +54,7 @@ case "$TARGET" in
 	  chrome.manifest
         ;;
     suite)
-        ../buildtools/preprocessor.pl -D$DEF "-DVERSION=$VERSION" install.js > $BUILDDIR/install.js
+        $BUILDTOOLSDIR/preprocessor.pl -D$DEF "-DVERSION=$VERSION" install.js > $BUILDDIR/install.js
         cd $BUILDDIR
 	zip -r bidimailpack_$TARGET.xpi  \
 	  chrome/bidimailpack.jar \
