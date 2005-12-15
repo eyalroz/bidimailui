@@ -22,10 +22,12 @@
          oncommand="SwitchMessageDirection()" />
   </keyset>
 
+#ifdef TBIRD
   <broadcasterset id="mailBroadcasters">
     <broadcaster id="ltr-document-direction-broadcaster" checked="false"/>
     <broadcaster id="rtl-document-direction-broadcaster" checked="false"/>  
   </broadcasterset>
+#endif
 
   <menupopup id="menu_View_Popup">
     <menuitem insertafter="mailviewCharsetMenu"
@@ -42,6 +44,7 @@
               oncommand="SwitchMessageDirection()" />
   </popup>
   
+#ifdef TBIRD
   <toolbarpalette id="MailToolbarPalette">
     <toolbarbutton id="button-direction-ltr-main-bar"
                    class="toolbarbutton-1"
@@ -56,4 +59,5 @@
                    label="&bidimail-rtl-button.label;"
                    tooltiptext="&bidimail-rtl-button.tip;" />  
   </toolbarpalette>
+#endif
 </overlay>

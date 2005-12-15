@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet type="text/css" href="chrome://communicator/skin/"?>
+
+<!DOCTYPE page SYSTEM "chrome://bidimailpack/locale/bidimailpack-prefs.dtd">
+
+<page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      onload="gBDMPrefs.migrateOldPrefs(); parent.initPanel(panel);"
+      headertitle="&bidimailpack-preftree-label;">
+
+  <script type="application/x-javascript"
+          src="chrome://bidimailpack/content/bidimailpack-common.js"/>
+  <script type="application/x-javascript"
+          src="chrome://bidimailpack/content/bidimailpack-prefs.js"/>
+  <script type="application/x-javascript">
+    var panel = "chrome://bidimailpack/content/bidimailpack-prefs.xul";
+    var _elementIDs = ["bidimailpack-default-dir",
+                       "bidimailpack-reply-in-default-dir",
+                       "bidimailpack-display-buttons"];
+  </script>
+
+  <groupbox>
+    <caption label="&message-composition-groupbox-caption;"/>
+    <description>&default-dir;</description>
+      <hbox class="indent">
+        <radiogroup id="bidimailpack-default-dir"
+                    prefstring="bidiui.mail.compose.default_direction"
+                    preftype="string">
+          <radio id="bidimailpack-default-dir-ltr"
+                 value="ltr"
+                 label="&ltr.label;"
+                 accesskey="&ltr.accesskey;"/>
+          <radio id="bidimailpack-default-dir-rtl"
+                 value="rtl"
+                 label="&rtl.label;"
+                 accesskey="&rtl.accesskey;"/>
+        </radiogroup>
+      </hbox>
+      <spacer/>
+      <checkbox id="bidimailpack-reply-in-default-dir"
+                prefstring="bidiui.mail.compose.reply_in_default_direction"
+                label="&always-reply-in-default-dir.label;"
+                accesskey="&always-reply-in-default-dir.accesskey;"
+                autostretch="never"/>
+      <checkbox id="bidimailpack-display-buttons"
+                prefstring="bidiui.mail.compose.show_direction_buttons"
+                label="&display-buttons.label;"
+                accesskey="&display-buttons.accesskey;"
+                autostretch="never"/>
+
+    <spacer style="height: 1em"/>
+
+    <hbox align="center">
+      <label value="&spaceBetweenParagraphs.label;"
+             accesskey="&spaceBetweenParagraphs.accesskey;"
+             control="bidimailpack-space-between-paragraphs-value"/>
+      <textbox id="bidimailpack-space-between-paragraphs-value" size="4"/>
+      <menulist id="bidimailpack-space-between-paragraphs-scale">
+        <menupopup>
+          <menuitem value="cm"
+                    label="&cmScale.label;"
+                    accesskey="&cmScale.accesskey;"/>
+          <menuitem value="px"
+                    label="&pixelScale.label;" 
+                    accesskey="&pixelScale.accesskey;"/>
+          <menuitem value="pt"
+                    label="&ptScale.label;"
+                    accesskey="&ptScale.accesskey;"/>
+        </menupopup>
+      </menulist>
+    </hbox>
+  </groupbox>
+
+  <spacer style="height: 1em"/>
+
+  <description>
+    <hbox>
+      <label value="&more-info;"/>
+      <label class="text-link"
+             href="&guide-url;"
+             value="&guide-link-text;"
+             onclick="open(this.getAttribute('href'), '_new');"/>
+    </hbox>
+  </description>
+</page>

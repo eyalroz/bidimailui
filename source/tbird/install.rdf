@@ -5,11 +5,12 @@
 
   <Description about="urn:mozilla:install-manifest">
     <em:id>{54e72d7b-ed31-4736-854f-f517358f21ee}</em:id>
-    <em:version>0.7</em:version>
-    
+#expand    <em:version>__VERSION__</em:version>
+
     <!-- Target Application this extension can install into, 
          with minimum and maximum supported versions. --> 
 
+#ifdef MOZ_THUNDERBIRD
     <!-- Thunderbird -->
     <em:targetApplication>
      <Description>
@@ -18,6 +19,25 @@
        <em:maxVersion>1.6a1</em:maxVersion>
      </Description>
     </em:targetApplication>
+#else
+    <!-- Mozilla 1.5-1.7 -->
+    <em:targetApplication>
+     <Description>
+       <em:id>{86c18b42-e466-45a9-ae7a-9b95ba6f5640}</em:id>
+       <em:minVersion>1.5</em:minVersion>
+       <em:maxVersion>1.8</em:maxVersion>
+     </Description>
+    </em:targetApplication>
+
+    <!-- Future seamonkey releases
+    <em:targetApplication>
+     <Description>
+       <em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
+       <em:minVersion>1.0</em:minVersion>
+       <em:maxVersion>1.5</em:maxVersion>
+     </Description>
+    </em:targetApplication>  -->
+#endif
 
     <!-- Front End MetaData -->
     <em:name>BiDi Mail UI</em:name>
@@ -29,10 +49,24 @@
     <em:contributor>Ilya Konstantinov</em:contributor>
     <em:contributor>Prognathous</em:contributor>
     <em:contributor>Ayman Hourieh</em:contributor>
-	<em:contributor>Reuven Gonen</em:contributor>
+    <em:contributor>Reuven Gonen</em:contributor>
     <em:homepageURL>http://bidiui.mozdev.org/</em:homepageURL>
 
-    <em:optionsURL>chrome://bidimailpack/content/bidimailpack-tbird-prefs.xul</em:optionsURL>
     <em:iconURL>chrome://bidimailpack/content/bidimailpack.png</em:iconURL>
+
+#ifdef MOZ_THUNDERBIRD
+    <em:optionsURL>chrome://bidimailpack/content/bidimailpack-tbird-prefs.xul</em:optionsURL>
+#else
+    <!-- Packages, Skins and Locales that this extension registers -->
+    <em:file>
+      <Description about="urn:mozilla:extension:file:bidimailpack.jar">
+        <em:package>content/bidimailpack/</em:package>
+        <em:locale>locale/en-US/bidimailpack/</em:locale>
+        <em:locale>locale/he-IL/bidimailpack/</em:locale>
+        <em:locale>locale/ar-SA/bidimailpack/</em:locale>
+        <em:skin>skin/classic/bidimailpack/</em:skin>
+      </Description>
+    </em:file>
   </Description>      
+#endif
 </RDF>
