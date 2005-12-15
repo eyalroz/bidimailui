@@ -6,6 +6,9 @@
   padding-right: 1em !important;
   border-right-style: solid !important;
   border-right-width: thin !important;
+%ifndef MOZ_THUNDERBIRD
+  border-right-color: blue !important;
+%endif
   padding-left: 0 !important;
   border-left: 0 !important;
 }
@@ -16,4 +19,7 @@
   padding-left: 1em !important;
   border-left-style: solid !important;
   border-left-width: thin !important;
+%ifndef MOZ_THUNDERBIRD
+  border-left-color: blue !important;
+%endif
 }

@@ -34,15 +34,13 @@ function matchInText(element, normalExpression, htmlizedExpression)
 {
   try {
     var iterator = new XPathEvaluator();
-    var path = iterator.evaluate("//text()", element, null,
-                                 XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+    var path = iterator.evaluate("//text()", element, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
     for (var node = path.iterateNext(); node; node = path.iterateNext())
     {
       if (normalExpression.test(node.data))
       return true;
     }
-  }
-  catch (ex) {
+  } catch(ex) {
     // 'new XPathEvaluator()' doesn't work for some reason, so we have
     // to test the HTMLized message rather than the bare text lines;
     // the regexp must change accordingly
@@ -70,8 +68,7 @@ var gBDMPrefs = {
   getBoolPref: function(prefName, defaultValue) {
     try {
       return this.prefService.getBoolPref("bidiui.mail." + prefName);
-    }
-    catch (ex) {
+    } catch(ex) {
       if (defaultValue != undefined)
         return defaultValue;
 
@@ -82,8 +79,7 @@ var gBDMPrefs = {
   getCharPref: function(prefName, defaultValue) {
     try {
       return this.prefService.getCharPref("bidiui.mail." + prefName);
-    }
-    catch (ex) {
+    } catch(ex) {
       if (defaultValue != undefined)
         return defaultValue;
 
@@ -119,8 +115,7 @@ var gBDMPrefs = {
         this.setBoolPref("compose.show_direction_buttons", false);
 
       this.prefService.clearUserPref("mail.compose.show_direction_buttons");
-    }
-    catch(ex) { }
+    } catch(ex) { }
 
     try {
       if (this.prefService
@@ -129,25 +124,31 @@ var gBDMPrefs = {
         this.setCharPref("compose.default_direction", "rtl");
 
       this.prefService.clearUserPref("mailnews.send_default_direction");
-    }
-    catch(ex) { }
+    } catch(ex) { }
 
     try {
       if (this.prefService.getBoolPref("mailnews.reply_in_default_direction"))
         this.setBoolPref("compose.reply_in_default_direction", true);
 
       this.prefService.clearUserPref("mailnews.reply_in_default_direction");
-    }
-    catch(ex) { }
+    } catch(ex) { }
 
     try {
       var oldValue =
         this.prefService
+#ifdef MOZ_THUNDERBIRD
             .getCharPref("mailnews.paragraph.vertical_margin.value");
+#else
+            .getCharPref("editor.paragraph.vertical_margins.value");
+#endif
       if (oldValue != "0") {
         var scale =
           this.prefService
-              .getCharPref("mailnews.paragraph.vertical_margin.scale");
+#ifdef MOZ_THUNDERBIRD
+              .getCharPref("mailnews.paragraph.vertical_margins.scale");
+#else
+              .getCharPref("editor.paragraph.vertical_margins.scale");
+#endif
         var newValue;
         if (scale != "px")
           newValue = parseFloat(oldValue, 10) * 2;
@@ -160,12 +161,18 @@ var gBDMPrefs = {
         }
       }
 
+#ifdef MOZ_THUNDERBIRD
       this.prefService
-          .clearUserPref("mailnews.paragraph.vertical_margin.value");
+              .getCharPref("mailnews.paragraph.vertical_margins.value");
       this.prefService
-          .clearUserPref("mailnews.paragraph.vertical_margin.scale");
-    }
-    catch(ex) { }
+              .getCharPref("mailnews.paragraph.vertical_margins.scale");
+#else
+      this.prefService
+              .getCharPref("editor.paragraph.vertical_margins.value");
+      this.prefService
+              .getCharPref("editor.paragraph.vertical_margins.scale");
+#endif
+    } catch(ex) { }
 
     this._setMigrated("067");
   }

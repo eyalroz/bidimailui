@@ -6,8 +6,6 @@ function SetMessageDirection(dir)
 
   var body = brwsr.docShell.contentViewer.DOMDocument.body;
   body.style.direction = dir;
-  // TB only
-  UpdateDirectionButtons(dir);
 }
 
 function SwitchMessageDirection()
@@ -21,16 +19,6 @@ function SwitchMessageDirection()
     window.getComputedStyle(body, null).direction == "ltr" ? "rtl" : "ltr";
 
   body.style.direction = oppositeDirection;
-  UpdateDirectionButtons(oppositeDirection);
-}
-
-// TB only - update optional direction buttons status
-function UpdateDirectionButtons(direction)
-{
-  var caster = document.getElementById("ltr-document-direction-broadcaster");
-  caster.setAttribute("checked", direction == "ltr");
-  caster = document.getElementById("rtl-document-direction-broadcaster");
-  caster.setAttribute("checked", direction == "rtl");
 }
 
 function browserOnLoadHandler()
@@ -94,10 +82,7 @@ function browserOnLoadHandler()
   if (bodyIsPlainText) {
     if (canBeAssumedRTL(body)) {
       SetMessageDirection("rtl");
-      UpdateDirectionButtons("rtl");
     }
-    else
-      UpdateDirectionButtons("ltr");
 
     return;
   }
@@ -126,12 +111,12 @@ function browserOnLoadHandler()
         head.appendChild(newSS);
     }
   }
-
-  UpdateDirectionButtons(window.getComputedStyle(body, null).direction);
 }
 
-function InstallBrowserHandler() {
+function InstallBrowserHandler()
+{
   var browser = getMessageBrowser();
   if (browser)
     browser.addEventListener("load", browserOnLoadHandler, true);
 }
+
