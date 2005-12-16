@@ -271,12 +271,10 @@ function ComposeWindowOnLoad()
   gLoadEventCount += 1;
   if (gLoadEventCount == 1) {
     gLastWindowToHaveFocus = null;
-
-    // Direction Controller
-    top.controllers.insertControllerAt(1, directionSwitchController);
   }
-  else
+  else {
     ComposeWindowOnActualLoad();
+  }
 }
 
 function HandleComposeReplyCSS()
@@ -536,6 +534,7 @@ function InstallComposeWindowEventHandlers()
   // is reopened. In this case, the 'compose-window-reopen' event occurs
   // instead of a load event
 
+  top.controllers.appendController(directionSwitchController);
   document.addEventListener("load", ComposeWindowOnLoad, true);
   document.addEventListener("compose-window-reopen",
                             ComposeWindowOnActualLoad, true);
