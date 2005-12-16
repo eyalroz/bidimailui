@@ -6,7 +6,9 @@ function misdetectedRTLCodePage(element)
 
   var htmlizedIgnore = "(\\s|[\\.;,:0-9']|&lt;|&gt;|&amp;|&quot;)";
   var htmlizedExpression = new RegExp ("((^|>)|" + htmlizedIgnore + "+)" + misdetectedCodePageSequence + "(" + htmlizedIgnore  + "($|<))");
-  return matchInText(element, normalExpression, htmlizedExpression);
+  if (matchInText(element, normalExpression, htmlizedExpression)) {
+    return !canBeAssumedRTL(element);
+  }
 }
 
 function canBeAssumedRTL(element)
