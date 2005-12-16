@@ -26,9 +26,6 @@ function SwitchMessageDirection()
 
 function browserOnLoadHandler()
 {
-  jsConsoleService.logStringMessage('here');
-
-
   var body = this.docShell.contentViewer.DOMDocument.body;
   var bodyIsPlainText = body.childNodes.length > 1
     && body.childNodes[1].className != "moz-text-html"; // either '*-plain' or '*-flowed'
