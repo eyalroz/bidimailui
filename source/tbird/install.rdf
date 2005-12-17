@@ -55,7 +55,7 @@
     <em:iconURL>chrome://bidimailpack/content/bidimailpack.png</em:iconURL>
 
 #ifdef MOZ_THUNDERBIRD
-    <em:optionsURL>chrome://bidimailpack/content/bidimailpack-tbird-prefs.xul</em:optionsURL>
+    <em:optionsURL>chrome://bidimailpack/content/bidimailpack-prefs.xul</em:optionsURL>
 #else
     <!-- Packages, Skins and Locales that this extension registers -->
     <em:file>
