@@ -982,7 +982,8 @@ var directionSwitchController = {
         break;
       
       case "cmd_ltr_paragraph":
-        this.setCasterGroup("paragraph");
+        if (IsHTMLEditor())
+          this.setCasterGroup("paragraph");
       case "cmd_rtl_paragraph":
         // necessary side-effects performed when
         // isCommandEnabled is called for cmd_ltr_paragraph
@@ -998,11 +999,17 @@ var directionSwitchController = {
     var casterID, oppositeCasterID, command, direction;
     var enabled = (content == top.document.commandDispatcher.focusedWindow);
 
+    // window is not ready to run getComputedStyle before some point,
+    // and it would cause a crash if we were to continue (see bug 11712)
+    if (gLoadEventCount == 1)
+      return;
+
     switch (casterPair) {
       case "document":
         command = "cmd_ltr_document";
         casterID = "ltr-document-direction-broadcaster";
         oppositeCasterID = "rtl-document-direction-broadcaster";
+
         direction =
           document.defaultView
                   .getComputedStyle(document.getElementById("content-frame")
@@ -1012,6 +1019,7 @@ var directionSwitchController = {
         command = "cmd_ltr_paragraph";
         casterID = "ltr-paragraph-direction-broadcaster";
         oppositeCasterID = "rtl-paragraph-direction-broadcaster";
+
         direction = GetCurrentSelectionDirection();
         break;
       default:
