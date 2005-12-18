@@ -3,6 +3,7 @@
 TARGET="$1"
 VERSION="0.7"
 BUILDDIR="build-$TARGET"
+XPINAME="bidimailui-${TARGET}.xpi"
 BUILDTOOLSDIR="../buildtools"
 export PERL5LIB="`pwd`/$BUILDTOOLSDIR"
 
@@ -45,7 +46,7 @@ case "$TARGET" in
         cp chrome.manifest $BUILDDIR/
         cp platform/Darwin/chrome.manifest $BUILDDIR/platform/Darwin/chrome.manifest
         cd $BUILDDIR
-	zip -r bidimailpack_$TARGET.xpi  \
+	zip -r $XPINAME.xpi  \
 	  chrome/bidimailpack.jar \
 	  defaults/ \
 	  platform/Darwin/chrome.manifest \
@@ -56,7 +57,7 @@ case "$TARGET" in
     suite)
         $BUILDTOOLSDIR/preprocessor.pl -D$DEF "-DVERSION=$VERSION" install.js > $BUILDDIR/install.js
         cd $BUILDDIR
-	zip -r bidimailpack_$TARGET.xpi  \
+	zip -r $XPINAME  \
 	  chrome/bidimailpack.jar \
 	  defaults/ \
 	  install.rdf \
