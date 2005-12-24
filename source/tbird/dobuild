@@ -3,7 +3,7 @@
 TARGET="$1"
 VERSION="0.7"
 BUILDDIR="build-$TARGET"
-XPINAME="bidimailui-${TARGET}.xpi"
+XPINAME="bidimailui_${TARGET}.xpi"
 BUILDTOOLSDIR="../buildtools"
 export PERL5LIB="`pwd`/$BUILDTOOLSDIR"
 
