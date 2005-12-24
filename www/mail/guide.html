@@ -29,17 +29,19 @@
 <p>will be left-aligned. If the word &#x643;&#x644;&#x645;&#x629; had appeared at the beginning of the line, though, the message would have been right-aligned. Thus when your text message has both blocks of Right-to-Left and Left-to-Right text, the direction is set to Right-to-Left.</p>
 
 <!-- begin: move this into a different section and change it for 0.7 when it is out -->
-<p>Both detection and setting of the direction is performed while loading the message. If a message is re-loaded, this automatic process repeats. For example, here is a message which was sent using the wrong character encoding. Note that BiDi Mail UI automatically aligns it to the left:</p>
+
+<h3><a name="Automatic_misdetected_charset_correction_for_displayed_messages">Automatic Correction of Misdetected Character Encoding for Displayed Messages</a></h3>
+
+<p>Without the extension installed (and without forcing a specific character encoding on all messages), one often encounters messages in Hebrew which display this way:</p>
 
 <div class="screenshot-container">
 <img class="screenshot" src="../images/messenger-charset-error.png" alt="bidiui-messenger-charset-error.png">
 </div></p>
-<p>Changing the Encoding via the View menu (in this case, from ISO-8859-1 to Windows-1255) will re-trigger the direction auto-detection:</p>
+<p>Instead of you having to change the character encoding manually (from the View menu, from ISO-8859-1 to Windows-1255), BiDi Mail UI autodetects this situation, sets the character set automatically, and of course also sets the direction appropriately:</p>
 <div class="screenshot-container">
 <img class="screenshot" src="../images/messenger-charset-corrected.png" alt="bidiui-messenger-charset-corrected.png">
-<!-- end: move this into a different section and change it for 0.7 when it is out -->
-
 </div>
+<hr>
 <h3><a name="Changing_direction_of_displayed_messages"> Changing direction of displayed messages </a></h3>
 <p>
 In addition to auto-detection, BiDi Mail UI also provides manual direction control over the displayed message. This can be done in three different ways:</p>
