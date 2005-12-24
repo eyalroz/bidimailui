@@ -147,7 +147,7 @@ var gBDMPrefs = {
         var scale =
           this.prefService
 #ifdef MOZ_THUNDERBIRD
-              .getCharPref("mailnews.paragraph.vertical_margins.scale");
+              .getCharPref("mailnews.paragraph.vertical_margin.scale");
 #else
               .getCharPref("editor.paragraph.vertical_margins.scale");
 #endif
@@ -165,14 +165,14 @@ var gBDMPrefs = {
 
 #ifdef MOZ_THUNDERBIRD
       this.prefService
-              .getCharPref("mailnews.paragraph.vertical_margins.value");
+          .clearUserPref("mailnews.paragraph.vertical_margin.value");
       this.prefService
-              .getCharPref("mailnews.paragraph.vertical_margins.scale");
+          .clearUserPref("mailnews.paragraph.vertical_margin.scale");
 #else
       this.prefService
-              .getCharPref("editor.paragraph.vertical_margins.value");
+          .clearUserPref("editor.paragraph.vertical_margins.value");
       this.prefService
-              .getCharPref("editor.paragraph.vertical_margins.scale");
+          .clearUserPref("editor.paragraph.vertical_margins.scale");
 #endif
     } catch(ex) { }
 
