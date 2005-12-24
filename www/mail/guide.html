@@ -28,8 +28,7 @@
 </div>
 <p>will be left-aligned. If the word &#x643;&#x644;&#x645;&#x629; had appeared at the beginning of the line, though, the message would have been right-aligned. Thus when your text message has both blocks of Right-to-Left and Left-to-Right text, the direction is set to Right-to-Left.</p>
 
-<!-- begin: move this into a different section and change it for 0.7 when it is out -->
-
+<hr>
 <h3><a name="Automatic_misdetected_charset_correction_for_displayed_messages">Automatic Correction of Misdetected Character Encoding for Displayed Messages</a></h3>
 
 <p>Without the extension installed (and without forcing a specific character encoding on all messages), one often encounters messages in Hebrew or Arabic which display this way:</p>
@@ -66,6 +65,8 @@ one:</p>
 <img class="screenshot" src="../images/messenger-message-after-switch.png" alt="bidiui-messenger-message-after-switch.png">
 </div>
 
+<hr>
+
 <h3><a name="Setting_the_default_direction_for_new_messages"> Setting the default direction for new
 messages </a></h3>
 <p>When composing a new message without BiDi Mail UI, Mozilla sets Left-to-Right as the default direction. However, with this extension, there are two factors that effect the direction of new messages: The default direction (either Left-to-Right or Right-to-Left) and an option that allows to keep the direction of the original message when replying (rather than using the default direction). Both are user-set options that appear in the Message Composition section of BiDi Mail UI options panel.</p>
@@ -78,6 +79,7 @@ messages </a></h3>
 <div class="screenshot-container">
 <img class="screenshot"  src="../images/reply-rtl.png" alt="bidiui-reply-rtl.png">
 </div>
+<hr>
 <h3><a name="Changing_direction_when_editing_plain_text_messages">Changing direction when editing plain text messages </a></h3>
 <p>
 In plain text messages there is only one single direction &ndash; the global message direction. BiDi Mail UI provides four ways to control this direction:</p>
@@ -104,6 +106,7 @@ This action will align the message to the opposite direction of the current one 
 <div class="screenshot-container">
 <img class="screenshot"  src="../images/composer-message-after-switch.png" alt="bidiui-composer-message-after-switch.png">
 </div>
+<hr>
 <h3><a name="Changing_direction_when_editing_HTML_messages">Changing direction when editing HTML messages<br>
 </a></h3>
 <p>In HTML messages, each paragraph can be to a different direction. BiDi Mail UI changes the behavior of the message editor, so that pressing Enter starts a new paragraph (similar to OpenOffice and MS Word). Shift+Enter starts a new line within a paragraph.</p>
@@ -148,6 +151,8 @@ panel and set the Paragraph Vertical Margins to a value higher than the initial 
 direction of HTML messages</a></h4>
 
 <p>Paragraphs that do not carry an explicit direction are displayed using the global message direction. This can be changed via the "Switch Message Direction" function, under the View menu. The user-set direction of specific paragraphs can be cleared using the "Clear Paragraph Direction" under the Format menu.</p>
+
+<hr>
 
 <h3><a name="inserting_direction_control_chars"> Inserting Direction Control Characters</a></h3>
 
