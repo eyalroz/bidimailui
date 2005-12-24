@@ -46,7 +46,7 @@ case "$TARGET" in
         cp chrome.manifest $BUILDDIR/
         cp platform/Darwin/chrome.manifest $BUILDDIR/platform/Darwin/chrome.manifest
         cd $BUILDDIR
-	zip -r $XPINAME.xpi  \
+	zip -r $XPINAME  \
 	  chrome/bidimailpack.jar \
 	  defaults/ \
 	  platform/Darwin/chrome.manifest \
