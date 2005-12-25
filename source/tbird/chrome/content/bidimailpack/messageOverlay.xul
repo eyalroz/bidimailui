@@ -22,7 +22,7 @@
          oncommand="SwitchMessageDirection()" />
   </keyset>
 
-#ifdef TBIRD
+#ifdef MOZ_THUNDERBIRD
   <broadcasterset id="mailBroadcasters">
     <broadcaster id="ltr-document-direction-broadcaster" checked="false"/>
     <broadcaster id="rtl-document-direction-broadcaster" checked="false"/>  
