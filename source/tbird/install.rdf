@@ -15,8 +15,8 @@
     <em:targetApplication>
      <Description>
        <em:id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</em:id>
-       <em:minVersion>1.5</em:minVersion>
-       <em:maxVersion>1.6a1</em:maxVersion>
+       <em:minVersion>1.4</em:minVersion>
+       <em:maxVersion>1.5.0.*</em:maxVersion>
      </Description>
     </em:targetApplication>
 #else
@@ -56,7 +56,8 @@
 
 #ifdef MOZ_THUNDERBIRD
     <em:optionsURL>chrome://bidimailpack/content/bidimailpack-prefs.xul</em:optionsURL>
-#else
+#endif
+
     <!-- Packages, Skins and Locales that this extension registers -->
     <em:file>
       <Description about="urn:mozilla:extension:file:bidimailpack.jar">
@@ -68,5 +69,4 @@
       </Description>
     </em:file>
   </Description>      
-#endif
 </RDF>
