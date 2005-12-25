@@ -44,7 +44,7 @@
               oncommand="SwitchMessageDirection()" />
   </popup>
   
-#ifdef TBIRD
+#ifdef MOZ_THUNDERBIRD
   <toolbarpalette id="MailToolbarPalette">
     <toolbarbutton id="button-direction-ltr-main-bar"
                    class="toolbarbutton-1"
