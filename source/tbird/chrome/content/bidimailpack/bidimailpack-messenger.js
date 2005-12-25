@@ -9,6 +9,9 @@ function SetMessageDirection(dir)
 
   var body = brwsr.docShell.contentViewer.DOMDocument.body;
   body.style.direction = dir;
+#ifdef MOZ_THUNDERBIRD
+  UpdateDirectionButtons(dir);
+#endif
 }
 
 function SwitchMessageDirection()
@@ -22,7 +25,20 @@ function SwitchMessageDirection()
     window.getComputedStyle(body, null).direction == "ltr" ? "rtl" : "ltr";
 
   body.style.direction = oppositeDirection;
+#ifdef MOZ_THUNDERBIRD
+  UpdateDirectionButtons(oppositeDirection);
+#endif
 }
+
+#ifdef MOZ_THUNDERBIRD
+function UpdateDirectionButtons(direction) 	 
+{ 	 
+  var caster = document.getElementById("ltr-document-direction-broadcaster"); 	 
+  caster.setAttribute("checked", direction == "ltr"); 	 
+  caster = document.getElementById("rtl-document-direction-broadcaster"); 	 
+  caster.setAttribute("checked", direction == "rtl"); 	 
+}
+#endif
 
 function browserOnLoadHandler()
 {
@@ -91,8 +107,15 @@ function browserOnLoadHandler()
   if (bodyIsPlainText) {
     if (canBeAssumedRTL(body)) {
       SetMessageDirection("rtl");
+#ifdef MOZ_THUNDERBIRD
+      UpdateDirectionButtons("rtl");
+#endif
     }
-
+#ifdef MOZ_THUNDERBIRD
+    else {
+      UpdateDirectionButtons("ltr");
+    }
+#endif
     return;
   }
   
