@@ -43,8 +43,9 @@ function UpdateDirectionButtons(direction)
 function browserOnLoadHandler()
 {
   var body = this.docShell.contentViewer.DOMDocument.body;
-  var bodyIsPlainText = body.childNodes.length > 1
-    && body.childNodes[1].className != "moz-text-html"; // either '*-plain' or '*-flowed'
+  var bodyIsPlainText = 
+       (body.childNodes.length > 1)
+    && (body.childNodes[1].className != "moz-text-html"); // either '*-plain' or '*-flowed'
 
   // quote bar css
   var newSS;

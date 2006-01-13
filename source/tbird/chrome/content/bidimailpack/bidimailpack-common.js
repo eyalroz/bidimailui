@@ -36,7 +36,7 @@ function matchInText(element, normalExpression, htmlizedExpression)
 {
   try {
     var iterator = new XPathEvaluator();
-    var path = iterator.evaluate("//text()", element, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+    var path = iterator.evaluate("descendent::text()", element, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
     for (var node = path.iterateNext(); node; node = path.iterateNext())
     {
       if (normalExpression.test(node.data))
