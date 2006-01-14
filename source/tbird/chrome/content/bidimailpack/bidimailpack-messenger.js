@@ -1,3 +1,12 @@
+// The following 3 lines enable logging messages to the javascript console:
+//
+// netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+// var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
+// jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
+//
+// here is an example of a console log message describing a DOM node:
+// jsConsoleService.logStringMessage('visiting node: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+
 // workaround for bug 12469
 var gMessageURI = null;
 
