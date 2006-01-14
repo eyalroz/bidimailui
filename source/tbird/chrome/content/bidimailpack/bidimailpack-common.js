@@ -7,8 +7,10 @@ function misdetectedRTLCodePage(element)
   var htmlizedIgnore = "(\\s|[\\.;,:0-9']|&lt;|&gt;|&amp;|&quot;)";
   var htmlizedExpression = new RegExp ("((^|>)|" + htmlizedIgnore + "+)" + misdetectedCodePageSequence + "(" + htmlizedIgnore  + "($|<))");
   if (matchInText(element, normalExpression, htmlizedExpression)) {
-    return !canBeAssumedRTL(element);
+    if (!canBeAssumedRTL(element))
+    return true;
   }
+  return false;
 }
 
 function canBeAssumedRTL(element)
@@ -36,11 +38,11 @@ function matchInText(element, normalExpression, htmlizedExpression)
 {
   try {
     var iterator = new XPathEvaluator();
-    var path = iterator.evaluate("descendent::text()", element, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+    var path = iterator.evaluate("descendant-or-self::text()", element, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
     for (var node = path.iterateNext(); node; node = path.iterateNext())
     {
       if (normalExpression.test(node.data))
-      return true;
+        return true;
     }
   } catch(ex) {
     // 'new XPathEvaluator()' doesn't work for some reason, so we have
