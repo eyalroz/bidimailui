@@ -94,15 +94,21 @@ function browserOnLoadHandler()
       var misdecodeAutodetectPref =
         gBDMPrefs.getBoolPref("display.autodetect_bidi_misdecoding", true);
       if ( misdecodeAutodetectPref &&
-           (charsetPref == "windows-1255" || charsetPref == "windows-1256") &&
            !msgWindow.charsetOverride &&
            (!msgWindow.mailCharacterSet ||
             msgWindow.mailCharacterSet == "US-ASCII" ||
             msgWindow.mailCharacterSet == "ISO-8859-1" ||
             msgWindow.mailCharacterSet == "windows-1252" ||
             msgWindow.mailCharacterSet == "") ) {
-        if (misdetectedRTLCodePage(body)) {
-         MessengerSetForcedCharacterSet(charsetPref);
+        var isMisdetectedRTLCodePage = false;
+        if (charsetPref == "windows-1255" || charsetPref == "windows-1256") {
+          isMisdetectedRTLCodePage = misdetectedRTLCodePage(body);
+        }
+        if (isMisdetectedRTLCodePage) {
+            MessengerSetForcedCharacterSet(charsetPref);
+        }
+        else if(misdetectedUTF8(body)) {
+          MessengerSetForcedCharacterSet("utf-8");
         }
       }
     }
