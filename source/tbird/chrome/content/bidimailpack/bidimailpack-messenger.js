@@ -102,9 +102,7 @@ function browserOnLoadHandler()
             msgWindow.mailCharacterSet == "windows-1252" ||
             msgWindow.mailCharacterSet == "") ) {
         if (misdetectedRTLCodePage(body)) {
-          messenger.SetDocumentCharset(charsetPref);
-          msgWindow.mailCharacterSet = charsetPref;
-          msgWindow.charsetOverride = true;
+         MessengerSetForcedCharacterSet(charsetPref);
         }
       }
     }
