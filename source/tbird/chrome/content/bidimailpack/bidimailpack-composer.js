@@ -280,7 +280,7 @@ function HandleComposeReplyCSS()
   if (IsHTMLEditor()) {
     var editor = GetCurrentEditor();
     if (!editor) {
-      alert("Could not acquire editor object.");
+      dump("Could not acquire editor object.");
       return;
     }
     editor.QueryInterface(nsIEditorStyleSheets);
@@ -561,7 +561,7 @@ function ApplyToSelectionBlockElements(evalStr)
   // jsConsoleService.logStringMessage('----- ApplyToSelectionBlockElements() -----');
   var editor = GetCurrentEditor();
   if (!editor) {
-    alert("Could not acquire editor object.");
+    dump("Could not acquire editor object.");
     return;
   }
 
@@ -818,7 +818,7 @@ function InsertParagraph()
 {
   var editor = GetCurrentEditor();
   if (!editor) {
-    alert("Could not acquire editor object.");
+    dump("Could not acquire editor object.");
     return;
   }
 
