@@ -1,3 +1,10 @@
+var hD="0123456789ABCDEF";
+function d2h(d) {
+  var h = hD.substr(d&15,1);
+  while(d>15) {d>>=4;h=hD.substr(d&15,1)+h;}
+  return h;
+}
+
 function misdetectedRTLCodePage(element)
 {
   var misdetectedCodePageSequence = "([\\u00BF-\\u00FF]{2,}|\\uFFFD{2,})";
@@ -11,6 +18,16 @@ function misdetectedRTLCodePage(element)
     return true;
   }
   return false;
+}
+
+function misdetectedUTF8(element)
+{
+  // hebrew leets in UTF8 are 0xD7 followed by a byte in the range 0x90 - 0xAA
+  // I don't know what the other chars are about...
+  // maybe check for some english text? spacing? something else?
+  var misdetectedUTF8Sequence = "(\\u00D7(\\u201D|\\u2022|\\u2220|\\u2122|[\\u0090-\\u00AA])){3,}";
+  var re = new RegExp (misdetectedUTF8Sequence);
+  return matchInText(element, re, re);
 }
 
 function canBeAssumedRTL(element)
