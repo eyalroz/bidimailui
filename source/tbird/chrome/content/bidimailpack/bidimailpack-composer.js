@@ -1,6 +1,5 @@
 // The following 3 lines enable logging messages to the javascript console:
 //
-// netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
 // var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
 // jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 //
@@ -665,7 +664,6 @@ function onKeyPress(ev)
       // The preventDefault flag is set on the event
       // (see http://bugzilla.mozdev.org/show_bug.cgi?id=12748)
       ev.getPreventDefault())
-      
     return;
 
   var editor = GetCurrentEditor();
@@ -687,7 +685,7 @@ function onKeyPress(ev)
     // Do whatever it takes to prevent the editor from inserting a BR
     ev.preventDefault();
     ev.stopPropagation();
-  
+
     // ... and insert a paragraph break instead
     InsertParagraph();
   }
@@ -708,7 +706,6 @@ function onKeyPress(ev)
 
         // combine the two paragraphs into a single paragraph
 #ifdef DEBUG_keypress
-        netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
         var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
         jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 
