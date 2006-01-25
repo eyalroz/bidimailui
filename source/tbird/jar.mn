@@ -13,6 +13,8 @@ bidimailpack.jar:
 *   locale/en-US/bidimailpack/bidimailpack-prefs.dtd              (chrome/locale/en-US/bidimailpack/bidimailpack-prefs.dtd)
 *   locale/ar-SA/bidimailpack/bidimailpack-prefs.dtd              (chrome/locale/ar-SA/bidimailpack/bidimailpack-prefs.dtd)
 *   locale/ar-SA/bidimailpack/bidimailpack.dtd                    (chrome/locale/ar-SA/bidimailpack/bidimailpack.dtd)
+*   locale/fa-IR/bidimailpack/bidimailpack-prefs.dtd              (chrome/locale/fa-IR/bidimailpack/bidimailpack-prefs.dtd)
+*   locale/fa-IR/bidimailpack/bidimailpack.dtd                    (chrome/locale/fa-IR/bidimailpack/bidimailpack.dtd)
 #ifdef MOZ_THUNDERBIRD
     skin/classic/bidimailpack/pinstripe-ltr-main-bar-24x24.png    (chrome/skin-tbird/classic/bidimailpack/pinstripe-ltr-main-bar-24x24.png)
     skin/classic/bidimailpack/pinstripe-rtl-main-bar-24x24.png    (chrome/skin-tbird/classic/bidimailpack/pinstripe-rtl-main-bar-24x24.png)
@@ -40,6 +42,7 @@ bidimailpack.jar:
     skin/modern/bidimailpack/contents.rdf                     (chrome/skin-suite/modern/bidimailpack/contents.rdf)
     skin/modern/bidimailpack/bidimailpack.css                 (chrome/skin-suite/modern/bidimailpack/bidimailpack.css)
     locale/ar-SA/bidimailpack/contents.rdf                    (chrome/locale/ar-SA/bidimailpack/contents.rdf)
+    locale/fa-IR/bidimailpack/contents.rdf                    (chrome/locale/fa-IR/bidimailpack/contents.rdf)
     locale/en-US/bidimailpack/contents.rdf                    (chrome/locale/en-US/bidimailpack/contents.rdf)
     locale/he-IL/bidimailpack/contents.rdf                    (chrome/locale/he-IL/bidimailpack/contents.rdf)
     content/bidimailpack/composeOverlay.xul                   (chrome/content/bidimailpack/composeOverlay-suite.xul)
