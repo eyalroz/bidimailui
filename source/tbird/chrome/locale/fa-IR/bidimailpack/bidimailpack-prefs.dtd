@@ -1,0 +1,24 @@
+<!ENTITY bidimailpack-settings                   "گزینه‌های رابط کاربری دو جهته">
+<!ENTITY message-composition-groupbox-caption    "ساخت پیام">
+<!ENTITY default-dir                             "جهت پیش‌گزیده:">
+<!ENTITY ltr.label                               "چپ به راست">
+<!ENTITY ltr.accesskey                           "L">
+<!ENTITY rtl.label                               "راست به چپ">
+<!ENTITY rtl.accesskey                           "R">
+<!ENTITY always-reply-in-default-dir.label       "پاسخ همیشه با در نظر گرفتن جهت پیش‌گزیده ارسال شود">
+<!ENTITY always-reply-in-default-dir.accesskey   "A">
+<!ENTITY more-info                               "برای اطلاعات بیشتر:">
+<!ENTITY guide-link-text                         "راهنمای کاربری رابط کاربری دو جهته">
+<!ENTITY guide-url                               "http://bidiui.mozdev.org/mail/guide.html">
+<!ENTITY bidimailpack-preftree-label             "BiDi Mail UI">
+<!ENTITY display-buttons.label                   "دگمه‌های نتنظیم جهت نمایش داده شوند">
+<!ENTITY display-buttons.accesskey               "D">
+
+<!ENTITY spaceBetweenParagraphs.label            "فضای بین پاراگراف‌ها:">
+<!ENTITY spaceBetweenParagraphs.accesskey        "S">
+<!ENTITY cmScale.label                           "سانتیمت">
+<!ENTITY cmScale.accesskey                       "c">
+<!ENTITY pixelScale.label                        "پیکسل">
+<!ENTITY pixelScale.accesskey                    "p">
+<!ENTITY ptScale.label                           "نقطه">
+<!ENTITY ptScale.accesskey                       "t">

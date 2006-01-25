@@ -1,0 +1,26 @@
+<!ENTITY menu-bidimail-switch-message-direction.label                 "تغییر جهت پیام">
+<!ENTITY menu-bidimail-switch-page-direction.label                    "تغییر جهت صفحه">
+<!ENTITY menu-bidimail-switch-document-direction.accesskey            "w">
+<!ENTITY key-bidimail-switch-document-direction.keycode               "X">
+<!ENTITY key-bidimail-switch-document-direction.modifiers             "accel,shift">
+<!ENTITY key-bidimail-switch-paragraph-direction.keycode              "E">
+<!ENTITY key-bidimail-switch-paragraph-direction.modifiers            "accel">
+
+<!ENTITY menu-bidimail-switch-paragraph-direction.label               "تغییر جهت پاراگراف">
+<!ENTITY menu-bidimail-switch-paragraph-direction.accesskey           "w">
+<!ENTITY menu-bidimail-clear-paragraph-direction.label                "پاک کردن جهت پاراگراف">
+<!ENTITY menu-bidimail-clear-paragraph-direction.accesskey            "a">
+
+<!ENTITY bidimail-ltr-button.label                                    "چپ به راست">
+<!ENTITY bidimail-ltr-button.tip                                      "جهت «چپ به راست» فعال شود">
+<!ENTITY bidimail-rtl-button.label                                    "راست به چپ">
+<!ENTITY bidimail-rtl-button.tip                                      "جهت «راست به چپ» فعال شود">
+
+<!ENTITY menu-bidimail-contol-character.label                         "کاراکتر کنترلی">
+<!ENTITY menu-bidimail-contol-character.accesskey                     "n">
+<!ENTITY menu-bidimail-insert-contol-character.label                  "درج کاراکتر کنترلی">
+<!ENTITY menu-bidimail-insert-contol-character.accesskey              "I">
+<!ENTITY menu-bidimail-lrm.label                                      "نشانه چپ به راست">
+<!ENTITY menu-bidimail-lrm.accesskey                                  "L">
+<!ENTITY menu-bidimail-rlm.label                                      "نشانه راست به چپ">
+<!ENTITY menu-bidimail-rlm.accesskey                                  "R">
