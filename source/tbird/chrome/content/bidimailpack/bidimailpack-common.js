@@ -8,7 +8,7 @@ function d2h(d) {
 
 function misdetectedRTLCodePage(element)
 {
-  var misdetectedCodePageSequence = "([\\u00BF-\\u00FF]{2,}|\\uFFFD{2,})";
+  var misdetectedCodePageSequence = "([\\u00BF-\\u00FF]{2,})";
   var normalIgnore = "(\\s|[<>\\.;,:0-9\"'])";
   var normalExpression = new RegExp ("(^|" + normalIgnore + "+)" + misdetectedCodePageSequence + "("+ normalIgnore + "+|$)");
 
@@ -26,7 +26,7 @@ function misdetectedUTF8(element)
   // hebrew leets in UTF8 are 0xD7 followed by a byte in the range 0x90 - 0xAA
   // I don't know what the other chars are about...
   // maybe check for some english text? spacing? something else?
-  var misdetectedUTF8Sequence = "(\\u00D7(\\u201D|\\u2022|\\u2220|\\u2122|[\\u0090-\\u00AA])){3,}";
+  var misdetectedUTF8Sequence = "(\\u00D7(\\u201D|\\u2022|\\u2220|\\u2122|[\\u0090-\\u00AA])){3,}|\\uFFFD{3,}";
   var re = new RegExp (misdetectedUTF8Sequence);
   return matchInText(element, re, re);
 }
@@ -54,13 +54,22 @@ function canBeAssumedRTL(element)
 
 function matchInText(element, normalExpression, htmlizedExpression)
 {
+  //jsConsoleService.logStringMessage("---------------------------------------------\n" +
+  //                                  "matching " + normalExpression);
   try {
     var iterator = new XPathEvaluator();
     var path = iterator.evaluate("descendant-or-self::text()", element, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
     for (var node = path.iterateNext(); node; node = path.iterateNext())
     {
-      if (normalExpression.test(node.data))
+      //var str = "";
+      //for(i = 0; i < node.data.length; i++) {
+      //  str += d2h(node.data.charCodeAt(i)) + " ";  
+      //}
+      //jsConsoleService.logStringMessage(node.data + "\n" + str);
+      if (normalExpression.test(node.data)) {
+        //jsConsoleService.logStringMessage("matches.\n---------------------------------------------");
         return true;
+      }
     }
   } catch(ex) {
     // 'new XPathEvaluator()' doesn't work for some reason, so we have
@@ -70,6 +79,7 @@ function matchInText(element, normalExpression, htmlizedExpression)
     if (htmlizedExpression.test(element.innerHTML))
       return true;
   }
+  //jsConsoleService.logStringMessage("no match.\n---------------------------------------------");
   return false;
 }
 
