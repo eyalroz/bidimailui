@@ -1,4 +1,5 @@
 var hD="0123456789ABCDEF";
+// decimal to hexadecimal representation
 function d2h(d) {
   var h = hD.substr(d&15,1);
   while(d>15) {d>>=4;h=hD.substr(d&15,1)+h;}
