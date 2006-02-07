@@ -102,15 +102,29 @@ function browserOnLoadHandler()
             msgWindow.mailCharacterSet == "") ) {
         var isMisdetectedRTLCodePage = false;
         if (charsetPref == "windows-1255" || charsetPref == "windows-1256") {
+          //jsConsoleService.logStringMessage("checking codepage");
           isMisdetectedRTLCodePage = misdetectedRTLCodePage(body);
+        } else {
+          //jsConsoleService.logStringMessage("not checking codepage after all");
         }
+
         if (isMisdetectedRTLCodePage) {
-            MessengerSetForcedCharacterSet(charsetPref);
+          //jsConsoleService.logStringMessage("setting codepage");
+          MessengerSetForcedCharacterSet(charsetPref);
         }
-        else if(misdetectedUTF8(body)) {
-          MessengerSetForcedCharacterSet("utf-8");
+        else { 
+          //jsConsoleService.logStringMessage("reject codepage");
+          if(misdetectedUTF8(body)) {
+            //jsConsoleService.logStringMessage("confirm utf8");
+            MessengerSetForcedCharacterSet("utf-8");
+          }
+          else {
+            //jsConsoleService.logStringMessage("reject utf8");
+          }
         }
+
       }
+
     }
   } 
 
