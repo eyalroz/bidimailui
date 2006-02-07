@@ -19,6 +19,17 @@ var gAlternativeEnterBehavior;
                             // is to close a paragraph and begin a new one
 var gParagraphVerticalMargin;
                             // Amount of space to add to paragraphs in HTML mail messages
+var bidiKeyboardService = Components.classes['@mozilla.org/widget/bidikeyboard;1'].getService();
+bidiKeyboardService.QueryInterface(Components.interfaces.nsIBidiKeyboard);
+                            // Used for determining whether the current keyboard layout
+                            // is RTL or LTR
+
+function KeyboardLayoutIsRTL()
+{
+    var obj = {};
+    bidiKeyboardService.isLangRTL(obj);
+    return obj.value;
+}
 
 function GetCurrentSelectionDirection()
 {
