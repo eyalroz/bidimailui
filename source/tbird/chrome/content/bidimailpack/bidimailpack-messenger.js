@@ -51,20 +51,32 @@ function UpdateDirectionButtons(direction)
 
 function browserOnLoadHandler()
 {
-  var body = this.docShell.contentViewer.DOMDocument.body;
-  var bodyIsPlainText = 
-       (body.childNodes.length > 1)
-    && (body.childNodes[1].className != "moz-text-html"); // either '*-plain' or '*-flowed'
+  var domDoc;
+  try {
+    domDoc = this.docShell.contentViewer.DOMDocument;
+  }
+  catch (ex) {
+    dump(ex);
+    return;
+  }
+
+  var body = domDoc.body;
+  if (!body)
+    return;
+
+  // either '*-plain' or '*-flowed'
+  var bodyIsPlainText =  body.childNodes.length > 1 &&
+                         body.childNodes[1].className != "moz-text-html";
 
   // quote bar css
-  var newSS;
-  newSS = this.docShell.contentViewer.DOMDocument.createElement("link");
-  newSS.rel  = "stylesheet";
-  newSS.type = "text/css";
-  newSS.href = "chrome://bidimailpack/content/quotebar.css";
-  head = this.docShell.contentViewer.DOMDocument.getElementsByTagName("head")[0];
-  if (head)
+  var head = domDoc.getElementsByTagName("head")[0];
+  if (head) {
+    var newSS = domDoc.createElement("link");
+    newSS.rel  = "stylesheet";
+    newSS.type = "text/css";
+    newSS.href = "chrome://bidimailpack/content/quotebar.css";
     head.appendChild(newSS);
+  }
 
   // -- Auto-detect some mis-decoded messages
   // When shall we attempt re-detection and overriding of the character set?
@@ -148,7 +160,6 @@ function browserOnLoadHandler()
   }
   
   // It's an HTML message
-
   if (!body.hasAttribute("dir") &&
       window.getComputedStyle(body, null).direction == "ltr" &&
       canBeAssumedRTL(body)) {
@@ -156,12 +167,8 @@ function browserOnLoadHandler()
     // but it looks RTLish, so let's add an initial stylesheet saying it's RTL,
     // which will be overridden by any other stylesheets within 
     // the document itself
-
-    head = this.docShell.contentViewer.DOMDocument
-                        .getElementsByTagName("head")[0];
     if (head) {
-      var newSS;
-      newSS = this.docShell.contentViewer.DOMDocument.createElement("link");
+      var newSS  = domDoc.createElement("link");
       newSS.rel  = "stylesheet";
       newSS.type = "text/css";
       newSS.href = "chrome://bidimailpack/content/weakrtl.css";
