@@ -10,14 +10,42 @@
 // workaround for bug 12469
 var gMessageURI = null;
 
+function GetMessageContentElement(domDoc) {
+  if (!domDoc)
+    throw("Called GetMessageContentElement with no document");
+
+  var bodyElement = domDoc.body;
+  if (!bodyElement)
+    throw("Cannot get the message content element without a body element");
+
+  // Try to find the DIV element which contains the message content
+  var firstSubBody = null;
+  var possibleSubBodies = bodyElement.getElementsByTagName("div");
+  for (var i = 0; i < possibleSubBodies.length && !firstSubBody; i++) {
+    if (/^moz-text/.test(possibleSubBodies[i].className))
+      firstSubBody = possibleSubBodies[i];
+  }
+
+  // If there's no such element, the meesage content element is inside
+  // the body element itself
+  return (firstSubBody || bodyElement);
+}
+
 function SetMessageDirection(dir)
 {
-  var brwsr = getMessageBrowser();
-  if (!brwsr)
+  var messageContentElement;
+  try {
+    messageContentElement =
+    GetMessageContentElement(getMessageBrowser().docShell.contentViewer
+                                                         .DOMDocument);
+  }
+  catch (ex) {
+    dump(ex);
     return;
+  }
 
-  var body = brwsr.docShell.contentViewer.DOMDocument.body;
-  body.style.direction = dir;
+  messageContentElement.style.direction = dir;
+
 #ifdef MOZ_THUNDERBIRD
   UpdateDirectionButtons(dir);
 #endif
@@ -25,29 +53,35 @@ function SetMessageDirection(dir)
 
 function SwitchMessageDirection()
 {
-  var brwsr = getMessageBrowser();
-  if (!brwsr)
+  var messageContentElement;
+  try {
+    messageContentElement =
+    GetMessageContentElement(getMessageBrowser().docShell.contentViewer
+                                                         .DOMDocument);
+  }
+  catch (ex) {
+    dump(ex);
     return;
+  }
 
-  var body = brwsr.docShell.contentViewer.DOMDocument.body;
-  var oppositeDirection =
-    window.getComputedStyle(body, null).direction == "ltr" ? "rtl" : "ltr";
-
-  body.style.direction = oppositeDirection;
+  var currentDirection =
+    window.getComputedStyle(messageContentElement, null).direction;
+  var oppositeDirection = currentDirection == "ltr" ? "rtl" : "ltr";
+  messageContentElement.style.direction = oppositeDirection;
 #ifdef MOZ_THUNDERBIRD
   UpdateDirectionButtons(oppositeDirection);
 #endif
 }
 
-#ifdef MOZ_THUNDERBIRD
 function UpdateDirectionButtons(direction) 	 
-{ 	 
+{
+#ifdef MOZ_THUNDERBIRD
   var caster = document.getElementById("ltr-document-direction-broadcaster"); 	 
   caster.setAttribute("checked", direction == "ltr"); 	 
   caster = document.getElementById("rtl-document-direction-broadcaster"); 	 
-  caster.setAttribute("checked", direction == "rtl"); 	 
-}
+  caster.setAttribute("checked", direction == "rtl");
 #endif
+}
 
 function browserOnLoadHandler()
 {
@@ -63,10 +97,6 @@ function browserOnLoadHandler()
   var body = domDoc.body;
   if (!body)
     return;
-
-  // either '*-plain' or '*-flowed'
-  var bodyIsPlainText =  body.childNodes.length > 1 &&
-                         body.childNodes[1].className != "moz-text-html";
 
   // quote bar css
   var head = domDoc.getElementsByTagName("head")[0];
@@ -140,33 +170,35 @@ function browserOnLoadHandler()
     }
   } 
 
-  // Auto detect plain text direction
+  // Auto detect the message direction
   if (!gBDMPrefs.getBoolPref("display.autodetect_direction", true))
     return;
 
-  if (bodyIsPlainText) {
-    if (canBeAssumedRTL(body)) {
-      SetMessageDirection("rtl");
-#ifdef MOZ_THUNDERBIRD
-      UpdateDirectionButtons("rtl");
-#endif
-    }
-#ifdef MOZ_THUNDERBIRD
-    else {
-      UpdateDirectionButtons("ltr");
-    }
-#endif
-    return;
+  // Find the DIV element which contains the message content
+  var firstSubBody = null;
+  var possibleSubBodies = body.getElementsByTagName("div");
+  for (var i = 0; i < possibleSubBodies.length && !firstSubBody; i++) {
+    if (/^moz-text/.test(possibleSubBodies[i].className))
+      firstSubBody = possibleSubBodies[i];
   }
-  
-  // It's an HTML message
+
+  /* 
+   * The first "sub body" element is the message content element
+   * note the attributes of the orginal body element are set
+   * on the body element.
+   *
+   * If the message content element couldn't be found, we use the
+   * body element itself.
+   */
   if (!body.hasAttribute("dir") &&
       window.getComputedStyle(body, null).direction == "ltr" &&
-      canBeAssumedRTL(body)) {
-    // the body has no DIR attribute and isn't already set to be RTLed,
-    // but it looks RTLish, so let's add an initial stylesheet saying it's RTL,
-    // which will be overridden by any other stylesheets within 
-    // the document itself
+      canBeAssumedRTL(firstSubBody || body)) {
+    /*
+     * The body has no DIR attribute and isn't already set to be RTLed,
+     * but it looks RTLish, so let's add an initial stylesheet saying it's RTL,
+     * which will be overridden by any other stylesheets within 
+     * the document itself
+     */
     if (head) {
       var newSS  = domDoc.createElement("link");
       newSS.rel  = "stylesheet";
@@ -178,6 +210,19 @@ function browserOnLoadHandler()
         head.appendChild(newSS);
     }
   }
+#ifdef MOZ_THUNDERBIRD
+  var currentDirection =
+    window.getComputedStyle(firstSubBody || body, null).direction;
+  UpdateDirectionButtons(currentDirection);
+#endif
+
+  // Autodetect the direction of any remaining "sub body"
+  for ( ; i < possibleSubBodies.length; i++) {
+    if (/^moz-text/.test(possibleSubBodies[i].className)) {
+      possibleSubBodies[i].dir = canBeAssumedRTL(possibleSubBodies[i]) ?
+                                 "rtl" : "ltr";
+    }
+  }
 }
 
 function InstallBrowserHandler()
@@ -186,4 +231,3 @@ function InstallBrowserHandler()
   if (browser)
     browser.addEventListener("load", browserOnLoadHandler, true);
 }
-
