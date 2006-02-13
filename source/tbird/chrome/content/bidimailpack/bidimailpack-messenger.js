@@ -108,19 +108,26 @@ function browserOnLoadHandler()
     head.appendChild(newSS);
   }
 
-  /*
-   * Auto-detect some mis-decoded messages:
-   * When shall we attempt re-detection and overriding of the character set?
-   * not if the encoding has _already_ been overridden (either due to the pref
-   * or not) and not if the default charset is not one of the 256-char codepages
-   * we expect get mangled, and then only when the charset is reported as one of
-   * the defaultish ones (or not reported at all)?
-   * Notes:
-   * - We don't detect 'false positives' (e.g. we won't detect when a message
-   *   which isn't supposed to be windows-1255 has been made windows-1255)
-   * - Changing the charset here means that the message is re-loaded, which
-   *   calls this function (the onLoad handler) again
-   */
+  // Find the DIV element which contains the message content
+  var firstSubBody = null;
+  var possibleSubBodies = body.getElementsByTagName("div");
+  for (var i = 0; i < possibleSubBodies.length && !firstSubBody; i++) {
+    if (/^moz-text/.test(possibleSubBodies[i].className))
+      firstSubBody = possibleSubBodies[i];
+  }
+
+  // -- Auto-detect some mis-decoded messages
+  // When shall we attempt re-detection and overriding of the character set?
+  // not if the encoding has _already_ been overridden (either due to the pref
+  // or not) and not if the default charset is not one of the 256-char codepages
+  // we expect get mangled, and then only when the charset is reported as one of
+  // the defaultish ones (or not reported at all)?
+  // Notes:
+  // - We don't detect 'false positives' (e.g. we won't detect when a message
+  //   which isn't supposed to be windows-1255 has been made windows-1255)
+  // - Changing the charset here means that the message is re-loaded, which
+  //   calls this function (the onLoad handler) again
+
   var charsetPref = null;
   try {
     charsetPref =
@@ -146,7 +153,7 @@ function browserOnLoadHandler()
         var isMisdetectedRTLCodePage = false;
         if (charsetPref == "windows-1255" || charsetPref == "windows-1256") {
           //jsConsoleService.logStringMessage("checking codepage");
-          isMisdetectedRTLCodePage = misdetectedRTLCodePage(body);
+          isMisdetectedRTLCodePage = misdetectedRTLCodePage(firstSubBody || body);
         } else {
           //jsConsoleService.logStringMessage("not checking codepage after all");
         }
@@ -156,8 +163,8 @@ function browserOnLoadHandler()
           MessengerSetForcedCharacterSet(charsetPref);
         }
         else { 
-          //jsConsoleService.logStringMessage("reject codepage");
-          if(misdetectedUTF8(body)) {
+          jsConsoleService.logStringMessage("reject codepage");
+          if(misdetectedUTF8(firstSubBody || body)) {
             //jsConsoleService.logStringMessage("confirm utf8");
             MessengerSetForcedCharacterSet("utf-8");
           }
@@ -174,14 +181,6 @@ function browserOnLoadHandler()
   // Auto detect the message direction
   if (!gBDMPrefs.getBoolPref("display.autodetect_direction", true))
     return;
-
-  // Find the DIV element which contains the message content
-  var firstSubBody = null;
-  var possibleSubBodies = body.getElementsByTagName("div");
-  for (var i = 0; i < possibleSubBodies.length && !firstSubBody; i++) {
-    if (/^moz-text/.test(possibleSubBodies[i].className))
-      firstSubBody = possibleSubBodies[i];
-  }
 
   /* 
    * The first "sub body" element is the message content element

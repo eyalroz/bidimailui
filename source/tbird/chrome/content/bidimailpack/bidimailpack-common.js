@@ -8,12 +8,18 @@ function d2h(d) {
 
 function misdetectedRTLCodePage(element)
 {
-  var misdetectedCodePageSequence = "([\\u00BF-\\u00FF]{2,})";
+  var misdetectedCodePageSequence1 = "([\\u00BF-\\u00FF]{2,})";
+  // this should actually only appear when the message has been 
+  // falsley detected as Unicode, but for some strange reason we
+  // get this here also
+  var misdetectedCodePageSequence2 = "\\uFFFD{3,}\\u0020";
   var normalIgnore = "(\\s|[<>\\.;,:0-9\"'])";
-  var normalExpression = new RegExp ("(^|" + normalIgnore + "+)" + misdetectedCodePageSequence + "("+ normalIgnore + "+|$)");
+  var normalExpression = new RegExp ("((^|" + normalIgnore + "+)" +
+    misdetectedCodePageSequence1 + "("+ normalIgnore + "+|$))|" + misdetectedCodePageSequence2);
 
   var htmlizedIgnore = "(\\s|[\\.;,:0-9']|&lt;|&gt;|&amp;|&quot;)";
-  var htmlizedExpression = new RegExp ("((^|>)|" + htmlizedIgnore + "+)" + misdetectedCodePageSequence + "(" + htmlizedIgnore  + "($|<))");
+  var htmlizedExpression = new RegExp ("(((^|>)|" + htmlizedIgnore + "+)" +
+    misdetectedCodePageSequence1 + "(" + htmlizedIgnore  + "($|<)))|" + misdetectedCodePageSequence2);
   if (matchInText(element, normalExpression, htmlizedExpression)) {
     if (!canBeAssumedRTL(element))
     return true;
@@ -23,7 +29,7 @@ function misdetectedRTLCodePage(element)
 
 function misdetectedUTF8(element)
 {
-  // hebrew leets in UTF8 are 0xD7 followed by a byte in the range 0x90 - 0xAA
+  // hebrew letters in UTF8 are 0xD7 followed by a byte in the range 0x90 - 0xAA
   // I don't know what the other chars are about...
   // maybe check for some english text? spacing? something else?
   var misdetectedUTF8Sequence = "(\\u00D7(\\u201D|\\u2022|\\u2220|\\u2122|[\\u0090-\\u00AA])){3,}|\\uFFFD{3,}";
@@ -67,7 +73,7 @@ function matchInText(element, normalExpression, htmlizedExpression)
       //}
       //jsConsoleService.logStringMessage(node.data + "\n" + str);
       if (normalExpression.test(node.data)) {
-        //jsConsoleService.logStringMessage("matches.\n---------------------------------------------");
+      //  jsConsoleService.logStringMessage("matches.\n---------------------------------------------");
         return true;
       }
     }
@@ -76,8 +82,10 @@ function matchInText(element, normalExpression, htmlizedExpression)
     // to test the HTMLized message rather than the bare text lines;
     // the regexp must change accordingly
     
-    if (htmlizedExpression.test(element.innerHTML))
+    if (htmlizedExpression.test(element.innerHTML)) {
+      //jsConsoleService.logStringMessage("matches.\n---------------------------------------------");
       return true;
+    }
   }
   //jsConsoleService.logStringMessage("no match.\n---------------------------------------------");
   return false;
