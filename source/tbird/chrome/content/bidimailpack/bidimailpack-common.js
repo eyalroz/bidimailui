@@ -73,7 +73,7 @@ function matchInText(element, normalExpression, htmlizedExpression)
       //}
       //jsConsoleService.logStringMessage(node.data + "\n" + str);
       if (normalExpression.test(node.data)) {
-      //  jsConsoleService.logStringMessage("matches.\n---------------------------------------------");
+        //jsConsoleService.logStringMessage("matches.\n---------------------------------------------");
         return true;
       }
     }
@@ -81,6 +81,12 @@ function matchInText(element, normalExpression, htmlizedExpression)
     // 'new XPathEvaluator()' doesn't work for some reason, so we have
     // to test the HTMLized message rather than the bare text lines;
     // the regexp must change accordingly
+
+    //var theHTML = element.innerHTML;
+    //for(i = 0; i < theHTML.length; i++) {
+    //  str += d2h(theHTML.charCodeAt(i)) + " ";  
+    //}
+    //jsConsoleService.logStringMessage(theHTML + "\n" + str);
     
     if (htmlizedExpression.test(element.innerHTML)) {
       //jsConsoleService.logStringMessage("matches.\n---------------------------------------------");
