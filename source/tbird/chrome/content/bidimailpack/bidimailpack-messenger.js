@@ -116,17 +116,18 @@ function browserOnLoadHandler()
       firstSubBody = possibleSubBodies[i];
   }
 
-  // -- Auto-detect some mis-decoded messages
-  // When shall we attempt re-detection and overriding of the character set?
-  // not if the encoding has _already_ been overridden (either due to the pref
-  // or not) and not if the default charset is not one of the 256-char codepages
-  // we expect get mangled, and then only when the charset is reported as one of
-  // the defaultish ones (or not reported at all)?
-  // Notes:
-  // - We don't detect 'false positives' (e.g. we won't detect when a message
-  //   which isn't supposed to be windows-1255 has been made windows-1255)
-  // - Changing the charset here means that the message is re-loaded, which
-  //   calls this function (the onLoad handler) again
+  /* -- Auto-detect some mis-decoded messages
+   * When shall we attempt re-detection and overriding of the character set?
+   * not if the encoding has _already_ been overridden (either due to the pref
+   * or not) and not if the default charset is not one of the 256-char codepages
+   * we expect get mangled, and then only when the charset is reported as one of
+   * the defaultish ones (or not reported at all)?
+   * Notes:
+   * - We don't detect 'false positives' (e.g. we won't detect when a message
+   *   which isn't supposed to be windows-1255 has been made windows-1255)
+   * - Changing the charset here means that the message is re-loaded, which
+   *   calls this function (the onLoad handler) again
+   */
 
   var charsetPref = null;
   try {
@@ -163,7 +164,7 @@ function browserOnLoadHandler()
           MessengerSetForcedCharacterSet(charsetPref);
         }
         else { 
-          jsConsoleService.logStringMessage("reject codepage");
+          //jsConsoleService.logStringMessage("reject codepage");
           if(misdetectedUTF8(firstSubBody || body)) {
             //jsConsoleService.logStringMessage("confirm utf8");
             MessengerSetForcedCharacterSet("utf-8");
