@@ -1,0 +1,26 @@
+<!ENTITY menu-bidimail-switch-message-direction.label                 "پیغام کی سمت بدلیں">
+<!ENTITY menu-bidimail-switch-page-direction.label                    "صفحے کی سمت بدلیں">
+<!ENTITY menu-bidimail-switch-document-direction.accesskey            "w">
+<!ENTITY key-bidimail-switch-document-direction.keycode               "X">
+<!ENTITY key-bidimail-switch-document-direction.modifiers             "accel,shift">
+<!ENTITY key-bidimail-switch-paragraph-direction.keycode              "E">
+<!ENTITY key-bidimail-switch-paragraph-direction.modifiers            "accel">
+
+<!ENTITY menu-bidimail-switch-paragraph-direction.label               "پیرا کی سمت بدلیں">
+<!ENTITY menu-bidimail-switch-paragraph-direction.accesskey           "w">
+<!ENTITY menu-bidimail-clear-paragraph-direction.label                "پیرا کی سمت صاف کریں">
+<!ENTITY menu-bidimail-clear-paragraph-direction.accesskey            "a">
+
+<!ENTITY bidimail-ltr-button.label                                    "ل‌ٹ‌ر">
+<!ENTITY bidimail-ltr-button.tip                                      "بائیں سے دائیں سمت کریں">
+<!ENTITY bidimail-rtl-button.label                                    "ر‌ٹ‌ل">
+<!ENTITY bidimail-rtl-button.tip                                      "دائیں سے بائیں سمت کریں">
+
+<!ENTITY menu-bidimail-contol-character.label                         "کنٹرول حرف">
+<!ENTITY menu-bidimail-contol-character.accesskey                     "n">
+<!ENTITY menu-bidimail-insert-contol-character.label                  "کنٹرول حرف ڈالیں">
+<!ENTITY menu-bidimail-insert-contol-character.accesskey              "I">
+<!ENTITY menu-bidimail-lrm.label                                      "بائیں سے دائیں نشان">
+<!ENTITY menu-bidimail-lrm.accesskey                                  "L">
+<!ENTITY menu-bidimail-rlm.label                                      "دائیں سے بائیں نشان">
+<!ENTITY menu-bidimail-rlm.accesskey                                  "R">
