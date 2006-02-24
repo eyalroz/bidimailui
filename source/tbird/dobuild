@@ -24,7 +24,7 @@ rm -rf $BUILDDIR
 mkdir $BUILDDIR
 
 $BUILDTOOLSDIR/preprocessor.pl -D$DEF jar.mn > $BUILDDIR/jar.mn
-$BUILDTOOLSDIR/make-jars.pl -v -z zip -p "$BUILDTOOLSDIR/preprocessor.pl -D$DEF -DVERSION=$VERSION"  -s . -d . < $BUILDDIR/jar.mn
+$BUILDTOOLSDIR/make-jars.pl -v -z zip -p "$BUILDTOOLSDIR/preprocessor.pl -D$DEF -DVERSION=$VERSION"  -s . -d . < $BUILDDIR/jar.mn || exit
 echo -e "\nJAR files ready\n"
 $BUILDTOOLSDIR/preprocessor.pl -D$DEF "-DVERSION=$VERSION" install.rdf > $BUILDDIR/install.rdf
 rm -rf bidimailpack
@@ -52,7 +52,7 @@ case "$TARGET" in
 	  platform/Darwin/chrome.manifest \
 	  platform/Darwin/chrome/bidimailpack-mac-skin.jar \
 	  install.rdf \
-	  chrome.manifest
+	  chrome.manifest || exit
         ;;
     suite)
         $BUILDTOOLSDIR/preprocessor.pl -D$DEF "-DVERSION=$VERSION" install.js > $BUILDDIR/install.js
@@ -61,7 +61,7 @@ case "$TARGET" in
 	  chrome/bidimailpack.jar \
 	  defaults/ \
 	  install.rdf \
-	  install.js
+	  install.js || exit
         ;;
 esac
 
