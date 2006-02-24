@@ -690,7 +690,12 @@ function onKeyPress(ev)
     editor = GetCurrentEditor();
     var isParMixed = { value: false }; // would be ignored
     var parState = editor.getParagraphState(isParMixed);
-    if (parState != "p")
+
+    // we currently apply our own enter behavior to
+    // paragraph states "p" and "h1" through "h6"
+
+    if (parState != "p" &&
+        parState.length != 2 )
       return;
 
     // Do whatever it takes to prevent the editor from inserting a BR
