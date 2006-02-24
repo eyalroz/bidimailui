@@ -1,4 +1,4 @@
-// The following 3 lines enable logging messages to the javascript console:
+// The following 2 lines enable logging messages to the javascript console:
 //
 // var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
 // jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
