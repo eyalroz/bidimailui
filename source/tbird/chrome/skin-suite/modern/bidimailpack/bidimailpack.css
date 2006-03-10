@@ -112,3 +112,8 @@
 #button-direction-rtl-formatting-bar[checked="true"] {
   -moz-image-region: rect(0px 110px 17px 88px);
 }
+
+#FormatToolbar > toolbarbutton[rtlmode="true"] {
+  list-style-image: url("chrome://bidimailpack/skin/format-buttons-rtl.gif")  !important;
+}
+
