@@ -1039,8 +1039,21 @@ var directionSwitchController = {
         oppositeCasterID = "rtl-paragraph-direction-broadcaster";
 
         direction = GetCurrentSelectionDirection();
+
+        var isRTL = (direction == "rtl");
+        document.getElementById("ulButton").setAttribute("rtlmode", isRTL);
+        document.getElementById("olButton").setAttribute("rtlmode", isRTL);
+        document.getElementById("outdentButton").setAttribute("rtlmode", isRTL);
+        document.getElementById("indentButton").setAttribute("rtlmode", isRTL);
+
         break;
       default:
+        var isRTL = document.getElementById("rtl-paragraph-direction-broadcaster").getAttribute("checked");
+        document.getElementById("ulButton").setAttribute("rtlmode", isRTL);
+        document.getElementById("olButton").setAttribute("rtlmode", isRTL);
+        document.getElementById("outdentButton").setAttribute("rtlmode", isRTL);
+        document.getElementById("indentButton").setAttribute("rtlmode", isRTL);
+
         return;
     }
     var caster = document.getElementById(casterID);
