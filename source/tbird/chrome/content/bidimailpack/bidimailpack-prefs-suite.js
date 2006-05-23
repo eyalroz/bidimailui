@@ -43,6 +43,13 @@ var gBDMPrefPane = {
       gBDMPrefs.getCharPref("compose.space_between_paragraphs.scale");
   },
 
+  onunload: function() {
+    // Clean up the header description
+    var header = top.document.getElementById("header");
+    if (header)
+      header.removeAttribute("description");
+  },
+
   saveSpaceBetweenParagraphsPrefs: function() {
     // Save these prefs only if they're valid:
     var newScale = gBDMPrefPane.spaceBetweenParagraphsScale;
