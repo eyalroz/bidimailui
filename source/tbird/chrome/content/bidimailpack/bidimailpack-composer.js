@@ -1028,10 +1028,10 @@ var directionSwitchController = {
         casterID = "ltr-document-direction-broadcaster";
         oppositeCasterID = "rtl-document-direction-broadcaster";
 
-	var contentDocument = document.getElementById("content-frame").contentDocument;
         direction =
-          contentDocument.defaultView
-                  .getComputedStyle(contentDocument.body, "").getPropertyValue("direction");
+          document.defaultView
+                  .getComputedStyle(document.getElementById("content-frame")
+                  .contentDocument.body, "").getPropertyValue("direction");
         break;
       case "paragraph":
         command = "cmd_ltr_paragraph";
