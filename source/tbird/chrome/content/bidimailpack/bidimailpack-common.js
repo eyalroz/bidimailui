@@ -6,7 +6,7 @@ function d2h(d) {
   return h;
 }
 
-function misdetectedRTLCodePage(element)
+function misdetectedRTLCodePage(element,rtlSequence)
 {
   var misdetectedCodePageSequence1 = "([\\u00BF-\\u00FF]{2,})";
   // this should actually only appear when the message has been 
@@ -27,6 +27,8 @@ function misdetectedRTLCodePage(element)
   return false;
 }
 
+// TODO: currently, this function only works properly with Hebrew text
+
 function misdetectedUTF8(element)
 {
   // hebrew letters in UTF8 are 0xD7 followed by a byte in the range 0x90 - 0xAA
@@ -37,17 +39,13 @@ function misdetectedUTF8(element)
   return matchInText(element, re, re);
 }
 
-function canBeAssumedRTL(element)
+function canBeAssumedRTL(element,rtlSequence)
 {
   // we check whether there exists a line which either begins
   // with a word consisting solely of characters of an RTL script,
   // or ends with two such words (excluding any punctuation/spacing/
   // numbering at the beginnings and ends of lines)
 
-  // we use definitions from nsBiDiUtils.h as the criteria for BiDi text;
-  // cf. the macros IS_IN_BMP_RTL_BLOCK and IS_RTL_PRESENTATION_FORM
-
-  var rtlSequence = "([\\u0590-\\u08FF]|[\\uFB1D-\\uFDFF]|[\\uFE70-\\uFEFC])+";
   var normalIgnore = "(\\s|[<>\\.;,:0-9\"'])";
   var normalExpression = new RegExp ("(^" + normalIgnore + "*" + rtlSequence + ")|(" +
                          rtlSequence + normalIgnore + "+" + rtlSequence + normalIgnore + "*$)");
