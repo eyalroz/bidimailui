@@ -153,7 +153,20 @@ function browserOnLoadHandler()
         var isMisdetectedRTLCodePage = false;
         if (charsetPref == "windows-1255" || charsetPref == "windows-1256") {
           //jsConsoleService.logStringMessage("checking codepage");
-          isMisdetectedRTLCodePage = misdetectedRTLCodePage(firstSubBody || body);
+          
+         // we use definitions from nsBiDiUtils.h as the criteria for BiDi text;
+         // cf. the macros IS_IN_BMP_RTL_BLOCK and IS_RTL_PRESENTATION_FORM
+
+         var rtlSequence;
+         if (charsetPref == "windows-1255") // Hebrew
+           rtlSequence = "([\\u0590-\\u05FF]|[\\uFB1D-\\uFB4F])+";
+         else  // Arabic, windows-1256
+           rtlSequence = "([\\u0600-\\u06FF]|[\\uFB50-\\uFDFF]|[\\uFE70-\\uFEFC])+";
+          
+          isMisdetectedRTLCodePage =
+            misdetectedRTLCodePage(
+              firstSubBody || body,
+              rtlSequence);
         } else {
           //jsConsoleService.logStringMessage("not checking codepage after all");
         }
@@ -190,9 +203,11 @@ function browserOnLoadHandler()
    * If the message content element couldn't be found, we use the
    * body element itself.
    */
+   
+  var rtlSequence = "([\\u0590-\\u08FF]|[\\uFB1D-\\uFDFF]|[\\uFE70-\\uFEFC])+";
   if (!body.hasAttribute("dir") &&
       window.getComputedStyle(body, null).direction == "ltr" &&
-      canBeAssumedRTL(firstSubBody || body)) {
+      canBeAssumedRTL(firstSubBody || body,rtlSequence)) {
     /*
      * The body has no DIR attribute and isn't already set to be RTLed,
      * but it looks RTLish, so let's add an initial stylesheet saying it's RTL,
