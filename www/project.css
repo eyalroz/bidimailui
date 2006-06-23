@@ -24,6 +24,11 @@ code {
   background: rgb(255,220,128);
 }
 
+table#installation-instructions td{
+  width: 50%;
+  vertical-align: top;
+}
+
 /*
 div#english-navbar #project-navigation a{
   border-left: 1px solid black;
