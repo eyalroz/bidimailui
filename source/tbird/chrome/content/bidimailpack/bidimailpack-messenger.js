@@ -234,7 +234,7 @@ function browserOnLoadHandler()
   // Autodetect the direction of any remaining "sub body"
   for ( ; i < possibleSubBodies.length; i++) {
     if (/^moz-text/.test(possibleSubBodies[i].className)) {
-      possibleSubBodies[i].dir = canBeAssumedRTL(possibleSubBodies[i]) ?
+      possibleSubBodies[i].dir = canBeAssumedRTL(possibleSubBodies[i],rtlSequence) ?
                                  "rtl" : "ltr";
     }
   }
