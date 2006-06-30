@@ -21,7 +21,7 @@ function misdetectedRTLCodePage(element,rtlSequence)
   var htmlizedExpression = new RegExp ("(((^|>)|" + htmlizedIgnore + "+)" +
     misdetectedCodePageSequence1 + "(" + htmlizedIgnore  + "($|<)))|" + misdetectedCodePageSequence2);
   if (matchInText(element, normalExpression, htmlizedExpression)) {
-    if (!canBeAssumedRTL(element))
+    if (!canBeAssumedRTL(element,rtlSequence))
     return true;
   }
   return false;
