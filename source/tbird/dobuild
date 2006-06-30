@@ -8,10 +8,12 @@ BUILDTOOLSDIR="../buildtools"
 export PERL5LIB="`pwd`/$BUILDTOOLSDIR"
 
 case "$TARGET" in
-    tbird)
+    tbird | tb | thunderbird)
+        TARGET=tbird
         DEF=MOZ_THUNDERBIRD
         ;;
-    suite)
+    suite | sm | seamonkey)
+        TARGET=suite
         DEF=MOZ_SEAMONKEY
         ;;
     *)
