@@ -1,12 +1,6 @@
 #!/bin/bash
 
 TARGET="$1"
-VERSION="0.7.3"
-BUILDDIR="build-$TARGET"
-XPINAME="bidimailui_${TARGET}.xpi"
-BUILDTOOLSDIR="../buildtools"
-export PERL5LIB="`pwd`/$BUILDTOOLSDIR"
-
 case "$TARGET" in
     tbird | tb | thunderbird)
         TARGET=tbird
@@ -21,6 +15,13 @@ case "$TARGET" in
 	exit 1
 	;;
 esac
+
+VERSION="0.7.3"
+BUILDDIR="build-$TARGET"
+XPINAME="bidimailui_${TARGET}.xpi"
+BUILDTOOLSDIR="../buildtools"
+export PERL5LIB="`pwd`/$BUILDTOOLSDIR"
+
 
 rm -rf $BUILDDIR
 mkdir $BUILDDIR
