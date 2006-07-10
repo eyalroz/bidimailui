@@ -8,21 +8,35 @@ function d2h(d) {
 
 function misdetectedRTLCodePage(element,rtlSequence)
 {
-  var misdetectedCodePageSequence1 = "([\\u00BF-\\u00FF]{2,})";
-  // this should actually only appear when the message has been 
-  // falsley detected as Unicode, but for some strange reason we
-  // get this here also
-  var misdetectedCodePageSequence2 = "\\uFFFD{3,}\\u0020";
-  var normalIgnore = "(\\s|[<>\\.;,:0-9\"'])";
-  var normalExpression = new RegExp ("((^|" + normalIgnore + "+)" +
-    misdetectedCodePageSequence1 + "("+ normalIgnore + "+|$))|" + misdetectedCodePageSequence2);
-
-  var htmlizedIgnore = "(\\s|[\\.;,:0-9']|&lt;|&gt;|&amp;|&quot;)";
-  var htmlizedExpression = new RegExp ("(((^|>)|" + htmlizedIgnore + "+)" +
-    misdetectedCodePageSequence1 + "(" + htmlizedIgnore  + "($|<)))|" + misdetectedCodePageSequence2);
-  if (matchInText(element, normalExpression, htmlizedExpression)) {
-    if (!canBeAssumedRTL(element,rtlSequence))
-    return true;
+  var misdetectionRegExp;
+  if (msgWindow.mailCharacterSet == "US-ASCII" ||
+      msgWindow.mailCharacterSet == "ISO-8859-1" ||
+      msgWindow.mailCharacterSet == "windows-1252") {
+     // if instead of the actual windows-1255/6 charset, mozilla used
+     // latin-1 or similar, instead of Hebrew/Arabic characters we would
+     // see latin characters with accent, from the upper values of the 
+     // 256-value charset
+     misdetectionRegExp = new RegExp("([\\u00BF-\\u00FF]{2,})");
+  }
+  else { // it's "UTF-8" or ""
+   // if instead of the actual windows-1255/6 charset, mozilla used
+   // UTF-8, it 'gives up' on seeing [\u00BF-\u00FF][\u00BF-\u00FF] byte pairs,
+   // so it decodes them as \FFFD 's for some reason
+    misdetectionRegExp = new RegExp("\\uFFFD{3,}");
+  }
+  if (matchInText(element, misdetectionRegExp, misdetectionRegExp)) {
+    //jsConsoleService.logStringMessage("matched " + misdetectionRegExp + " in the text");
+    var falsePositiveRegExp = new RegExp(rtlSequence);
+    if (!matchInText(element, falsePositiveRegExp, falsePositiveRegExp)) {
+      //jsConsoleService.logStringMessage("did NOT match " + falsePositiveRegExp + " in the text");
+      return true;
+    }
+    else {
+      //jsConsoleService.logStringMessage("matched " + falsePositiveRegExp + " in the text");
+    }
+  }
+  else {
+    //jsConsoleService.logStringMessage("did NOT match " + misdetectionRegExp + " in the text");
   }
   return false;
 }
@@ -34,6 +48,8 @@ function misdetectedUTF8(element)
   // hebrew letters in UTF8 are 0xD7 followed by a byte in the range 0x90 - 0xAA
   // I don't know what the other chars are about...
   // maybe check for some english text? spacing? something else?
+  // Also, it seems UTF-8 messages which mozilla displays using
+  // ISO-8859-8-I have FFFD's for some reason
   var misdetectedUTF8Sequence = "(\\u00D7(\\u201D|\\u2022|\\u2220|\\u2122|[\\u0090-\\u00AA])){3,}|\\uFFFD{3,}";
   var re = new RegExp (misdetectedUTF8Sequence);
   return matchInText(element, re, re);
@@ -58,8 +74,7 @@ function canBeAssumedRTL(element,rtlSequence)
 
 function matchInText(element, normalExpression, htmlizedExpression)
 {
-  //jsConsoleService.logStringMessage("---------------------------------------------\n" +
-  //                                  "matching " + normalExpression);
+  //jsConsoleService.logStringMessage("---------------------------------------------\n" + "matching " + normalExpression);
   try {
     var iterator = new XPathEvaluator();
     var path = iterator.evaluate("descendant-or-self::text()", element, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
@@ -71,7 +86,7 @@ function matchInText(element, normalExpression, htmlizedExpression)
       //}
       //jsConsoleService.logStringMessage(node.data + "\n" + str);
       if (normalExpression.test(node.data)) {
-        //jsConsoleService.logStringMessage("matches.\n---------------------------------------------");
+        //jsConsoleService.logStringMessage("found match.\n---------------------------------------------");
         return true;
       }
     }
