@@ -1,7 +1,7 @@
 // The following 2 lines enable logging messages to the javascript console:
 //
-// var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
-// jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
+ var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
+ jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 //
 // here is an example of a console log message describing a DOM node:
 // jsConsoleService.logStringMessage('visiting node: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
@@ -19,10 +19,10 @@ function GetMessageContentElement(domDoc) {
 
   // Try to find the DIV element which contains the message content
   var firstSubBody = null;
-  var possibleSubBodies = bodyElement.getElementsByTagName("div");
-  for (var i = 0; i < possibleSubBodies.length && !firstSubBody; i++) {
-    if (/^moz-text/.test(possibleSubBodies[i].className))
-      firstSubBody = possibleSubBodies[i];
+  var elementsRequiringExplicitDirection = bodyElement.getElementsByTagName("div");
+  for (var i = 0; i < elementsRequiringExplicitDirection.length && !firstSubBody; i++) {
+    if (/^moz-text/.test(elementsRequiringExplicitDirection[i].className))
+      firstSubBody = elementsRequiringExplicitDirection[i];
   }
 
   // If there's no such element, the meesage content element is inside
@@ -84,49 +84,28 @@ function UpdateDirectionButtons(direction)
 
 function browserOnLoadHandler()
 {
-  var domDoc;
+  //jsConsoleService.logStringMessage("------------------------------\nbrowserOnLoadHandler()");
+
+  var domDocument;
   try {
-    domDoc = this.docShell.contentViewer.DOMDocument;
+    domDocument = this.docShell.contentViewer.DOMDocument;
   }
   catch (ex) {
+    //jsConsoleService.logStringMessage("couldn't get DOMDocument");
     dump(ex);
     return;
   }
 
-  var body = domDoc.body;
-  if (!body)
+  var body = domDocument.body;
+  if (!body) {
+    //jsConsoleService.logStringMessage("couldn't get DOMDocument body");
     return;
-
-  // quote bar css
-  var head = domDoc.getElementsByTagName("head")[0];
-  if (head) {
-    var newSS = domDoc.createElement("link");
-    newSS.rel  = "stylesheet";
-    newSS.type = "text/css";
-    newSS.href = "chrome://bidimailpack/content/quotebar.css";
-    head.appendChild(newSS);
   }
 
-  // Find the DIV element which contains the message content
-  var firstSubBody = null;
-  var possibleSubBodies = body.getElementsByTagName("div");
-  for (var i = 0; i < possibleSubBodies.length && !firstSubBody; i++) {
-    if (/^moz-text/.test(possibleSubBodies[i].className))
-      firstSubBody = possibleSubBodies[i];
-  }
+  // element which may contains message content (we filter them later)
+  var elementsRequiringExplicitDirection = [body];
+  elementsRequiringExplicitDirection.concat(body.getElementsByTagName("div"));
 
-  /* -- Auto-detect some mis-decoded messages
-   * When shall we attempt re-detection and overriding of the character set?
-   * not if the encoding has _already_ been overridden (either due to the pref
-   * or not) and not if the default charset is not one of the 256-char codepages
-   * we expect get mangled, and then only when the charset is reported as one of
-   * the defaultish ones (or not reported at all)?
-   * Notes:
-   * - We don't detect 'false positives' (e.g. we won't detect when a message
-   *   which isn't supposed to be windows-1255 has been made windows-1255)
-   * - Changing the charset here means that the message is re-loaded, which
-   *   calls this function (the onLoad handler) again
-   */
 
   var charsetPref = null;
   try {
@@ -134,110 +113,130 @@ function browserOnLoadHandler()
       gBDMPrefs.prefService.getCharPref("mailnews.view_default_charset");
   }
   catch (ex) { }
+  var directionPref = gBDMPrefs.getBoolPref("display.autodetect_direction", true);
 
-  var msgWindow = Components.classes[msgWindowContractID].createInstance();
-  msgWindow = msgWindow.QueryInterface(Components.interfaces.nsIMsgWindow);
-  if (charsetPref && msgWindow) {
-    loadedMessageURI = GetLoadedMessage();
-    if (loadedMessageURI != gMessageURI) {
-      gMessageURI = loadedMessageURI;
-      var misdecodeAutodetectPref =
-        gBDMPrefs.getBoolPref("display.autodetect_bidi_misdecoding", true);
-      if ( misdecodeAutodetectPref &&
-           !msgWindow.charsetOverride &&
-           (!msgWindow.mailCharacterSet ||
-            msgWindow.mailCharacterSet == "US-ASCII" ||
+  if (!msgWindow) {
+    return;
+  }
+  
+  var loadedMessageURI = GetLoadedMessage();
+  if (loadedMessageURI == gMessageURI) {
+    return;
+  }
+
+  var rtlSequence;
+  if (charsetPref == "windows-1255") // Hebrew, windows-1255
+    rtlSequence = "([\\u0590-\\u05FF]|[\\uFB1D-\\uFB4F]){3,}";
+  else  // Arabic, windows-1256
+    rtlSequence = "([\\u0600-\\u06FF]|[\\uFB50-\\uFDFF]|[\\uFE70-\\uFEFC]){3,}";
+
+  // Auto-detect some mis-decoded messages
+  //
+  // When shall we attempt re-detection and overriding of the character set?
+  // not if the encoding has _already_ been overridden (either due to the pref
+  // or not) and not if the default charset is not one of the one-octet codepages
+  // we expect get mangled, and then only when the charset is reported as one of
+  // the defaultish ones (or not reported at all); or, alternatively, when the
+  // charset used is UTF-8 but the text appears to actually be in a one-octect
+  // charsets.
+  // Notes:
+  // - Changing the charset here means that the message is re-loaded, which
+  //   calls this function (the onLoad handler) again
+  // - Since msgWindow.charsetOverride is true after our first change,
+  //   this loop an actually an OR over the need to change the charset for any
+  //   of the subbodies
+  // - Sometimes the charset is not set, or set to ""; in this case we can't
+  //   tell if mozilla is using UTF-8 or something else, so we apply all
+  //   possible auto-detection methods
+
+  if (charsetPref) {
+    var misdecodeAutodetectPref =
+      gBDMPrefs.getBoolPref("display.autodetect_bidi_misdecoding", true);
+    if ( misdecodeAutodetectPref &&
+         !msgWindow.charsetOverride)  {
+        //jsConsoleService.logStringMessage('considering charset change');
+
+      if ( (charsetPref == "windows-1255" || charsetPref == "windows-1256")&&
+           (msgWindow.mailCharacterSet == "US-ASCII" ||
             msgWindow.mailCharacterSet == "ISO-8859-1" ||
             msgWindow.mailCharacterSet == "windows-1252" ||
+            msgWindow.mailCharacterSet == "UTF-8" ||
             msgWindow.mailCharacterSet == "") ) {
-        var isMisdetectedRTLCodePage = false;
-        if (charsetPref == "windows-1255" || charsetPref == "windows-1256") {
-          //jsConsoleService.logStringMessage("checking codepage");
-          
-         // we use definitions from nsBiDiUtils.h as the criteria for BiDi text;
-         // cf. the macros IS_IN_BMP_RTL_BLOCK and IS_RTL_PRESENTATION_FORM
-
-         var rtlSequence;
-         if (charsetPref == "windows-1255") // Hebrew
-           rtlSequence = "([\\u0590-\\u05FF]|[\\uFB1D-\\uFB4F])+";
-         else  // Arabic, windows-1256
-           rtlSequence = "([\\u0600-\\u06FF]|[\\uFB50-\\uFDFF]|[\\uFE70-\\uFEFC])+";
-          
-          isMisdetectedRTLCodePage =
-            misdetectedRTLCodePage(
-              firstSubBody || body,
-              rtlSequence);
-        } else {
-          //jsConsoleService.logStringMessage("not checking codepage after all");
-        }
-
-        if (isMisdetectedRTLCodePage) {
-          //jsConsoleService.logStringMessage("setting codepage");
+        //jsConsoleService.logStringMessage("checking misdetected codepage");
+        if (misdetectedRTLCodePage(body,rtlSequence)) {
+          //jsConsoleService.logStringMessage("confirm misdetected codepage; setting charset to charsetPref " + charsetPref);
           MessengerSetForcedCharacterSet(charsetPref);
+          return;
         }
-        else { 
-          //jsConsoleService.logStringMessage("reject codepage");
-          if(misdetectedUTF8(firstSubBody || body)) {
-            //jsConsoleService.logStringMessage("confirm utf8");
-            MessengerSetForcedCharacterSet("utf-8");
-          }
-          else {
-            //jsConsoleService.logStringMessage("reject utf8");
-          }
-        }
-
+      } else {
+        //jsConsoleService.logStringMessage("not checking codepage since our charset pref is " + charsetPref);
       }
-
+      //jsConsoleService.logStringMessage("reject misdetected codepage");
+        
+      if (msgWindow.mailCharacterSet != "UTF-8") {
+        //jsConsoleService.logStringMessage("checking misdetected utf-8");
+        if (misdetectedUTF8(body)) {
+          //jsConsoleService.logStringMessage("confirm misdetected utf-8; setting charset to utf-8");
+          MessengerSetForcedCharacterSet("utf-8");
+          return;
+        }
+        else {
+          //jsConsoleService.logStringMessage("reject utf8; not setting charset to utf-8");
+        }
+      }
     }
-  } 
+  }
+  else {
+    //jsConsoleService.logStringMessage("not considering charset change");
+  }
+
+  gMessageURI = loadedMessageURI;
+
+  //jsConsoleService.logStringMessage("completed charset phase");
+
+  // quote bar css
+  var head = domDocument.getElementsByTagName("head")[0];
+  if (head) {
+    var newSS = domDocument.createElement("link");
+    newSS.rel  = "stylesheet";
+    newSS.type = "text/css";
+    newSS.href = "chrome://bidimailpack/content/quotebar.css";
+    head.appendChild(newSS);
+  }
+
+
+  // be careful: we may be matching some elements twice in the following code! Check this!
 
   // Auto detect the message direction
   if (!gBDMPrefs.getBoolPref("display.autodetect_direction", true))
     return;
 
-  /* 
-   * The first "sub body" element is the message content element
-   * note the attributes of the orginal body element are set
-   * on the body element.
-   *
-   * If the message content element couldn't be found, we use the
-   * body element itself.
-   */
+  if (directionPref) {
+
+    //jsConsoleService.logStringMessage("elementsRequiringExplicitDirection.length = " + elementsRequiringExplicitDirection.length);
+ 
+    for (i=0  ; i < elementsRequiringExplicitDirection.length; i++) {
+      var node = elementsRequiringExplicitDirection[i];
    
-  var rtlSequence = "([\\u0590-\\u08FF]|[\\uFB1D-\\uFDFF]|[\\uFE70-\\uFEFC])+";
-  if (!body.hasAttribute("dir") &&
-      window.getComputedStyle(body, null).direction == "ltr" &&
-      canBeAssumedRTL(firstSubBody || body,rtlSequence)) {
-    /*
-     * The body has no DIR attribute and isn't already set to be RTLed,
-     * but it looks RTLish, so let's add an initial stylesheet saying it's RTL,
-     * which will be overridden by any other stylesheets within 
-     * the document itself
-     */
-    if (head) {
-      var newSS  = domDoc.createElement("link");
-      newSS.rel  = "stylesheet";
-      newSS.type = "text/css";
-      newSS.href = "chrome://bidimailpack/content/weakrtl.css";
-      if (head.firstChild)
-        head.insertBefore(newSS,head.firstChild);
-      else
-        head.appendChild(newSS);
+      //jsConsoleService.logStringMessage('elementsRequiringExplicitDirection[ ' + i + ']: ' + node + "\ntype: " + node.nodeType + "\nclassName: " + node.className + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+        // Auto detect the subbody direction
+      if (!node)
+        continue;
+      if ( !( (node==body) || (/^moz-text/.test(node.className))) )
+        continue;
+   
+      //jsConsoleService.logStringMessage("considering direction change?");
+      var res = canBeAssumedRTL(node,rtlSequence);
+      //jsConsoleService.logStringMessage("canBeAssumedRTL(elementsRequiringExplicitDirection[i],rtlSequence) = " + res + "\nset node.dir to " + (res ? "rtl" : "ltr") );
+      node.setAttribute("dir", (res ? "rtl" : "ltr") );
     }
   }
+
 #ifdef MOZ_THUNDERBIRD
   var currentDirection =
-    window.getComputedStyle(firstSubBody || body, null).direction;
+    window.getComputedStyle(body, null).direction;
   UpdateDirectionButtons(currentDirection);
 #endif
-
-  // Autodetect the direction of any remaining "sub body"
-  for ( ; i < possibleSubBodies.length; i++) {
-    if (/^moz-text/.test(possibleSubBodies[i].className)) {
-      possibleSubBodies[i].dir = canBeAssumedRTL(possibleSubBodies[i],rtlSequence) ?
-                                 "rtl" : "ltr";
-    }
-  }
 }
 
 function InstallBrowserHandler()
