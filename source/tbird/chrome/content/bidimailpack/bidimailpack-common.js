@@ -63,12 +63,12 @@ function canBeAssumedRTL(element,rtlSequence)
   // numbering at the beginnings and ends of lines)
 
   var normalIgnore = "(\\s|[<>\\.;,:0-9\"'])";
-  var normalExpression = new RegExp ("(^" + normalIgnore + "*" + rtlSequence + ")|(" +
-                         rtlSequence + normalIgnore + "+" + rtlSequence + normalIgnore + "*$)");
+  var normalExpression = new RegExp ("((^|\\n)" + normalIgnore + "*" + rtlSequence + ")|(" +
+                         rtlSequence + normalIgnore + "+" + rtlSequence + normalIgnore + "*($|\\n))");
 
   var htmlizedIgnore = "(\\s|[\\.;,:0-9']|&lt;|&gt;|&amp;|&quot;)";
-  var htmlizedExpression = new RegExp ("((^|>)" + htmlizedIgnore + "*" + rtlSequence + ")|(" +
-                       rtlSequence + htmlizedIgnore + "+" + rtlSequence + htmlizedIgnore + "*($|<))");
+  var htmlizedExpression = new RegExp ("((^|>|\\n)" + htmlizedIgnore + "*" + rtlSequence + ")|(" +
+                       rtlSequence + htmlizedIgnore + "+" + rtlSequence + htmlizedIgnore + "*($|<|\\n))");
   return matchInText(element, normalExpression, htmlizedExpression);
 }
 
