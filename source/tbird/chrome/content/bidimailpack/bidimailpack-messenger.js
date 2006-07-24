@@ -1,10 +1,11 @@
+#ifdef DEBUG
 // The following 2 lines enable logging messages to the javascript console:
-//
-// var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
-// jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
-//
-// here is an example of a console log message describing a DOM node:
+var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
+jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
+
+// Here is an example of a console log message describing a DOM node:
 // jsConsoleService.logStringMessage('visiting node: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+#endif
 
 // workaround for bug 12469
 var gMessageURI = null;
@@ -84,21 +85,27 @@ function UpdateDirectionButtons(direction)
 
 function browserOnLoadHandler()
 {
-  //jsConsoleService.logStringMessage("------------------------------\nbrowserOnLoadHandler()");
+#ifdef DEBUG_browserOnLoadHandler
+  jsConsoleService.logStringMessage("------------------------------\nbrowserOnLoadHandler()");
+#endif
 
   var domDocument;
   try {
     domDocument = this.docShell.contentViewer.DOMDocument;
   }
   catch (ex) {
-    //jsConsoleService.logStringMessage("couldn't get DOMDocument");
+#ifdef DEBUG_browserOnLoadHandler
+    jsConsoleService.logStringMessage("couldn't get DOMDocument");
+#endif
     dump(ex);
     return;
   }
 
   var body = domDocument.body;
   if (!body) {
-    //jsConsoleService.logStringMessage("couldn't get DOMDocument body");
+#ifdef DEBUG_browserOnLoadHandler
+    jsConsoleService.logStringMessage("couldn't get DOMDocument body");
+#endif
     return;
   }
 
@@ -116,11 +123,17 @@ function browserOnLoadHandler()
   var directionPref = gBDMPrefs.getBoolPref("display.autodetect_direction", true);
 
   if (!msgWindow) {
+#ifdef DEBUG_browserOnLoadHandler
+    jsConsoleService.logStringMessage("couldn't get msgWindow");
+#endif
     return;
   }
   
   var loadedMessageURI = GetLoadedMessage();
   if (loadedMessageURI == gMessageURI) {
+#ifdef DEBUG_browserOnLoadHandler
+    jsConsoleService.logStringMessage("loadedMessageURI == gMessageURI, exiting");
+#endif
     return;
   }
 
@@ -154,7 +167,9 @@ function browserOnLoadHandler()
       gBDMPrefs.getBoolPref("display.autodetect_bidi_misdecoding", true);
     if ( misdecodeAutodetectPref &&
          !msgWindow.charsetOverride)  {
-        //jsConsoleService.logStringMessage('considering charset change');
+#ifdef DEBUG_browserOnLoadHandler
+        jsConsoleService.logStringMessage('considering charset change');
+#endif
 
       if ( (charsetPref == "windows-1255" || charsetPref == "windows-1256")&&
            (msgWindow.mailCharacterSet == "US-ASCII" ||
@@ -162,37 +177,55 @@ function browserOnLoadHandler()
             msgWindow.mailCharacterSet == "windows-1252" ||
             msgWindow.mailCharacterSet == "UTF-8" ||
             msgWindow.mailCharacterSet == "") ) {
-        //jsConsoleService.logStringMessage("checking misdetected codepage");
+#ifdef DEBUG_browserOnLoadHandler
+        jsConsoleService.logStringMessage("checking misdetected codepage");
+#endif
         if (misdetectedRTLCodePage(body,rtlSequence)) {
-          //jsConsoleService.logStringMessage("confirm misdetected codepage; setting charset to charsetPref " + charsetPref);
+#ifdef DEBUG_browserOnLoadHandler
+          jsConsoleService.logStringMessage("confirm misdetected codepage; setting charset to charsetPref " + charsetPref);
+#endif
           MessengerSetForcedCharacterSet(charsetPref);
           return;
         }
       } else {
-        //jsConsoleService.logStringMessage("not checking codepage since our charset pref is " + charsetPref);
+#ifdef DEBUG_browserOnLoadHandler
+        jsConsoleService.logStringMessage("not checking codepage since our charset pref is " + charsetPref);
+#endif
       }
-      //jsConsoleService.logStringMessage("reject misdetected codepage");
+#ifdef DEBUG_browserOnLoadHandler
+      jsConsoleService.logStringMessage("reject misdetected codepage");
+#endif
         
       if (msgWindow.mailCharacterSet != "UTF-8") {
-        //jsConsoleService.logStringMessage("checking misdetected utf-8");
+#ifdef DEBUG_browserOnLoadHandler
+        jsConsoleService.logStringMessage("checking misdetected utf-8");
+#endif
         if (misdetectedUTF8(body)) {
-          //jsConsoleService.logStringMessage("confirm misdetected utf-8; setting charset to utf-8");
+#ifdef DEBUG_browserOnLoadHandler
+          jsConsoleService.logStringMessage("confirm misdetected utf-8; setting charset to utf-8");
+#endif
           MessengerSetForcedCharacterSet("utf-8");
           return;
         }
         else {
-          //jsConsoleService.logStringMessage("reject utf8; not setting charset to utf-8");
+#ifdef DEBUG_browserOnLoadHandler
+          jsConsoleService.logStringMessage("reject utf8; not setting charset to utf-8");
+#endif
         }
       }
     }
   }
   else {
-    //jsConsoleService.logStringMessage("not considering charset change");
+#ifdef DEBUG_browserOnLoadHandler
+    jsConsoleService.logStringMessage("not considering charset change");
+#endif
   }
 
   gMessageURI = loadedMessageURI;
 
-  //jsConsoleService.logStringMessage("completed charset phase");
+#ifdef DEBUG_browserOnLoadHandler
+  jsConsoleService.logStringMessage("completed charset phase");
+#endif
 
   // quote bar css
   var head = domDocument.getElementsByTagName("head")[0];
@@ -212,22 +245,29 @@ function browserOnLoadHandler()
     return;
 
   if (directionPref) {
-
-    //jsConsoleService.logStringMessage("elementsRequiringExplicitDirection.length = " + elementsRequiringExplicitDirection.length);
+#ifdef DEBUG_browserOnLoadHandler
+    jsConsoleService.logStringMessage("elementsRequiringExplicitDirection.length = " + elementsRequiringExplicitDirection.length);
+#endif
  
     for (i=0  ; i < elementsRequiringExplicitDirection.length; i++) {
       var node = elementsRequiringExplicitDirection[i];
    
-      //jsConsoleService.logStringMessage('elementsRequiringExplicitDirection[ ' + i + ']: ' + node + "\ntype: " + node.nodeType + "\nclassName: " + node.className + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+#ifdef DEBUG_browserOnLoadHandler
+      jsConsoleService.logStringMessage('elementsRequiringExplicitDirection[ ' + i + ']: ' + node + "\ntype: " + node.nodeType + "\nclassName: " + node.className + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+#endif
         // Auto detect the subbody direction
       if (!node)
         continue;
       if ( !( (node==body) || (/^moz-text/.test(node.className))) )
         continue;
    
-      //jsConsoleService.logStringMessage("considering direction change?");
+#ifdef DEBUG_browserOnLoadHandler
+      jsConsoleService.logStringMessage("considering direction change?");
+#endif
       var res = canBeAssumedRTL(node,rtlSequence);
-      //jsConsoleService.logStringMessage("canBeAssumedRTL(elementsRequiringExplicitDirection[i],rtlSequence) = " + res + "\nset node.dir to " + (res ? "rtl" : "ltr") );
+#ifdef DEBUG_browserOnLoadHandler
+      jsConsoleService.logStringMessage("canBeAssumedRTL(elementsRequiringExplicitDirection[i],rtlSequence) = " + res + "\nset node.dir to " + (res ? "rtl" : "ltr") );
+#endif
       node.setAttribute("dir", (res ? "rtl" : "ltr") );
     }
   }
