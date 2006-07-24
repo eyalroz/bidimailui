@@ -4,11 +4,11 @@ TARGET="$1"
 case "$TARGET" in
     tbird | tb | thunderbird)
         TARGET=tbird
-        DEF=MOZ_THUNDERBIRD
+        DEFS="-DMOZ_THUNDERBIRD"
         ;;
     suite | sm | seamonkey)
         TARGET=suite
-        DEF=MOZ_SEAMONKEY
+        DEFS="-DMOZ_SEAMONKEY"
         ;;
     *)
 	echo "please specify either tbird or suite"
@@ -16,20 +16,31 @@ case "$TARGET" in
 	;;
 esac
 
+shift 1
+
+if [ -n "$1" ]; then
+	DEFS+=" -DDEBUG"
+	while [ -n "$1" ]; do
+		DEFS+=" -DDEBUG_$1"
+		shift 1
+	done
+fi
+
 VERSION="0.7.3"
+DEFS+=" -DVERSION=$VERSION"
+echo -e "Building the XPI with the following definitions:\n\n$DEFS\n"
 BUILDDIR="build-$TARGET"
 XPINAME="bidimailui_${TARGET}.xpi"
 BUILDTOOLSDIR="../buildtools"
 export PERL5LIB="`pwd`/$BUILDTOOLSDIR"
 
-
 rm -rf $BUILDDIR
 mkdir $BUILDDIR
 
-$BUILDTOOLSDIR/preprocessor.pl -D$DEF jar.mn > $BUILDDIR/jar.mn
-$BUILDTOOLSDIR/make-jars.pl -v -z zip -p "$BUILDTOOLSDIR/preprocessor.pl -D$DEF -DVERSION=$VERSION"  -s . -d . < $BUILDDIR/jar.mn || exit
+$BUILDTOOLSDIR/preprocessor.pl $DEFS jar.mn > $BUILDDIR/jar.mn
+$BUILDTOOLSDIR/make-jars.pl -v -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $DEFS"  -s . -d . < $BUILDDIR/jar.mn || exit
 echo -e "\nJAR files ready\n"
-$BUILDTOOLSDIR/preprocessor.pl -D$DEF "-DVERSION=$VERSION" install.rdf > $BUILDDIR/install.rdf
+$BUILDTOOLSDIR/preprocessor.pl $DEFS install.rdf > $BUILDDIR/install.rdf
 rm -rf bidimailpack
 rm -rf bidimailpack-mac-skin
 rm -f installed-chrome.txt
@@ -58,7 +69,7 @@ case "$TARGET" in
 	  chrome.manifest || exit
         ;;
     suite)
-        $BUILDTOOLSDIR/preprocessor.pl -D$DEF "-DVERSION=$VERSION" install.js > $BUILDDIR/install.js
+        $BUILDTOOLSDIR/preprocessor.pl $DEFS install.js > $BUILDDIR/install.js
         cd $BUILDDIR
 	zip -r $XPINAME  \
 	  chrome/bidimailpack.jar \
