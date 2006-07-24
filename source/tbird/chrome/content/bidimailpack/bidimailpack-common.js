@@ -8,43 +8,76 @@ function d2h(d) {
 
 function misdetectedRTLCodePage(element,rtlSequence)
 {
-  var misdetectionRegExp;
+  var initialMatch;
   if (msgWindow.mailCharacterSet == "US-ASCII" ||
       msgWindow.mailCharacterSet == "ISO-8859-1" ||
       msgWindow.mailCharacterSet == "windows-1252") {
      // if instead of the actual windows-1255/6 charset, mozilla used
      // latin-1 or similar, instead of Hebrew/Arabic characters we would
      // see latin characters with accent, from the upper values of the 
-     // 256-value charset
-     misdetectionRegExp = new RegExp("([\\u00BF-\\u00FF]{2,})");
+     // 256-value charset; see explanation of the regexp specifics in 
+     // canBeAssumedRTL()
+
+    var misdetectedRTLSequence = "[\\u00BF-\\u00FF]{3,}";
+
+    var normalIgnore = "(\\s|[<>\\.;,:0-9\"'])*";
+    var nonEmptyNormalIgnore = "(\\s|[<>\\.;,:0-9\"'])+";
+    var normalExpression = new RegExp (
+      "(" + "^" + normalIgnore + misdetectedRTLSequence + normalIgnore + "$" + ")" +
+      "|" +
+      "(" + "(^|\\n)" + misdetectedRTLSequence + misdetectedRTLSequence + nonEmptyNormalIgnore + "(" + nonEmptyNormalIgnore + "|$|\\n)" + ")" +
+      "|" +
+      "(" + misdetectedRTLSequence + nonEmptyNormalIgnore + misdetectedRTLSequence + normalIgnore + "($|\\n)" + ")" );
+ 
+    var htmlizedIgnore = "(\\s|[\\.;,:0-9']|&lt;|&gt;|&amp;|&quot;)*";
+    var nonEmptyHtmlizedIgnore = "(\\s|[\\.;,:0-9']|&lt;|&gt;|&amp;|&quot;)+";
+    var htmlizedExpression = new RegExp (
+      "(" + "(^|>|\\n)" + htmlizedIgnore + misdetectedRTLSequence + nonEmptyHtmlizedIgnore + "(" + nonEmptyHtmlizedIgnore + "|$|\\n|<)" + ")" +
+      "|" +
+      "(" + misdetectedRTLSequence + nonEmptyHtmlizedIgnore + misdetectedRTLSequence + htmlizedIgnore + "($|\\n|<)" + ")" );
+    initialMatch = matchInText(element, normalExpression, htmlizedExpression);
+    if (initialMatch) {
+#ifdef DEBUG_misdetectedRTLCodePage
+      jsConsoleService.logStringMessage("matched\n" + normalExpression + "\nor\n" + htmlizedExpression + "\nin the text");
+#endif
+    }
+    else {
+#ifdef DEBUG_misdetectedRTLCodePage
+      jsConsoleService.logStringMessage("did NOT match\n" + normalExpression + "\nor\n" + htmlizedExpression + "\nin the text");
+#endif
+    }
   }
   else { // it's "UTF-8" or ""
    // if instead of the actual windows-1255/6 charset, mozilla used
    // UTF-8, it 'gives up' on seeing [\u00BF-\u00FF][\u00BF-\u00FF] byte pairs,
    // so it decodes them as \FFFD 's for some reason
-    misdetectionRegExp = new RegExp("\\uFFFD{3,}");
-  }
-  if (matchInText(element, misdetectionRegExp, misdetectionRegExp)) {
+    var misDetectionExpression = new RegExp("\\uFFFD{3,}");
+    initialMatch = matchInText(element, misDetectionExpression, misDetectionExpression);
+    if (initialMatch) {
 #ifdef DEBUG_misdetectedRTLCodePage
-    jsConsoleService.logStringMessage("matched " + misdetectionRegExp + " in the text");
+      jsConsoleService.logStringMessage("matched " + misDetectionExpression + " in the text");
 #endif
-    var falsePositiveRegExp = new RegExp(rtlSequence);
-    if (!matchInText(element, falsePositiveRegExp, falsePositiveRegExp)) {
+    }
+    else {
 #ifdef DEBUG_misdetectedRTLCodePage
-      jsConsoleService.logStringMessage("did NOT match " + falsePositiveRegExp + " in the text");
+      jsConsoleService.logStringMessage("did NOT match " + misDetectionExpression + " in the text");
+#endif
+    }
+  }
+
+  if (initialMatch) {
+    var falsePositiveRegExp = new RegExp(rtlSequence);
+    if (!canBeAssumedRTL(element,rtlSequence)) {
+#ifdef DEBUG_misdetectedRTLCodePage
+      jsConsoleService.logStringMessage("text can NOT be assumed RTL with " + rtlSequence + " , confirming misdetected codepage");
 #endif
       return true;
     }
     else {
 #ifdef DEBUG_misdetectedRTLCodePage
-      jsConsoleService.logStringMessage("matched " + falsePositiveRegExp + " in the text");
+      jsConsoleService.logStringMessage("text CAN be assumed RTL with " + rtlSequence + " , rejecting misdetected codepage");
 #endif
     }
-  }
-  else {
-#ifdef DEBUG_misdetectedRTLCodePage
-    jsConsoleService.logStringMessage("did NOT match " + misdetectionRegExp + " in the text");
-#endif
   }
   return false;
 }
@@ -70,13 +103,26 @@ function canBeAssumedRTL(element,rtlSequence)
   // or ends with two such words (excluding any punctuation/spacing/
   // numbering at the beginnings and ends of lines)
 
-  var normalIgnore = "(\\s|[<>\\.;,:0-9\"'])";
-  var normalExpression = new RegExp ("((^|\\n)" + normalIgnore + "*" + rtlSequence + ")|(" +
-                         rtlSequence + normalIgnore + "+" + rtlSequence + normalIgnore + "*($|\\n))");
+  var normalIgnore = "(\\s|[<>\\.;,:0-9\"'])*";
+  var nonEmptyNormalIgnore = "(\\s|[<>\\.;,:0-9\"'])+";
+  var normalExpression = new RegExp (
+    // either message has only one line whose single word is RTL
+    "(" + "^" + normalIgnore + rtlSequence + normalIgnore + "$" + ")" +
+    "|" +
+    // or it has a line which begins with two RTL words
+    "(" + "(^|\\n)" + normalIgnore + rtlSequence + nonEmptyNormalIgnore + "(" + nonEmptyNormalIgnore + "|$|\\n)" + ")" +
+    "|" +
+    // or it has a line which ends with two RTL words
+    "(" + rtlSequence + nonEmptyNormalIgnore + rtlSequence + normalIgnore + "($|\\n)" + ")" );
 
-  var htmlizedIgnore = "(\\s|[\\.;,:0-9']|&lt;|&gt;|&amp;|&quot;)";
-  var htmlizedExpression = new RegExp ("((^|>|\\n)" + htmlizedIgnore + "*" + rtlSequence + ")|(" +
-                       rtlSequence + htmlizedIgnore + "+" + rtlSequence + htmlizedIgnore + "*($|<|\\n))");
+  var htmlizedIgnore = "(\\s|[\\.;,:0-9']|&lt;|&gt;|&amp;|&quot;)*";
+  var nonEmptyHtmlizedIgnore = "(\\s|[\\.;,:0-9']|&lt;|&gt;|&amp;|&quot;)+";
+  var htmlizedExpression = new RegExp (
+    // either message has a sequence between HTML >'s and <'s which begins with two RTL words
+    "(" + "(^|>|\\n)" + htmlizedIgnore + rtlSequence + nonEmptyHtmlizedIgnore + "(" + nonEmptyHtmlizedIgnore + "|$|\\n|<)" + ")" +
+    "|" +
+    // or it has such a sequence which ends with two RTL words
+    "(" + rtlSequence + nonEmptyHtmlizedIgnore + rtlSequence + htmlizedIgnore + "($|\\n|<)" + ")" );
   return matchInText(element, normalExpression, htmlizedExpression);
 }
 
