@@ -1,10 +1,11 @@
+#ifdef DEBUG
 // The following 2 lines enable logging messages to the javascript console:
-//
-// var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
-// jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
-//
-// here is an example of a console log message describing a DOM node:
+var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
+jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
+
+// Here is an example of a console log message describing a DOM node:
 // jsConsoleService.logStringMessage('visiting node: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+#endif
 
 const nsISelectionController = Components.interfaces.nsISelectionController;
 
@@ -33,7 +34,9 @@ function KeyboardLayoutIsRTL()
 
 function GetCurrentSelectionDirection()
 {
-  // jsConsoleService.logStringMessage('----- in GetCurrentSelectionDirection() -----');
+#ifdef DEBUG_GetCurrentSelectionDirection
+   jsConsoleService.logStringMessage('----- in GetCurrentSelectionDirection() -----');
+#endif
 
   // The current selection is a forest of DOM nodes,
   // each of which is contained in a block HTML
@@ -81,13 +84,17 @@ function GetCurrentSelectionDirection()
         break;
     }
 
-    // jsConsoleService.logStringMessage('commonAncestorContainer:' + cac + "\ntype:" + cac.nodeType + "\nHTML:\n" + cac.innerHTML);
-    // jsConsoleService.logStringMessage('commonAncestorContainer:' + cac + "\ntype:" + cac.nodeType + "\nvalue:\n" + cac.nodeValue + "\nis LTR = " + cacIsLTR + "; is RTL = " + cacIsRTL);
+#ifdef DEBUG_GetCurrentSelectionDirection
+    jsConsoleService.logStringMessage('commonAncestorContainer:' + cac + "\ntype:" + cac.nodeType + "\nHTML:\n" + cac.innerHTML);
+    jsConsoleService.logStringMessage('commonAncestorContainer:' + cac + "\ntype:" + cac.nodeType + "\nvalue:\n" + cac.nodeValue + "\nis LTR = " + cacIsLTR + "; is RTL = " + cacIsRTL);
+#endif
 
     if (cac.nodeType == Node.TEXT_NODE) {
       // the range is some text within a single DOM leaf node
       // so there's no need for any traversal
-      // jsConsoleService.logStringMessage('just a text node, continuing');
+#ifdef DEBUG_GetCurrentSelectionDirection
+      jsConsoleService.logStringMessage('just a text node, continuing');
+#endif
       hasLTR = hasLTR || cacIsLTR;
       hasRTL = hasRTL || cacIsRTL;
       if (hasLTR && hasRTL)
@@ -124,7 +131,9 @@ function GetCurrentSelectionDirection()
       node = range.startContainer;
   
       while (node != cac) {
-        // jsConsoleService.logStringMessage('visiting start slope node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
+#ifdef DEBUG_GetCurrentSelectionDirection
+        jsConsoleService.logStringMessage('visiting start slope node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
+#endif
         if (node.nodeType == Node.ELEMENT_NODE) {
           var nodeStyle = view.getComputedStyle(node, "");
           var display = nodeStyle.getPropertyValue("display");
@@ -134,13 +143,17 @@ function GetCurrentSelectionDirection()
             switch (nodeStyle.getPropertyValue("direction")) {
               case "ltr":
                 hasLTR = true;
-                // jsConsoleService.logStringMessage('found LTR');
+#ifdef DEBUG_GetCurrentSelectionDirection
+                jsConsoleService.logStringMessage('found LTR');
+#endif
                 if (hasRTL)
                   return "complex";
                 break;
               case "rtl":
                 hasRTL = true;
-                // jsConsoleService.logStringMessage('found RTL');
+#ifdef DEBUG_GetCurrentSelectionDirection
+                jsConsoleService.logStringMessage('found RTL');
+#endif
                 if (hasLTR)
                   return "complex";
                 break;
@@ -158,7 +171,9 @@ function GetCurrentSelectionDirection()
     else node = range.startContainer;
 
     do {
-      // jsConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
+#ifdef DEBUG_GetCurrentSelectionDirection
+      jsConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
+#endif
 
       // check the current node's direction
 
@@ -174,13 +189,17 @@ function GetCurrentSelectionDirection()
           switch (nodeStyle.getPropertyValue("direction")) {
             case "ltr":
               hasLTR = true;
-              // jsConsoleService.logStringMessage('found LTR');
+#ifdef DEBUG_GetCurrentSelectionDirection
+              jsConsoleService.logStringMessage('found LTR');
+#endif
               if (hasRTL)
                 return "complex";
               break;
             case "rtl":
               hasRTL = true;
-              // jsConsoleService.logStringMessage('found RTL');
+#ifdef DEBUG_GetCurrentSelectionDirection
+              jsConsoleService.logStringMessage('found RTL');
+#endif
               if (hasLTR)
                 return "complex";
               break;
@@ -188,7 +207,9 @@ function GetCurrentSelectionDirection()
         }
         else if (node.parentNode == cac) {
           // there is a non-block child of cac, so we use cac's data
-          // jsConsoleService.logStringMessage('non-block child of cac, using cac direction');
+#ifdef DEBUG_GetCurrentSelectionDirection
+          jsConsoleService.logStringMessage('non-block child of cac, using cac direction');
+#endif
           hasLTR = hasLTR || cacIsLTR;
           hasRTL = hasRTL || cacIsRTL;
           if (hasLTR && hasRTL)
@@ -197,20 +218,26 @@ function GetCurrentSelectionDirection()
       }
 
       if (node == range.endContainer) {
-        // jsConsoleService.logStringMessage('at end container, stopping traversal');
+#ifdef DEBUG_GetCurrentSelectionDirection
+        jsConsoleService.logStringMessage('at end container, stopping traversal');
+#endif
         break; // proceed to the next selection range
       }
 
       // is there is a child node which need be traversed?
 
       if (node.firstChild) {
-        // jsConsoleService.logStringMessage('descending to first child');
+#ifdef DEBUG_GetCurrentSelectionDirection
+        jsConsoleService.logStringMessage('descending to first child');
+#endif
         node = node.firstChild;
         // fallthrough to sibling search in case first child is a text node
         if  (node.nodeType != Node.TEXT_NODE)
           continue; // we've found the next node to visit
         else if (node == range.endContainer) {
-          // jsConsoleService.logStringMessage('at TEXT_NODE endContainer, stopping traversal');        
+#ifdef DEBUG_GetCurrentSelectionDirection
+          jsConsoleService.logStringMessage('at TEXT_NODE endContainer, stopping traversal');        
+#endif
           break; // if the next node is the end container as well as a
                  // text node, we don't need to to check its direction,
                  // but we do need to stop the traversal
@@ -224,13 +251,17 @@ function GetCurrentSelectionDirection()
       do {
         if (node.nextSibling) {
           node = node.nextSibling;
-          // jsConsoleService.logStringMessage('moving to next sibling');
+#ifdef DEBUG_GetCurrentSelectionDirection
+          jsConsoleService.logStringMessage('moving to next sibling');
+#endif
           if  (node.nodeType != Node.TEXT_NODE)
             break; // we've found the next node to visit
           else continue; // try the next sibling
         }
         else node = node.parentNode;
-        // jsConsoleService.logStringMessage('moving back up');
+#ifdef DEBUG_GetCurrentSelectionDirection
+        jsConsoleService.logStringMessage('moving back up');
+#endif
       } while (node != cac);
 
     } while (node != cac);
@@ -568,7 +599,9 @@ function FindClosestBlockElement(node)
 
 function ApplyToSelectionBlockElements(evalStr)
 {
-  // jsConsoleService.logStringMessage('----- ApplyToSelectionBlockElements() -----');
+#ifdef DEBUG_ApplyToSelectionBlockElements
+  jsConsoleService.logStringMessage('----- ApplyToSelectionBlockElements() -----');
+#endif
   var editor = GetCurrentEditor();
   if (!editor) {
     dump("Could not acquire editor object.");
@@ -592,47 +625,65 @@ function ApplyToSelectionBlockElements(evalStr)
           endContainer = range.startContainer.lastChild;
         }
         
-        // jsConsoleService.logStringMessage('endContainer:' + endContainer + "\ntype: " + endContainer.nodeType + "\nHTML:\n" + endContainer.innerHTML + "\nvalue:\n" + endContainer.nodeValue);
+#ifdef DEBUG_ApplyToSelectionBlockElements
+        jsConsoleService.logStringMessage('endContainer:' + endContainer + "\ntype: " + endContainer.nodeType + "\nHTML:\n" + endContainer.innerHTML + "\nvalue:\n" + endContainer.nodeValue);
+#endif
 
         var node = startContainer;
         // walk the tree till we find the endContainer of the selection range,
         // giving our directionality style to everything on our way
         do {
-          // jsConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
+#ifdef DEBUG_ApplyToSelectionBlockElements
+          jsConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
+#endif
 
           var closestBlockElement = FindClosestBlockElement(node);
           if (closestBlockElement) {
-            // jsConsoleService.logStringMessage('found closestBlockElement:' + closestBlockElement + "\ntype: " + closestBlockElement.nodeType + "\nHTML:\n" + closestBlockElement.innerHTML + "\nvalue:\n" + closestBlockElement.nodeValue);
+#ifdef DEBUG_ApplyToSelectionBlockElements
+            jsConsoleService.logStringMessage('found closestBlockElement:' + closestBlockElement + "\ntype: " + closestBlockElement.nodeType + "\nHTML:\n" + closestBlockElement.innerHTML + "\nvalue:\n" + closestBlockElement.nodeValue);
+#endif
             eval(evalStr);
           }
           else {
-            // jsConsoleService.logStringMessage('could not find cbe');
+#ifdef DEBUG_ApplyToSelectionBlockElements
+            jsConsoleService.logStringMessage('could not find cbe');
+#endif
             break;
           }
 
           // This check should be placed here, not as the 'while'
           // condition, to handle cases where begin == end
           if (node == endContainer) {
-            // jsConsoleService.logStringMessage('at end container, stopping traversal');
+#ifdef DEBUG_ApplyToSelectionBlockElements
+            jsConsoleService.logStringMessage('at end container, stopping traversal');
+#endif
             break;
           }
 
           // Traverse through the tree in order
           if (node.firstChild) {
-            // jsConsoleService.logStringMessage('descending to first child');
+#ifdef DEBUG_ApplyToSelectionBlockElements
+            jsConsoleService.logStringMessage('descending to first child');
+#endif
             node = node.firstChild;
           }
           else if (node.nextSibling) {
-            // jsConsoleService.logStringMessage('moving to next sibling');
+#ifdef DEBUG_ApplyToSelectionBlockElements
+            jsConsoleService.logStringMessage('moving to next sibling');
+#endif
             node = node.nextSibling;
           }
           else
             // find a parent node which has anything after
             while (node = node.parentNode) {
-              // jsConsoleService.logStringMessage('moved up to parent node');
+#ifdef DEBUG_ApplyToSelectionBlockElements
+              jsConsoleService.logStringMessage('moved up to parent node');
+#endif
               if (node.nextSibling) {
                 node = node.nextSibling;
-                // jsConsoleService.logStringMessage('moved to next sibling');
+#ifdef DEBUG_ApplyToSelectionBlockElements
+                jsConsoleService.logStringMessage('moved to next sibling');
+#endif
                 break;
               }
             }

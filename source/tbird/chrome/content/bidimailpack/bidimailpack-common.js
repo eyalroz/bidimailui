@@ -25,18 +25,26 @@ function misdetectedRTLCodePage(element,rtlSequence)
     misdetectionRegExp = new RegExp("\\uFFFD{3,}");
   }
   if (matchInText(element, misdetectionRegExp, misdetectionRegExp)) {
-    //jsConsoleService.logStringMessage("matched " + misdetectionRegExp + " in the text");
+#ifdef DEBUG_misdetectedRTLCodePage
+    jsConsoleService.logStringMessage("matched " + misdetectionRegExp + " in the text");
+#endif
     var falsePositiveRegExp = new RegExp(rtlSequence);
     if (!matchInText(element, falsePositiveRegExp, falsePositiveRegExp)) {
-      //jsConsoleService.logStringMessage("did NOT match " + falsePositiveRegExp + " in the text");
+#ifdef DEBUG_misdetectedRTLCodePage
+      jsConsoleService.logStringMessage("did NOT match " + falsePositiveRegExp + " in the text");
+#endif
       return true;
     }
     else {
-      //jsConsoleService.logStringMessage("matched " + falsePositiveRegExp + " in the text");
+#ifdef DEBUG_misdetectedRTLCodePage
+      jsConsoleService.logStringMessage("matched " + falsePositiveRegExp + " in the text");
+#endif
     }
   }
   else {
-    //jsConsoleService.logStringMessage("did NOT match " + misdetectionRegExp + " in the text");
+#ifdef DEBUG_misdetectedRTLCodePage
+    jsConsoleService.logStringMessage("did NOT match " + misdetectionRegExp + " in the text");
+#endif
   }
   return false;
 }
@@ -74,19 +82,25 @@ function canBeAssumedRTL(element,rtlSequence)
 
 function matchInText(element, normalExpression, htmlizedExpression)
 {
-  //jsConsoleService.logStringMessage("---------------------------------------------\n" + "matching " + normalExpression);
+#ifdef DEBUG_matchInText
+  jsConsoleService.logStringMessage("---------------------------------------------\n" + "matching " + normalExpression);
+#endif
   try {
     var iterator = new XPathEvaluator();
     var path = iterator.evaluate("descendant-or-self::text()", element, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
     for (var node = path.iterateNext(); node; node = path.iterateNext())
     {
-      //var str = "";
-      //for(i = 0; i < node.data.length; i++) {
-      //  str += d2h(node.data.charCodeAt(i)) + " ";  
-      //}
-      //jsConsoleService.logStringMessage(node.data + "\n" + str);
+#ifdef DEBUG_matchInText
+      var str = "";
+      for(i = 0; i < node.data.length; i++) {
+        str += d2h(node.data.charCodeAt(i)) + " ";  
+      }
+      jsConsoleService.logStringMessage(node.data + "\n" + str);
+#endif
       if (normalExpression.test(node.data)) {
-        //jsConsoleService.logStringMessage("found match.\n---------------------------------------------");
+#ifdef DEBUG_matchInText
+        jsConsoleService.logStringMessage("found match.\n---------------------------------------------");
+#endif
         return true;
       }
     }
@@ -95,18 +109,20 @@ function matchInText(element, normalExpression, htmlizedExpression)
     // to test the HTMLized message rather than the bare text lines;
     // the regexp must change accordingly
 
-    //var theHTML = element.innerHTML;
-    //for(i = 0; i < theHTML.length; i++) {
-    //  str += d2h(theHTML.charCodeAt(i)) + " ";  
-    //}
-    //jsConsoleService.logStringMessage(theHTML + "\n" + str);
+#ifdef DEBUG_matchInText
+    jsConsoleService.logStringMessage(theHTML + "\n" + str);
+#endif
     
     if (htmlizedExpression.test(element.innerHTML)) {
-      //jsConsoleService.logStringMessage("matches.\n---------------------------------------------");
+#ifdef DEBUG_matchInText
+      jsConsoleService.logStringMessage("matches.\n---------------------------------------------");
+#endif
       return true;
     }
   }
-  //jsConsoleService.logStringMessage("no match.\n---------------------------------------------");
+#ifdef DEBUG_matchInText
+  jsConsoleService.logStringMessage("no match.\n---------------------------------------------");
+#endif
   return false;
 }
 
