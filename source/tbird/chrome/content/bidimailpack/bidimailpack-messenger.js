@@ -237,7 +237,9 @@ function browserOnLoadHandler()
   }
 
 
+#ifdef DEBUG
   // be careful: we may be matching some elements twice in the following code! Check this!
+#endif
 
   // Auto detect the message direction
   if (!gBDMPrefs.getBoolPref("display.autodetect_direction", true))
