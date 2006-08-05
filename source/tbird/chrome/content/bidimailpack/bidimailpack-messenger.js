@@ -161,7 +161,7 @@ function browserOnLoadHandler()
   //   tell if mozilla is using UTF-8 or something else, so we apply all
   //   possible auto-detection methods
 
-  if ((charsetPref) && (loadedMessageURI != gMessageURI)) {
+  if (charsetPref && loadedMessageURI != gMessageURI) {
     var misdecodeAutodetectPref =
       gBDMPrefs.getBoolPref("display.autodetect_bidi_misdecoding", true);
     if ( misdecodeAutodetectPref &&
