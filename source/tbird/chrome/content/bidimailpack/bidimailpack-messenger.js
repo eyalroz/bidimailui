@@ -132,9 +132,8 @@ function browserOnLoadHandler()
   var loadedMessageURI = GetLoadedMessage();
   if (loadedMessageURI == gMessageURI) {
 #ifdef DEBUG_browserOnLoadHandler
-    jsConsoleService.logStringMessage("loadedMessageURI == gMessageURI, exiting");
+    jsConsoleService.logStringMessage("loadedMessageURI == gMessageURI, so we won't mess with the charset");
 #endif
-    return;
   }
 
   var rtlSequence;
@@ -162,7 +161,7 @@ function browserOnLoadHandler()
   //   tell if mozilla is using UTF-8 or something else, so we apply all
   //   possible auto-detection methods
 
-  if (charsetPref) {
+  if ((charsetPref) && (loadedMessageURI != gMessageURI)) {
     var misdecodeAutodetectPref =
       gBDMPrefs.getBoolPref("display.autodetect_bidi_misdecoding", true);
     if ( misdecodeAutodetectPref &&
