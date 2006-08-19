@@ -26,9 +26,13 @@ function GetMessageContentElement(domDoc) {
       firstSubBody = elementsRequiringExplicitDirection[i];
   }
 
-  // If there's no such element, the meesage content element is inside
-  // the body element itself
-  return (firstSubBody || bodyElement);
+  // If there's no such element or if the element has no text under it (happens
+  // when "Simple HTML" mode is used see Mozilla bug 282476), the meesage 
+  // content element is inside the body element itself
+  if (!firstSubBody || gatherTextUnder(firstSubBody) == "")
+    return bodyElement;
+
+  return firstSubBody;
 }
 
 function SetMessageDirection(dir)
