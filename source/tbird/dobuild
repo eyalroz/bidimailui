@@ -21,13 +21,13 @@ shift 1
 if [ -n "$1" ]; then
 	DEFS+=" -DDEBUG"
 	while [ -n "$1" ]; do
-		DEFS+=" -DDEBUG_$1"
+		DEFS="$DEFS -DDEBUG_$1"
 		shift 1
 	done
 fi
 
 VERSION="0.7.3"
-DEFS+=" -DVERSION=$VERSION"
+DEFS="$DEFS -DVERSION=$VERSION"
 echo -e "Building the XPI with the following definitions:\n\n$DEFS\n"
 BUILDDIR="build-$TARGET"
 XPINAME="bidimailui_${TARGET}.xpi"
