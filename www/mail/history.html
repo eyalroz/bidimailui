@@ -6,13 +6,22 @@
 
 <ul id="version-history">
 
+<li><a name="0.7.3">version 0.7.3</a>
+  <ul>
+    <li>Completely reworked charset and direction autodetection code; significant reduction in both false positives and false negatives for detection of UTF-8 and of windows codepages 1255/1256.
+    <li>Urdu language localization (see credits <a href="http://bidiui.mozdev.org/mail/credits.html">here</a>).
+    <li>The extension is now also functional when setting 'View message as' to 'Simple HTML' or 'Text Only'.
+    <li>Charset autodetection correction has been extended to include the attachments.
+  </ul>
+</li>
+
 <li><a name="0.7.2">version 0.7.2</a>
   <ul>
     <li>Now settings the direction separately for each inline attachment to HTML messages.
     <li>Subject line now properly ignored when ascertaining direction and character encoding of message bodies.
     <li>Modifications the logic for detection of cases in which Mozilla set the message character encoding incorrectly; now also detecting cases in which UTF-8 messages were set to single-byte encodings.
     <li>Fixed behavior of Enter key when using menus.
-    <li>Farsi language localization.
+    <li>Farsi language localization  (see credits <a href="http://bidiui.mozdev.org/mail/credits.html">here</a>).
   </ul>
 </li>
 
