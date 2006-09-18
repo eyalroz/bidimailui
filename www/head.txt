@@ -1,4 +1,0 @@
-<link rel="stylesheet" href="/project.css" type="text/css">
-<title>BiDi UI</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta content="text/css" http-equiv="Content-Style-Type">
