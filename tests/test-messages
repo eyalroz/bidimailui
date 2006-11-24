@@ -885,7 +885,7 @@ Delivered-To: some@one.com
 From: some@one.com
 Sender: some@one.com
 MIME-Version: 1.0
-Date: Mon, 17 Feb 2006 09:49:06 -0700 (PDT)
+Date: Sat, 16 Jan 2006 21:17:44 +0200
 Subject: Message 17
 Message-ID: <20060803073747.56627.qmail@web32607.mail.mud.yahoo.com>
 Content-Type: multipart/mixed;
@@ -909,5 +909,26 @@ Content-Disposition: inline; filename="myfile.htm"
 </body></html>
 
 --0-510419055-1154590667=:52404--
+
+
+From - Fri Nov 24 20:29:43 2006
+X-Account-Key: account7
+X-UIDL: 418780a900001bcb
+X-Mozilla-Status: 0013
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
+Message-ID: <1164392064.4567368006af2@webmail.technion.ac.il>
+Date: Sun, 18 Feb 2006 21:17:44 +0200
+From: some@one.com
+To: some@one.com
+Subject: Message 18
+MIME-Version: 1.0
+Content-Type: text/plain; charset=Windows-1255
+Content-Transfer-Encoding: 8bit
+Status: RO
+
+תשובות בקובץ המצ"ב.
+
+
 
 
