@@ -322,6 +322,10 @@ function SetDocumentDirection(dir)
 {
   var body = document.getElementById("content-frame").contentDocument.body;
   body.setAttribute("dir", dir);
+  // We can't use the dir attribute of the subject textbox, like we do for the
+  // message body, since XUL elements' dir attribute means something else than
+  // this attribute for HTML elements. But we can set it for its input field...
+  document.getElementById("msgSubject").inputField.setAttribute("dir", dir);
 }
 
 function InsertControlCharacter(controlCharacter)
