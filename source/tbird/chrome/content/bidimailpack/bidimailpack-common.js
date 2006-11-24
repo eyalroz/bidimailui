@@ -130,7 +130,7 @@ function misdetectedUTF8(element)
   // maybe check for some english text? spacing? something else?
   // Also, it seems UTF-8 messages which mozilla displays using
   // ISO-8859-8-I have FFFD's for some reason
-  var misdetectedUTF8Sequence = "(\\u00D7(\\u201D|\\u2022|\\u2220|\\u2122|[\\u0090-\\u00AA])){3,}|\\uFFFD{3,}";
+  var misdetectedUTF8Sequence = "(\\u00D7(\\u201D|\\u2022|\\u2220|\\u2122|[\\u0090-\\u00AA])){3}|\\uFFFD{3,}|(\\u05F3(\\u2022|\\u2018)){2}";
   var re = new RegExp (misdetectedUTF8Sequence);
   return matchInText(element, re, re);
 }
@@ -149,7 +149,7 @@ function canBeAssumedRTL(element,rtlSequence)
     "(" + "^" + normalIgnore + rtlSequence + normalIgnore + "$" + ")" +
     "|" +
     // or it has a line which begins with two RTL words
-    "(" + "(^|\\n)" + normalIgnore + rtlSequence + nonEmptyNormalIgnore + "(" + nonEmptyNormalIgnore + "|$|\\n)" + ")" +
+    "(" + "(^|\\n)" + normalIgnore + rtlSequence + nonEmptyNormalIgnore + rtlSequence + "(" + nonEmptyNormalIgnore + "|$|\\n)" + ")" +
     "|" +
     // or it has a line which ends with two RTL words
     "(" + rtlSequence + nonEmptyNormalIgnore + rtlSequence + normalIgnore + "($|\\n)" + ")" );
@@ -158,7 +158,7 @@ function canBeAssumedRTL(element,rtlSequence)
   var nonEmptyHtmlizedIgnore = "(\\s|[\\.;,:0-9']|&lt;|&gt;|&amp;|&quot;)+";
   var htmlizedExpression = new RegExp (
     // either message has a sequence between HTML >'s and <'s which begins with two RTL words
-    "(" + "(^|>|\\n)" + htmlizedIgnore + rtlSequence + nonEmptyHtmlizedIgnore + "(" + nonEmptyHtmlizedIgnore + "|$|\\n|<)" + ")" +
+    "(" + "(^|>|\\n)" + htmlizedIgnore + rtlSequence + nonEmptyHtmlizedIgnore + rtlSequence + "(" + nonEmptyHtmlizedIgnore + "|$|\\n|<)" + ")" +
     "|" +
     // or it has such a sequence which ends with two RTL words
     "(" + rtlSequence + nonEmptyHtmlizedIgnore + rtlSequence + htmlizedIgnore + "($|\\n|<)" + ")" );
