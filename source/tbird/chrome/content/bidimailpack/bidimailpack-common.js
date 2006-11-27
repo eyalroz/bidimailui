@@ -195,9 +195,14 @@ function matchInText(element, normalExpression, htmlizedExpression)
     // the regexp must change accordingly
 
 #ifdef DEBUG_matchInText
-    jsConsoleService.logStringMessage(theHTML + "\n" + str);
+    var str = "";
+    for(i = 0; i < element.innerHTML.length; i++) {
+      str += d2h(element.innerHTML.charCodeAt(i)) + " ";  
+    }
+
+    jsConsoleService.logStringMessage("can't use XPath; matching expression:\n\n" + htmlizedExpression + "\n\nagainst HTML:\n" + element.innerHTML + "\n\n" + str);
 #endif
-    
+
     if (htmlizedExpression.test(element.innerHTML)) {
 #ifdef DEBUG_matchInText
       jsConsoleService.logStringMessage("matches.\n---------------------------------------------");
