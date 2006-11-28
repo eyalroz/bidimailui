@@ -158,8 +158,9 @@ function browserOnLoadHandler()
 
   var charsetPref = null;
   try {
-    charsetPref =
-      gBDMPrefs.prefService.getCharPref("mailnews.view_default_charset");
+    charsetPref = gBDMPrefs.prefService.getComplexValue(
+      "mailnews.view_default_charset",
+      Components.interfaces.nsIPrefLocalizedString).data;
   }
   catch (ex) { }
   var directionPref = gBDMPrefs.getBoolPref("display.autodetect_direction", true);
@@ -178,11 +179,12 @@ function browserOnLoadHandler()
 #endif
   }
 
-  var rtlSequence;
+  var directionDetectionRTLSequence = "([\\u0590-\\u05FF]|[\\uFB1D-\\uFB4F]|[\\u0600-\\u06FF]|[\\uFB50-\\uFDFF]|[\\uFE70-\\uFEFC]){3,}"
+  var charsetDetectionRTLSequence;
   if (charsetPref == "windows-1255") // Hebrew, windows-1255
-    rtlSequence = "([\\u0590-\\u05FF]|[\\uFB1D-\\uFB4F]){3,}";
+    charsetDetectionRTLSequence = "([\\u0590-\\u05FF]|[\\uFB1D-\\uFB4F]){3,}";
   else  // Arabic, windows-1256
-    rtlSequence = "([\\u0600-\\u06FF]|[\\uFB50-\\uFDFF]|[\\uFE70-\\uFEFC]){3,}";
+    charsetDetectionRTLSequence = "([\\u0600-\\u06FF]|[\\uFB50-\\uFDFF]|[\\uFE70-\\uFEFC]){3,}";
 
   // Auto-detect some mis-decoded messages
   //
@@ -221,7 +223,7 @@ function browserOnLoadHandler()
 #ifdef DEBUG_browserOnLoadHandler
         jsConsoleService.logStringMessage("checking misdetected codepage");
 #endif
-        if (misdetectedRTLCodePage(body,rtlSequence)) {
+        if (misdetectedRTLCodePage(body,charsetDetectionRTLSequence)) {
 #ifdef DEBUG_browserOnLoadHandler
           jsConsoleService.logStringMessage("confirm misdetected codepage; setting charset to charsetPref " + charsetPref);
 #endif
@@ -307,7 +309,7 @@ function browserOnLoadHandler()
 #ifdef DEBUG_browserOnLoadHandler
       jsConsoleService.logStringMessage("considering direction change?");
 #endif
-      var res = canBeAssumedRTL(node,rtlSequence);
+      var res = canBeAssumedRTL(node,directionDetectionRTLSequence);
 #ifdef DEBUG_browserOnLoadHandler
       jsConsoleService.logStringMessage("canBeAssumedRTL(elementsRequiringExplicitDirection[i],rtlSequence) = " + res + "\nset node.dir to " + (res ? "rtl" : "ltr") );
 #endif
