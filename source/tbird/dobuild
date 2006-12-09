@@ -26,7 +26,7 @@ if [ -n "$1" ]; then
 	done
 fi
 
-VERSION="0.7.4"
+VERSION="0.8"
 DEFS="$DEFS -DVERSION=$VERSION"
 echo -e "Building the XPI with the following definitions:\n\n$DEFS\n"
 BUILDDIR="build-$TARGET"
