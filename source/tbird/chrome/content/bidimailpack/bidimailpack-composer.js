@@ -1070,8 +1070,11 @@ var directionSwitchController = {
   },
 
   isCommandEnabled: function(command) {
-    // we're enabled if the editor is focused
-    var rv = (content == top.document.commandDispatcher.focusedWindow);
+    var inMessage = (content == top.document.commandDispatcher.focusedWindow);
+    var inSubjectBox = 
+      (document.commandDispatcher.focusedElement ==
+       document.getElementById("msgSubject").inputField);
+    var retVal = false;
     
     // and now for what this function is actually supposed to do...
 
@@ -1083,12 +1086,16 @@ var directionSwitchController = {
     switch (command) {
       case "cmd_switch_paragraph":
       case "cmd_clear_paragraph_dir":
+        retVal = inMessage;
+        break;
       case "cmd_switch_document":
+        retVal = inMessage || inSubjectBox;
         break;
 
       case "cmd_ltr_document":
         this.setCasterGroup("document");
       case "cmd_rtl_document":
+        retVal = inMessage || inSubjectBox;
         // necessary side-effects performed when
         // isCommandEnabled is called for cmd_ltr_document
         break;
@@ -1097,19 +1104,18 @@ var directionSwitchController = {
         if (IsHTMLEditor())
           this.setCasterGroup("paragraph");
       case "cmd_rtl_paragraph":
+        retVal = inMessage;
         // necessary side-effects performed when
         // isCommandEnabled is called for cmd_ltr_paragraph
         break;
-      default:
-        rv = false;
     }
 
-    return rv;
+    return retVal;
   },
 
   setCasterGroup: function(casterPair) {
-    var casterID, oppositeCasterID, command, direction;
-    var enabled = (content == top.document.commandDispatcher.focusedWindow);
+    var casterID, oppositeCasterID, command, direction, commandsAreEnabled;
+    var inMessage = (content == top.document.commandDispatcher.focusedWindow);
 
     // window is not ready to run getComputedStyle before some point,
     // and it would cause a crash if we were to continue (see bug 11712)
@@ -1126,6 +1132,10 @@ var directionSwitchController = {
           document.defaultView
                   .getComputedStyle(document.getElementById("content-frame")
                   .contentDocument.body, "").getPropertyValue("direction");
+        var inSubjectBox =
+          (document.commandDispatcher.focusedElement ==
+           document.getElementById("msgSubject").inputField);
+        commandsAreEnabled = inMessage || inSubjectBox;
         break;
       case "paragraph":
         command = "cmd_ltr_paragraph";
@@ -1139,7 +1149,7 @@ var directionSwitchController = {
         document.getElementById("olButton").setAttribute("rtlmode", isRTL);
         document.getElementById("outdentButton").setAttribute("rtlmode", isRTL);
         document.getElementById("indentButton").setAttribute("rtlmode", isRTL);
-
+        commandsAreEnabled = inMessage;
         break;
       default:
         var isRTL = document.getElementById("rtl-paragraph-direction-broadcaster").getAttribute("checked");
@@ -1154,9 +1164,9 @@ var directionSwitchController = {
     var oppositeCaster = document.getElementById(oppositeCasterID);
 
     caster.setAttribute("checked", direction == "ltr");
-    caster.setAttribute("disabled", !enabled);
+    caster.setAttribute("disabled", !commandsAreEnabled);
     oppositeCaster.setAttribute("checked", direction == "rtl");
-    oppositeCaster.setAttribute("disabled", !enabled);
+    oppositeCaster.setAttribute("disabled", !commandsAreEnabled);
   },
 
   setAllCasters: function() {
