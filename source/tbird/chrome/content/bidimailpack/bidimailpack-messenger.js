@@ -48,31 +48,6 @@ jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 // workaround for bug 12469
 var gMessageURI = null;
 
-function GetMessageContentElement(domDoc) {
-  if (!domDoc)
-    throw("Called GetMessageContentElement with no document");
-
-  var bodyElement = domDoc.body;
-  if (!bodyElement)
-    throw("Cannot get the message content element without a body element");
-
-  // Try to find the DIV element which contains the message content
-  var firstSubBody = null;
-  var elementsRequiringExplicitDirection = bodyElement.getElementsByTagName("div");
-  for (var i = 0; i < elementsRequiringExplicitDirection.length && !firstSubBody; i++) {
-    if (/^moz-text/.test(elementsRequiringExplicitDirection[i].className))
-      firstSubBody = elementsRequiringExplicitDirection[i];
-  }
-
-  // If there's no such element or if the element has no text under it (happens
-  // when "Simple HTML" mode is used see Mozilla bug 282476), the meesage 
-  // content element is inside the body element itself
-  if (!firstSubBody || gatherTextUnder(firstSubBody) == "")
-    return bodyElement;
-
-  return firstSubBody;
-}
-
 function SetMessageDirection(dir)
 {
   var messageContentElement;
@@ -330,3 +305,4 @@ function InstallBrowserHandler()
   if (browser)
     browser.addEventListener("load", browserOnLoadHandler, true);
 }
+

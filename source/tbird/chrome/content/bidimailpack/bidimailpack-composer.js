@@ -49,8 +49,6 @@ jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 const nsISelectionController = Components.interfaces.nsISelectionController;
 
 // Globals
-var gLoadEventOccured = false;
-                            // see setCasterGroup() in the direction controller
 var gLastWindowToHaveFocus; // used to prevent doing unncessary work when a focus
                             // 'changes' to the same window which is already in focus
 var gAlternativeEnterBehavior;
@@ -318,14 +316,17 @@ function GetCurrentSelectionDirection()
   return null;
 }
 
-function SetDocumentDirection(dir)
+function SetDocumentDirection(direction)
 {
-  var body = document.getElementById("content-frame").contentDocument.body;
-  body.setAttribute("dir", dir);
+#ifdef DEBUG_SetDocumentDirection
+  jsConsoleService.logStringMessage('--- SetDocumentDirection( \'' + direction + '\' ) ---');
+#endif
+
+  document.getElementById("content-frame").contentDocument.body.style.direction = direction;
   // We can't use the dir attribute of the subject textbox, like we do for the
   // message body, since XUL elements' dir attribute means something else than
   // this attribute for HTML elements. But we can set it for its input field...
-  document.getElementById("msgSubject").inputField.setAttribute("dir", dir);
+  document.getElementById("msgSubject").inputField.style.direction = direction;
 }
 
 function InsertControlCharacter(controlCharacter)
@@ -345,15 +346,6 @@ function SwitchDocumentDirection()
     directionSwitchController.doCommand("cmd_ltr_document");
   else
     directionSwitchController.doCommand("cmd_rtl_document");
-}
-
-function ComposeWindowOnLoad()
-{
-  gLastWindowToHaveFocus = null;
-  gLoadEventOccured = true;
-
-  document.removeEventListener("load", ComposeWindowOnLoad, true);
-  document.addEventListener("load", ComposeWindowOnActualLoad, true);
 }
 
 function HandleComposeReplyCSS()
@@ -432,8 +424,7 @@ function GetMessageDisplayDirection(messageURI)
   // in a messenger window with a direction set in a
   // single message window
 
-  var win, loadedMessageURI, brwsr, winBody, retVal;
-
+  var win, loadedMessageURI, browser;
   var windowManager = Components.classes["@mozilla.org/appshell/window-mediator;1"]
                                 .getService(nsIWindowMediator);
   var messengerWindowList = windowManager.getEnumerator("mail:3pane");
@@ -451,15 +442,15 @@ function GetMessageDisplayDirection(messageURI)
     if (loadedMessageURI != messageURI)
       continue;
 
-    brwsr = win.getMessageBrowser();
-    if (!brwsr)
+    browser = win.getMessageBrowser();
+    if (!browser)
       continue;
 
-    winBody = brwsr.docShell.contentViewer.DOMDocument.body;
-    retVal = win.getComputedStyle(winBody, null).direction; 
+    messageContentElement =
+      GetMessageContentElement(browser.docShell.contentViewer.DOMDocument);
+    return messageContentElement.style.direction;
   }
-
-  return retVal;
+  return null;
 }
 
 function DetermineNewMessageParams(messageParams)
@@ -518,10 +509,14 @@ function SetInitialDocumentDirection(messageParams)
     SetDocumentDirection(defaultDirection == "rtl" ? "rtl" : "ltr");
     return;
   }
-
-  if (messageParams.originalDisplayDirection)
+  else if (messageParams.isReply && messageParams.originalDisplayDirection)
+  {
     SetDocumentDirection(messageParams.originalDisplayDirection);
+  }
   else {
+#ifdef DEBUG_SetInitialDocumentDirection
+    jsConsoleService.logStringMessage('shouldn\'t get here... probably no URI for this reply');
+#endif
     // we shouldn't be able to get here - when replying, the original
     // window should be in existence
     // XXX TODO: but we do get here for drafts
@@ -535,14 +530,9 @@ function SetInitialDocumentDirection(messageParams)
 
 function ComposeWindowOnActualLoad()
 {
-  // this function should only be run once, when the new message window is
-  // loaded, open, ready, out there, doin' it's thing, etc. etc. ;
-  // it may be triggered by a load or a reopen event
-  
-  document.removeEventListener("load", ComposeWindowOnActualLoad, true);
-  document.removeEventListener("compose-window-reopen",
-                            ComposeWindowOnActualLoad, true);
-  
+#ifdef DEBUG_ComposeWindowOnActualLoad
+  jsConsoleService.logStringMessage('--- ComposeWindowOnActualLoad() --- ');
+#endif
   HandleDirectionButtons();
   // Track "Show Direction Buttons" pref.
   try {
@@ -571,7 +561,9 @@ function ComposeWindowOnActualLoad()
   };
     
   DetermineNewMessageParams(messageParams);
-  SetInitialDocumentDirection(messageParams);
+#ifdef DEBUG_ComposeWindowOnActualLoad
+  jsConsoleService.logStringMessage('isReply = ' + messageParams.isReply + ' ;  isEmpty = ' + messageParams.isEmpty + ' ; gMsgCompose.originalMsgURI = ' + (gMsgCompose? gMsgCompose.originalMsgURI : 'no gMsgCompose') + ' ; originalDisplayDirection = ' + messageParams.originalDisplayDirection);
+#endif
 
   var isHTMLEditor = IsHTMLEditor();
 
@@ -590,6 +582,7 @@ function ComposeWindowOnActualLoad()
       LoadParagraphMode();
   }
 
+  SetInitialDocumentDirection(messageParams);
   directionSwitchController.setAllCasters();
 }
 
@@ -608,23 +601,81 @@ function ComposeWindowOnUnload()
   }
 }
 
+function ComposeWindowOnLoad()
+{
+  gLastWindowToHaveFocus = null;
+  
+  if (gMsgCompose) {
+    ComposeWindowOnActualLoad();
+    document.removeEventListener("load", ComposeWindowOnLoad, true);
+  }
+  else {
+    dump("gMsgCompose not ready for this message in ComposeWindowOnLoad");
+  }
+}
+
+function ComposeWindowOnReopen()
+{
+  gLastWindowToHaveFocus = null;
+  
+  if (gMsgCompose) {
+    // technically this could be a second call to ComposeWindowOnActualLoad(),
+    // which should only be run once, but what's happening is that the message
+    // window created initially and never visible, with ComposeWindowOnActualLoad()
+    // having already run once, is being replicated for use with a (possibly)
+    // different message 
+    ComposeWindowOnActualLoad();
+    document.removeEventListener("compose-window-reopen", ComposeWindowOnLoad, true);
+    document.removeEventListener("load", ComposeWindowOnReopen, true);
+  }
+  else {
+    dump("gMsgCompose not ready for this message in ComposeWindowOnReopen()");
+  }
+}
+
+#ifdef DEBUG_ComposeEvents
+var gLoadCount = 0;
+var gReopenCount = 0;
+
+function DebugLoadHandler(ev)
+{
+  gLoadCount++;
+  jsConsoleService.logStringMessage('load event #' + gLoadCount + ' :\ncurrentTarget = ' + ev.currentTarget + ' ; originalTarget = ' + ev.originalTarget + ' ; explicitOriginalTarget = ' + ev.explicitOriginalTarget);
+}
+
+function DebugLoadHandlerNonCapturing()
+{
+  jsConsoleService.logStringMessage('this is a non-capturing load event');
+}
+
+function DebugReopenHandler(ev)
+{
+  gReopenCount++;
+  jsConsoleService.logStringMessage('compose-window-reopen event #' + gReopenCount + ' :\ncurrentTarget = ' + ev.currentTarget + ' ; originalTarget = ' + ev.originalTarget + ' ; explicitOriginalTarget = ' + ev.explicitOriginalTarget);
+}
+function DebugReopenHandlerNonCapturing()
+{
+  jsConsoleService.logStringMessage('this is a non-capturing compose-window-reopen event');
+}
+
+#endif
+
 function InstallComposeWindowEventHandlers()
 {
-  // Note:
-  // When a 'new message' window is first created, the 'load' handler
-  // is run for it, once, before it is displayed. If it is displayed
-  // immediately upon creation, the 'load' handler is run again; but
-  // a copy is also made of it, so that if a 'new message' window is closed
-  // then the user wants a new one, a copy of one of the closed windows
-  // is reopened. In this case, the 'compose-window-reopen' event occurs
-  // instead of a load event
-
   top.controllers.appendController(directionSwitchController);
-  document.addEventListener("load", ComposeWindowOnLoad, true);
-  document.addEventListener("compose-window-reopen",
-                            ComposeWindowOnActualLoad, true);
-  document.addEventListener("unload", ComposeWindowOnUnload, true);
-  document.addEventListener("keypress", onKeyPress, true);
+#ifdef DEBUG_ComposeEvents
+  window.addEventListener("load", DebugLoadHandler, true);
+  window.addEventListener("compose-window-reopen",
+                            DebugReopenHandler, true);
+  window.addEventListener("load", DebugLoadHandlerNonCapturing, false);
+  window.addEventListener("compose-window-reopen",
+                            DebugReopenHandlerNonCapturing, false);
+#endif
+  window.addEventListener("load", ComposeWindowOnLoad, false);
+  window.addEventListener("compose-window-reopen",
+                            ComposeWindowOnReopen, true);
+  window.addEventListener("unload", ComposeWindowOnUnload, true);
+  window.addEventListener("keypress", onKeyPress, true);
 }
 
 function FindClosestBlockElement(node)
@@ -1122,7 +1173,7 @@ var directionSwitchController = {
 
     // window is not ready to run getComputedStyle before some point,
     // and it would cause a crash if we were to continue (see bug 11712)
-    if (!gLoadEventOccured)
+    if (!gMsgCompose)
       return;
 
     switch (casterPair) {
