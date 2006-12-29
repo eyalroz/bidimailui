@@ -49,8 +49,8 @@ jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 const nsISelectionController = Components.interfaces.nsISelectionController;
 
 // Globals
-var gLoadEventCount = 0;    // see comment in InstallComposeWindowEventHandlers()
-                            // and the use of this variable in ComposeWindowOnLoad()
+var gLoadEventOccured = false;
+                            // see setCasterGroup() in the direction controller
 var gLastWindowToHaveFocus; // used to prevent doing unncessary work when a focus
                             // 'changes' to the same window which is already in focus
 var gAlternativeEnterBehavior;
@@ -349,14 +349,11 @@ function SwitchDocumentDirection()
 
 function ComposeWindowOnLoad()
 {
-  // Initialize (or update) globals
-  gLoadEventCount += 1;
-  if (gLoadEventCount == 1) {
-    gLastWindowToHaveFocus = null;
-  }
-  else {
-    ComposeWindowOnActualLoad();
-  }
+  gLastWindowToHaveFocus = null;
+  gLoadEventOccured = true;
+
+  document.removeEventListener("load", ComposeWindowOnLoad, true);
+  document.addEventListener("load", ComposeWindowOnActualLoad, true);
 }
 
 function HandleComposeReplyCSS()
@@ -390,12 +387,10 @@ function HandleDirectionButtons()
            .hidden = hideMainToolbarButtons;
 #endif
 
-  var hideFormattingToolbarButtons = hiddenButtonsPref || !isHTMLEditor;
- 
   document.getElementById("directionality-formatting-toolbar-section")
-          .setAttribute("hidden", hideFormattingToolbarButtons);
+          .setAttribute("hidden", hiddenButtonsPref);
   document.getElementById("directionality-separator-formatting-bar")
-          .hidden = hideFormattingToolbarButtons;
+          .hidden = hiddenButtonsPref;
 }
 
 function LoadParagraphMode()
@@ -540,6 +535,14 @@ function SetInitialDocumentDirection(messageParams)
 
 function ComposeWindowOnActualLoad()
 {
+  // this function should only be run once, when the new message window is
+  // loaded, open, ready, out there, doin' it's thing, etc. etc. ;
+  // it may be triggered by a load or a reopen event
+  
+  document.removeEventListener("load", ComposeWindowOnActualLoad, true);
+  document.removeEventListener("compose-window-reopen",
+                            ComposeWindowOnActualLoad, true);
+  
   HandleDirectionButtons();
   // Track "Show Direction Buttons" pref.
   try {
@@ -1119,7 +1122,7 @@ var directionSwitchController = {
 
     // window is not ready to run getComputedStyle before some point,
     // and it would cause a crash if we were to continue (see bug 11712)
-    if (gLoadEventCount == 1)
+    if (!gLoadEventOccured)
       return;
 
     switch (casterPair) {
