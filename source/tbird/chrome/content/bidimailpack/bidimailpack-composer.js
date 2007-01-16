@@ -322,6 +322,7 @@ function SetDocumentDirection(direction)
   jsConsoleService.logStringMessage('--- SetDocumentDirection( \'' + direction + '\' ) ---');
 #endif
 
+  document.getElementById("content-frame").contentDocument.documentElement.style.direction = direction;
   document.getElementById("content-frame").contentDocument.body.style.direction = direction;
   // We can't use the dir attribute of the subject textbox, like we do for the
   // message body, since XUL elements' dir attribute means something else than
