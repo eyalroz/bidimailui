@@ -36,6 +36,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+const MSFDirectionProperty = "bidiui.direction";
+
 #ifdef DEBUG
 // The following 2 lines enable logging messages to the javascript console:
 var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
@@ -48,8 +50,11 @@ jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 // workaround for bug 12469
 var gMessageURI = null;
 
-function SetMessageDirection(dir)
+function SetMessageDirection(direction,setProperty)
 {
+#ifdef DEBUG_SetMessageDirection
+  jsConsoleService.logStringMessage("direction = " + direction + " setProperty = " + setProperty );
+#endif
   var messageContentElement;
   try {
     messageContentElement =
@@ -61,11 +66,30 @@ function SetMessageDirection(dir)
     return;
   }
 
-  messageContentElement.style.direction = dir;
+  messageContentElement.style.direction = direction;
 
 #ifdef MOZ_THUNDERBIRD
-  UpdateDirectionButtons(dir);
+  UpdateDirectionButtons(direction);
 #endif
+
+  if (setProperty) 
+    SetMessageMSFDirectionProperty(direction);
+}
+
+function SetMessageMSFDirectionProperty(direction)
+{
+  // set the MSF direction property for the current message
+
+  var messageURI = GetLoadedMessage();
+  if (messageURI) {
+    var messageHeader = messenger.msgHdrFromURI(messageURI);
+    if(messageURI)  {
+      messageHeader.setStringProperty(MSFDirectionProperty, direction);
+    }
+    else if (!messageHeader)
+      dump("no message header for message URI\n" + messageURI);
+  }
+  dump("can't get the current message URI, so not setting direction property");
 }
 
 function SwitchMessageDirection()
@@ -81,21 +105,19 @@ function SwitchMessageDirection()
     return;
   }
 
-  var currentDirection =
-    window.getComputedStyle(messageContentElement, null).direction;
-  var oppositeDirection = currentDirection == "ltr" ? "rtl" : "ltr";
-  messageContentElement.style.direction = oppositeDirection;
-#ifdef MOZ_THUNDERBIRD
-  UpdateDirectionButtons(oppositeDirection);
-#endif
+  var newDirection =
+    (window.getComputedStyle(
+     messageContentElement, null).direction == "rtl" ?
+     "rtl" : "ltr");
+  SetMessageDirection(newDirection,true);
 }
 
-function UpdateDirectionButtons(direction) 	 
+function UpdateDirectionButtons(direction)  
 {
 #ifdef MOZ_THUNDERBIRD
-  var caster = document.getElementById("ltr-document-direction-broadcaster"); 	 
-  caster.setAttribute("checked", direction == "ltr"); 	 
-  caster = document.getElementById("rtl-document-direction-broadcaster"); 	 
+  var caster = document.getElementById("ltr-document-direction-broadcaster");  
+  caster.setAttribute("checked", direction == "ltr");  
+  caster = document.getElementById("rtl-document-direction-broadcaster");  
   caster.setAttribute("checked", direction == "rtl");
 #endif
 }
@@ -103,7 +125,7 @@ function UpdateDirectionButtons(direction)
 function browserOnLoadHandler()
 {
 #ifdef DEBUG_browserOnLoadHandler
-  jsConsoleService.logStringMessage("------------------------------\nbrowserOnLoadHandler()");
+  jsConsoleService.logStringMessage("--- browserOnLoadHandler() ---");
 #endif
 
   var domDocument;
@@ -255,7 +277,6 @@ function browserOnLoadHandler()
     head.appendChild(newSS);
   }
 
-
 #ifdef DEBUG
   // be careful: we may be matching some elements twice in the following code! Check this!
 #endif
@@ -278,17 +299,57 @@ function browserOnLoadHandler()
         // Auto detect the subbody direction
       if (!node)
         continue;
-      if ( !( (node==body) || (/^moz-text/.test(node.className))) )
+      if ( (node!=body) && !(/^moz-text/.test(node.className))) 
         continue;
-   
+        
+      if (node == body) {
+#ifdef DEBUG_browserOnLoadHandler
+        jsConsoleService.logStringMessage("loadedMessageURI = " + loadedMessageURI);
+#endif
+        var messageHeader;
+        try {
+          messageHeader = messenger.msgHdrFromURI(loadedMessageURI);
+        }
+        catch(ex) {
+#ifdef DEBUG_browserOnLoadHandler
+          jsConsoleService.logStringMessage("couldn't get header:" + ex);
+#endif
+        }
+#ifdef DEBUG_browserOnLoadHandler
+        jsConsoleService.logStringMessage("messageHeader =" + messageHeader);
+#endif
+        try {
+          var directionProperty = messageHeader.getStringProperty(MSFDirectionProperty);
+
+          if (directionProperty == "rtl" || directionProperty == "ltr") {
+#ifdef DEBUG_SetMessageDirection
+            jsConsoleService.logStringMessage("setting direction by property to " + directionProperty);
+#endif
+            SetMessageDirection(directionProperty,false);
+            continue;
+          }
+#ifdef DEBUG_SetMessageDirection
+          else 
+            jsConsoleService.logStringMessage("NOT setting direction by property: " + directionProperty);
+#endif
+        }
+        catch(ex) {
+#ifdef DEBUG_browserOnLoadHandler
+          jsConsoleService.logStringMessage("couldn't get direction property:" + ex);
+#endif
+        }
+  
 #ifdef DEBUG_browserOnLoadHandler
       jsConsoleService.logStringMessage("considering direction change?");
 #endif
-      var res = canBeAssumedRTL(node,directionDetectionRTLSequence);
+      var detectedDirection = (canBeAssumedRTL(node,directionDetectionRTLSequence) ? "rtl" : "ltr");
 #ifdef DEBUG_browserOnLoadHandler
-      jsConsoleService.logStringMessage("canBeAssumedRTL(elementsRequiringExplicitDirection[i],rtlSequence) = " + res + "\nset node.dir to " + (res ? "rtl" : "ltr") );
+      jsConsoleService.logStringMessage("canBeAssumedRTL(elementsRequiringExplicitDirection[i],rtlSequence) -> " + (detectedDirection == "rtl") );
 #endif
-      node.setAttribute("dir", (res ? "rtl" : "ltr") );
+      if (node == body)
+        SetMessageDirection(detectedDirection, true)
+      else
+        node.style.direction = detectedDirection;
     }
   }
 
