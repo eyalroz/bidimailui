@@ -108,7 +108,7 @@ function SwitchMessageDirection()
   var newDirection =
     (window.getComputedStyle(
      messageContentElement, null).direction == "rtl" ?
-     "rtl" : "ltr");
+     "ltr" : "rtl");
   SetMessageDirection(newDirection,true);
 }
 
@@ -338,7 +338,8 @@ function browserOnLoadHandler()
           jsConsoleService.logStringMessage("couldn't get direction property:" + ex);
 #endif
         }
-  
+      }
+      
 #ifdef DEBUG_browserOnLoadHandler
       jsConsoleService.logStringMessage("considering direction change?");
 #endif
