@@ -57,7 +57,7 @@ case "$TARGET" in
         mkdir $BUILDDIR/platform/Darwin
         mkdir $BUILDDIR/platform/Darwin/chrome
         mv bidimailpack-mac-skin.jar $BUILDDIR/platform/Darwin/chrome
-        cp chrome.manifest $BUILDDIR/
+        $BUILDTOOLSDIR/preprocessor.pl $DEFS chrome.manifest > $BUILDDIR/chrome.manifest
         cp platform/Darwin/chrome.manifest $BUILDDIR/platform/Darwin/chrome.manifest
         cd $BUILDDIR
 	zip -r $XPINAME  \
@@ -69,12 +69,14 @@ case "$TARGET" in
 	  chrome.manifest || exit
         ;;
     suite)
+        $BUILDTOOLSDIR/preprocessor.pl $DEFS chrome.manifest > $BUILDDIR/chrome.manifest
         $BUILDTOOLSDIR/preprocessor.pl $DEFS install.js > $BUILDDIR/install.js
         cd $BUILDDIR
 	zip -r $XPINAME  \
 	  chrome/bidimailpack.jar \
 	  defaults/ \
 	  install.rdf \
+	  chrome.manifest \
 	  install.js || exit
         ;;
 esac
