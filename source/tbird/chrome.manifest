@@ -50,3 +50,7 @@ style chrome://messenger/content/messengercompose/messengercompose.xul chrome://
 style chrome://global/content/customizeToolbar.xul chrome://bidimailpack/skin/bidimailpack.css
 style chrome://messenger/content/messageWindow.xul chrome://bidimailpack/skin/bidimailpack.css
 style chrome://messenger/content/messenger.xul chrome://bidimailpack/skin/bidimailpack.css
+#ifdef MOZ_SEAMONKEY
+overlay chrome://communicator/content/pref/preftree.xul chrome://bidimailpack/content/bidimailpack-preftree.xul
+skin bidimailpack modern/1.0 jar:chrome/bidimailpack.jar!/skin/modern/bidimailpack/
+#endif
