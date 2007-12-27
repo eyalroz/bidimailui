@@ -1,5 +1,6 @@
 #!/bin/bash
 
+VERSION="0.8.1"
 TARGET="$1"
 case "$TARGET" in
     tbird | tb | thunderbird)
@@ -16,6 +17,21 @@ case "$TARGET" in
 	;;
 esac
 
+# all arguments after the target app are #define 'd in the XUL preprocessor,
+# with a DEBUG_ prefix; so if you want to, say, have debugging code specific
+# to the function myFancyFunc(), write it like so:
+#
+# #ifdef DEBUG_myFancyFunc 
+#   debugging code etc. etc.
+# #endif
+# 
+# then invoke
+#
+# dobuild tbird myFancyFunc
+#
+# to have your debugging code enabled
+
+
 shift 1
 
 if [ -n "$1" ]; then
@@ -26,7 +42,6 @@ if [ -n "$1" ]; then
 	done
 fi
 
-VERSION="0.8"
 DEFS="$DEFS -DVERSION=$VERSION"
 echo -e "Building the XPI with the following definitions:\n\n$DEFS\n"
 BUILDDIR="build-$TARGET"
