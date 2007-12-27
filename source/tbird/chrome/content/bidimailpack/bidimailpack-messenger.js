@@ -281,11 +281,10 @@ function browserOnLoadHandler()
   // be careful: we may be matching some elements twice in the following code! Check this!
 #endif
 
-  // Auto detect the message direction
-  if (!gBDMPrefs.getBoolPref("display.autodetect_direction", true))
-    return;
-
   if (directionPref) {
+
+    // auto-detect the message direction
+
 #ifdef DEBUG_browserOnLoadHandler
     jsConsoleService.logStringMessage("elementsRequiringExplicitDirection.length = " + elementsRequiringExplicitDirection.length);
 #endif
@@ -296,7 +295,7 @@ function browserOnLoadHandler()
 #ifdef DEBUG_browserOnLoadHandler
       jsConsoleService.logStringMessage('elementsRequiringExplicitDirection[ ' + i + ']: ' + node + "\ntype: " + node.nodeType + "\nclassName: " + node.className + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
 #endif
-        // Auto detect the subbody direction
+        // auto-detect the subbody direction
       if (!node)
         continue;
       if ( (node!=body) && !(/^moz-text/.test(node.className))) 
