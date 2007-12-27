@@ -103,6 +103,8 @@
         <em:locale>locale/en-US/bidimailpack/</em:locale>
         <em:locale>locale/he-IL/bidimailpack/</em:locale>
         <em:locale>locale/ar-SA/bidimailpack/</em:locale>
+        <em:locale>locale/fa-IR/bidimailpack/</em:locale>
+        <em:locale>locale/ur-PK/bidimailpack/</em:locale>
         <em:skin>skin/classic/bidimailpack/</em:skin>
       </Description>
     </em:file>
