@@ -6,5 +6,5 @@ pref("bidiui.mail.compose.space_between_paragraphs.scale", "cm");
 
 // Hidden prefs
 pref("bidiui.mail.display.autodetect_direction", true);
-pref("bidiui.mail.dispaly.autodetect_bidi_misdecoding", true);
+pref("bidiui.mail.display.autodetect_bidi_misdecoding", true);
 pref("bidiui.mail.compose.alternative_enter_behavior", true);
