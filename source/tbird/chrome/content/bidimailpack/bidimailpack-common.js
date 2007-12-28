@@ -61,28 +61,22 @@ function misdetectedRTLCodePage(element,rtlSequence)
 
     var normalIgnore = "(\\s|[<>\\.;,:0-9\"'])*";
     var nonEmptyNormalIgnore = "(\\s|[<>\\.;,:0-9\"'])+";
-    var normalExpression = new RegExp (
+    var codepageMisdetectionExpression = new RegExp (
       "(" + "^" + normalIgnore + misdetectedRTLSequence + normalIgnore + "$" + ")" +
       "|" +
       "(" + "(^|\\n)" + misdetectedRTLSequence + misdetectedRTLSequence + nonEmptyNormalIgnore + "(" + nonEmptyNormalIgnore + "|$|\\n)" + ")" +
       "|" +
       "(" + misdetectedRTLSequence + nonEmptyNormalIgnore + misdetectedRTLSequence + normalIgnore + "($|\\n)" + ")" );
  
-    var htmlizedIgnore = "(\\s|[\\.;,:0-9']|&lt;|&gt;|&amp;|&quot;)*";
-    var nonEmptyHtmlizedIgnore = "(\\s|[\\.;,:0-9']|&lt;|&gt;|&amp;|&quot;)+";
-    var htmlizedExpression = new RegExp (
-      "(" + "(^|>|\\n)" + htmlizedIgnore + misdetectedRTLSequence + nonEmptyHtmlizedIgnore + "(" + nonEmptyHtmlizedIgnore + "|$|\\n|<)" + ")" +
-      "|" +
-      "(" + misdetectedRTLSequence + nonEmptyHtmlizedIgnore + misdetectedRTLSequence + htmlizedIgnore + "($|\\n|<)" + ")" );
-    initialMatch = matchInText(element, normalExpression, htmlizedExpression);
+    initialMatch = matchInText(element, codepageMisdetectionExpression);
     if (initialMatch) {
 #ifdef DEBUG_misdetectedRTLCodePage
-      jsConsoleService.logStringMessage("matched\n" + normalExpression + "\nor\n" + htmlizedExpression + "\nin the text");
+      jsConsoleService.logStringMessage("matched\n" + codepageMisdetectionExpression + "\nin the text");
 #endif
     }
     else {
 #ifdef DEBUG_misdetectedRTLCodePage
-      jsConsoleService.logStringMessage("did NOT match\n" + normalExpression + "\nor\n" + htmlizedExpression + "\nin the text");
+      jsConsoleService.logStringMessage("did NOT match\n" + codepageMisdetectionExpression + "\nin the text");
 #endif
     }
   }
@@ -90,22 +84,21 @@ function misdetectedRTLCodePage(element,rtlSequence)
    // if instead of the actual windows-1255/6 charset, mozilla used
    // UTF-8, it 'gives up' on seeing [\u00BF-\u00FF][\u00BF-\u00FF] byte pairs,
    // so it decodes them as \FFFD 's for some reason
-    var misDetectionExpression = new RegExp("\\uFFFD{3,}");
-    initialMatch = matchInText(element, misDetectionExpression, misDetectionExpression);
+    var utf8MisdetectionExpression = new RegExp("\\uFFFD{3,}");
+    initialMatch = matchInText(element, utf8MisdetectionExpression);
     if (initialMatch) {
 #ifdef DEBUG_misdetectedRTLCodePage
-      jsConsoleService.logStringMessage("matched " + misDetectionExpression + " in the text");
+      jsConsoleService.logStringMessage("matched " + utf8MisdetectionExpression + " in the text");
 #endif
     }
     else {
 #ifdef DEBUG_misdetectedRTLCodePage
-      jsConsoleService.logStringMessage("did NOT match " + misDetectionExpression + " in the text");
+      jsConsoleService.logStringMessage("did NOT match " + utf8MisdetectionExpression + " in the text");
 #endif
     }
   }
 
   if (initialMatch) {
-    var falsePositiveRegExp = new RegExp(rtlSequence);
     if (!canBeAssumedRTL(element,rtlSequence)) {
 #ifdef DEBUG_misdetectedRTLCodePage
       jsConsoleService.logStringMessage("text can NOT be assumed RTL with " + rtlSequence + " , confirming misdetected codepage");
@@ -131,8 +124,8 @@ function misdetectedUTF8(element)
   // Also, it seems UTF-8 messages which mozilla displays using
   // ISO-8859-8-I have FFFD's for some reason
   var misdetectedUTF8Sequence = "(\\u00D7(\\u201D|\\u2022|\\u2220|\\u2122|[\\u0090-\\u00AA])){3}|\\uFFFD{3,}|(\\u05F3(\\u2022|\\u2018)){2}";
-  var re = new RegExp (misdetectedUTF8Sequence);
-  return matchInText(element, re, re);
+  var misdetectionExpression = new RegExp (misdetectedUTF8Sequence);
+  return matchInText(element, misdetectionExpression);
 }
 
 function canBeAssumedRTL(element,rtlSequence)
@@ -144,7 +137,7 @@ function canBeAssumedRTL(element,rtlSequence)
 
   var normalIgnore = "(\\s|[<>\\.;,:0-9\"'])*";
   var nonEmptyNormalIgnore = "(\\s|[<>\\.;,:0-9\"'])+";
-  var normalExpression = new RegExp (
+  var rtlLineExpression = new RegExp (
     // either message has only one line whose single word is RTL
     "(" + "^" + normalIgnore + rtlSequence + normalIgnore + "$" + ")" +
     "|" +
@@ -154,58 +147,31 @@ function canBeAssumedRTL(element,rtlSequence)
     // or it has a line which ends with two RTL words
     "(" + rtlSequence + nonEmptyNormalIgnore + rtlSequence + normalIgnore + "($|\\n)" + ")" );
 
-  var htmlizedIgnore = "(\\s|[\\.;,:0-9']|&lt;|&gt;|&amp;|&quot;)*";
-  var nonEmptyHtmlizedIgnore = "(\\s|[\\.;,:0-9']|&lt;|&gt;|&amp;|&quot;)+";
-  var htmlizedExpression = new RegExp (
-    // either message has a sequence between HTML >'s and <'s which begins with two RTL words
-    "(" + "(^|>|\\n)" + htmlizedIgnore + rtlSequence + nonEmptyHtmlizedIgnore + rtlSequence + "(" + nonEmptyHtmlizedIgnore + "|$|\\n|<)" + ")" +
-    "|" +
-    // or it has such a sequence which ends with two RTL words
-    "(" + rtlSequence + nonEmptyHtmlizedIgnore + rtlSequence + htmlizedIgnore + "($|\\n|<)" + ")" );
-  return matchInText(element, normalExpression, htmlizedExpression);
+  return matchInText(element, rtlLineExpression);
 }
 
-function matchInText(element, normalExpression, htmlizedExpression)
+function matchInText(element, expression)
 {
 #ifdef DEBUG_matchInText
   jsConsoleService.logStringMessage("---------------------------------------------\n" + "matching " + normalExpression);
 #endif
-  try {
-    var iterator = new XPathEvaluator();
-    var path = iterator.evaluate("descendant-or-self::text()", element, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
-    for (var node = path.iterateNext(); node; node = path.iterateNext())
-    {
-#ifdef DEBUG_matchInText
-      var str = "";
-      for(i = 0; i < node.data.length; i++) {
-        str += d2h(node.data.charCodeAt(i)) + " ";  
-      }
-      jsConsoleService.logStringMessage(node.data + "\n" + str);
-#endif
-      if (normalExpression.test(node.data)) {
-#ifdef DEBUG_matchInText
-        jsConsoleService.logStringMessage("found match.\n---------------------------------------------");
-#endif
-        return true;
-      }
-    }
-  } catch(ex) {
-    // 'new XPathEvaluator()' doesn't work for some reason, so we have
-    // to test the HTMLized message rather than the bare text lines;
-    // the regexp must change accordingly
-
+  var treeWalker = document.createTreeWalker(
+    element,
+    NodeFilter.SHOW_TEXT,
+    null, // additional filter function
+    false
+  );
+  while(node = treeWalker.nextNode()) {
 #ifdef DEBUG_matchInText
     var str = "";
-    for(i = 0; i < element.innerHTML.length; i++) {
-      str += d2h(element.innerHTML.charCodeAt(i)) + " ";  
+    for(i = 0; i < node.data.length; i++) {
+      str += d2h(node.data.charCodeAt(i)) + " ";  
     }
-
-    jsConsoleService.logStringMessage("can't use XPath; matching expression:\n\n" + htmlizedExpression + "\n\nagainst HTML:\n" + element.innerHTML + "\n\n" + str);
+    jsConsoleService.logStringMessage(node.data + "\n" + str);
 #endif
-
-    if (htmlizedExpression.test(element.innerHTML)) {
+    if (expression.test(node.data)) {
 #ifdef DEBUG_matchInText
-      jsConsoleService.logStringMessage("matches.\n---------------------------------------------");
+      jsConsoleService.logStringMessage("found match.\n---------------------------------------------");
 #endif
       return true;
     }
