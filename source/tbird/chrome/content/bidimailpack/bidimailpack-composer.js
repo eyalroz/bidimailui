@@ -43,7 +43,7 @@ var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getSe
 jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 
 // Here is an example of a console log message describing a DOM node:
-// jsConsoleService.logStringMessage('visiting node: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+// jsConsoleService.logStringMessage('visiting node: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\ninnerHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.outerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
 #endif
 
 const nsISelectionController = Components.interfaces.nsISelectionController;
