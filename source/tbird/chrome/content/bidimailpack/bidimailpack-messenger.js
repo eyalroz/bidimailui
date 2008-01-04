@@ -53,7 +53,7 @@ var gMessageURI = null;
 function SetMessageDirection(direction,setProperty)
 {
 #ifdef DEBUG_SetMessageDirection
-  jsConsoleService.logStringMessage("direction = " + direction + " setProperty = " + setProperty );
+  jsConsoleService.logStringMessage("SetMessageDirection to " + direction + ", setProperty = " + setProperty );
 #endif
   var messageContentElement;
   try {
@@ -63,10 +63,18 @@ function SetMessageDirection(direction,setProperty)
   }
   catch (ex) {
     dump(ex);
+#ifdef DEBUG_SetMessageDirection
+    jsConsoleService.logStringMessage("Failed setting message direction:\n" + ex);
+#endif
     return;
   }
 
   messageContentElement.style.direction = direction;
+
+  // RSS entries might be enclosed in an IFRAME which isolates them from outside changes
+  if (messageContentElement.childNodes.item(1).id == "_mailrssiframe") {
+    messageContentElement.childNodes.item(1).contentDocument.documentElement.style.direction = direction;
+  }
 
 #ifdef MOZ_THUNDERBIRD
   UpdateDirectionButtons(direction);
