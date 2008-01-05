@@ -147,6 +147,9 @@ function browserOnLoadHandler()
     dump(ex);
     return;
   }
+  if (/^http:\/\/.*www\.mozilla.*\/start\/$/.test(domDocument.baseURI)) {
+    return;
+  }
 
   var body = domDocument.body;
   if (!body) {
