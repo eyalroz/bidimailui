@@ -932,3 +932,38 @@ Status: RO
 
 
 
+From - Thu Dec 27 08:54:09 2007
+X-Account-Key: account10
+X-UIDL: 454dc50500000530
+X-Mozilla-Status: 0011
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
+Return-Path: <another@one.com>
+Message-ID: <1198738127.47734acfeac57@mail.one.com>
+Date: Sun, 19 Feb 2006 21:17:44 +0200
+From: some@one.com
+To: some@one.com
+Subject: Message 19
+MIME-Version: 1.0
+Content-Type: text/plain; charset=Windows-1255
+Content-Transfer-Encoding: 8bit
+Status: RO
+
+אמר החכם יו: ההרמוניה במנהגים היא שבחם, וממנה יפיה של-דרך המלכים 
+הקדמונים. קטנות וגדולות – אלו ואלו תלויות בה. אם-ארעה תקלה במהלכם
+של דברים, מי שיודע הרמוניה מהי יכול לחזור ולכוונם. ולפי שאין הרמוניה
+אלא זו הגדורה במנהג, אל ישנה אדם מן המנהג.
+
+
+Quoting Somebody <some@one.com>:
+
+>
+> Inserting the unicode symbol between every character in a string is not 
+> necessarily ideal. Take a perfectly normal string like "How are you today?"
+> This string already has spaces, and so it will naturally wrap where the browser
+> sees those "soft" spaces.
+> 
+
+
+מי שלומד את-הראשונות על-מנת ללמוד על-החדשות, ראוי להיות מורה.
+
