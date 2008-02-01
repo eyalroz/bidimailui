@@ -479,9 +479,9 @@ function GetDisplayedCopyParams(messageURI,messageParams)
         continue;
       messageParams.originalDisplayDirection = subBody.style.direction;
     }
-    messageParams.recodedUTF8 = displayedCopyBody.hasAttribute('bidiui-recoded-utf8');
-    messageParams.recodedCharset = displayedCopyBody.getAttribute('bidiui-recoded-charset');
-    messageParams.mailnewsDecodingType = displayedCopyBody.getAttribute('bidiui-detected-decoding-type');
+    messageParams.recodedUTF8 = displayedCopyBody.hasAttribute('bidimailuiui-recoded-utf8');
+    messageParams.recodedCharset = displayedCopyBody.getAttribute('bidimailuiui-recoded-charset');
+    messageParams.mailnewsDecodingType = displayedCopyBody.getAttribute('bidimailuiui-detected-decoding-type');
   }
 }
 
