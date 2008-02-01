@@ -36,8 +36,6 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-const MSFDirectionProperty = "bidiui.direction";
-
 #ifdef DEBUG
 // The following 2 lines enable logging messages to the javascript console:
 var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
@@ -50,63 +48,44 @@ jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 // workaround for bug 12469
 var gMessageURI = null;
 
-function SetMessageDirection(direction,setProperty)
+var gUnicodeConverter = null;
+
+
+
+function SetMessageDirection(direction)
 {
 #ifdef DEBUG_SetMessageDirection
-  jsConsoleService.logStringMessage("SetMessageDirection to " + direction + ", setProperty = " + setProperty );
+  jsConsoleService.logStringMessage("SetMessageDirection to " + direction);
 #endif
-  var messageContentElement;
+  var body;
   try {
-    messageContentElement =
-    GetMessageContentElement(getMessageBrowser().docShell.contentViewer
-                                                         .DOMDocument);
+    body = getMessageBrowser().contentDocument.body;
   }
   catch (ex) {
     dump(ex);
 #ifdef DEBUG_SetMessageDirection
-    jsConsoleService.logStringMessage("Failed setting message direction:\n" + ex);
+    jsConsoleService.logStringMessage("Failed setting message direction - can't get body:\n" + ex);
 #endif
     return;
   }
 
-  messageContentElement.style.direction = direction;
+  body.style.direction = direction;
 
   // RSS entries might be enclosed in an IFRAME which isolates them from outside changes
-  if (messageContentElement.childNodes.item(1).id == "_mailrssiframe") {
-    messageContentElement.childNodes.item(1).contentDocument.documentElement.style.direction = direction;
+  if (body.childNodes.item(1).childNodes.item(1).id == "_mailrssiframe") {
+    body.childNodes.item(1).childNodes.item(1).contentDocument.documentElement.style.direction = direction;
   }
 
 #ifdef MOZ_THUNDERBIRD
   UpdateDirectionButtons(direction);
 #endif
-
-  if (setProperty) 
-    SetMessageMSFDirectionProperty(direction);
-}
-
-function SetMessageMSFDirectionProperty(direction)
-{
-  // set the MSF direction property for the current message
-
-  var messageURI = GetLoadedMessage();
-  if (messageURI) {
-    var messageHeader = messenger.msgHdrFromURI(messageURI);
-    if(messageURI)  {
-      messageHeader.setStringProperty(MSFDirectionProperty, direction);
-    }
-    else if (!messageHeader)
-      dump("no message header for message URI\n" + messageURI);
-  }
-  dump("can't get the current message URI, so not setting direction property");
 }
 
 function SwitchMessageDirection()
 {
-  var messageContentElement;
+  var body;
   try {
-    messageContentElement =
-    GetMessageContentElement(getMessageBrowser().docShell.contentViewer
-                                                         .DOMDocument);
+    body = getMessageBrowser().contentDocument.body;
   }
   catch (ex) {
     dump(ex);
@@ -114,10 +93,9 @@ function SwitchMessageDirection()
   }
 
   var newDirection =
-    (window.getComputedStyle(
-     messageContentElement, null).direction == "rtl" ?
+    (window.getComputedStyle(body, null).direction == "rtl" ?
      "ltr" : "rtl");
-  SetMessageDirection(newDirection,true);
+  SetMessageDirection(newDirection);
 }
 
 function UpdateDirectionButtons(direction)  
@@ -132,10 +110,31 @@ function UpdateDirectionButtons(direction)
 
 function browserOnLoadHandler()
 {
+  if (!gUnicodeConverter)
+    gUnicodeConverter = Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]
+                                  .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
+
 #ifdef DEBUG_browserOnLoadHandler
   jsConsoleService.logStringMessage("--- browserOnLoadHandler() ---");
 #endif
 
+  // First, let's make sure we can poke the:
+  // - message window
+  // - message body
+  // - URI of the loaded message
+
+  if (!msgWindow) {
+#ifdef DEBUG_browserOnLoadHandler
+    jsConsoleService.logStringMessage("couldn't get msgWindow");
+#endif
+    return;
+  }
+  var loadedMessageURI = GetLoadedMessage();
+  if (loadedMessageURI == gMessageURI) {
+#ifdef DEBUG_browserOnLoadHandler
+    jsConsoleService.logStringMessage("loadedMessageURI == gMessageURI");
+#endif
+  }
   var domDocument;
   try {
     domDocument = this.docShell.contentViewer.DOMDocument;
@@ -150,7 +149,7 @@ function browserOnLoadHandler()
   if (/^http:\/\/.*www\.mozilla.*\/start\/$/.test(domDocument.baseURI)) {
     return;
   }
-
+    
   var body = domDocument.body;
   if (!body) {
 #ifdef DEBUG_browserOnLoadHandler
@@ -159,10 +158,7 @@ function browserOnLoadHandler()
     return;
   }
 
-  // element which may contains message content (we filter them later)
-  var elementsRequiringExplicitDirection = [body];
-  elementsRequiringExplicitDirection.concat(body.getElementsByTagName("div"));
-
+  // charset misdetectioncorrections
 
   var charsetPref = null;
   try {
@@ -171,105 +167,14 @@ function browserOnLoadHandler()
       Components.interfaces.nsIPrefLocalizedString).data;
   }
   catch (ex) { }
-  var directionPref = gBDMPrefs.getBoolPref("display.autodetect_direction", true);
 
-  if (!msgWindow) {
-#ifdef DEBUG_browserOnLoadHandler
-    jsConsoleService.logStringMessage("couldn't get msgWindow");
-#endif
-    return;
-  }
-  
-  var loadedMessageURI = GetLoadedMessage();
-  if (loadedMessageURI == gMessageURI) {
-#ifdef DEBUG_browserOnLoadHandler
-    jsConsoleService.logStringMessage("loadedMessageURI == gMessageURI, so we won't mess with the charset");
-#endif
-  }
-
-  var directionDetectionRTLSequence = "([\\u0590-\\u05FF]|[\\uFB1D-\\uFB4F]|[\\u0600-\\u06FF]|[\\uFB50-\\uFDFF]|[\\uFE70-\\uFEFC]){3,}"
-  var charsetDetectionRTLSequence;
-  if (charsetPref == "windows-1255") // Hebrew, windows-1255
-    charsetDetectionRTLSequence = "([\\u0590-\\u05FF]|[\\uFB1D-\\uFB4F]){3,}";
-  else  // Arabic, windows-1256
-    charsetDetectionRTLSequence = "([\\u0600-\\u06FF]|[\\uFB50-\\uFDFF]|[\\uFE70-\\uFEFC]){3,}";
-
-  // Auto-detect some mis-decoded messages
-  //
-  // When shall we attempt re-detection and overriding of the character set?
-  // not if the encoding has _already_ been overridden (either due to the pref
-  // or not) and not if the default charset is not one of the one-octet codepages
-  // we expect get mangled, and then only when the charset is reported as one of
-  // the defaultish ones (or not reported at all); or, alternatively, when the
-  // charset used is UTF-8 but the text appears to actually be in a one-octect
-  // charsets.
-  // Notes:
-  // - Changing the charset here means that the message is re-loaded, which
-  //   calls this function (the onLoad handler) again
-  // - Since msgWindow.charsetOverride is true after our first change,
-  //   this loop an actually an OR over the need to change the charset for any
-  //   of the subbodies
-  // - Sometimes the charset is not set, or set to ""; in this case we can't
-  //   tell if mozilla is using UTF-8 or something else, so we apply all
-  //   possible auto-detection methods
-
-  if (charsetPref && loadedMessageURI != gMessageURI) {
-    var misdecodeAutodetectPref =
-      gBDMPrefs.getBoolPref("display.autodetect_bidi_misdecoding", true);
-    if ( misdecodeAutodetectPref &&
-         !msgWindow.charsetOverride)  {
-#ifdef DEBUG_browserOnLoadHandler
-        jsConsoleService.logStringMessage('considering charset change');
-#endif
-
-      if ( (charsetPref == "windows-1255" || charsetPref == "windows-1256")&&
-           (msgWindow.mailCharacterSet == "US-ASCII" ||
-            msgWindow.mailCharacterSet == "ISO-8859-1" ||
-            msgWindow.mailCharacterSet == "windows-1252" ||
-            msgWindow.mailCharacterSet == "UTF-8" ||
-            msgWindow.mailCharacterSet == "") ) {
-#ifdef DEBUG_browserOnLoadHandler
-        jsConsoleService.logStringMessage("checking misdetected codepage");
-#endif
-        if (misdetectedRTLCodePage(body,charsetDetectionRTLSequence)) {
-#ifdef DEBUG_browserOnLoadHandler
-          jsConsoleService.logStringMessage("confirm misdetected codepage; setting charset to charsetPref " + charsetPref);
-#endif
-          MessengerSetForcedCharacterSet(charsetPref);
-          return;
-        }
-      } else {
-#ifdef DEBUG_browserOnLoadHandler
-        jsConsoleService.logStringMessage("not checking codepage since our charset pref is " + charsetPref);
-#endif
-      }
-#ifdef DEBUG_browserOnLoadHandler
-      jsConsoleService.logStringMessage("reject misdetected codepage");
-#endif
-        
-      if (msgWindow.mailCharacterSet != "UTF-8") {
-#ifdef DEBUG_browserOnLoadHandler
-        jsConsoleService.logStringMessage("checking misdetected utf-8");
-#endif
-        if (misdetectedUTF8(body)) {
-#ifdef DEBUG_browserOnLoadHandler
-          jsConsoleService.logStringMessage("confirm misdetected utf-8; setting charset to utf-8");
-#endif
-          MessengerSetForcedCharacterSet("utf-8");
-          return;
-        }
-        else {
-#ifdef DEBUG_browserOnLoadHandler
-          jsConsoleService.logStringMessage("reject utf8; not setting charset to utf-8");
-#endif
-        }
-      }
-    }
-  }
-  else {
-#ifdef DEBUG_browserOnLoadHandler
-    jsConsoleService.logStringMessage("not considering charset change");
-#endif
+ 
+  // TODO: perhaps we should pass the message content element instead?
+  if (gBDMPrefs.getBoolPref("display.autodetect_bidi_misdecoding", true)) {
+    if (!fixLoadedMessageCharsetIssues(body,loadedMessageURI,charsetPref))
+      // the message will be reloaded, let's not do anything else with it
+      // until then
+      return;
   }
 
   gMessageURI = loadedMessageURI;
@@ -278,7 +183,8 @@ function browserOnLoadHandler()
   jsConsoleService.logStringMessage("completed charset phase");
 #endif
 
-  // quote bar css
+  // make quote bars behave properly with RTL quoted text
+  
   var head = domDocument.getElementsByTagName("head")[0];
   if (head) {
     var newSS = domDocument.createElement("link");
@@ -288,87 +194,328 @@ function browserOnLoadHandler()
     head.appendChild(newSS);
   }
 
-#ifdef DEBUG
-  // be careful: we may be matching some elements twice in the following code! Check this!
-#endif
-
-  if (directionPref) {
-
-    // auto-detect the message direction
-
-#ifdef DEBUG_browserOnLoadHandler
-    jsConsoleService.logStringMessage("elementsRequiringExplicitDirection.length = " + elementsRequiringExplicitDirection.length);
-#endif
- 
-    for (i=0  ; i < elementsRequiringExplicitDirection.length; i++) {
-      var node = elementsRequiringExplicitDirection[i];
-   
-#ifdef DEBUG_browserOnLoadHandler
-      jsConsoleService.logStringMessage('elementsRequiringExplicitDirection[ ' + i + ']: ' + node + "\ntype: " + node.nodeType + "\nclassName: " + node.className + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
-#endif
-        // auto-detect the subbody direction
-      if (!node)
-        continue;
-      if ( (node!=body) && !(/^moz-text/.test(node.className))) 
-        continue;
-        
-      if (node == body) {
-#ifdef DEBUG_browserOnLoadHandler
-        jsConsoleService.logStringMessage("loadedMessageURI = " + loadedMessageURI);
-#endif
-        var messageHeader;
-        try {
-          messageHeader = messenger.msgHdrFromURI(loadedMessageURI);
-        }
-        catch(ex) {
-#ifdef DEBUG_browserOnLoadHandler
-          jsConsoleService.logStringMessage("couldn't get header:" + ex);
-#endif
-        }
-#ifdef DEBUG_browserOnLoadHandler
-        jsConsoleService.logStringMessage("messageHeader =" + messageHeader);
-#endif
-        try {
-          var directionProperty = messageHeader.getStringProperty(MSFDirectionProperty);
-
-          if (directionProperty == "rtl" || directionProperty == "ltr") {
-#ifdef DEBUG_SetMessageDirection
-            jsConsoleService.logStringMessage("setting direction by property to " + directionProperty);
-#endif
-            SetMessageDirection(directionProperty,false);
-            continue;
-          }
-#ifdef DEBUG_SetMessageDirection
-          else 
-            jsConsoleService.logStringMessage("NOT setting direction by property: " + directionProperty);
-#endif
-        }
-        catch(ex) {
-#ifdef DEBUG_browserOnLoadHandler
-          jsConsoleService.logStringMessage("couldn't get direction property:" + ex);
-#endif
-        }
-      }
-      
-#ifdef DEBUG_browserOnLoadHandler
-      jsConsoleService.logStringMessage("considering direction change?");
-#endif
-      var detectedDirection = (canBeAssumedRTL(node,directionDetectionRTLSequence) ? "rtl" : "ltr");
-#ifdef DEBUG_browserOnLoadHandler
-      jsConsoleService.logStringMessage("canBeAssumedRTL(elementsRequiringExplicitDirection[i],rtlSequence) -> " + (detectedDirection == "rtl") );
-#endif
-      if (node == body)
-        SetMessageDirection(detectedDirection, true)
-      else
-        node.style.direction = detectedDirection;
-    }
-  }
+  if (gBDMPrefs.getBoolPref("display.autodetect_direction", true))
+    applyDirectionDetection(domDocument.body,loadedMessageURI);
 
 #ifdef MOZ_THUNDERBIRD
   var currentDirection =
     window.getComputedStyle(body, null).direction;
   UpdateDirectionButtons(currentDirection);
 #endif
+}    
+
+function neutralsOnly(str)
+{
+#ifdef DEBUG_neutralsOnly
+  jsConsoleService.logStringMessage("in neutralsOnly for\n\n" + str);
+#endif
+  var neutrals = new RegExp("^(\\s|\\n|[!-@\[-`\\u2013\\u2014])*$");
+  return neutrals.test(str);
+}
+
+// returns "rtl", "ltr", "neutral" or "mixed"; but only an element
+// with more than one text node can be mixed
+function directionCheck(obj)
+{
+#ifdef DEBUG_directionCheck
+  jsConsoleService.logStringMessage("in directionCheck(" + obj + ")");
+#endif
+  // we check whether there exists a line which either begins
+  // with a word consisting solely of characters of an RTL script,
+  // or ends with two such words (excluding any punctuation/spacing/
+  // numbering at the beginnings and ends of lines)
+
+  var rtlCharacter = "[\\u0590-\\u05FF\\uFB1D-\\uFB4F\\u0600-\\u06FF\\uFB50-\\uFDFF\\uFE70-\\uFEFC]";
+  // note we're allowing sequences of initials, e.g W"ERBEH
+  var rtlSequence = "(" +  rtlCharacter + "{2,}|" + rtlCharacter + "\"" + rtlCharacter + ")";
+  var neutralCharacter = "[ \\f\\n\\r\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\\u2013\\u2014]";
+  var ignorableCharacter = "(" + neutralCharacter + "|" + rtlCharacter + ")";
+  var allNeutralExpression = new RegExp (
+    "^" + neutralCharacter + "*" + "$");
+  var rtlLineExpression = new RegExp (
+    // either the text has no non-RTL characters and some RTL characters
+    "(" + "^" + ignorableCharacter + "*" + rtlCharacter + ignorableCharacter + "*" + "$" + ")" +
+    "|" +
+    // or it has a line with two RTL 'words' before any non-RTL characters
+    "(" + "(^|\\n)" + ignorableCharacter + "*" + rtlSequence + neutralCharacter + "+" + rtlSequence + ")" +
+    "|" +
+    // or it has a line with two RTL 'words' after all non-RTL characters
+    "(" + rtlSequence + neutralCharacter + "+" + rtlSequence + ignorableCharacter + "*" + "($|\\n)" + ")" );
+
+  if (typeof obj == 'string') {
+    if (allNeutralExpression.test(obj)) {
+#ifdef DEBUG_directionCheck
+      jsConsoleService.logStringMessage("directionCheck - string\n\n"+obj+"\n\nis NEUTRAL");
+#endif
+      return "neutral";
+    }
+#ifdef DEBUG_directionCheck
+    jsConsoleService.logStringMessage("directionCheck - string\n\n"+obj+"\n\nis " + (rtlLineExpression.test(obj) ? "RTL" : "LTR") );
+#endif
+    return (rtlLineExpression.test(obj) ? "rtl" : "ltr");
+  }
+  else { // it's a DOM node
+    if (allNeutralExpression.test(obj.textContent)) {
+#ifdef DEBUG_directionCheck
+      jsConsoleService.logStringMessage("directionCheck - object "+obj+"\nis NEUTRAL");
+#endif
+      return null;
+    }
+    var matchResults = new Object;
+    matchInText(obj, rtlLineExpression, matchResults);
+    return (matchResults.hasMatching ?
+            (matchResults.hasNonMatching ? "mixed" : "rtl") : "ltr");
+#ifdef DEBUG_directionCheck
+    jsConsoleService.logStringMessage("directionCheck - object "+obj+"\nis " + (matchResults.hasMatching ?
+            (matchResults.hasNonMatching ? "mixed" : "rtl") : "ltr") );
+#endif
+  }
+  //  return rtlLineExpression.test(element.textContent);
+}
+
+// split elements in the current message (we assume it's moz-text-plain)
+// so that \n\n in the message text means moving to another block element
+// this allows setting per-paragraph direction, assuming paragraphs are
+// separated by double \n's
+function splitTextElementsInPlainMessageDOMTree(subBody)
+{
+#ifdef DEBUG_splitTextElementsInPlainMessageDOMTree
+  jsConsoleService.logStringMessage("in splitTextElementsInPlainMessageDOMTree()");
+#endif
+  var treeWalker = document.createTreeWalker(
+    subBody,
+    NodeFilter.SHOW_TEXT,
+    null,
+    false
+  );
+  var node = treeWalker.nextNode();
+  while (node) {
+#ifdef DEBUG_splitTextElementsInPlainMessageDOMTree
+    jsConsoleService.logStringMessage("-----\ntext node\n-----\n" + node.nodeValue);
+#endif
+    // TODO: ensure the parent's a PRE or BLOCKQUOTE or something else that's nice
+    if (! /(\n\s*)+\n/m.test(node.nodeValue)) {
+       node = treeWalker.nextNode();
+       continue;
+    }
+#ifdef DEBUG_splitTextElementsInPlainMessageDOMTree
+    jsConsoleService.logStringMessage(RegExp.leftContext + "\n-----\n"+RegExp.lastMatch+"\n-----\n"+RegExp.rightContext);
+#endif
+
+    var restOfText = node.cloneNode(false);
+    node.nodeValue = RegExp.leftContext + RegExp.lastMatch;
+    restOfText.nodeValue = RegExp.rightContext;
+  
+    var firstPartOfParent = node.parentNode;
+    var secondPartOfParent = node.parentNode.cloneNode(false);
+
+    secondPartOfParent.appendChild(restOfText);
+     
+    // everything after our node with the \n\n goes to the splinter element,
+    // everything before it remains
+    while (node.nextSibling) {
+#ifdef DEBUG_splitTextElementsInPlainMessageDOMTree
+//    jsConsoleService.logStringMessage("nextsibling =\n" + node.nextSibling + "\nvalue:\n"+(node.nextSibling ? node.nextSibling.nodeValue : null));
+#endif
+      var tempNode = node.nextSibling;
+      firstPartOfParent.removeChild(node.nextSibling);
+      secondPartOfParent.appendChild(tempNode);
+    }
+     
+    // add the new part of the parent to the document
+    if (firstPartOfParent.nextSibling)
+      firstPartOfParent.parentNode.insertBefore(secondPartOfParent,firstPartOfParent.nextSibling);
+    else firstPartOfParent.parentNode.appendChild(secondPartOfParent);
+
+    var newNode = treeWalker.nextNode();
+    node = ((newNode != node) ? newNode : treeWalker.nextNode());
+  }
+}
+
+// wraps every sequence of text node, A's etc in a
+// moz-text-flowed message's DOM tree within a DIV
+// (whose direction we can later set)
+function wrapTextNodesInFlowedMessageDOMTree(subBody)
+{
+  var clonedDiv = subBody.ownerDocument.createElement("DIV");
+  clonedDiv.setAttribute('bidimailui-generated', true);
+  var treeWalker = document.createTreeWalker(
+    subBody,
+    NodeFilter.SHOW_TEXT,
+    null,
+    false
+  );
+  var node;
+  while ((node = treeWalker.nextNode())) {
+    if ((node.parentNode.nodeName != 'A') &&
+        (node.parentNode.nodeName != 'DIV') &&
+        (node.parentNode.nodeName != 'BLOCKQUOTE')) {
+      // and other such elements within moz-text-flowed messages
+#ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
+      jsConsoleService.logStringMessage("not handling node\n" + node.nodeValue + "\nwith parent node name " + node.parentNode.nodeName);
+#endif
+      continue;
+    }
+    if (node.parentNode.hasAttribute('bidimailui-generated') ||
+        ((node.parentNode.nodeName == 'A') &&
+        (node.parentNode.parentNode.hasAttribute('bidimailui-generated')))) {
+#ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
+      jsConsoleService.logStringMessage("already handled node\n"+ node.nodeValue);
+#endif
+      continue;
+    }
+#ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
+    jsConsoleService.logStringMessage("wrapping with DIV, node\n" + node.nodeValue);
+#endif
+    var wrapperDiv = clonedDiv.cloneNode(false);
+
+    var emptyLine;
+    if (node.parentNode.nodeName == 'A') {
+      node.parentNode.parentNode.replaceChild(wrapperDiv,node.parentNode);
+      wrapperDiv.appendChild(node.parentNode);
+      emptyLine = false;
+    }
+    else {
+      node.parentNode.replaceChild(wrapperDiv,node);
+      wrapperDiv.appendChild(node);
+      emptyLine =
+        // actually we only see '\n' text nodes for empty lines, but let's add
+        // some other options as a safety precaution
+        ((node.nodeValue == '\n') ||
+         !node.nodeValue );
+    }
+    var sibling;
+    // add everything within the current 'paragraph' to the new DIV
+    while (sibling = wrapperDiv.nextSibling) {
+      if (sibling.nodeName == 'BLOCKQUOTE') {
+#ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
+        jsConsoleService.logStringMessage("hit blockquote, finishing walk");
+#endif
+        break;
+      }
+      if (sibling.nodeName == 'BR') {
+        if (!emptyLine) {
+          // if the DIV has any text content, it will
+          // have a one-line height; otherwise it will 
+          // have no height and we need the BR after it
+          wrapperDiv.parentNode.removeChild(sibling);
+        }
+#ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
+          jsConsoleService.logStringMessage("hit BR with emptyLine = " + emptyLine + "\nfinishing walk");
+#endif
+        break;
+      }
+#ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
+      jsConsoleService.logStringMessage("adding node " + sibling + " to DIV\nnode name:" + node.nodeName + "\nnode value\n" + node.nodeValue);
+#endif
+      wrapperDiv.parentNode.removeChild(sibling);
+      wrapperDiv.appendChild(sibling);
+      // we're assuming empty lines in moz-text-flowed messages
+      // can only be one empty text node followed by a BR; and
+      // if we got here, we haven't hit BR right after the first
+      // text node
+      emptyLine = false;
+    }
+#ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
+    if (!sibling)
+      jsConsoleService.logStringMessage("walk ends after last sibling!");
+#endif
+  }
+}
+
+function applyDirectionDetection(body, loadedMessageURI)
+{
+#ifdef DEBUG_applyDirectionDetection
+  jsConsoleService.logStringMessage("in applyDirectionDetection for message\n" + loadedMessageURI);
+  if (body.childNodes.item(1))
+    jsConsoleService.logStringMessage("body.childNodes.item(1).className = " + body.childNodes.item(1).className);
+  else
+    jsConsoleService.logStringMessage("body has no children");
+#endif
+  
+  // Create an array of all the elements whose contents' direction 
+  // we need to check and whose direction we set accordingly
+  
+  var elementsRequiringExplicitDirection = new Array;
+  for (var i=0; i < body.childNodes.length; i++) {
+    var subBody = body.childNodes.item(i);
+
+    if (! /^moz-text/.test(subBody.className))
+      continue;
+    
+    elementsRequiringExplicitDirection.push(subBody);
+
+#ifdef DEBUG_applyDirectionDetection
+    jsConsoleService.logStringMessage('subbody ' + i + ' is ' + subBody.className);
+#endif
+
+    var nodes ;
+    if (subBody.className == "moz-text-plain") {
+      splitTextElementsInPlainMessageDOMTree(subBody);
+     
+      nodes =  subBody.getElementsByTagName("PRE");
+      for (var j = 0; j < nodes.length; j++ ) {
+        elementsRequiringExplicitDirection.push(nodes[j]);
+      }
+      nodes =  subBody.getElementsByTagName("BLOCKQUOTE");
+      for (var j = 0; j < nodes.length; j++ ) {
+        elementsRequiringExplicitDirection.push(nodes[j]);
+      }
+    }
+    else if (subBody.className == "moz-text-flowed") {
+
+      wrapTextNodesInFlowedMessageDOMTree(subBody);
+      nodes =  subBody.getElementsByTagName("DIV");
+      for (var j = 0; j < nodes.length; j++ ) {
+
+        if (/^moz-text/.test(nodes[j].className))
+          continue;
+
+        elementsRequiringExplicitDirection.push(nodes[j]);
+      }
+    }
+  }
+
+  // auto-detect the direction of elements in the message
+
+#ifdef DEBUG_applyDirectionDetection
+  jsConsoleService.logStringMessage("elementsRequiringExplicitDirection.length = " + elementsRequiringExplicitDirection.length);
+//  jsConsoleService.logStringMessage("body.getElementsByTagName(\"blockquote\").length = " + body.getElementsByTagName("blockquote").length);
+#endif
+
+  // direction-check all of the elements whose direction should be set explicitly
+
+  for (i=0; i < elementsRequiringExplicitDirection.length; i++) {
+    var node = elementsRequiringExplicitDirection[i];
+    try {
+   
+#ifdef DEBUG_applyDirectionDetection
+    jsConsoleService.logStringMessage('elementsRequiringExplicitDirection[ ' + i + ']: ' + node + "\ntype: " + node.nodeType + "\nclassName: " + node.className + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+#endif
+        
+#ifdef DEBUG_applyDirectionDetection
+    jsConsoleService.logStringMessage("considering direction change?");
+#endif
+    var detectedDirection = directionCheck(node);
+#ifdef DEBUG_applyDirectionDetection
+    jsConsoleService.logStringMessage("canBeAssumedRTL(elementsRequiringExplicitDirection[i]) = " + (detectedDirection == "rtl") );
+#endif
+    if (detectedDirection != "neutral") {
+      // "mixed" -> "rtl" as far as direction is concerned
+      node.style.direction = (detectedDirection == "ltr" ? "ltr" : "rtl");
+      if ((node.nodeName == "BLOCKQUOTE") ||
+          (node.nodeName == "blockquote")) {
+        // this affected the sides on which a quote bar appears
+        node.setAttribute('direction-uniformity',detectedDirection);
+      }
+    }
+    // otherwise, let's not set the direction of an all-neutral-char node
+    } catch(ex) {
+#ifdef DEBUG_applyDirectionDetection
+      jsConsoleService.logStringMessage(ex);
+#endif
+    }
+  }
 }
 
 function InstallBrowserHandler()
@@ -378,3 +525,513 @@ function InstallBrowserHandler()
     browser.addEventListener("load", browserOnLoadHandler, true);
 }
 
+function matchInText(element, expression, matchResults)
+{
+#ifdef DEBUG_matchInText
+  jsConsoleService.logStringMessage("---------------------------------------------\n" +
+    "matching " + expression + "\nin element" + element);
+#endif
+  var treeWalker = document.createTreeWalker(
+    element,
+    NodeFilter.SHOW_TEXT,
+    null, // additional filter function
+    false
+  );
+  while((node = treeWalker.nextNode())) {
+#ifdef DEBUG_matchInText
+#ifdef DEBUG_scancodes
+    jsConsoleService.logStringMessage(node.data + "\n" + stringToScanCodes(node.data));
+#else
+    jsConsoleService.logStringMessage(node.data);
+#endif
+#endif
+    if (expression.test(node.data)) {
+      if (matchResults) {
+        matchResults.hasMatching = true;
+      }
+      else {
+#ifdef DEBUG_matchInText
+        jsConsoleService.logStringMessage("found match.\n---------------------------------------------");
+#endif
+        return true;
+      }
+    }
+    else if (matchResults) {
+      matchResults.hasNonMatching = true;
+    }
+    
+#ifdef DEBUG_matchInText
+    jsConsoleService.logStringMessage("... node doesn't match.\n");
+#endif
+  }
+#ifdef DEBUG_matchInText
+  jsConsoleService.logStringMessage( 
+    ((matchResults ? matchResults.hasMatching : false) ? "found" : "no") +
+    "match.\n---------------------------------------------");
+#endif
+  return (matchResults ? matchResults.hasMatching : false);
+}
+
+
+// Detect and attempt to reload/recode content of wholly or partially mis-decoded messages
+// (return false if the message has been set to be reloaded)
+function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredCharset)
+{
+  var contentToMatch;
+
+#ifdef DEBUG_fixLoadedMessageCharsetIssues
+  jsConsoleService.logStringMessage('in fixLoadedMessageCharsetIssues()');
+#endif
+ 
+  // If preferredCodepageCharset is not set to one of windows-1255/6, we will 
+  // completely ignore text in those codepages - we won't try to recover it in 
+  // any way (but we will try to recover UTF-8 text)
+
+  if ((preferredCharset != "windows-1255") &&
+      (preferredCharset != "windows-1256")) {
+    preferredCharset = null;
+  }
+  
+  /*
+  There are 4 parameters affecting what we need to do with the loaded message
+  with respect to reloading or recoding.
+  
+  1. Message has been reloaded (by the previous run of this function) or has
+     otherwise been forced into a specific charset (Y/N)
+  1. Charset used by mozilla to decode the message (
+       N = windows-1252/equivalents, including no/empty charset
+       C = windows-1255/6
+       U = UTF-8, 
+     we won't handle any issues with other charsets
+  2. Message contains UTF-8 text (Y/N)
+  3. Message contains windows-1255/6 text (Y/N)
+
+  What should we do for each combination of values? 
+  (* means all possible values)
+
+  *NNN - No problem, do nothing 
+  NNNY - Reload with UTF-8 (and continue with YNNY)
+  NNYN - Reload with windows-1255/6  (and continue with YNYN)
+  *NYY - Recode both UTF-8 and windows-1255/6
+  *CNN - No problem, do nothing
+  NCNY - Reload with UTF-8 (and continue with YCNY)
+  *CYN - No problem, do nothing
+  NCYY - This is bad, since we can't effectively recode; strangely enough, the
+         best bet should be reloading with windows-1252 (and continue
+         with one of YNNN-YNYY)
+  *UN* - No problem, do nothing
+  NUYN - Reload with windows-1255/6
+  NUYY - This is bad, since we can't effectively recode; strangely enough, the
+         best bet should be reloading with windows-1252 (and continue
+         with one of YNNN-YNYY)
+  YNNY - recode UTF-8 text
+  YNYN - recode windows-1255/6 text
+  YC*Y - This is very bad, since we're not allowed to change charset;
+         we'll try recording UTF-8 text, but it'll probably won't work well
+  *UY* - This is very bad, since we're not allowed to change charset;
+         we'll try recording windows-1255/6 text, but it'll probably won't work well
+         
+  Extra Notes:
+
+  1. If we tell mailnews to change the charset, the message will be reloaded and
+     this function will be triggered again
+  2. There's 'waste' in this algorithm - after recoding, we again check for UTF-8
+     and windows-1255/6 text although we actually know the answer; but how to safely
+     convey this information to the next load event?
+  3. We're not specifically checking the subject line
+  */
+  
+  // this sets parameter no. 1
+  var mustKeepCharset = 
+    (loadedMessageURI == gMessageURI) || msgWindow.charsetOverride;
+
+  // this sets parameter no. 2
+  var mailnewsDecodingType;
+#ifdef DEBUG_fixLoadedMessageCharsetIssues
+  jsConsoleService.logStringMessage('msgWindow.mailCharacterSet = ' + msgWindow.mailCharacterSet);
+#endif
+  if ((preferredCharset != null) &&
+      (msgWindow.mailCharacterSet == preferredCharset))
+    mailnewsDecodingType = "preferred-charset";
+  else if (((msgWindow.mailCharacterSet == "ISO-8859-8-I") ||
+            (msgWindow.mailCharacterSet == "ISO-8859-8")) && 
+       (preferredCharset == "windows-1255")) {
+     mailnewsDecodingType = "preferred-charset";
+  }
+  else switch(msgWindow.mailCharacterSet) {
+    case "US-ASCII":
+    case "ISO-8859-1":
+    case "windows-1252":
+    case null:
+      mailnewsDecodingType = "latin-charset"; break;
+    case "":
+      // sometimes the charset is misread, and Mozilla sets it to "" while
+      // using UTF-8; this is the case specifically for
+      // Content-type: text/plain; charset=iso-8859-I
+      // in the message... but we can't know that without streaming the raw
+      // message, which is expensive
+    case "UTF-8":
+      mailnewsDecodingType  = "UTF-8"; break;
+    default: 
+#ifdef DEBUG_fixLoadedMessageCharsetIssues
+  jsConsoleService.logStringMessage('returning since msgWindow.mailCharacterSet = ' + msgWindow.mailCharacterSet);
+#endif
+      return true;
+  }
+
+
+  // this sets parameter no. 3
+  // (note its value depends on parameter no. 2)
+  var havePreferredCharsetText;
+
+  if (preferredCharset != null) {
+    if (mailnewsDecodingType == "preferred-charset") {
+      // text in the preferred charset is properly decoded, so we only
+      // need to look for characters in the Hebrew or Arabic Unicode ranges;
+      // we look for a sequence, since some odd character may be the result
+      // of misdecoding UTF-8 text
+      contentToMatch = new RegExp(
+        (preferredCharset == "windows-1255") ?
+        "[\\u0590-\\u05FF\\uFB1D-\\uFB4F]{3,}" : "[\\u0600-\\u06FF\\uFE50-\\uFEFC]{3,}");
+    }
+    else {
+      // text in the preferred charset is properly decoded, so we only
+      // need to look for a character in the Hebrew or Arabic Unicode range
+      contentToMatch = new RegExp(
+        (mailnewsDecodingType == "latin-charset") ?
+        // Here we want a sequence of Unicode value of characters whose 
+        // windows-1252 octet is such that would be decoded as 'clearly'
+        // Hebrew or Arabic text; we could be less or more picky depending
+        // on what we feel about characters like power-of-2, paragraph-mark,
+        // plus-minus etc. ; let's be conservative: the windows-1255
+        // and windows-1256 octet ranges corresponding to the letters 
+        // themselves fall within the range C0-FF; this range is all accented
+        // Latin letters in windows-1252, whose Unicode values are the
+        // same as their octets
+        "[\\u00C0-\\u00FF]{3,}" :
+        // Here we know that mailnewsDecodingType == "UTF-8"; if
+        // you decode windows-1255/6 content as UTF-8, you'll get failures
+        // because you see multi-octet-starter octets (11xxxxxx) followed
+        // by other multi-octet-starter octets rather than 
+        // multi-octect-continuer octets (10xxxxxx); what mailnews does in
+        // such cases is emit \uFFFD, which is the Unicode 'replacement
+        // character'; let's be cautious, though, and look for repetitions
+        // of this rather than the odd encoding error or what-not
+        "\\uFFFD{3,}");
+    }    
+    havePreferredCharsetText = matchInText(element, contentToMatch);
+  }
+  else {
+    havePreferredCharsetText = false;
+  }
+  
+  // this sets parameter no. 4
+  // (note its value depends on parameter no. 2)
+  var haveUTF8Text;
+  
+  contentToMatch = new RegExp (
+    (mailnewsDecodingType == "UTF-8") ?
+    // The only characters we can be sure will be properly decoded in windows-1252
+    // when they appear after UTF-8 decoding are those with single octets in UTF-8
+    // and the same value as windows-1252; if there's anything else we'll be
+    // conservative and assume some UTF-8 decoding is necessary
+    "[^\\u0000-\\u007F\\u00A0-\\u00FF]" :
+    // mailnewsDecodingType is latin-charset or preferred-charset
+    //
+    // TODO: some of these are only relevant for UTF-8 misdecoded as windows-1252 
+    // (or iso-8859-1; mozilla cheats and uses windows-1252), while some of these
+    // are only relevant for UTF-8 misdecoded as windows-1255
+    "(\\u00D7([\\u00A2\\u00A9\\u017E\\u0152\\u0153\\u02DC\\u2018\\u2019\\u201C\\u201D\\u2022\\u2220\\u2122\\u0090-\\u00AA])){3}" +
+    "|" + 
+    "\\uFFFD{3,}" +
+    "|" + 
+    "\\u00EF\\u00BB\\u00BF" + // UTF-8 BOM octets
+    "|" +
+    "(\\u05F3(\\u2022|\\u2018)){2}");
+
+  haveUTF8Text = matchInText(element, contentToMatch);
+
+#ifdef DEBUG_fixLoadedMessageCharsetIssues
+  jsConsoleService.logStringMessage("--------\n " +
+    (mustKeepCharset ? "Y" : "N") +
+    ((mailnewsDecodingType == "latin-charset") ? "N" :
+     ((mailnewsDecodingType == "preferred-charset") ? "C" : "U")) +
+    (havePreferredCharsetText ? "Y" : "N") +
+    (haveUTF8Text ? "Y" : "N") + 
+    "\n--------");
+#endif
+
+  // ... and now act based on the parameter values
+  
+  if (!mustKeepCharset) {
+    switch(mailnewsDecodingType) {
+      case "latin-charset":
+        if (!havePreferredCharsetText) {
+          if (!haveUTF8Text) {
+            // NNNN
+          }
+          else {
+            // NNNY
+            MessengerSetForcedCharacterSet("utf-8");
+            return false;
+          }
+        }
+        else {
+          if (!haveUTF8Text) {
+            //NNYN 
+            MessengerSetForcedCharacterSet(preferredCharset);
+            return false;
+          }
+          else {
+            //NNYY
+            performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType,true,true);
+          }
+        }
+        break;
+      case "preferred-charset":
+        if (!havePreferredCharsetText) {
+          if (!haveUTF8Text) {
+            // NCNN
+          }
+          else {
+            // NCNY
+            MessengerSetForcedCharacterSet("utf-8");
+            return false;
+          }
+        }
+        else {
+          if (!haveUTF8Text) {
+            // NCYN
+          }
+          else {
+            // NCYY
+            MessengerSetForcedCharacterSet("windows-1252");
+            return false;
+          }
+        }
+        break;
+      case "UTF-8":
+        if (!havePreferredCharsetText) {
+          if (!haveUTF8Text) {
+            // NUNN
+          }
+          else {
+            // NUNY
+          }
+        }
+        else {
+          if (!haveUTF8Text) {
+            // NUYN
+            MessengerSetForcedCharacterSet(preferredCharset);
+            return false;
+          }
+          else {
+            // NUYY
+            MessengerSetForcedCharacterSet("windows-1252");
+            return false;
+          }
+        }
+    }
+  }
+  else { // reloading in different charset is allowed
+    switch(mailnewsDecodingType) {
+      case "latin-charset":
+        if (!havePreferredCharsetText) {
+          if (!haveUTF8Text) {
+            // YNNN
+          }
+          else {
+            // YNNY
+            performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType,false,true);
+          }
+        }
+        else {
+          if (!haveUTF8Text) {
+            // YNYN
+            performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType,true,false);
+          }
+          else {
+            // YNYY
+            performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType,true,true);
+          }
+        }
+        break;
+      case "preferred-charset":
+        if (!havePreferredCharsetText) {
+          if (!haveUTF8Text) {
+            // YCNN
+          }
+          else {
+            // YCNY
+            performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType,false,true);
+          }
+        }
+        else {
+          if (!haveUTF8Text) {
+            // YCYN
+          }
+          else {
+            // YCYY
+            performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType,false,true);
+          }
+        }
+        break;
+      case "UTF-8":
+        if (!havePreferredCharsetText) {
+          if (!haveUTF8Text) {
+            // YUNN
+          }
+          else {
+            // YUNY
+          }
+        }
+        else {
+          if (!haveUTF8Text) {
+            // YUYN
+            performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType,true,false);
+          }
+          else {
+            // YUYY
+            performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType,true,false);
+          }
+        }
+    }
+  }
+  return true;
+}
+
+function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType,doCharset,doUTF8)
+{
+#ifdef DEBUG_performCorrectiveRecoding
+          jsConsoleService.logStringMessage('---------------------------------\nin performCorrectiveRecoding(' + 
+          preferredCharset + ', ' + mailnewsDecodingType + ", " + (doCharset ? "docharset" : "") + ", " + 
+          (doUTF8 ? "doUTF8" : "") + ")");
+#endif
+  var misdetectedRTLCharacter = "[\\xBF-\\xD6\\xD8-\\xFF]"
+  var misdetectedRTLSequence = misdetectedRTLCharacter + "{2,}";
+
+  // Rationale: Since we know that this message is a misdecoded RTL-codepage message,
+  // we assume that every text field with a misdetected RTL 'word' has no non-windows-1255 chars
+  // and hence can be recoded (plus we relaxed the definition of a word)
+  //
+  // TODO: I would like to use \b's instead of the weird combination here,
+  // but for some reason if I use \b's, I don't match the strings EE E4 20 and E7 E3 22 F9 
+
+  var codepageMisdetectionExpression = 
+    new RegExp (misdetectedRTLCharacter + "{3,}" +
+                "|" +
+                "(" + "(\\s|\"|\W|^)" + misdetectedRTLCharacter + "{2,}(\"|\\s|\W|$)" + ")" );
+
+  // TODO: some of these are only relevant for UTF-8 misdecoded as windows-1252 
+  // (or iso-8859-1; mozilla cheats and uses windows-1252), while some of these
+  // are only relevant for UTF-8 misdecoded as windows-1255
+  
+  // TODO: maybe it's better to undecode first, then check whether it's UTF-8; that will probably allow
+  // using a char range instead of so many individual chars
+  var misdetectedUTF8Sequence = 
+    "(\\u00D7([\\u00A2\\u00A9\\u017E\\u0152\\u0153\\u02DC\\u2018\\u2019\\u201C\\u201D\\u2022\\u2220\\u2122\\u0090-\\u00AA])){3}" +
+    "|" + 
+    "\\uFFFD{3,}" +
+    "|" + 
+    "\\u00EF\\u00BB\\u00BF" + // UTF-8 BOM octets
+    "|" +
+    "(\\u05F3(\\u2022|\\u2018)){2}";
+  var utf8MisdetectionExpression = new RegExp (misdetectedUTF8Sequence);
+
+  var treeWalker = document.createTreeWalker(
+    element,
+    NodeFilter.SHOW_TEXT,
+    null, // additional filter function
+    false
+  );
+  while((node = treeWalker.nextNode())) {
+  
+    var lines = node.data.split('\n');
+    for(i = 0; i < lines.length; i++) {
+      var workingStr; 
+  
+      // Note: It's _important_ to check for UTF-8 first, because that has the 
+      // much more distinctive D7 blah D7 blah D7 blah pattern!
+      if (doUTF8 && utf8MisdetectionExpression.test(lines[i])) {
+        try {
+
+          // remove some higher-than-0x7F characters originating in HTML entities, such as &nbsp;
+          // (we remove them only if they're not the second byte of a two-byte sequence; we ignore
+          // the possibility of their being part of a 3-to-6-byte sequence)
+          workingStr = lines[i].replace(/(^|[\x00-\xBF])\xA0+/g,'$1 ');
+          // this is for multiple A0's in a row; I bet there's a better way to do this than a second replace...
+          workingStr = workingStr.replace(/(^|[\x00-\xBF])\xA0+/g,'$1 ');
+        
+          // at this point, mailnewsDecodingType can only be latin or preferred
+          gUnicodeConverter.charset =
+            (mailnewsDecodingType == "latin-charset") ? 'windows-1252' : preferredCharset;
+#ifdef DEBUG_scancodes
+          jsConsoleService.logStringMessage(
+            "decoded as " + gUnicodeConverter.charset + ":\n" + workingStr + "\n----\n" + stringToScanCodes(workingStr));
+#endif
+        
+          workingStr = gUnicodeConverter.ConvertFromUnicode(workingStr);
+          // TODO: not sure we need this next line
+          workingStr += gUnicodeConverter.Finish();
+#ifdef DEBUG_scancodes
+          jsConsoleService.logStringMessage("undecoded bytes:\n" + workingStr  + "\n----\n" + stringToScanCodes(workingStr));
+#endif
+          gUnicodeConverter.charset = "UTF-8";
+          lines[i] = gUnicodeConverter.ConvertToUnicode(workingStr);
+          
+#ifdef DEBUG_scancodes
+          jsConsoleService.logStringMessage("decoded UTF-8:\n" + lines[i] + "\n----\n" + stringToScanCodes(lines[i]));
+#endif
+        } catch(ex) {
+#ifdef DEBUG_scancodes
+          jsConsoleService.logStringMessage("Exception while trying to recode \n" + lines[i] + "\n\n" + ex);
+#else
+          dump("Exception while trying to recode \n" + lines[i] + "\n\n" + ex);
+#endif
+        }
+      }
+      else if (doCharset && codepageMisdetectionExpression.test(lines[i])) {
+        //try{
+          // at this point, mailnewsDecodingType can only be latin or UTF-8
+          gUnicodeConverter.charset =
+            (mailnewsDecodingType == "latin-charset") ? 'windows-1252' : "UTF-8";
+#ifdef DEBUG_scancodes
+          jsConsoleService.logStringMessage(
+            "decoded as " + gUnicodeConverter.charset + ":\n" + lines[i] + "\n----\n" + stringToScanCodes(lines[i]));
+#endif
+        
+          workingStr = lines[i];
+          workingStr = gUnicodeConverter.ConvertFromUnicode(lines[i]);
+          // TODO: not sure we need this next line
+          workingStr += gUnicodeConverter.Finish();
+#ifdef DEBUG_scancodes
+          jsConsoleService.logStringMessage("undecoded bytes:\n" + workingStr  + "\n----\n" + stringToScanCodes(workingStr));
+#endif
+          gUnicodeConverter.charset = preferredCharset;
+          lines[i] = gUnicodeConverter.ConvertToUnicode(workingStr);
+#ifdef DEBUG_scancodes
+          jsConsoleService.logStringMessage("decoded " + preferredCharset + ":\n" + lines[i] + "\n----\n" + stringToScanCodes(lines[i]));
+#endif
+        //} catch(ex) {
+#ifdef DEBUG_scancodes
+        //  jsConsoleService.logStringMessage("Exception while trying to recode \n" + line + "\n\n" + ex);
+#else
+        //  dump("Exception while trying to recode \n" + line + "\n\n" + ex);
+#endif
+        //}
+      }
+    }
+#ifdef DEBUG_scancodes
+//    jsConsoleService.logStringMessage("lines:\n");
+//    for(i = 0; i < lines.length; i++) {
+//      jsConsoleService.logStringMessage(lines[i]);
+//    }
+#endif
+    if (doUTF8 || doCharset) {
+      node.data = lines.join('\n');
+    }
+#ifdef DEBUG_scancodes
+//    jsConsoleService.logStringMessage("node.data is now\n" + node.data);
+#endif
+  }
+}
