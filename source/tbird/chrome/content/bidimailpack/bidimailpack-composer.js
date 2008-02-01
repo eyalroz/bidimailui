@@ -61,6 +61,28 @@ var bidiKeyboardService = Components.classes['@mozilla.org/widget/bidikeyboard;1
 bidiKeyboardService.QueryInterface(Components.interfaces.nsIBidiKeyboard);
                             // Used for determining whether the current keyboard layout
                             // is RTL or LTR
+gBodyReadyListener = {
+  messageParams: null,
+
+  NotifyComposeFieldsReady : function() { },
+  ComposeProcessDone : function(result) { },
+  SaveInFolderDone : function(folderName) { },
+  NotifyComposeBodyReady : function() {
+#ifdef DEBUG_gBodyReadyListener
+    jsConsoleService.logStringMessage('body ready');
+#endif
+    if (this.messageParams.isReply) {
+      performCorrectiveRecoding(
+        document.getElementById("content-frame").contentDocument.body,
+        this.messageParams.recodedCharset,
+        this.messageParams.mailnewsDecodingType,
+        (this.messageParams.recodedCharset != null),
+        this.messageParams.recodedUTF8);
+    }
+    SetInitialDirection(this.messageParams);
+  }
+};
+
 
 function KeyboardLayoutIsRTL()
 {
@@ -414,7 +436,7 @@ function LoadParagraphMode()
   }
 }
 
-function GetMessageDisplayDirection(messageURI)
+function GetDisplayedCopyParams(messageURI,messageParams)
 {
   // Note: there may be more than one window
   // which displays the message we are replying to;
@@ -425,7 +447,7 @@ function GetMessageDisplayDirection(messageURI)
   // in a messenger window with a direction set in a
   // single message window
 
-  var win, loadedMessageURI, browser;
+  var win, loadedMessageURI, displayedCopyBrowser;
   var windowManager = Components.classes["@mozilla.org/appshell/window-mediator;1"]
                                 .getService(nsIWindowMediator);
   var messengerWindowList = windowManager.getEnumerator("mail:3pane");
@@ -443,21 +465,28 @@ function GetMessageDisplayDirection(messageURI)
     if (loadedMessageURI != messageURI)
       continue;
 
-    browser = win.getMessageBrowser();
-    if (!browser)
+    displayedCopyBrowser = win.getMessageBrowser();
+    if (!displayedCopyBrowser)
       continue;
 
-    messageContentElement =
-      GetMessageContentElement(browser.docShell.contentViewer.DOMDocument);
-    return messageContentElement.style.direction;
+    //messageContentElement =
+    //  GetMessageContentElement(browser.docShell.contentViewer.DOMDocument);
+    var displayedCopyBody = displayedCopyBrowser.contentDocument.body;
+    for (var i=0; i < displayedCopyBody.childNodes.length; i++) {
+      var subBody = displayedCopyBody.childNodes.item(i);
+  
+      if (! /^moz-text/.test(subBody.className))
+        continue;
+      messageParams.originalDisplayDirection = subBody.style.direction;
+    }
+    messageParams.recodedUTF8 = displayedCopyBody.hasAttribute('bidiui-recoded-utf8');
+    messageParams.recodedCharset = displayedCopyBody.getAttribute('bidiui-recoded-charset');
+    messageParams.mailnewsDecodingType = displayedCopyBody.getAttribute('bidiui-detected-decoding-type');
   }
-  return null;
 }
 
-function DetermineNewMessageParams(messageParams)
+function DetermineNewMessageParams(messageBody,messageParams)
 {
-  var body = document.getElementById("content-frame").contentDocument.body;
-
   try {
     messageParams.isReply = (gMsgCompose.originalMsgURI.length > 0);
   }
@@ -465,45 +494,23 @@ function DetermineNewMessageParams(messageParams)
     dump(ex);
   };
 
-  try {
-    if (!body.hasChildNodes()) 
-      messageParams.isEmpty = true;
-    else if ( body.hasChildNodes() && !(body.firstChild.hasChildNodes())) {
-      if ((body.firstChild == body.lastChild) &&
-          (body.firstChild.nodeName == "BR"))
-        messageParams.isEmpty = true;
-    }
-    else {
-      if (body.firstChild == body.lastChild &&
-          body.firstChild.nodeName == "P" &&
-          body.firstChild.firstChild.nodeName == "BR" &&
-          body.firstChild.firstChild == body.firstChild.lastChild)
-        messageParams.isEmpty = true;
-    }
-  }
-  catch(ex) {
-    // can't get elements - must be empty...
-    messageParams.isEmpty = true;
-  }
- 
-  if (messageParams.isReply || !messageParams.isEmpty) {
+  if (messageParams.isReply) {
     // XXX TODO - this doesn't work for drafts;
     // they have no gMsgCompose.originalMsgURI
-    messageParams.originalDisplayDirection =
-      GetMessageDisplayDirection(gMsgCompose.originalMsgURI);
+      GetDisplayedCopyParams(gMsgCompose.originalMsgURI,messageParams);
   }
 }
 
-function SetInitialDocumentDirection(messageParams)
+function SetInitialDirection(messageParams)
 {
+
   // determine whether we need to use the default direction;
   // this happens for new documents (e.g. new e-mail message,
   // or new composer page), and also for mail/news replies if the
   // prefs say we force the direction/ of replies to the default
   // direction for new messages
-  if ( (!messageParams.isReply && messageParams.isEmpty) ||
-       (messageParams.isReply &&
-        gBDMPrefs.getBoolPref("compose.reply_in_default_direction", false)) ) {
+  if ( !messageParams.isReply ||
+       gBDMPrefs.getBoolPref("compose.reply_in_default_direction", false)) {
     var defaultDirection =
       gBDMPrefs.getCharPref("compose.default_direction",
                              "ltr").toLowerCase();
@@ -521,16 +528,20 @@ function SetInitialDocumentDirection(messageParams)
     // we shouldn't be able to get here - when replying, the original
     // window should be in existence
     // XXX TODO: but we do get here for drafts
-    if (canBeAssumedRTL(document.getElementById("content-frame")
-                                .contentDocument.body))
+    var detectionDirection = directionCheck(
+      document.getElementById("content-frame").contentDocument.body);
+    if ((detectionDirection  == "rtl") && (detectionDirection != "mixed"))
       SetDocumentDirection("rtl");
-    else
+    else if (detectionDirection == "ltr")
       SetDocumentDirection("ltr");
   }
 }
 
 function ComposeWindowOnActualLoad()
 {
+  var messageBody =
+    document.getElementById("content-frame").contentDocument.body;
+
 #ifdef DEBUG_ComposeWindowOnActualLoad
   jsConsoleService.logStringMessage('--- ComposeWindowOnActualLoad() --- ');
 #endif
@@ -551,19 +562,29 @@ function ComposeWindowOnActualLoad()
 
   // When this message is already on display in the main Mail&News window
   // (or a separate message window) with its direction set to some value,
-  // we wish to maintain the same direction when bringing up the message
-  // in an editor window. Such is the case for drafts and for replies;
-  // for new (empty) messages, we use a default direction
+  // and perhaps with some content 'manually' recoded by our extension
+  // we wish to maintain the same direction and perform the same recoding
+  // when bringing up the message in an editor window. Such is the case
+  // for drafts and for replies; for new (empty) messages, we use a default
+  // direction
 
   var messageParams = {
     isReply: false,
-    isEmpty: false,
-    originalDisplayDirection: null
+    originalDisplayDirection: null,
+    recodedUTF8: true,
+    recodedCharset: null,
+    mailnewsDecodingType : 'latin-charset'
   };
     
-  DetermineNewMessageParams(messageParams);
+  DetermineNewMessageParams(messageBody,messageParams);
 #ifdef DEBUG_ComposeWindowOnActualLoad
-  jsConsoleService.logStringMessage('isReply = ' + messageParams.isReply + ' ;  isEmpty = ' + messageParams.isEmpty + ' ; gMsgCompose.originalMsgURI = ' + (gMsgCompose? gMsgCompose.originalMsgURI : 'no gMsgCompose') + ' ; originalDisplayDirection = ' + messageParams.originalDisplayDirection);
+  jsConsoleService.logStringMessage('isReply = ' + messageParams.isReply + 
+    '\ngMsgCompose.originalMsgURI = ' +
+    (gMsgCompose? gMsgCompose.originalMsgURI : 'no gMsgCompose') +
+    '\noriginalDisplayDirection = ' + messageParams.originalDisplayDirection + 
+    '\nUTF-8 recoded = ' + messageParams.recodedUTF8 +
+    '\ncharset recoded = ' + messageParams.recodedCharset +
+    '\nmailnews decoding type = ' + messageParams.mailnewsDecodingType );
 #endif
 
   var isHTMLEditor = IsHTMLEditor();
@@ -583,7 +604,14 @@ function ComposeWindowOnActualLoad()
       LoadParagraphMode();
   }
 
-  SetInitialDocumentDirection(messageParams);
+  if (messageParams.isReply) {
+    if (!gUnicodeConverter)
+      gUnicodeConverter =
+        Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]
+                  .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
+  }                
+  gBodyReadyListener.messageParams = messageParams;
+  gMsgCompose.RegisterStateListener(gBodyReadyListener);
   directionSwitchController.setAllCasters();
 }
 
