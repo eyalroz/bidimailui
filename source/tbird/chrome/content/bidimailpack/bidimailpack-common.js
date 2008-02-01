@@ -37,150 +37,31 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-var hD="0123456789ABCDEF";
-// decimal to hexadecimal representation
-function d2h(d) {
-  var h = hD.substr(d&15,1);
-  while(d>15) {d>>=4;h=hD.substr(d&15,1)+h;}
-  return h;
-}
+// number to hexadecimal representation
 
-function misdetectedRTLCodePage(element,rtlSequence)
-{
-  var initialMatch;
-  if (msgWindow.mailCharacterSet == "US-ASCII" ||
-      msgWindow.mailCharacterSet == "ISO-8859-1" ||
-      msgWindow.mailCharacterSet == "windows-1252") {
-     // if instead of the actual windows-1255/6 charset, mozilla used
-     // latin-1 or similar, instead of Hebrew/Arabic characters we would
-     // see latin characters with accent, from the upper values of the 
-     // 256-value charset; see explanation of the regexp specifics in 
-     // canBeAssumedRTL()
+var gHexDigits="0123456789ABCDEF";
 
-    var misdetectedRTLSequence = "[\\u00BF-\\u00FF]{3,}";
-
-    var normalIgnore = "(\\s|[<>\\.;,:0-9\"'])*";
-    var nonEmptyNormalIgnore = "(\\s|[<>\\.;,:0-9\"'])+";
-    var codepageMisdetectionExpression = new RegExp (
-      "(" + "^" + normalIgnore + misdetectedRTLSequence + normalIgnore + "$" + ")" +
-      "|" +
-      "(" + "(^|\\n)" + misdetectedRTLSequence + misdetectedRTLSequence + nonEmptyNormalIgnore + "(" + nonEmptyNormalIgnore + "|$|\\n)" + ")" +
-      "|" +
-      "(" + misdetectedRTLSequence + nonEmptyNormalIgnore + misdetectedRTLSequence + normalIgnore + "($|\\n)" + ")" );
- 
-    initialMatch = matchInText(element, codepageMisdetectionExpression);
-    if (initialMatch) {
-#ifdef DEBUG_misdetectedRTLCodePage
-      jsConsoleService.logStringMessage("matched\n" + codepageMisdetectionExpression + "\nin the text");
-#endif
-    }
-    else {
-#ifdef DEBUG_misdetectedRTLCodePage
-      jsConsoleService.logStringMessage("did NOT match\n" + codepageMisdetectionExpression + "\nin the text");
-#endif
-    }
+function num2hex(num) {
+  var hexString = gHexDigits.substr(num & 15, 1);
+  while(num > 15) {
+    num >>= 4;
+    hexString = gHexDigits.substr(num & 15, 1) + hexString;
   }
-  else { // it's "UTF-8" or ""
-   // if instead of the actual windows-1255/6 charset, mozilla used
-   // UTF-8, it 'gives up' on seeing [\u00BF-\u00FF][\u00BF-\u00FF] byte pairs,
-   // so it decodes them as \FFFD 's for some reason
-    var utf8MisdetectionExpression = new RegExp("\\uFFFD{3,}");
-    initialMatch = matchInText(element, utf8MisdetectionExpression);
-    if (initialMatch) {
-#ifdef DEBUG_misdetectedRTLCodePage
-      jsConsoleService.logStringMessage("matched " + utf8MisdetectionExpression + " in the text");
-#endif
-    }
-    else {
-#ifdef DEBUG_misdetectedRTLCodePage
-      jsConsoleService.logStringMessage("did NOT match " + utf8MisdetectionExpression + " in the text");
-#endif
-    }
-  }
-
-  if (initialMatch) {
-    if (!canBeAssumedRTL(element,rtlSequence)) {
-#ifdef DEBUG_misdetectedRTLCodePage
-      jsConsoleService.logStringMessage("text can NOT be assumed RTL with " + rtlSequence + " , confirming misdetected codepage");
-#endif
-      return true;
-    }
-    else {
-#ifdef DEBUG_misdetectedRTLCodePage
-      jsConsoleService.logStringMessage("text CAN be assumed RTL with " + rtlSequence + " , rejecting misdetected codepage");
-#endif
-    }
-  }
-  return false;
+  return hexString;
 }
 
-// TODO: currently, this function only works properly with Hebrew text
-
-function misdetectedUTF8(element)
+#ifdef DEBUG
+function stringToScanCodes(str) 
 {
-  // hebrew letters in UTF8 are 0xD7 followed by a byte in the range 0x90 - 0xAA
-  // I don't know what the other chars are about...
-  // maybe check for some english text? spacing? something else?
-  // Also, it seems UTF-8 messages which mozilla displays using
-  // ISO-8859-8-I have FFFD's for some reason
-  var misdetectedUTF8Sequence = "(\\u00D7(\\u201D|\\u2022|\\u2220|\\u2122|[\\u0090-\\u00AA])){3}|\\uFFFD{3,}|(\\u05F3(\\u2022|\\u2018)){2}";
-  var misdetectionExpression = new RegExp (misdetectedUTF8Sequence);
-  return matchInText(element, misdetectionExpression);
-}
-
-function canBeAssumedRTL(element,rtlSequence)
-{
-  // we check whether there exists a line which either begins
-  // with a word consisting solely of characters of an RTL script,
-  // or ends with two such words (excluding any punctuation/spacing/
-  // numbering at the beginnings and ends of lines)
-
-  var normalIgnore = "(\\s|[<>\\.;,:0-9\"'])*";
-  var nonEmptyNormalIgnore = "(\\s|[<>\\.;,:0-9\"'])+";
-  var rtlLineExpression = new RegExp (
-    // either message has only one line whose single word is RTL
-    "(" + "^" + normalIgnore + rtlSequence + normalIgnore + "$" + ")" +
-    "|" +
-    // or it has a line which begins with two RTL words
-    "(" + "(^|\\n)" + normalIgnore + rtlSequence + nonEmptyNormalIgnore + rtlSequence + "(" + nonEmptyNormalIgnore + "|$|\\n)" + ")" +
-    "|" +
-    // or it has a line which ends with two RTL words
-    "(" + rtlSequence + nonEmptyNormalIgnore + rtlSequence + normalIgnore + "($|\\n)" + ")" );
-
-  return matchInText(element, rtlLineExpression);
-}
-
-function matchInText(element, expression)
-{
-#ifdef DEBUG_matchInText
-  jsConsoleService.logStringMessage("---------------------------------------------\n" + "matching " + normalExpression);
-#endif
-  var treeWalker = document.createTreeWalker(
-    element,
-    NodeFilter.SHOW_TEXT,
-    null, // additional filter function
-    false
-  );
-  while(node = treeWalker.nextNode()) {
-#ifdef DEBUG_matchInText
-    var str = "";
-    for(i = 0; i < node.data.length; i++) {
-      str += d2h(node.data.charCodeAt(i)) + " ";  
-    }
-    jsConsoleService.logStringMessage(node.data + "\n" + str);
-#endif
-    if (expression.test(node.data)) {
-#ifdef DEBUG_matchInText
-      jsConsoleService.logStringMessage("found match.\n---------------------------------------------");
-#endif
-      return true;
-    }
+  if (str == null)
+    return null;
+  var scanCodesString = "";
+  for(var i = 0; i < str.length; i++) {
+    scanCodesString += num2hex(str.charCodeAt(i)) + " ";  
   }
-#ifdef DEBUG_matchInText
-  jsConsoleService.logStringMessage("no match.\n---------------------------------------------");
-#endif
-  return false;
+  return scanCodesString;
 }
+#endif
 
 // Prefs helper
 var gBDMPrefs = {
