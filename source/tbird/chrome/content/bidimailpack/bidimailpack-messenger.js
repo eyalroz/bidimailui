@@ -557,7 +557,7 @@ function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredChars
 #endif
       return true;
   }
-  element.setAttribute('bidiui-detected-decoding-type',mailnewsDecodingType);
+  element.setAttribute('bidimailui-detected-decoding-type',mailnewsDecodingType);
 
 
   // this sets parameter no. 3

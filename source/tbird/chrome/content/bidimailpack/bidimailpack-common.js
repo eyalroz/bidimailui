@@ -364,10 +364,10 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
 #endif
   }
   if (doUTF8) {
-    element.setAttribute('bidiui-recoded-utf8',true);
+    element.setAttribute('bidimailui-recoded-utf8',true);
   }
   if (doCharset) {
-    element.setAttribute('bidiui-recoded-charset',preferredCharset);
+    element.setAttribute('bidimailui-recoded-charset',preferredCharset);
   }
 }
 
