@@ -36,11 +36,12 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-/* make the bar marking the quoted message appear       */
-/* to the right of it if the message is being displayed */
-/* or edited in right-to-left direction                 */
-
-[dir="rtl"] blockquote[type="cite"] {
+/* since different paragraphs or other block elements within a blockquote
+   may have different directions, we need the delimiting bar on both sides
+   of the blockquote
+ */
+   
+blockquote[type="cite"][direction-uniformity="rtl"] {
   padding-right: 1em !important;
   border-right-style: solid !important;
   border-right-width: thin !important;
@@ -51,7 +52,7 @@
   border-left: 0 !important;
 }
 
-[dir="ltr"] blockquote[type="cite"] {
+blockquote[type="cite"][direction-uniformity="ltr"] {
   padding-right: 0 !important;
   border-right: 0 !important;
   padding-left: 1em !important;
@@ -61,3 +62,18 @@
   border-left-color: blue !important;
 %endif
 }
+
+blockquote[type="cite"] {
+  padding-right: 1em !important;
+  padding-left: 1em !important;
+  border-right-style: solid !important;
+  border-left-style: solid !important;
+  border-right-width: 1px !important;
+  border-left-width: 1px !important;
+%ifndef MOZ_THUNDERBIRD
+  border-right-color: blue !important;
+  border-left-color: blue !important;
+%endif
+}
+
+
