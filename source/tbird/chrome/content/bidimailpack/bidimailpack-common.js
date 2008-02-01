@@ -37,6 +37,10 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+// used in performCorrectiveRecoding()
+
+var gUnicodeConverter = null;
+
 // number to hexadecimal representation
 
 var gHexDigits="0123456789ABCDEF";
@@ -214,3 +218,272 @@ function GetMessageContentElement(domDoc) {
 
   return firstSubBody;
 }
+
+function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType,doCharset,doUTF8)
+{
+#ifdef DEBUG_performCorrectiveRecoding
+          jsConsoleService.logStringMessage('---------------------------------\nin performCorrectiveRecoding(' + 
+          preferredCharset + ', ' + mailnewsDecodingType + ", " + (doCharset ? "doCharset" : "!doCharset") + ", " + 
+          (doUTF8 ? "doUTF8" : "!doUTF8") + ")");
+          jsConsoleService.logStringMessage('element text content:\n\n' + element.textContent);
+#endif
+  if (!doCharset && !doUTF8) {
+#ifdef DEBUG_performCorrectiveRecoding
+    jsConsoleService.logStringMessage('nothing to do, returning');
+#endif
+    return;
+  }
+  var misdetectedRTLCharacter = "[\\xBF-\\xD6\\xD8-\\xFF]"
+  var misdetectedRTLSequence = misdetectedRTLCharacter + "{2,}";
+
+  // Rationale: Since we know that this message is a misdecoded RTL-codepage message,
+  // we assume that every text field with a misdetected RTL 'word' has no non-windows-1255 chars
+  // and hence can be recoded (plus we relaxed the definition of a word)
+  //
+  // TODO: I would like to use \b's instead of the weird combination here,
+  // but for some reason if I use \b's, I don't match the strings EE E4 20 and E7 E3 22 F9 
+
+  var codepageMisdetectionExpression = 
+    new RegExp (misdetectedRTLCharacter + "{3,}" +
+                "|" +
+                "(" + "(\\s|\"|\W|^)" + misdetectedRTLCharacter + "{2,}(\"|\\s|\W|$)" + ")" );
+
+  // TODO: some of these are only relevant for UTF-8 misdecoded as windows-1252 
+  // (or iso-8859-1; mozilla cheats and uses windows-1252), while some of these
+  // are only relevant for UTF-8 misdecoded as windows-1255
+  
+  // TODO: maybe it's better to undecode first, then check whether it's UTF-8; that will probably allow
+  // using a char range instead of so many individual chars
+  var misdetectedUTF8Sequence = 
+    "(\\u00D7([\\u00A2\\u00A9\\u017E\\u0152\\u0153\\u02DC\\u2018\\u2019\\u201C\\u201D\\u2022\\u2220\\u2122\\u0090-\\u00AA])){3}" +
+    "|" + 
+    "\\uFFFD{3,}" +
+    "|" + 
+    "\\u00EF\\u00BB\\u00BF" + // UTF-8 BOM octets
+    "|" +
+    "(\\u05F3(\\u2022|\\u2018)){2}";
+  var utf8MisdetectionExpression = new RegExp (misdetectedUTF8Sequence);
+
+  var treeWalker = document.createTreeWalker(
+    element,
+    NodeFilter.SHOW_TEXT,
+    null, // additional filter function
+    false
+  );
+  while((node = treeWalker.nextNode())) {
+  
+    var lines = node.data.split('\n');
+#ifdef DEBUG_scancodes
+    jsConsoleService.logStringMessage("text node with " + lines.length + "lines");
+#endif
+    for(i = 0; i < lines.length; i++) {
+      var workingStr; 
+  
+      // Note: It's _important_ to check for UTF-8 first, because that has the 
+      // much more distinctive D7 blah D7 blah D7 blah pattern!
+      if (doUTF8 && utf8MisdetectionExpression.test(lines[i])) {
+        try {
+
+          // remove some higher-than-0x7F characters originating in HTML entities, such as &nbsp;
+          // (we remove them only if they're not the second byte of a two-byte sequence; we ignore
+          // the possibility of their being part of a 3-to-6-byte sequence)
+          workingStr = lines[i].replace(/(^|[\x00-\xBF])\xA0+/g,'$1 ');
+          // this is for multiple A0's in a row; I bet there's a better way to do this than a second replace...
+          workingStr = workingStr.replace(/(^|[\x00-\xBF])\xA0+/g,'$1 ');
+        
+          // at this point, mailnewsDecodingType can only be latin or preferred
+          gUnicodeConverter.charset =
+            (mailnewsDecodingType == "latin-charset") ? 'windows-1252' : preferredCharset;
+#ifdef DEBUG_scancodes
+          jsConsoleService.logStringMessage(
+            "decoded as " + gUnicodeConverter.charset + ":\n" + workingStr + "\n----\n" + stringToScanCodes(workingStr));
+#endif
+        
+          workingStr = gUnicodeConverter.ConvertFromUnicode(workingStr);
+          // TODO: not sure we need this next line
+          workingStr += gUnicodeConverter.Finish();
+#ifdef DEBUG_scancodes
+          jsConsoleService.logStringMessage("undecoded bytes:\n" + workingStr  + "\n----\n" + stringToScanCodes(workingStr));
+#endif
+          gUnicodeConverter.charset = "UTF-8";
+          lines[i] = gUnicodeConverter.ConvertToUnicode(workingStr);
+          
+#ifdef DEBUG_scancodes
+          jsConsoleService.logStringMessage("decoded UTF-8:\n" + lines[i] + "\n----\n" + stringToScanCodes(lines[i]));
+#endif
+        } catch(ex) {
+#ifdef DEBUG_scancodes
+          jsConsoleService.logStringMessage("Exception while trying to recode \n" + lines[i] + "\n\n" + ex);
+#else
+          dump("Exception while trying to recode \n" + lines[i] + "\n\n" + ex);
+#endif
+        }
+      }
+      else if (doCharset && codepageMisdetectionExpression.test(lines[i])) {
+        //try{
+          // at this point, mailnewsDecodingType can only be latin or UTF-8
+          gUnicodeConverter.charset =
+            (mailnewsDecodingType == "latin-charset") ? 'windows-1252' : "UTF-8";
+#ifdef DEBUG_scancodes
+          jsConsoleService.logStringMessage(
+            "decoded as " + gUnicodeConverter.charset + ":\n" + lines[i] + "\n----\n" + stringToScanCodes(lines[i]));
+#endif
+        
+          workingStr = lines[i];
+          workingStr = gUnicodeConverter.ConvertFromUnicode(lines[i]);
+          // TODO: not sure we need this next line
+          workingStr += gUnicodeConverter.Finish();
+#ifdef DEBUG_scancodes
+          jsConsoleService.logStringMessage("undecoded bytes:\n" + workingStr  + "\n----\n" + stringToScanCodes(workingStr));
+#endif
+          gUnicodeConverter.charset = preferredCharset;
+          lines[i] = gUnicodeConverter.ConvertToUnicode(workingStr);
+#ifdef DEBUG_scancodes
+          jsConsoleService.logStringMessage("decoded " + preferredCharset + ":\n" + lines[i] + "\n----\n" + stringToScanCodes(lines[i]));
+#endif
+        //} catch(ex) {
+#ifdef DEBUG_scancodes
+        //  jsConsoleService.logStringMessage("Exception while trying to recode \n" + line + "\n\n" + ex);
+#else
+        //  dump("Exception while trying to recode \n" + line + "\n\n" + ex);
+#endif
+        //}
+      }
+    }
+#ifdef DEBUG_scancodes
+//    jsConsoleService.logStringMessage("lines:\n");
+//    for(i = 0; i < lines.length; i++) {
+//      jsConsoleService.logStringMessage(lines[i]);
+//    }
+#endif
+    if (doUTF8 || doCharset) {
+      node.data = lines.join('\n');
+    }
+#ifdef DEBUG_scancodes
+//    jsConsoleService.logStringMessage("node.data is now\n" + node.data);
+#endif
+  }
+  if (doUTF8) {
+    element.setAttribute('bidiui-recoded-utf8',true);
+  }
+  if (doCharset) {
+    element.setAttribute('bidiui-recoded-charset',preferredCharset);
+  }
+}
+
+function matchInText(element, expression, matchResults)
+{
+#ifdef DEBUG_matchInText
+  jsConsoleService.logStringMessage("---------------------------------------------\n" +
+    "matching " + expression + "\nin element" + element);
+#endif
+  var treeWalker = document.createTreeWalker(
+    element,
+    NodeFilter.SHOW_TEXT,
+    null, // additional filter function
+    false
+  );
+  while((node = treeWalker.nextNode())) {
+#ifdef DEBUG_matchInText
+#ifdef DEBUG_scancodes
+    jsConsoleService.logStringMessage(node.data + "\n" + stringToScanCodes(node.data));
+#else
+    jsConsoleService.logStringMessage(node.data);
+#endif
+#endif
+    if (expression.test(node.data)) {
+      if (matchResults) {
+        matchResults.hasMatching = true;
+      }
+      else {
+#ifdef DEBUG_matchInText
+        jsConsoleService.logStringMessage("found match.\n---------------------------------------------");
+#endif
+        return true;
+      }
+    }
+    else if (matchResults) {
+      matchResults.hasNonMatching = true;
+    }
+    
+#ifdef DEBUG_matchInText
+    jsConsoleService.logStringMessage("... node doesn't match.\n");
+#endif
+  }
+#ifdef DEBUG_matchInText
+  jsConsoleService.logStringMessage( 
+    ((matchResults ? matchResults.hasMatching : false) ? "found" : "no") +
+    "match.\n---------------------------------------------");
+#endif
+  return (matchResults ? matchResults.hasMatching : false);
+}
+
+function neutralsOnly(str)
+{
+#ifdef DEBUG_neutralsOnly
+  jsConsoleService.logStringMessage("in neutralsOnly for\n\n" + str);
+#endif
+  var neutrals = new RegExp("^(\\s|\\n|[!-@\[-`\\u2013\\u2014])*$");
+  return neutrals.test(str);
+}
+
+// returns "rtl", "ltr", "neutral" or "mixed"; but only an element
+// with more than one text node can be mixed
+function directionCheck(obj)
+{
+#ifdef DEBUG_directionCheck
+  jsConsoleService.logStringMessage("in directionCheck(" + obj + ")");
+#endif
+  // we check whether there exists a line which either begins
+  // with a word consisting solely of characters of an RTL script,
+  // or ends with two such words (excluding any punctuation/spacing/
+  // numbering at the beginnings and ends of lines)
+
+  var rtlCharacter = "[\\u0590-\\u05FF\\uFB1D-\\uFB4F\\u0600-\\u06FF\\uFB50-\\uFDFF\\uFE70-\\uFEFC]";
+  // note we're allowing sequences of initials, e.g W"ERBEH
+  var rtlSequence = "(" +  rtlCharacter + "{2,}|" + rtlCharacter + "\"" + rtlCharacter + ")";
+  var neutralCharacter = "[ \\f\\n\\r\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\\u2013\\u2014]";
+  var ignorableCharacter = "(" + neutralCharacter + "|" + rtlCharacter + ")";
+  var allNeutralExpression = new RegExp (
+    "^" + neutralCharacter + "*" + "$");
+  var rtlLineExpression = new RegExp (
+    // either the text has no non-RTL characters and some RTL characters
+    "(" + "^" + ignorableCharacter + "*" + rtlCharacter + ignorableCharacter + "*" + "$" + ")" +
+    "|" +
+    // or it has a line with two RTL 'words' before any non-RTL characters
+    "(" + "(^|\\n)" + ignorableCharacter + "*" + rtlSequence + neutralCharacter + "+" + rtlSequence + ")" +
+    "|" +
+    // or it has a line with two RTL 'words' after all non-RTL characters
+    "(" + rtlSequence + neutralCharacter + "+" + rtlSequence + ignorableCharacter + "*" + "($|\\n)" + ")" );
+
+  if (typeof obj == 'string') {
+    if (allNeutralExpression.test(obj)) {
+#ifdef DEBUG_directionCheck
+      jsConsoleService.logStringMessage("directionCheck - string\n\n"+obj+"\n\nis NEUTRAL");
+#endif
+      return "neutral";
+    }
+#ifdef DEBUG_directionCheck
+    jsConsoleService.logStringMessage("directionCheck - string\n\n"+obj+"\n\nis " + (rtlLineExpression.test(obj) ? "RTL" : "LTR") );
+#endif
+    return (rtlLineExpression.test(obj) ? "rtl" : "ltr");
+  }
+  else { // it's a DOM node
+    if (allNeutralExpression.test(obj.textContent)) {
+#ifdef DEBUG_directionCheck
+      jsConsoleService.logStringMessage("directionCheck - object "+obj+"\nis NEUTRAL");
+#endif
+      return null;
+    }
+    var matchResults = new Object;
+    matchInText(obj, rtlLineExpression, matchResults);
+    return (matchResults.hasMatching ?
+            (matchResults.hasNonMatching ? "mixed" : "rtl") : "ltr");
+#ifdef DEBUG_directionCheck
+    jsConsoleService.logStringMessage("directionCheck - object "+obj+"\nis " + (matchResults.hasMatching ?
+            (matchResults.hasNonMatching ? "mixed" : "rtl") : "ltr") );
+#endif
+  }
+  //  return rtlLineExpression.test(element.textContent);
+}
+
