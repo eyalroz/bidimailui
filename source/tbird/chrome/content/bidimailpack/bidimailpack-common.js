@@ -225,7 +225,7 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
           jsConsoleService.logStringMessage('---------------------------------\nin performCorrectiveRecoding(' + 
           preferredCharset + ', ' + mailnewsDecodingType + ", " + (doCharset ? "doCharset" : "!doCharset") + ", " + 
           (doUTF8 ? "doUTF8" : "!doUTF8") + ")");
-          jsConsoleService.logStringMessage('element text content:\n\n' + element.textContent);
+          jsConsoleService.logStringMessage('element textContent (all nodes together):\n\n' + element.textContent);
 #endif
   if (!doCharset && !doUTF8) {
 #ifdef DEBUG_performCorrectiveRecoding
@@ -274,7 +274,7 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
   
     var lines = node.data.split('\n');
 #ifdef DEBUG_scancodes
-    jsConsoleService.logStringMessage("text node with " + lines.length + "lines");
+    jsConsoleService.logStringMessage("processing text node with " + lines.length + " lines");
 #endif
     for(i = 0; i < lines.length; i++) {
       var workingStr; 
@@ -283,14 +283,8 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
       // much more distinctive D7 blah D7 blah D7 blah pattern!
       if (doUTF8 && utf8MisdetectionExpression.test(lines[i])) {
         try {
-
-          // remove some higher-than-0x7F characters originating in HTML entities, such as &nbsp;
-          // (we remove them only if they're not the second byte of a two-byte sequence; we ignore
-          // the possibility of their being part of a 3-to-6-byte sequence)
-          workingStr = lines[i].replace(/(^|[\x00-\xBF])\xA0+/g,'$1 ');
-          // this is for multiple A0's in a row; I bet there's a better way to do this than a second replace...
-          workingStr = workingStr.replace(/(^|[\x00-\xBF])\xA0+/g,'$1 ');
-        
+          workingStr = lines[i];
+          
           // at this point, mailnewsDecodingType can only be latin or preferred
           gUnicodeConverter.charset =
             (mailnewsDecodingType == "latin-charset") ? 'windows-1252' : preferredCharset;
@@ -298,13 +292,42 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
           jsConsoleService.logStringMessage(
             "decoded as " + gUnicodeConverter.charset + ":\n" + workingStr + "\n----\n" + stringToScanCodes(workingStr));
 #endif
+
         
           workingStr = gUnicodeConverter.ConvertFromUnicode(workingStr);
           // TODO: not sure we need this next line
           workingStr += gUnicodeConverter.Finish();
+
 #ifdef DEBUG_scancodes
           jsConsoleService.logStringMessage("undecoded bytes:\n" + workingStr  + "\n----\n" + stringToScanCodes(workingStr));
 #endif
+
+          // remove some higher-than-0x7F characters originating in HTML entities, such as &nbsp;
+          // (we remove them only if they're not the second byte of a two-byte sequence; we ignore
+          // the possibility of their being part of a 3-to-6-byte sequence)
+          workingStr = workingStr.replace(/(^|[\x00-\xBF])\xA0+/g,'$1 ');
+
+          // decode any numeric HTML entities ; weird stuff
+          // will be replaced with the UTF-8 encoding of a \uFFFD (unicode replacement char)
+          workingStr = workingStr.replace(
+            /[\xC2–\xDF]*&#(\d+);/g,
+            function() {
+              var res = String.fromCharCode(RegExp.$1);
+	      return ((res.charCodeAt(0) > 0xBF) ? '\xEF\xBF\xBD' : res);
+            }
+            );
+
+          // first byte of a two-byte sequence followed by a byte not completing the sequence
+          workingStr = workingStr.replace(/\xD7([^\x80-\xBF]|$)/g,'$1');
+          //workingStr = workingStr.replace(/\xD7\xEF/g,'\xEF');
+
+#ifdef DEBUG_scancodes
+          jsConsoleService.logStringMessage(
+            "after preprocessing (decoding of HTML entities, removing NBSPs (A0's)," + 
+            "removing unterminated 2-byte sequences):\n" + workingStr +
+            "\n----\n" + stringToScanCodes(workingStr));
+#endif
+
           gUnicodeConverter.charset = "UTF-8";
           lines[i] = gUnicodeConverter.ConvertToUnicode(workingStr);
           
