@@ -413,7 +413,7 @@ function matchInText(element, expression, matchResults)
 #ifdef DEBUG_matchInText
   jsConsoleService.logStringMessage( 
     ((matchResults ? matchResults.hasMatching : false) ? "found" : "no") +
-    "match.\n---------------------------------------------");
+    " match.\n---------------------------------------------");
 #endif
   return (matchResults ? matchResults.hasMatching : false);
 }
@@ -442,13 +442,20 @@ function directionCheck(obj)
   var rtlCharacter = "[\\u0590-\\u05FF\\uFB1D-\\uFB4F\\u0600-\\u06FF\\uFB50-\\uFDFF\\uFE70-\\uFEFC]";
   // note we're allowing sequences of initials, e.g W"ERBEH
   var rtlSequence = "(" +  rtlCharacter + "{2,}|" + rtlCharacter + "\"" + rtlCharacter + ")";
-  var neutralCharacter = "[ \\f\\n\\r\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\\u2013\\u2014]";
+  var ltrSequence = "(" +  "\\w" + "[\\-@\\.']?" + ")" + "{2,}";
+  var neutralCharacter = "[ \\f\\n\\r\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\{-}\u2013\\u2014]";
   var ignorableCharacter = "(" + neutralCharacter + "|" + rtlCharacter + ")";
   var allNeutralExpression = new RegExp (
     "^" + neutralCharacter + "*" + "$");
   var rtlLineExpression = new RegExp (
     // either the text has no non-RTL characters and some RTL characters
     "(" + "^" + ignorableCharacter + "*" + rtlCharacter + ignorableCharacter + "*" + "$" + ")" +
+    "|" +
+    // or it has only one non-RTL 'word', with an RTL 'word' before it
+    "(" + "^" + ignorableCharacter + "*" + rtlSequence + ignorableCharacter + "+" + ltrSequence + ignorableCharacter + "*" +  "$" + ")" +
+    "|" +
+    // or it has only one non-RTL 'word', with an RTL 'word' after it
+    "(" + "^" + ignorableCharacter + "*" + ltrSequence + ignorableCharacter + "+" + rtlSequence + ignorableCharacter + "*" +  "$" + ")" +
     "|" +
     // or it has a line with two RTL 'words' before any non-RTL characters
     "(" + "(^|\\n)" + ignorableCharacter + "*" + rtlSequence + neutralCharacter + "+" + rtlSequence + ")" +
