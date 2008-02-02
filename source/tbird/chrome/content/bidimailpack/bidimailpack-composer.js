@@ -438,6 +438,9 @@ function LoadParagraphMode()
 
 function GetDisplayedCopyParams(messageURI,messageParams)
 {
+#ifdef DEBUG_GetDisplayedCopyParams
+    jsConsoleService.logStringMessage('GetDisplayedCopyParams for message\n' + messageURI);
+#endif
   // Note: there may be more than one window
   // which displays the message we are replying to;
   // since the enumeration is from the oldest window
@@ -469,9 +472,17 @@ function GetDisplayedCopyParams(messageURI,messageParams)
     if (!displayedCopyBrowser)
       continue;
 
-    //messageContentElement =
-    //  GetMessageContentElement(browser.docShell.contentViewer.DOMDocument);
+#ifdef DEBUG_GetDisplayedCopyParams
+    jsConsoleService.logStringMessage('found a window displaying our message');
+#endif
+
+
     var displayedCopyBody = displayedCopyBrowser.contentDocument.body;
+
+#ifdef DEBUG_GetDisplayedCopyParams
+    jsConsoleService.logStringMessage('body is ' + displayedCopyBody);
+#endif
+
     for (var i=0; i < displayedCopyBody.childNodes.length; i++) {
       var subBody = displayedCopyBody.childNodes.item(i);
   
@@ -479,9 +490,9 @@ function GetDisplayedCopyParams(messageURI,messageParams)
         continue;
       messageParams.originalDisplayDirection = subBody.style.direction;
     }
-    messageParams.recodedUTF8 = displayedCopyBody.hasAttribute('bidimailuiui-recoded-utf8');
-    messageParams.recodedCharset = displayedCopyBody.getAttribute('bidimailuiui-recoded-charset');
-    messageParams.mailnewsDecodingType = displayedCopyBody.getAttribute('bidimailuiui-detected-decoding-type');
+    messageParams.recodedUTF8 = displayedCopyBody.hasAttribute('bidimailui-recoded-utf8');
+    messageParams.recodedCharset = displayedCopyBody.getAttribute('bidimailui-recoded-charset');
+    messageParams.mailnewsDecodingType = displayedCopyBody.getAttribute('bidimailui-detected-decoding-type');
   }
 }
 
