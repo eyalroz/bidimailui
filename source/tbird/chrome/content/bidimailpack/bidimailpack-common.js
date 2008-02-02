@@ -446,7 +446,7 @@ function neutralsOnly(str)
 #ifdef DEBUG_neutralsOnly
   jsConsoleService.logStringMessage("in neutralsOnly for\n\n" + str);
 #endif
-  var neutrals = new RegExp("^(\\s|\\n|[!-@\[-`\\u2013\\u2014])*$");
+  var neutrals = new RegExp("^(\\s|\\n|[!-@\[-`\\u2013\\u2014\\uFFFD])*$");
   return neutrals.test(str);
 }
 
@@ -466,7 +466,7 @@ function directionCheck(obj)
   // note we're allowing sequences of initials, e.g W"ERBEH
   var rtlSequence = "(" +  rtlCharacter + "{2,}|" + rtlCharacter + "\"" + rtlCharacter + ")";
   var ltrSequence = "(" +  "\\w" + "[\\-@\\.']?" + ")" + "{2,}";
-  var neutralCharacter = "[ \\f\\n\\r\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\{-}\u2013\\u2014]";
+  var neutralCharacter = "[ \\f\\n\\r\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\{-}\u2013\\u2014\\uFFFD]";
   var ignorableCharacter = "(" + neutralCharacter + "|" + rtlCharacter + ")";
   var allNeutralExpression = new RegExp (
     "^" + neutralCharacter + "*" + "$");
