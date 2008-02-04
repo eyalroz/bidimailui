@@ -203,7 +203,8 @@ function browserOnLoadHandler()
 // split elements in the current message (we assume it's moz-text-plain)
 // so that \n\n in the message text means moving to another block element
 // this allows setting per-paragraph direction, assuming paragraphs are
-// separated by double \n's
+// separated by double \n's (with possibly some neutral characters between 
+// them, e.g. hello\n---\ngoodbye )
 function splitTextElementsInPlainMessageDOMTree(subBody)
 {
 #ifdef DEBUG_splitTextElementsInPlainMessageDOMTree
@@ -221,7 +222,7 @@ function splitTextElementsInPlainMessageDOMTree(subBody)
     jsConsoleService.logStringMessage("-----\ntext node\n-----\n" + node.nodeValue);
 #endif
     // TODO: ensure the parent's a PRE or BLOCKQUOTE or something else that's nice
-    if (! /(\n\s*)+\n/m.test(node.nodeValue)) {
+    if (! /\n[ \f\r\t\v\n\u00A0\\u2028\\u2029!-@\[-`{-\xA0\u2013\u2014\uFFFD]*\n/m.test(node.nodeValue)) {
        node = treeWalker.nextNode();
        continue;
     }
