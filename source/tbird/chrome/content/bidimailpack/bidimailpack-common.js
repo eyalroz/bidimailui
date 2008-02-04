@@ -451,7 +451,7 @@ function neutralsOnly(str)
 #ifdef DEBUG_neutralsOnly
   jsConsoleService.logStringMessage("in neutralsOnly for\n\n" + str);
 #endif
-  var neutrals = new RegExp("^[ \\f\\n\\r\\t\\v!-@\[-`\\u2013\\u2014\\uFFFD]*$");
+  var neutrals = new RegExp("^[ \\f\\r\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\{-\xA0\u2013\\u2014\\uFFFD]*$");
   return neutrals.test(str);
 }
 
@@ -467,17 +467,20 @@ function directionCheck(obj)
   // or ends with two such words (excluding any punctuation/spacing/
   // numbering at the beginnings and ends of lines)
 
-  var rtlCharacter = "[\\u0590-\\u05FF\\uFB1D-\\uFB4F\\u0600-\\u06FF\\uFB50-\\uFDFF\\uFE70-\\uFEFC]";
+  var rtlCharacterInner = "\\u0590-\\u05FF\\uFB1D-\\uFB4F\\u0600-\\u06FF\\uFB50-\\uFDFF\\uFE70-\\uFEFC";
+  var rtlCharacter = "[" + rtlCharacterInner + "]";
   // note we're allowing sequences of initials, e.g W"ERBEH
   var rtlSequence = "(" +  rtlCharacter + "{2,}|" + rtlCharacter + "\"" + rtlCharacter + ")";
   var ltrSequence = "(" +  "\\w" + "[\\-@\\.']?" + ")" + "{2,}";
-  var neutralCharacter = "[ \\f\\n\\r\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\{-}\u2013\\u2014\\uFFFD]";
-  var ignorableCharacter = "(" + neutralCharacter + "|" + rtlCharacter + ")";
+  var neutralCharacterInner = " \\f\\r\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\{-\xA0\u2013\\u2014\\uFFFD";
+  var neutralCharacter = "[" + neutralCharacterInner + "]";
+  var ignorableCharacter = "[" + neutralCharacterInner + rtlCharacterInner + "]";
+  var ignorableCharacterWithNewline = "[" + neutralCharacterInner + rtlCharacterInner + "\\n]";
   var allNeutralExpression = new RegExp (
     "^" + neutralCharacter + "*" + "$");
   var rtlLineExpression = new RegExp (
     // either the text has no non-RTL characters and some RTL characters
-    "(" + "^" + ignorableCharacter + "*" + rtlCharacter + ignorableCharacter + "*" + "$" + ")" +
+    "(" + "^" + ignorableCharacterWithNewline + "*" + rtlCharacter + ignorableCharacterWithNewline + "*" + "$" + ")" +
     "|" +
     // or it has only one non-RTL 'word', with an RTL 'word' before it
     "(" + "^" + ignorableCharacter + "*" + rtlSequence + ignorableCharacter + "+" + ltrSequence + ignorableCharacter + "*" +  "$" + ")" +
