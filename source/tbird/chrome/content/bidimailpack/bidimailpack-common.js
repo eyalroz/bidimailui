@@ -302,6 +302,11 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
           jsConsoleService.logStringMessage("undecoded bytes:\n" + workingStr  + "\n----\n" + stringToScanCodes(workingStr));
 #endif
 
+          // We see a lot of D7 20's instead of D7 A0's which are the 2-byte sequence for 
+          // the Hebrew letter Nun; I guess some clients or maybe even Mozilla replace A0
+          // (a non-breaking space in windows-1252) with 20 (a normal space)
+          workingStr = workingStr.replace(/\xD7\x20/g,'\xD7\xA0');
+
           // remove some higher-than-0x7F characters originating in HTML entities, such as &nbsp;
           // (we remove them only if they're not the second byte of a two-byte sequence; we ignore
           // the possibility of their being part of a 3-to-6-byte sequence)
