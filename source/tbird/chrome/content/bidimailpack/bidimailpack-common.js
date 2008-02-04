@@ -451,7 +451,7 @@ function neutralsOnly(str)
 #ifdef DEBUG_neutralsOnly
   jsConsoleService.logStringMessage("in neutralsOnly for\n\n" + str);
 #endif
-  var neutrals = new RegExp("^[ \\f\\n\\r\\t\\v!-@\[-`\\u2013\\u2014\\uFFFD])*$");
+  var neutrals = new RegExp("^[ \\f\\n\\r\\t\\v!-@\[-`\\u2013\\u2014\\uFFFD]*$");
   return neutrals.test(str);
 }
 
