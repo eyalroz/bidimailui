@@ -435,7 +435,9 @@ function matchInText(element, expression, matchResults)
     }
     
 #ifdef DEBUG_matchInText
-    jsConsoleService.logStringMessage("... node doesn't match.\n");
+    if (!matchResults) {
+      jsConsoleService.logStringMessage("... node doesn't match.\n");
+    }
 #endif
   }
 #ifdef DEBUG_matchInText
@@ -451,7 +453,7 @@ function neutralsOnly(str)
 #ifdef DEBUG_neutralsOnly
   jsConsoleService.logStringMessage("in neutralsOnly for\n\n" + str);
 #endif
-  var neutrals = new RegExp("^[ \\f\\r\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\{-\xA0\u2013\\u2014\\uFFFD]*$");
+  var neutrals = new RegExp("^[ \\f\\r\\n\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\{-\xA0\u2013\\u2014\\uFFFD]*$");
   return neutrals.test(str);
 }
 
@@ -474,10 +476,11 @@ function directionCheck(obj)
   var ltrSequence = "(" +  "\\w" + "[\\-@\\.']?" + ")" + "{2,}";
   var neutralCharacterInner = " \\f\\r\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\{-\xA0\u2013\\u2014\\uFFFD";
   var neutralCharacter = "[" + neutralCharacterInner + "]";
+  var neutralCharacterWithNewLine = "[\\n" + neutralCharacterInner + "]";
   var ignorableCharacter = "[" + neutralCharacterInner + rtlCharacterInner + "]";
   var ignorableCharacterWithNewline = "[" + neutralCharacterInner + rtlCharacterInner + "\\n]";
   var allNeutralExpression = new RegExp (
-    "^" + neutralCharacter + "*" + "$");
+    "^" + neutralCharacterWithNewLine + "*" + "$");
   var rtlLineExpression = new RegExp (
     // either the text has no non-RTL characters and some RTL characters
     "(" + "^" + ignorableCharacterWithNewline + "*" + rtlCharacter + ignorableCharacterWithNewline + "*" + "$" + ")" +
@@ -507,20 +510,26 @@ function directionCheck(obj)
     return (rtlLineExpression.test(obj) ? "rtl" : "ltr");
   }
   else { // it's a DOM node
+#ifdef DEBUG_scancodes
+    jsConsoleService.logStringMessage(obj.textContent + "\n" + stringToScanCodes(obj.textContent));
+#endif
     if (allNeutralExpression.test(obj.textContent)) {
 #ifdef DEBUG_directionCheck
       jsConsoleService.logStringMessage("directionCheck - object "+obj+"\nis NEUTRAL");
 #endif
       return null;
     }
+#ifdef DEBUG_directionCheck
+      jsConsoleService.logStringMessage("object is NOT NEUTRAL");
+#endif
     var matchResults = new Object;
     matchInText(obj, rtlLineExpression, matchResults);
-    return (matchResults.hasMatching ?
-            (matchResults.hasNonMatching ? "mixed" : "rtl") : "ltr");
 #ifdef DEBUG_directionCheck
     jsConsoleService.logStringMessage("directionCheck - object "+obj+"\nis " + (matchResults.hasMatching ?
             (matchResults.hasNonMatching ? "mixed" : "rtl") : "ltr") );
 #endif
+    return (matchResults.hasMatching ?
+            (matchResults.hasNonMatching ? "mixed" : "rtl") : "ltr");
   }
   //  return rtlLineExpression.test(element.textContent);
 }
