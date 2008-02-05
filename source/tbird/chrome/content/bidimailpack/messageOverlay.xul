@@ -57,7 +57,7 @@
     <key id="key-bidimail-switch"
          modifiers="&key-bidimail-switch-document-direction.modifiers;"
          key="&key-bidimail-switch-document-direction.keycode;"
-         oncommand="SwitchMessageDirection()" />
+         oncommand="cycleDirectionSettings()" />
   </keyset>
 
 #ifdef MOZ_THUNDERBIRD
@@ -71,7 +71,7 @@
     <menuitem insertafter="mailviewCharsetMenu"
               label="&menu-bidimail-switch-message-direction.label;"
               accesskey="&menu-bidimail-switch-document-direction.accesskey;" 
-              key="key-bidimail-switch" oncommand="SwitchMessageDirection()" />
+              key="key-bidimail-switch" oncommand="cycleDirectionSettings()" />
   </menupopup>
   
   <popup id="messagePaneContext">
@@ -79,23 +79,7 @@
     <menuitem label="&menu-bidimail-switch-message-direction.label;"
               key="key-bidimail-switch"
               accesskey="&menu-bidimail-switch-document-direction.accesskey;"
-              oncommand="SwitchMessageDirection()" />
+              oncommand="cycleDirectionSettings()" />
   </popup>
-  
-#ifdef MOZ_THUNDERBIRD
-  <toolbarpalette id="MailToolbarPalette">
-    <toolbarbutton id="button-direction-ltr-main-bar"
-                   class="toolbarbutton-1"
-                   oncommand="SetMessageDirection('ltr');"
-                   observes="ltr-document-direction-broadcaster"
-                   label="&bidimail-ltr-button.label;"
-                   tooltiptext="&bidimail-ltr-button.tip;" />
-    <toolbarbutton id="button-direction-rtl-main-bar"
-                   class="toolbarbutton-1"
-                   oncommand="SetMessageDirection('rtl');"
-                   observes="rtl-document-direction-broadcaster"
-                   label="&bidimail-rtl-button.label;"
-                   tooltiptext="&bidimail-rtl-button.tip;" />  
-  </toolbarpalette>
-#endif
+ 
 </overlay>

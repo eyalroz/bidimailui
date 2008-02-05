@@ -41,7 +41,7 @@
    of the blockquote
  */
    
-blockquote[type="cite"][direction-uniformity="rtl"] {
+blockquote[type="cite"][bidimailui-direction-uniformity="rtl"] {
   padding-right: 1em !important;
   border-right-style: solid !important;
   border-right-width: thin !important;
@@ -52,7 +52,7 @@ blockquote[type="cite"][direction-uniformity="rtl"] {
   border-left: 0 !important;
 }
 
-blockquote[type="cite"][direction-uniformity="ltr"] {
+blockquote[type="cite"][bidimailui-direction-uniformity="ltr"] {
   padding-right: 0 !important;
   border-right: 0 !important;
   padding-left: 1em !important;
