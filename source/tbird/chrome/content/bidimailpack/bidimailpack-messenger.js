@@ -48,60 +48,38 @@ jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 // workaround for bug 12469
 var gMessageURI = null;
 
-function SetMessageDirection(direction)
+function cycleDirectionSettings()
 {
-#ifdef DEBUG_SetMessageDirection
-  jsConsoleService.logStringMessage("SetMessageDirection to " + direction);
+  var body = getMessageBrowser().contentDocument.body;
+  switch (body.getAttribute('bidimailui-forced-direction')) {
+    case 'ltr':
+#ifdef DEBUG_cycleDirectionSettings
+  jsConsoleService.logStringMessage('currently direction is FORCED LTR');
 #endif
-  var body;
-  try {
-    body = getMessageBrowser().contentDocument.body;
-  }
-  catch (ex) {
-    dump(ex);
-#ifdef DEBUG_SetMessageDirection
-    jsConsoleService.logStringMessage("Failed setting message direction - can't get body:\n" + ex);
+      setDirections(body,'rtl');
+      body.setAttribute('bidimailui-forced-direction','rtl');
+      break;
+    case 'rtl':
+#ifdef DEBUG_cycleDirectionSettings
+  jsConsoleService.logStringMessage('currently direction is FORCED RTL');
 #endif
-    return;
+      setDirections(body,null);
+      body.removeAttribute('bidimailui-forced-direction');
+      break;
+    default:
+#ifdef DEBUG_cycleDirectionSettings
+  jsConsoleService.logStringMessage('currently direction is NOT FORCED');
+#endif
+      setDirections(body,'ltr');
+      body.setAttribute('bidimailui-forced-direction','ltr');
   }
-
-  body.style.direction = direction;
-
+/*
   // RSS entries might be enclosed in an IFRAME which isolates them from outside changes
   if (body.childNodes.item(1).childNodes.item(1).id == "_mailrssiframe") {
     body.childNodes.item(1).childNodes.item(1).contentDocument.documentElement.style.direction = direction;
   }
 
-#ifdef MOZ_THUNDERBIRD
-  UpdateDirectionButtons(direction);
-#endif
-}
-
-function SwitchMessageDirection()
-{
-  var body;
-  try {
-    body = getMessageBrowser().contentDocument.body;
-  }
-  catch (ex) {
-    dump(ex);
-    return;
-  }
-
-  var newDirection =
-    (window.getComputedStyle(body, null).direction == "rtl" ?
-     "ltr" : "rtl");
-  SetMessageDirection(newDirection);
-}
-
-function UpdateDirectionButtons(direction)  
-{
-#ifdef MOZ_THUNDERBIRD
-  var caster = document.getElementById("ltr-document-direction-broadcaster");  
-  caster.setAttribute("checked", direction == "ltr");  
-  caster = document.getElementById("rtl-document-direction-broadcaster");  
-  caster.setAttribute("checked", direction == "rtl");
-#endif
+*/
 }
 
 function browserOnLoadHandler()
@@ -190,14 +168,10 @@ function browserOnLoadHandler()
     head.appendChild(newSS);
   }
 
-  if (gBDMPrefs.getBoolPref("display.autodetect_direction", true))
-    applyDirectionDetection(domDocument.body,loadedMessageURI);
-
-#ifdef MOZ_THUNDERBIRD
-  var currentDirection =
-    window.getComputedStyle(body, null).direction;
-  UpdateDirectionButtons(currentDirection);
-#endif
+  if (gBDMPrefs.getBoolPref("display.autodetect_direction", true)) {
+    preprocessMessageDOM(domDocument.body);
+    detectAndSetDirections(domDocument.body,loadedMessageURI,null);
+  }
 }    
 
 // split elements in the current message (we assume it's moz-text-plain)
@@ -351,20 +325,38 @@ function wrapTextNodesInFlowedMessageDOMTree(subBody)
   }
 }
 
-function applyDirectionDetection(body, loadedMessageURI)
+function preprocessMessageDOM(body)
 {
-#ifdef DEBUG_applyDirectionDetection
-  jsConsoleService.logStringMessage("in applyDirectionDetection for message\n" + loadedMessageURI);
+#ifdef DEBUG_preprocessMessageDOM
+  jsConsoleService.logStringMessage("preprocessMessageDOM);
   if (body.childNodes.item(1))
     jsConsoleService.logStringMessage("body.childNodes.item(1).className = " + body.childNodes.item(1).className);
   else
     jsConsoleService.logStringMessage("body has no children");
 #endif
-  
-  // Create an array of all the elements whose contents' direction 
-  // we need to check and whose direction we set accordingly
-  
-  var elementsRequiringExplicitDirection = new Array;
+
+  for (var i=0; i < body.childNodes.length; i++) {
+    var subBody = body.childNodes.item(i);
+
+#ifdef DEBUG_preprocessMessageDOM
+    jsConsoleService.logStringMessage('subbody ' + i + ' is ' + subBody.className);
+#endif
+
+    if (subBody.className == "moz-text-plain") {
+      splitTextElementsInPlainMessageDOMTree(subBody);
+    }
+    else if (subBody.className == "moz-text-flowed") {
+      wrapTextNodesInFlowedMessageDOMTree(subBody);
+    }
+  }
+}
+
+// Gather all the elements whose contents' direction 
+// we need to check and whose direction we set accordingly
+// (or to force, as the case may be)
+function gatherElementsRequiringDirectionSetting(
+  body, elementsRequiringExplicitDirection)
+{
   for (var i=0; i < body.childNodes.length; i++) {
     var subBody = body.childNodes.item(i);
 
@@ -373,14 +365,12 @@ function applyDirectionDetection(body, loadedMessageURI)
     
     elementsRequiringExplicitDirection.push(subBody);
 
-#ifdef DEBUG_applyDirectionDetection
+#ifdef DEBUG_gatherElementsRequiringDirectionSetting
     jsConsoleService.logStringMessage('subbody ' + i + ' is ' + subBody.className);
 #endif
 
-    var nodes ;
+    var nodes;
     if (subBody.className == "moz-text-plain") {
-      splitTextElementsInPlainMessageDOMTree(subBody);
-     
       nodes =  subBody.getElementsByTagName("PRE");
       for (var j = 0; j < nodes.length; j++ ) {
         elementsRequiringExplicitDirection.push(nodes[j]);
@@ -391,8 +381,6 @@ function applyDirectionDetection(body, loadedMessageURI)
       }
     }
     else if (subBody.className == "moz-text-flowed") {
-
-      wrapTextNodesInFlowedMessageDOMTree(subBody);
       nodes =  subBody.getElementsByTagName("DIV");
       for (var j = 0; j < nodes.length; j++ ) {
 
@@ -403,12 +391,20 @@ function applyDirectionDetection(body, loadedMessageURI)
       }
     }
   }
+}
 
-  // auto-detect the direction of elements in the message
+function detectAndSetDirections(body, loadedMessageURI)
+{
+#ifdef DEBUG_detectAndSetDirections
+  jsConsoleService.logStringMessage("in detectAndSetDirections for message\n" + loadedMessageURI);
+#endif
+  
+  var elementsRequiringExplicitDirection = new Array;
+  gatherElementsRequiringDirectionSetting(
+    body, elementsRequiringExplicitDirection);
 
-#ifdef DEBUG_applyDirectionDetection
+#ifdef DEBUG_detectAndSetDirections
   jsConsoleService.logStringMessage("elementsRequiringExplicitDirection.length = " + elementsRequiringExplicitDirection.length);
-//  jsConsoleService.logStringMessage("body.getElementsByTagName(\"blockquote\").length = " + body.getElementsByTagName("blockquote").length);
 #endif
 
   // direction-check all of the elements whose direction should be set explicitly
@@ -417,34 +413,58 @@ function applyDirectionDetection(body, loadedMessageURI)
     var node = elementsRequiringExplicitDirection[i];
     try {
    
-#ifdef DEBUG_applyDirectionDetection
-    jsConsoleService.logStringMessage('elementsRequiringExplicitDirection[ ' + i + ']: ' + node + "\ntype: " + node.nodeType + "\nclassName: " + node.className + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+#ifdef DEBUG_detectAndSetDirections
+      jsConsoleService.logStringMessage('elementsRequiringExplicitDirection[ ' + i + ']: ' + node + "\ntype: " + node.nodeType + "\nclassName: " + node.className + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
 #endif
         
-#ifdef DEBUG_applyDirectionDetection
-    jsConsoleService.logStringMessage("considering direction change?");
+      var detectedDirection = directionCheck(node);
+#ifdef DEBUG_detectAndSetDirections
+      jsConsoleService.logStringMessage("detected direction: " + detectedDirection);
 #endif
-    var detectedDirection = directionCheck(node);
-#ifdef DEBUG_applyDirectionDetection
-    jsConsoleService.logStringMessage("canBeAssumedRTL(elementsRequiringExplicitDirection[i]) = " + (detectedDirection == "rtl") );
-#endif
-    if (detectedDirection != "neutral") {
-      // "mixed" -> "rtl" as far as direction is concerned
-      node.style.direction = (detectedDirection == "ltr" ? "ltr" : "rtl");
-      if ((node.nodeName == "BLOCKQUOTE") ||
-          (node.nodeName == "blockquote")) {
-        // this affected the sides on which a quote bar appears
-        node.setAttribute('direction-uniformity',detectedDirection);
+      if (detectedDirection != "neutral") {
+        // "mixed" -> "rtl" as far as direction is concerned
+        node.style.direction = (detectedDirection == "ltr" ? "ltr" : "rtl");
       }
-    }
+      node.setAttribute('bidimailui-direction-uniformity',detectedDirection);
     // otherwise, let's not set the direction of an all-neutral-char node
     } catch(ex) {
-#ifdef DEBUG_applyDirectionDetection
+#ifdef DEBUG_detectAndSetDirections
       jsConsoleService.logStringMessage(ex);
 #endif
     }
   }
 }
+
+function setDirections(body, forcedDirection)
+{
+#ifdef DEBUG_setDirections
+  jsConsoleService.logStringMessage('settings directions to ' + (forcedDirection ? forcedDirection : 'detected directions'));
+#endif
+  var elementsRequiringExplicitDirection = new Array;
+  gatherElementsRequiringDirectionSetting(
+    body, elementsRequiringExplicitDirection);
+
+  if (forcedDirection != null) {
+    for (i=0; i < elementsRequiringExplicitDirection.length; i++) {
+      elementsRequiringExplicitDirection[i].style.direction = forcedDirection;
+    }
+    return;
+  }
+  
+  // need to revert to the detected directions
+
+  for (i=0; i < elementsRequiringExplicitDirection.length; i++) {
+    var node = elementsRequiringExplicitDirection[i];
+    detectedDirection = node.getAttribute('bidimailui-direction-uniformity');
+    // we're assuming detectedDirection is not null
+    if (detectedDirection != "neutral") {
+      // "mixed" -> "rtl" as far as direction is concerned
+      node.style.direction = (detectedDirection == "ltr" ? "ltr" : "rtl");
+    }
+  }
+}
+
+
 
 function InstallBrowserHandler()
 {
