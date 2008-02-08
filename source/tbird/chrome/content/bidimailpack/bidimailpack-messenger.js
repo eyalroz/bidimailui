@@ -132,29 +132,28 @@ function browserOnLoadHandler()
     return;
   }
 
-  // charset misdetectioncorrections
+  // charset misdetection corrections
 
-  var charsetPref = null;
-  try {
-    charsetPref = gBDMPrefs.prefService.getComplexValue(
-      "mailnews.view_default_charset",
-      Components.interfaces.nsIPrefLocalizedString).data;
-  }
-  catch (ex) { }
-
- 
-  // TODO: perhaps we should pass the message content element instead?
   if (gBDMPrefs.getBoolPref("display.autodetect_bidi_misdecoding", true)) {
-    if (!fixLoadedMessageCharsetIssues(body,loadedMessageURI,charsetPref))
-      // the message will be reloaded, let's not do anything else with it
-      // until then
+    var charsetPref = null;
+    try {
+      charsetPref = gBDMPrefs.prefService.getComplexValue(
+        "mailnews.view_default_charset",
+        Components.interfaces.nsIPrefLocalizedString).data;
+    }
+    catch (ex) { }
+
+    if (!fixLoadedMessageCharsetIssues(body,loadedMessageURI,charsetPref)) {
+      // the message will be reloaded, let's not do anything else 
+      // with it until then
       return;
+    }
   }
 
   gMessageURI = loadedMessageURI;
 
 #ifdef DEBUG_browserOnLoadHandler
-  jsConsoleService.logStringMessage("completed charset phase");
+  jsConsoleService.logStringMessage("completed charset correction phase");
 #endif
 
   // make quote bars behave properly with RTL quoted text
