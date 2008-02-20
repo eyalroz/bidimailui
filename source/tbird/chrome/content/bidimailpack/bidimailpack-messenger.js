@@ -136,18 +136,68 @@ function browserOnLoadHandler()
 
   if (gBDMPrefs.getBoolPref("display.autodetect_bidi_misdecoding", true)) {
     var charsetPref = null;
-    try {
-      charsetPref = gBDMPrefs.prefService.getComplexValue(
-        "mailnews.view_default_charset",
-        Components.interfaces.nsIPrefLocalizedString).data;
-    }
-    catch (ex) { }
+    charsetPref = gBDMPrefs.prefService.getComplexValue(
+      "mailnews.view_default_charset",
+      Components.interfaces.nsIPrefLocalizedString).data;
 
-    if (!fixLoadedMessageCharsetIssues(body,loadedMessageURI,charsetPref)) {
-      // the message will be reloaded, let's not do anything else 
-      // with it until then
-      return;
+#ifdef DEBUG_browserOnLoadHandler
+    jsConsoleService.logStringMessage("charsetPref = " + charsetPref);
+#endif
+      
+    // if the charset pref is not one we can use for detecting mis-decoded
+    // codepage charsets, maybe we should tell the user about it
+      
+    if ((charsetPref != "windows-1255") &&
+        (charsetPref != "windows-1256") &&
+        (!gBDMPrefs.getBoolPref("display.user_accepts_unusable_charset_pref", false))) {
+      var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+                              .getService(Components.interfaces.nsIPromptService);
+      var list = [
+        gBidimailuiStrings.GetStringFromName("bidimailui.chraset_dialog.set_to_windows_1255"),
+        gBidimailuiStrings.GetStringFromName("bidimailui.chraset_dialog.set_to_windows_1256"),
+        gBidimailuiStrings.GetStringFromName("bidimailui.chraset_dialog.leave_as_is")];
+      var selected = {};
+#ifdef DEBUG_browserOnLoadHandler
+      jsConsoleService.logStringMessage("gBidimailuiStrings.GetStringFromName(\"bidimailui.chraset_dialog.set_to_windows_1255\") =\n" + gBidimailuiStrings.GetStringFromName("bidimailui.chraset_dialog.set_to_windows_1255"));
+#endif
+      var ok = prompts.select(
+        window,
+        gBidimailuiStrings.GetStringFromName("bidimailui.chraset_dialog.window_title"),
+        gBidimailuiStrings.GetStringFromName("bidimailui.chraset_dialog.dialog_message"),
+        list.length, list, selected);
+      if (ok) {
+#ifdef DEBUG_browserOnLoadHandler
+      jsConsoleService.logStringMessage("ok!");
+#endif
+        var str = 
+          Components.classes["@mozilla.org/supports-string;1"]
+                    .createInstance(Components.interfaces.nsISupportsString);
+        switch (selected.value) {
+          case 0:
+            str.data = charsetPref = "windows-1255";
+            prefs.setComplexValue("mailnews.view_default_charset", 
+              Components.interfaces.nsISupportsString, str);
+              break;
+          case 1:
+            str.data = charsetPref = "windows-1256";
+            prefs.setComplexValue("mailnews.view_default_charset", 
+                  Components.interfaces.nsISupportsString, str);
+            break;
+          case 2:
+            gBDMPrefs.setBoolPref("display.user_accepts_unusable_charset_pref", true);
+            break;
+        }
+      }
+#ifdef DEBUG_browserOnLoadHandler
+      else jsConsoleService.logStringMessage("not ok!");
+#endif
     }
+  }
+
+  if (!fixLoadedMessageCharsetIssues(body,loadedMessageURI,charsetPref)) {
+    // the message will be reloaded, let's not do anything else 
+    // with it until then
+    return;
   }
 
   gMessageURI = loadedMessageURI;

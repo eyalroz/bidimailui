@@ -55,8 +55,8 @@
 
   <keyset id="mailKeys">
     <key id="key-bidimail-switch"
-         modifiers="&key-bidimail-switch-document-direction.modifiers;"
-         key="&key-bidimail-switch-document-direction.keycode;"
+         modifiers="&key-bidimail-cycle-document-direction.modifiers;"
+         key="&key-bidimail-cycle-document-direction.keycode;"
          oncommand="cycleDirectionSettings()" />
   </keyset>
 
@@ -70,7 +70,7 @@
   <menupopup id="menu_View_Popup">
     <menuitem insertafter="mailviewCharsetMenu"
               label="&menu-bidimail-switch-message-direction.label;"
-              accesskey="&menu-bidimail-switch-document-direction.accesskey;" 
+              accesskey="&menu-bidimail-cycle-document-direction.accesskey;" 
               key="key-bidimail-switch" oncommand="cycleDirectionSettings()" />
   </menupopup>
   
@@ -78,7 +78,7 @@
     <menuseparator/>
     <menuitem label="&menu-bidimail-switch-message-direction.label;"
               key="key-bidimail-switch"
-              accesskey="&menu-bidimail-switch-document-direction.accesskey;"
+              accesskey="&menu-bidimail-cycle-document-direction.accesskey;"
               oncommand="cycleDirectionSettings()" />
   </popup>
  
