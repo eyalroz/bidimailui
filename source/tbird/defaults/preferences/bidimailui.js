@@ -8,3 +8,4 @@ pref("bidiui.mail.compose.space_between_paragraphs.scale", "cm");
 pref("bidiui.mail.display.autodetect_direction", true);
 pref("bidiui.mail.display.autodetect_bidi_misdecoding", true);
 pref("bidiui.mail.compose.alternative_enter_behavior", true);
+pref("bidiui.mail.display.user_accepts_unusable_charset_pref", false);
