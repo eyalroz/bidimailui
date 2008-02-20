@@ -516,13 +516,13 @@ function directionCheck(obj)
   }
   else { // it's a DOM node
 #ifdef DEBUG_scancodes
-    jsConsoleService.logStringMessage(obj.textContent + "\n" + stringToScanCodes(obj.textContent));
+    jsConsoleService.logStringMessage("obj.textContent:\n" + obj.textContent + "\n" + stringToScanCodes(obj.textContent));
 #endif
     if (allNeutralExpression.test(obj.textContent)) {
 #ifdef DEBUG_directionCheck
       jsConsoleService.logStringMessage("directionCheck - object "+obj+"\nis NEUTRAL");
 #endif
-      return null;
+      return "neutral";
     }
 #ifdef DEBUG_directionCheck
       jsConsoleService.logStringMessage("object is NOT NEUTRAL");
