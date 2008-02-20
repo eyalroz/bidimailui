@@ -37,6 +37,11 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+var gBidimailuiStrings =
+  Components.classes["@mozilla.org/intl/stringbundle;1"]
+            .getService(Components.interfaces.nsIStringBundleService)
+            .createBundle("chrome://bidimailpack/locale/bidimailpack.properties");
+
 // used in performCorrectiveRecoding()
 
 var gUnicodeConverter = null;
@@ -526,7 +531,7 @@ function directionCheck(obj)
     matchInText(obj, rtlLineExpression, matchResults);
 #ifdef DEBUG_directionCheck
     jsConsoleService.logStringMessage("directionCheck - object "+obj+"\nis " + (matchResults.hasMatching ?
-            (matchResults.hasNonMatching ? "mixed" : "rtl") : "ltr") );
+            (matchResults.hasNonMatching ? "MIXED" : "RTL") : "LTR") );
 #endif
     return (matchResults.hasMatching ?
             (matchResults.hasNonMatching ? "mixed" : "rtl") : "ltr");

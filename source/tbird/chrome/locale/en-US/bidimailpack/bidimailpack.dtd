@@ -37,10 +37,14 @@
    - ***** END LICENSE BLOCK ***** -->
 
 <!ENTITY menu-bidimail-switch-message-direction.label                 "Switch Message Direction">
+<!ENTITY menu-bidimail-cycle-message-direction.label                  "Cycle Message Direction Mode">
 <!ENTITY menu-bidimail-switch-page-direction.label                    "Switch Page Direction">
 <!ENTITY menu-bidimail-switch-document-direction.accesskey            "w">
+<!ENTITY menu-bidimail-cycle-document-direction.accesskey             "y">
 <!ENTITY key-bidimail-switch-document-direction.keycode               "X">
 <!ENTITY key-bidimail-switch-document-direction.modifiers             "accel,shift">
+<!ENTITY key-bidimail-cycle-document-direction.keycode                "X">
+<!ENTITY key-bidimail-cycle-document-direction.modifiers              "accel,shift">
 <!ENTITY key-bidimail-switch-paragraph-direction.keycode              "E">
 <!ENTITY key-bidimail-switch-paragraph-direction.modifiers            "accel">
 
