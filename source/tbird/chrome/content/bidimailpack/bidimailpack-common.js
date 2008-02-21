@@ -224,6 +224,7 @@ function GetMessageContentElement(domDoc) {
   return firstSubBody;
 }
 
+// Note: if both doCharset and doUTF8 is false, we only correct HTML entities
 function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType,doCharset,doUTF8)
 {
 #ifdef DEBUG_performCorrectiveRecoding
@@ -260,7 +261,11 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
   // TODO: maybe it's better to undecode first, then check whether it's UTF-8; that will probably allow
   // using a char range instead of so many individual chars
   var misdetectedUTF8Sequence = 
-    "(\\u00D7([\\u00A2\\u00A9\\u017E\\u0152\\u0153\\u02DC\\u2018\\u2019\\u201C\\u201D\\u2022\\u2220\\u2122\\u0090-\\u00AA])){3}" +
+    // Hebrew
+    "(\\xD7[\\u00A2\\u00A9\\u017E\\u0152\\u0153\\u02DC\\u2018\\u2019\\u201C\\u201D\\u2022\\u2220\\u2122\\u0090-\\u00AA]){3}" +
+    "|" + 
+    // Arabic
+    "((\\xD8[\\x8C-\\xBF])|(\\xD9[\\x80-\\xB9])|(\\xEF\\xAD[\\x90-\\xBF])|(\\xEF[\\xAE-\\xBA][\\x80-\\xBF])|(\\xEF\\xBB[\\x80-\\xBC])){3}" +
     "|" + 
     "\\uFFFD{3,}" +
     "|" + 
@@ -285,7 +290,7 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
       var workingStr; 
   
       // Note: It's _important_ to check for UTF-8 first, because that has the 
-      // much more distinctive D7 blah D7 blah D7 blah pattern!
+      // much more distinctive [D7-D9] blah [D7-D9] blah [D7-D9] blah pattern!
       if (doUTF8 && utf8MisdetectionExpression.test(lines[i])) {
         try {
           workingStr = lines[i];
@@ -310,7 +315,7 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
           // We see a lot of D7 20's instead of D7 A0's which are the 2-byte sequence for 
           // the Hebrew letter Nun; I guess some clients or maybe even Mozilla replace A0
           // (a non-breaking space in windows-1252) with 20 (a normal space)
-          workingStr = workingStr.replace(/\xD7\x20/g,'\xD7\xA0');
+          workingStr = workingStr.replace(/([\xD7-\xD9])\x20/g,'$1\xA0');
 
           // remove some higher-than-0x7F characters originating in HTML entities, such as &nbsp;
           // (we remove them only if they're not the second byte of a two-byte sequence; we ignore
@@ -328,8 +333,7 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
             );
 
           // first byte of a two-byte sequence followed by a byte not completing the sequence
-          workingStr = workingStr.replace(/\xD7([^\x80-\xBF]|$)/g,'$1');
-          //workingStr = workingStr.replace(/\xD7\xEF/g,'\xEF');
+          workingStr = workingStr.replace(/[\xD7-\xD9]([^\x80-\xBF]|$)/g,'$1');
 
 #ifdef DEBUG_scancodes
           jsConsoleService.logStringMessage(
@@ -339,11 +343,12 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
 #endif
 
           gUnicodeConverter.charset = "UTF-8";
-          lines[i] = gUnicodeConverter.ConvertToUnicode(workingStr);
+          workingStr = gUnicodeConverter.ConvertToUnicode(workingStr);
           
 #ifdef DEBUG_scancodes
-          jsConsoleService.logStringMessage("decoded UTF-8:\n" + lines[i] + "\n----\n" + stringToScanCodes(lines[i]));
+          jsConsoleService.logStringMessage("decoded UTF-8:\n" + workingStr + "\n----\n" + stringToScanCodes(lines[i]));
 #endif
+          lines[i] = workingStr;
         } catch(ex) {
 #ifdef DEBUG_scancodes
           jsConsoleService.logStringMessage("Exception while trying to recode \n" + lines[i] + "\n\n" + ex);

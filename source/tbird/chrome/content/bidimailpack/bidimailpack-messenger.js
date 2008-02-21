@@ -689,9 +689,13 @@ function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredChars
     // mailnewsDecodingType is latin-charset or preferred-charset
     //
     // TODO: some of these are only relevant for UTF-8 misdecoded as windows-1252 
-    // (or iso-8859-1; mozilla cheats and uses windows-1252), while some of these
-    // are only relevant for UTF-8 misdecoded as windows-1255
-    "(\\u00D7([\\u00A2\\u00A9\\u017E\\u0152\\u0153\\u02DC\\u2018\\u2019\\u201C\\u201D\\u2022\\u2220\\u2122\\u0090-\\u00AA])){3}" +
+    // (or iso-8859-1; mozilla cheats and uses windows-1252), 
+    //
+    // Hebrew
+    "(\\xD7[\\u00A2\\u00A9\\u017E\\u0152\\u0153\\u02DC\\u2018\\u2019\\u201C\\u201D\\u2022\\u2220\\u2122\\u0090-\\u00AA]){3}" +
+    "|" + 
+    // Arabic
+    "((\\xD8[\\x8C-\\xBF])|(\\xD9[\\x80-\\xB9])|(\\xEF\\xAD[\\x90-\\xBF])|(\\xEF[\\xAE-\\xBA][\\x80-\\xBF])|(\\xEF\\xBB[\\x80-\\xBC])){3}" +
     "|" + 
     "\\uFFFD{3,}" +
     "|" + 
