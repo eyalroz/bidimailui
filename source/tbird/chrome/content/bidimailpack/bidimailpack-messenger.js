@@ -48,38 +48,79 @@ jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 // workaround for bug 12469
 var gMessageURI = null;
 
+function setMessageDirectionForcing(forcedDirection)
+{
+  // we assume forcedDirection is 'rtl', 'ltr' or null
+#ifdef DEBUG_setMessageDirectionForcing
+  jsConsoleService.logStringMessage('SetMessageDirection(' + forcedDirection + ')');
+#endif
+  var body = getMessageBrowser().contentDocument.body;
+  setDirections(body,forcedDirection);
+  updateDirectionMenuButton(forcedDirection,false);
+  if (!forcedDirection) {
+    body.removeAttribute('bidimailui-forced-direction');
+  }
+  else {
+    body.setAttribute('bidimailui-forced-direction',forcedDirection);
+  }
+}
+
 function cycleDirectionSettings()
 {
+#ifdef DEBUG_cycleDirectionSettings
+  jsConsoleService.logStringMessage('until now, direction was FORCED RTL');
+#endif
   var body = getMessageBrowser().contentDocument.body;
   switch (body.getAttribute('bidimailui-forced-direction')) {
     case 'ltr':
-#ifdef DEBUG_cycleDirectionSettings
-  jsConsoleService.logStringMessage('currently direction is FORCED LTR');
-#endif
-      setDirections(body,'rtl');
-      body.setAttribute('bidimailui-forced-direction','rtl');
+      newForcedDirection = 'rtl';
       break;
     case 'rtl':
-#ifdef DEBUG_cycleDirectionSettings
-  jsConsoleService.logStringMessage('currently direction is FORCED RTL');
-#endif
-      setDirections(body,null);
-      body.removeAttribute('bidimailui-forced-direction');
+      newForcedDirection = null;
       break;
-    default:
-#ifdef DEBUG_cycleDirectionSettings
-  jsConsoleService.logStringMessage('currently direction is NOT FORCED');
-#endif
-      setDirections(body,'ltr');
-      body.setAttribute('bidimailui-forced-direction','ltr');
+    default: // should be null
+      newForcedDirection = 'ltr';
   }
-/*
-  // RSS entries might be enclosed in an IFRAME which isolates them from outside changes
-  if (body.childNodes.item(1).childNodes.item(1).id == "_mailrssiframe") {
-    body.childNodes.item(1).childNodes.item(1).contentDocument.documentElement.style.direction = direction;
-  }
+  setMessageDirectionForcing(newForcedDirection);
+}
 
-*/
+function updateDirectionMenuButton(forcedDirection,disabled)
+{
+#ifdef DEBUG_updateDirectionMenuButton
+  jsConsoleService.logStringMessage('updateDirectionMenuButton(forcedDirection='+forcedDirection+',disabled='+disabled+')');
+#endif
+  menubutton = document.getElementById('bidimailui-forcing-menubutton');
+  if (menubutton) {
+    menubutton.setAttribute('disabled', disabled);
+    menubutton.setAttribute('selectedItem', (forcedDirection ? forcedDirection : 'autodetect'));
+    document.getElementById('bidimailui-forcing-menu-autodetect')
+            .setAttribute('checked', (!forcedDirection));
+    document.getElementById('bidimailui-forcing-menu-ltr')
+            .setAttribute('checked', (forcedDirection == 'ltr'));
+    document.getElementById('bidimailui-forcing-menu-rtl')
+            .setAttribute('checked', (forcedDirection == 'rtl'));
+  }
+}
+
+function onMessageDirectionButtonClick(whichButton)
+{
+  if (!gBDMPrefs.getBoolPref("display.autodetect_direction", true)) {
+    return;
+  }
+  var body = getMessageBrowser().contentDocument.body;
+  switch (body.getAttribute('bidimailui-forced-direction')) {
+    case 'ltr': // only 'ltr' button currently in pressed state
+      newForcedDirection  = 
+        (whichButton == 'ltr' ? null : 'rtl');
+      break;
+    case 'rtl': // only 'rtl' button currently in pressed state
+      newForcedDirection  = 
+        (whichButton == 'rtl' ? null : 'ltr');
+      break;
+    default: // both buttons are depressed
+      newForcedDirection = whichButton;
+  }
+  setMessageDirectionForcing(newForcedDirection);
 }
 
 function browserOnLoadHandler()
@@ -101,6 +142,7 @@ function browserOnLoadHandler()
 #ifdef DEBUG_browserOnLoadHandler
     jsConsoleService.logStringMessage("couldn't get msgWindow");
 #endif
+    updateDirectionMenuButton(null,true);
     return;
   }
   var loadedMessageURI = GetLoadedMessage();
@@ -120,7 +162,11 @@ function browserOnLoadHandler()
     dump(ex);
     return;
   }
-  if (/^http:\/\/.*www\.mozilla.*\/start\/$/.test(domDocument.baseURI)) {
+
+  if ((!domDocument.baseURI) ||
+      (domDocument.baseURI == "about:blank") ||
+      (/^http:\/\/.*www\.mozilla.*\/start\/$/.test(domDocument.baseURI))) {
+    updateDirectionMenuButton(null,true);
     return;
   }
     
@@ -129,6 +175,7 @@ function browserOnLoadHandler()
 #ifdef DEBUG_browserOnLoadHandler
     jsConsoleService.logStringMessage("couldn't get DOMDocument body");
 #endif
+    updateDirectionMenuButton(null,true);
     return;
   }
 
@@ -220,6 +267,10 @@ function browserOnLoadHandler()
   if (gBDMPrefs.getBoolPref("display.autodetect_direction", true)) {
     preprocessMessageDOM(domDocument.body);
     detectAndSetDirections(domDocument.body,loadedMessageURI,null);
+    updateDirectionMenuButton(null,false);
+  }
+  else {
+    updateDirectionMenuButton(null,true);
   }
 }    
 

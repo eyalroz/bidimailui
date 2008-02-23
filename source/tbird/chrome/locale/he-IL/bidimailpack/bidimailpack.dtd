@@ -55,6 +55,14 @@
 <!ENTITY bidimail-rtl-button.label                           "ימין־לשמאל">
 <!ENTITY bidimail-rtl-button.tip                             "כוון מימין־לשמאל">
 
+<!ENTITY bidimailui-forcing-menubutton.label                 "כיוון">
+<!ENTITY bidimailui-forcing-menubutton.tip                   "בקרת כיוון הודעה">
+<!ENTITY bidimailui-forcing-menu.label                       "בקרת כיוון הודעה:">
+<!ENTITY bidimailui-forcing-menu-autodetect.label            "זיהוי כיוונים אוטומטי">
+<!ENTITY bidimailui-forcing-menu-ltr.label                   "כפה כיוון משמאל-לימין">
+<!ENTITY bidimailui-forcing-menu-rtl.label                   "כפה כיוון מימין-לשמאל">
+
+
 <!ENTITY menu-bidimail-contol-character.label                "תו בקרה">
 <!ENTITY menu-bidimail-contol-character.accesskey            "ב">
 <!ENTITY menu-bidimail-insert-contol-character.label         "הוסף תו בקרה">
