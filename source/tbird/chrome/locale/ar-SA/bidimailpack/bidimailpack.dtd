@@ -1,4 +1,4 @@
-<!-- ***** BEGIN LICENSE BLOCK *****
+﻿<!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1/GPL 2.0/LGPL 2.1
    -
    - The contents of this file are subject to the Mozilla Public License Version
@@ -53,6 +53,13 @@
 <!ENTITY bidimail-ltr-button.tip                               "تحديد الاتّجاه يسار إلى يمين">
 <!ENTITY bidimail-rtl-button.label                             "يمين إلى يسار">
 <!ENTITY bidimail-rtl-button.tip                               "تحديد الاتّجاه يمين إلى يسار">
+
+<!ENTITY bidimailui-forcing-menubutton.label                   "Direction">
+<!ENTITY bidimailui-forcing-menubutton.tip                     "Message Direction Control">
+<!ENTITY bidimailui-forcing-menu.label                         "Message Direction Control:">
+<!ENTITY bidimailui-forcing-menu-autodetect.label              "Autodetect Directions">
+<!ENTITY bidimailui-forcing-menu-ltr.label                     "Force Left-to-Right">
+<!ENTITY bidimailui-forcing-menu-rtl.label                     "Force Right-to-Left">
 
 <!ENTITY menu-bidimail-contol-character.label                  "رمز تحكّم">
 <!ENTITY menu-bidimail-contol-character.accesskey              "ت">

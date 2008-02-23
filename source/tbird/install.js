@@ -82,7 +82,6 @@ if(retval == SUCCESS)
     registerChrome(localeFlag, folder, "locale/fa-IR/" + name + "/");
     registerChrome(localeFlag, folder, "locale/ur-PK/" + name + "/");
     registerChrome(skinFlag, folder, "skin/classic/" + name + "/");
-    registerChrome(skinFlag, folder, "skin/modern/" + name + "/");
 
     // Default Prefs File
     var componentsDir = getFolder("Program", "components");

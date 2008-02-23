@@ -42,6 +42,9 @@
 <!ENTITY % bidimailpackDTD SYSTEM "chrome://bidimailpack/locale/bidimailpack.dtd">
 %bidimailpackDTD;
 ]>
+#ifndef MOZ_THUNDERBIRD
+<?xml-stylesheet href="chrome://bidimailpack/skin/bidimailpack.css" type="text/css"?>
+#endif
 
 <overlay
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -60,16 +63,9 @@
          oncommand="cycleDirectionSettings()" />
   </keyset>
 
-#ifdef MOZ_THUNDERBIRD
-  <broadcasterset id="mailBroadcasters">
-    <broadcaster id="ltr-document-direction-broadcaster" checked="false"/>
-    <broadcaster id="rtl-document-direction-broadcaster" checked="false"/>  
-  </broadcasterset>
-#endif
-
   <menupopup id="menu_View_Popup">
     <menuitem insertafter="mailviewCharsetMenu"
-              label="&menu-bidimail-switch-message-direction.label;"
+              label="&menu-bidimail-cycle-message-direction.label;"
               accesskey="&menu-bidimail-cycle-document-direction.accesskey;" 
               key="key-bidimail-switch" oncommand="cycleDirectionSettings()" />
   </menupopup>
@@ -81,5 +77,47 @@
               accesskey="&menu-bidimail-cycle-document-direction.accesskey;"
               oncommand="cycleDirectionSettings()" />
   </popup>
- 
+
+#ifdef MOZ_THUNDERBIRD
+  <toolbarpalette id="MailToolbarPalette">
+#else
+  <toolbar id="msgToolbar">
+#endif
+    <toolbarbutton id="bidimailui-forcing-menubutton"
+                   oncommand="cycleDirectionSettings();"
+                   label="&bidimailui-forcing-menubutton.label;"
+                   tooltiptext="&bidimailui-forcing-menubutton.tip;"
+                   type="menu-button"
+                   selectedItem="autodetect"
+                   disabled="true"
+#ifndef MOZ_THUNDERBIRD
+                   insertafter="button-stop"
+#endif
+                   class="toolbarbutton-1 chromeclass-toolbar-additional custombutton">
+      <menupopup onpopupshowing="">
+        <label value="&bidimailui-forcing-menu.label;" style="font-weight: bold"/>
+        <menuseparator />
+        <menuitem 
+          type="radio"
+          id="bidimailui-forcing-menu-autodetect"
+          label="&bidimailui-forcing-menu-autodetect.label;"
+          oncommand="setMessageDirectionForcing(null);" />
+        <menuitem 
+          type="radio"
+          id="bidimailui-forcing-menu-ltr"
+          label="&bidimailui-forcing-menu-ltr.label;"
+          oncommand="setMessageDirectionForcing('ltr');" />
+        <menuitem 
+          type="radio"
+          id="bidimailui-forcing-menu-rtl"
+          label="&bidimailui-forcing-menu-rtl.label;"
+          oncommand="setMessageDirectionForcing('rtl');" />
+      </menupopup>
+    </toolbarbutton>
+#ifdef MOZ_THUNDERBIRD
+  </toolbarpalette>
+#else
+  </toolbar>
+#endif
+
 </overlay>
