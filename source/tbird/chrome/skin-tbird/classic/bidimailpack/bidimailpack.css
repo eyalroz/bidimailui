@@ -14,7 +14,99 @@
           formatting/styling toolbar    ??px width x ??px height
 */				  
 
-/* Main Toolbar - small icons */
+/* Messenger Main Toolbar - small icons */
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton {
+  list-style-image: url("chrome://bidimailpack/skin/winstripe-autodetect-main-bar-16x16.png");
+  -moz-image-region: rect(0px 16px 16px 0px);
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton:hover {
+  -moz-image-region: rect(0px 32px 16px 16px);
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton:hover:active {
+  -moz-image-region: rect(0px 48px 16px 32px);
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"] {
+  list-style-image: url("chrome://bidimailpack/skin/winstripe-ltr-main-bar-16x16.png");
+  -moz-image-region: rect(0px 16px 16px 0px);
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"]:hover {
+  -moz-image-region: rect(0px 32px 16px 16px);
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"]:hover:active {
+  -moz-image-region: rect(0px 48px 16px 32px);
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"] {
+  list-style-image: url("chrome://bidimailpack/skin/winstripe-rtl-main-bar-16x16.png");
+  -moz-image-region: rect(0px 16px 16px 0px);
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover {
+  -moz-image-region: rect(0px 32px 16px 16px);
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover:active {
+  -moz-image-region: rect(0px 48px 16px 32px);
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
+  list-style-image: url("chrome://bidimailpack/skin/winstripe-autodetect-main-bar-16x16.png");
+  -moz-image-region: rect(0px 64px 16px 48px) !important;
+}
+
+/* Messenger Main Toolbar Buttons - large icons */
+
+#bidimailui-forcing-menubutton {
+  list-style-image: url("chrome://bidimailpack/skin/winstripe-autodetect-main-bar-24x24.png");
+  -moz-image-region: rect(0px 24px 24px 0px);
+}
+
+#bidimailui-forcing-menubutton:hover {
+  -moz-image-region: rect(0px 48px 24px 24px);
+}
+
+#bidimailui-forcing-menubutton:hover:active {
+  -moz-image-region: rect(0px 72px 24px 48px);
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"] {
+  list-style-image: url("chrome://bidimailpack/skin/winstripe-ltr-main-bar-24x24.png");
+  -moz-image-region: rect(0px 24px 24px 0px);
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"]:hover {
+  -moz-image-region: rect(0px 48px 24px 24px);
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"]:hover:active {
+  -moz-image-region: rect(0px 72px 24px 48px);
+}
+
+#bidimailui-forcing-menubutton[selectedItem="rtl"] {
+  list-style-image: url("chrome://bidimailpack/skin/winstripe-rtl-main-bar-24x24.png");
+  -moz-image-region: rect(0px 24px 24px 0px);
+}
+
+#bidimailui-forcing-menubutton[selectedItem="rtl"]:hover {
+  -moz-image-region: rect(0px 48px 24px 24px);
+}
+
+#bidimailui-forcing-menubutton[selectedItem="rtl"]:hover:active {
+  -moz-image-region: rect(0px 72px 24px 48px);
+}
+
+#bidimailui-forcing-menubutton[disabled="true"] {
+  list-style-image: url("chrome://bidimailpack/skin/winstripe-autodetect-main-bar-24x24.png");
+  -moz-image-region: rect(0px 96px 24px 72px) !important;
+}
+
+/* Composer/Editor Main Toolbar - small icons */
 
 toolbar[iconsize="small"] #button-direction-ltr-main-bar {
   list-style-image: url("chrome://bidimailpack/skin/winstripe-ltr-main-bar-16x16.png");
@@ -51,7 +143,7 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
 }
 
 
-/* Main Toolbar Buttons - large icons */
+/* Composer/Editor Main Toolbar Buttons - large icons */
 
 #button-direction-ltr-main-bar {
   list-style-image: url("chrome://bidimailpack/skin/winstripe-ltr-main-bar-24x24.png");
@@ -87,7 +179,7 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
   -moz-image-region: rect(0px 96px 24px 72px) !important;
 }
 
-/* Formatting Bar Buttons */
+/* Composer/Editor Formatting Bar Buttons */
 
 #button-direction-ltr-formatting-bar {
   list-style-image: url("chrome://bidimailpack/skin/ltr-formatting-bar.png");

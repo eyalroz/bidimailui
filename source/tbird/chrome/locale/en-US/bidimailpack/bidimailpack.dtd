@@ -58,6 +58,13 @@
 <!ENTITY bidimail-rtl-button.label                                    "RTL">
 <!ENTITY bidimail-rtl-button.tip                                      "Set Right-to-Left Direction">
 
+<!ENTITY bidimailui-forcing-menubutton.label                          "Direction">
+<!ENTITY bidimailui-forcing-menubutton.tip                            "Message Direction Control">
+<!ENTITY bidimailui-forcing-menu.label                                "Message Direction Control:">
+<!ENTITY bidimailui-forcing-menu-autodetect.label                     "Autodetect Directions">
+<!ENTITY bidimailui-forcing-menu-ltr.label                            "Force Left-to-Right">
+<!ENTITY bidimailui-forcing-menu-rtl.label                            "Force Right-to-Left">
+
 <!ENTITY menu-bidimail-contol-character.label                         "Control Character">
 <!ENTITY menu-bidimail-contol-character.accesskey                     "n">
 <!ENTITY menu-bidimail-insert-contol-character.label                  "Insert Control Character">

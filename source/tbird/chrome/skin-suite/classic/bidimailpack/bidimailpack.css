@@ -37,8 +37,57 @@
 
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
+/* Messenger Main Bar Buttons */
+
+#bidimailui-forcing-menubutton {
+  list-style-image: url("chrome://bidimailpack/skin/messenger-main-bar-autodetect.png");
+  -moz-image-region: rect(0px 30px 29px 0px);
+}
+
+#bidimailui-forcing-menubutton:hover {
+  -moz-image-region: rect(0px 60px 29px 30px);
+}
+
+#bidimailui-forcing-menubutton:hover:active {
+  -moz-image-region: rect(0px 90px 29px 60px);
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"] {
+  list-style-image: url("chrome://bidimailpack/skin/messenger-main-bar-ltr.png");
+  -moz-image-region: rect(0px 30px 29px 0px);
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"]:hover {
+  -moz-image-region: rect(0px 60px 29px 30px);
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"]:hover:active {
+  -moz-image-region: rect(0px 90px 29px 60px);
+}
+
+#bidimailui-forcing-menubutton[selectedItem="rtl"] {
+  list-style-image: url("chrome://bidimailpack/skin/messenger-main-bar-rtl.png");
+  -moz-image-region: rect(0px 30px 29px 0px);
+}
+
+#bidimailui-forcing-menubutton[selectedItem="rtl"]:hover {
+  -moz-image-region: rect(0px 60px 29px 30px);
+}
+
+#bidimailui-forcing-menubutton[selectedItem="rtl"]:hover:active {
+  -moz-image-region: rect(0px 90px 29px 60px);
+}
+
+#bidimailui-forcing-menubutton[disabled="true"] {
+  list-style-image: url("chrome://bidimailpack/skin/messenger-main-bar-autodetect.png");
+  -moz-image-region: rect(0px 120px 29px 90px) !important;
+}
+
+
+/* Composer/Editor Main Bar Buttons */
+
 #button-direction-ltr-main-bar {
-  list-style-image: url("chrome://bidimailpack/skin/ltr-main-bar.png");
+  list-style-image: url("chrome://bidimailpack/skin/composer-main-bar-ltr.png");
   -moz-image-region: rect(0px 23px 21px 0px);
 }
 
@@ -54,10 +103,8 @@
   -moz-image-region: rect(0px 92px 21px 69px) !important;
 }
 
-
-
 #button-direction-rtl-main-bar {
-  list-style-image: url("chrome://bidimailpack/skin/rtl-main-bar.png");
+  list-style-image: url("chrome://bidimailpack/skin/composer-main-bar-rtl.png");
   -moz-image-region: rect(0px 23px 21px 0px);
 }
 
@@ -74,6 +121,7 @@
 }
 
 
+/* Composer/Editor Formatting Bar Buttons */
 
 #button-direction-ltr-formatting-bar {
   list-style-image: url("chrome://bidimailpack/skin/ltr-formatting-bar.png");
