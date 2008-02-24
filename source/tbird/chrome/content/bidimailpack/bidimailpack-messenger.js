@@ -598,23 +598,23 @@ function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredChars
   
   1. Message has been reloaded (by the previous run of this function) or has
      otherwise been forced into a specific charset (Y/N)
-  1. Charset used by mozilla to decode the message (
+  2. Charset used by mozilla to decode the message (
        N = windows-1252/equivalents, including no/empty charset
        C = windows-1255/6
        U = UTF-8, 
      we won't handle any issues with other charsets
-  2. Message contains UTF-8 text (Y/N)
   3. Message contains windows-1255/6 text (Y/N)
+  4. Message contains UTF-8 text (Y/N)
 
   What should we do for each combination of values? 
   (* means all possible values)
 
   *NNN - No problem, do nothing 
-  NNNY - Reload with UTF-8 (and continue with YNNY)
-  NNYN - Reload with windows-1255/6  (and continue with YNYN)
+  NNNY - Reload with UTF-8 (and continue with YUNY)
+  NNYN - Reload with windows-1255/6  (and continue with YCYN)
   *NYY - Recode both UTF-8 and windows-1255/6
   *CNN - No problem, do nothing
-  NCNY - Reload with UTF-8 (and continue with YCNY)
+  NCNY - Reload with UTF-8 (and continue with YUNY)
   *CYN - No problem, do nothing
   NCYY - This is bad, since we can't effectively recode; strangely enough, the
          best bet should be reloading with windows-1252 (and continue
@@ -671,7 +671,7 @@ function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredChars
       // in the message... but we can't know that without streaming the raw
       // message, which is expensive
     case "UTF-8":
-      mailnewsDecodingType  = "UTF-8"; break;
+      mailnewsDecodingType = "UTF-8"; break;
     default: 
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
   jsConsoleService.logStringMessage('returning since msgWindow.mailCharacterSet = ' + msgWindow.mailCharacterSet);
