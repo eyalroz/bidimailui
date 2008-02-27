@@ -13,7 +13,7 @@
    -
    - The Original Code is the BiDi Mail UI extension.
    -
-   - The Initial Developer of the Original Code is Ayman Hourieh.
+   - The Initial Developer of the Original Code is Eyal Rozenberg.
    -
    - Portions created by the Initial Developer are Copyright (C) 2004-2006
    - the Initial Developer. All Rights Reserved.
@@ -21,6 +21,7 @@
    - Contributor(s):
    -   Ayman Hourieh
    -   Eyal Rozenberg <eyalroz@technion.ac.il>
+   -   Asaf Romano <mozilla.mano@sent.com>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either of the GNU General Public License Version 2 or later (the "GPL"),
@@ -36,27 +37,27 @@
    -
    - ***** END LICENSE BLOCK ***** -->
 
-<!ENTITY bidimailpack-settings                   "BiDi Mail UI إعدادات">
-<!ENTITY message-composition-groupbox-caption    "تأليف الرّسالة">
-<!ENTITY default-dir                             "الاتّجاه الافتراضي:">
-<!ENTITY ltr.label                               "يسار إلى يمين">
-<!ENTITY ltr.accesskey                           "ر">
-<!ENTITY rtl.label                               "يمين إلى يسار">
-<!ENTITY rtl.accesskey                           "م">
-<!ENTITY always-reply-in-default-dir.label       "الرّد دائماً بالاتّجاه التّلقائي">
-<!ENTITY always-reply-in-default-dir.accesskey   "ت">
-<!ENTITY more-info                               "لمزيد من المعلومات:">
-<!ENTITY guide-link-text                         "دليل المستخدم لـ BiDi Mail UI">
-<!ENTITY guide-url                               "http://bidiui.mozdev.org/mail/guide.html">
-<!ENTITY bidimailpack-preftree-label             "BiDi Mail UI">
-<!ENTITY display-buttons.label                   "عرض أزرار إعداد الاتّجاه">
-<!ENTITY display-buttons.accesskey               "ع">
+<!ENTITY bidimailpack-settings "خيارات واجهة البريد ثنائية الاتجاه">
+<!ENTITY message-composition-groupbox-caption "كتابة الرّسائل">
+<!ENTITY default-dir "الاتّجاه المبدئي:">
+<!ENTITY ltr.label "يسار إلى يمين">
+<!ENTITY ltr.accesskey "ر">
+<!ENTITY rtl.label "يمين إلى يسار">
+<!ENTITY rtl.accesskey "م">
+<!ENTITY always-reply-in-default-dir.label "ردّ دائمًا بالاتّجاه المبدئي">
+<!ENTITY always-reply-in-default-dir.accesskey "ت">
+<!ENTITY more-info "لمزيد من المعلومات:">
+<!ENTITY guide-link-text "دليل مستخدم واجهة البريد ثنائية الاتجاه">
+<!ENTITY guide-url "http://bidiui.mozdev.org/mail/guide.html">
+<!ENTITY bidimailpack-preftree-label "واجهة البريد ثنائية الاتجاه">
+<!ENTITY display-buttons.label "أظهر أزرار تحديد الاتّجاه">
+<!ENTITY display-buttons.accesskey "ع">
 
-<!ENTITY spaceBetweenParagraphs.label            "هوامش الفقرة العموديّة:">
-<!ENTITY spaceBetweenParagraphs.accesskey        "هو">
-<!ENTITY cmScale.label                           "سم">
-<!ENTITY cmScale.accesskey                       "س">
-<!ENTITY pixelScale.label                        "بكسل">
-<!ENTITY pixelScale.accesskey                    "ب">
-<!ENTITY ptScale.label                           "نقطة">
-<!ENTITY ptScale.accesskey                       "ن">
+<!ENTITY spaceBetweenParagraphs.label "المسافة بين الفقرات:">
+<!ENTITY spaceBetweenParagraphs.accesskey "م">
+<!ENTITY cmScale.label "سم">
+<!ENTITY cmScale.accesskey "س">
+<!ENTITY pixelScale.label "عنصورة">
+<!ENTITY pixelScale.accesskey "ب">
+<!ENTITY ptScale.label "نقطة">
+<!ENTITY ptScale.accesskey "ن">
