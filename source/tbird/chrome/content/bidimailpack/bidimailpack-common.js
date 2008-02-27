@@ -271,7 +271,7 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
     "|" + 
     "\\u00EF\\u00BB\\u00BF" + // UTF-8 BOM octets
     "|" +
-    "(\\u05F3(\\u2022|\\u2018)){2}";
+    "(\\u05F3[\\u2018-\\u2022\\xA9]){2}";
   var utf8MisdetectionExpression = new RegExp (misdetectedUTF8Sequence);
 
   var treeWalker = document.createTreeWalker(
