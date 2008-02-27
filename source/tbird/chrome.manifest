@@ -39,7 +39,7 @@
 content bidimailpack jar:chrome/bidimailpack.jar!/content/bidimailpack/
 locale bidimailpack en-US jar:chrome/bidimailpack.jar!/locale/en-US/bidimailpack/
 locale bidimailpack he-IL jar:chrome/bidimailpack.jar!/locale/he-IL/bidimailpack/
-locale bidimailpack ar-SA jar:chrome/bidimailpack.jar!/locale/ar-SA/bidimailpack/
+locale bidimailpack ar jar:chrome/bidimailpack.jar!/locale/ar/bidimailpack/
 locale bidimailpack fa-IR jar:chrome/bidimailpack.jar!/locale/fa-IR/bidimailpack/
 locale bidimailpack ur-PK jar:chrome/bidimailpack.jar!/locale/ur-PK/bidimailpack/
 skin bidimailpack classic/1.0 jar:chrome/bidimailpack.jar!/skin/classic/bidimailpack/
