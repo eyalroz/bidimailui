@@ -752,7 +752,7 @@ function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredChars
     "|" + 
     "\\u00EF\\u00BB\\u00BF" + // UTF-8 BOM octets
     "|" +
-    "(\\u05F3(\\u2022|\\u2018)){2}");
+    "(\\u05F3[\\u2018-\\u2022\\xA9]){2}");
 
   haveUTF8Text = matchInText(element, contentToMatch);
 
