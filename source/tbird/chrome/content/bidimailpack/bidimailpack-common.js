@@ -227,6 +227,8 @@ function GetMessageContentElement(domDoc) {
 // Note: if both doCharset and doUTF8 is false, we only correct HTML entities
 function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType,doCharset,doUTF8)
 {
+  var needCharsetReapplication = false;
+
 #ifdef DEBUG_performCorrectiveRecoding
           jsConsoleService.logStringMessage('---------------------------------\nin performCorrectiveRecoding(' + 
           preferredCharset + ', ' + mailnewsDecodingType + ", " + (doCharset ? "doCharset" : "!doCharset") + ", " + 
@@ -355,6 +357,12 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
 #else
           dump("Exception while trying to recode \n" + lines[i] + "\n\n" + ex);
 #endif
+          // in some cases we seem to get manged UTF-8 text
+          // which can be fixed by re-applying the current character set to the message,
+          // then recoding if necessary
+          if (/(\x3F[20\x90-\xA8]){3,}/.test(workingStr)) {
+            needCharsetReapplication = true;
+          }
         }
       }
       else if (doCharset && codepageMisdetectionExpression.test(lines[i])) {
@@ -407,6 +415,7 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
   if (doCharset) {
     element.setAttribute('bidimailui-recoded-charset',preferredCharset);
   }
+  return needCharsetReapplication;
 }
 
 function matchInText(element, expression, matchResults)
