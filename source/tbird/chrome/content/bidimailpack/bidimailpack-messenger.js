@@ -789,7 +789,14 @@ function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredChars
           }
           else {
             //NNYY
-            performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType,true,true);
+            if (performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType,true,true)) {
+#ifdef DEBUG_fixLoadedMessageCharsetIssues
+              jsConsoleService.logStringMessage(
+                "re-applying charset - bug workaround");
+#endif
+              // need to re-apply the same charset, as a workaround for a weird mailnews bug
+              MessengerSetForcedCharacterSet(msgWindow.mailCharacterSet);
+            }
           }
         }
         break;
