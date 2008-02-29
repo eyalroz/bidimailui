@@ -249,6 +249,9 @@ function browserOnLoadHandler()
 
   gMessageURI = loadedMessageURI;
 
+  if (gBDMPrefs.getBoolPref("display.decode_numeric_html_entities", false))
+    decodeNumericHTMLEntitiesInText(body);
+
 #ifdef DEBUG_browserOnLoadHandler
   jsConsoleService.logStringMessage("completed charset correction phase");
 #endif
@@ -910,4 +913,22 @@ function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredChars
     }
   }
   return true;
+}
+
+function decodeNumericHTMLEntitiesInText(element)
+{
+  var treeWalker = document.createTreeWalker(
+    element,
+    NodeFilter.SHOW_TEXT,
+    null, // additional filter function
+    false
+  );
+  while((node = treeWalker.nextNode())) {
+    node.data = node.data.replace(
+      /&#(\d+);/g,
+      function() {
+        return String.fromCharCode(RegExp.$1);
+      }
+    );
+  }
 }
