@@ -806,6 +806,7 @@ function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredChars
 #endif
               // need to re-apply the same charset, as a workaround for a weird mailnews bug
               MessengerSetForcedCharacterSet(msgWindow.mailCharacterSet);
+              return false;
             }
           }
         }
