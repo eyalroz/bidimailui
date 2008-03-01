@@ -249,8 +249,15 @@ function browserOnLoadHandler()
 
   gMessageURI = loadedMessageURI;
 
-  if (gBDMPrefs.getBoolPref("display.decode_numeric_html_entities", false))
-    decodeNumericHTMLEntitiesInText(body);
+  if (msgWindow.charsetOverride) {
+    body.setAttribute('bidimailui-charset-is-forced',true);
+  }
+
+  if (gBDMPrefs.getBoolPref("display.decode_numeric_html_entities", false)) {
+    if (decodeNumericHTMLEntitiesInText(body)) {
+      body.setAttribute('bidimailui-found-numeric-entities',true);
+    }
+  }
 
 #ifdef DEBUG_browserOnLoadHandler
   jsConsoleService.logStringMessage("completed charset correction phase");
@@ -915,8 +922,10 @@ function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredChars
   return true;
 }
 
+// returns true if numeric entities were found
 function decodeNumericHTMLEntitiesInText(element)
 {
+  var entitiesFound = false;
   var treeWalker = document.createTreeWalker(
     element,
     NodeFilter.SHOW_TEXT,
@@ -927,8 +936,10 @@ function decodeNumericHTMLEntitiesInText(element)
     node.data = node.data.replace(
       /&#(\d+);/g,
       function() {
+        entitiesFound = true;
         return String.fromCharCode(RegExp.$1);
       }
     );
   }
+  return entitiesFound;
 }
