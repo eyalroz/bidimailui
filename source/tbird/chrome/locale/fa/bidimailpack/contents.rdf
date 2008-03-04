@@ -42,13 +42,13 @@
          xmlns:chrome="http://www.mozilla.org/rdf/chrome#">
 
   <RDF:Seq about="urn:mozilla:locale:root">
-    <RDF:li resource="urn:mozilla:locale:fa-IR"/>
+    <RDF:li resource="urn:mozilla:locale:fa"/>
   </RDF:Seq>
 
-  <RDF:Description about="urn:mozilla:locale:fa-IR">
+  <RDF:Description about="urn:mozilla:locale:fa">
     <chrome:packages>
-      <RDF:Seq about="urn:mozilla:locale:fa-IR:packages">
-        <RDF:li resource="urn:mozilla:locale:fa-IR:bidimailpack"/>
+      <RDF:Seq about="urn:mozilla:locale:fa:packages">
+        <RDF:li resource="urn:mozilla:locale:fa:bidimailpack"/>
       </RDF:Seq>
     </chrome:packages>
   </RDF:Description>
