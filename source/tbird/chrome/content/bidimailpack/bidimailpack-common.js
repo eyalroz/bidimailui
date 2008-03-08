@@ -264,7 +264,7 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
   // using a char range instead of so many individual chars
   var misdetectedUTF8Sequence = 
     // Hebrew
-    "(\\xD7[ \\u00A2\\u00A9\\u017E\\u0152\\u0153\\u02DC\\u2013-\\u2022\\u2220\\u2122\\u0090-\\u00AA]|(&#65533;) ?){3}" +
+    "(\\xD7([ \\u017E\\u0152\\u0153\\u02DC\\u2013-\\u2022\\u2220\\u2122\\u0090-\\u00AA]|&#65533;) ?\"?){3}" +
     "|" + 
     // Arabic
     "((\\xD8[\\x8C-\\xBF])|(\\xD9[\\x80-\\xB9])|(\\xEF\\xAD[\\x90-\\xBF])|(\\xEF[\\xAE-\\xBA][\\x80-\\xBF])|(\\xEF\\xBB[\\x80-\\xBC])){3}" +
