@@ -1,4 +1,4 @@
-<!-- ***** BEGIN LICENSE BLOCK *****
+﻿<!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1/GPL 2.0/LGPL 2.1
    -
    - The contents of this file are subject to the Mozilla Public License Version
@@ -20,7 +20,6 @@
    -
    - Contributor(s):
    -   Alan Baghumian
-   -   Ehsan Akhgari <ehsan.akhgari@gmail.com>
    -
    - Alternatively, the contents of this file may be used under the terms of
    - either of the GNU General Public License Version 2 or later (the "GPL"),
@@ -38,27 +37,35 @@
 
 <!ENTITY menu-bidimail-switch-message-direction.label                 "تغییر جهت پیام">
 <!ENTITY menu-bidimail-switch-page-direction.label                    "تغییر جهت صفحه">
-<!ENTITY menu-bidimail-switch-document-direction.accesskey            "ج">
+<!ENTITY menu-bidimail-switch-document-direction.accesskey            "w">
 <!ENTITY key-bidimail-switch-document-direction.keycode               "X">
 <!ENTITY key-bidimail-switch-document-direction.modifiers             "accel,shift">
 <!ENTITY key-bidimail-switch-paragraph-direction.keycode              "E">
 <!ENTITY key-bidimail-switch-paragraph-direction.modifiers            "accel">
 
 <!ENTITY menu-bidimail-switch-paragraph-direction.label               "تغییر جهت پاراگراف">
-<!ENTITY menu-bidimail-switch-paragraph-direction.accesskey           "ت">
+<!ENTITY menu-bidimail-switch-paragraph-direction.accesskey           "w">
 <!ENTITY menu-bidimail-clear-paragraph-direction.label                "پاک کردن جهت پاراگراف">
-<!ENTITY menu-bidimail-clear-paragraph-direction.accesskey            "پ">
+<!ENTITY menu-bidimail-clear-paragraph-direction.accesskey            "a">
 
 <!ENTITY bidimail-ltr-button.label                                    "چپ به راست">
 <!ENTITY bidimail-ltr-button.tip                                      "جهت «چپ به راست» فعال شود">
 <!ENTITY bidimail-rtl-button.label                                    "راست به چپ">
 <!ENTITY bidimail-rtl-button.tip                                      "جهت «راست به چپ» فعال شود">
 
+<!ENTITY bidimailui-forcing-menubutton.label                          "جهت">
+<!ENTITY bidimailui-forcing-menubutton.tip                            "کنترل جهت پیام">
+<!ENTITY bidimailui-forcing-menu.label                                "کنترل جهت پیام:">
+<!ENTITY bidimailui-forcing-menu-autodetect.label                     "شناسایی خودکار جهت">
+<!ENTITY bidimailui-forcing-menu-ltr.label                            "اجبار چپ به راست">
+<!ENTITY bidimailui-forcing-menu-rtl.label                            "اجبار راست به چپ">
+
 <!ENTITY menu-bidimail-contol-character.label                         "کاراکتر کنترلی">
-<!ENTITY menu-bidimail-contol-character.accesskey                     "ک">
+<!ENTITY menu-bidimail-contol-character.accesskey                     "n">
 <!ENTITY menu-bidimail-insert-contol-character.label                  "درج کاراکتر کنترلی">
-<!ENTITY menu-bidimail-insert-contol-character.accesskey              "د">
+<!ENTITY menu-bidimail-insert-contol-character.accesskey              "I">
 <!ENTITY menu-bidimail-lrm.label                                      "نشانه چپ به راست">
-<!ENTITY menu-bidimail-lrm.accesskey                                  "چ">
+<!ENTITY menu-bidimail-lrm.accesskey                                  "L">
 <!ENTITY menu-bidimail-rlm.label                                      "نشانه راست به چپ">
-<!ENTITY menu-bidimail-rlm.accesskey                                  "ر">
+<!ENTITY menu-bidimail-rlm.accesskey                                  "R">
+
