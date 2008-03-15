@@ -639,6 +639,7 @@ function ComposeWindowOnUnload()
   catch(ex) {
     dump("Failed to remove pref observer: " + ex + "\n");
   }
+  gMsgCompose.UnregisterStateListener(gBodyReadyListener);
 }
 
 function ComposeWindowOnLoad()
