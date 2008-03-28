@@ -1,0 +1,71 @@
+﻿<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is the BiDi Mail UI extension.
+   -
+   - The Initial Developer of the Original Code is Zack Ajmal.
+   -
+   - Portions created by the Initial Developer are Copyright (C) 2006
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Zack Ajmal
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either of the GNU General Public License Version 2 or later (the "GPL"),
+   - or the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the GPL or the LGPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+<!ENTITY menu-bidimail-switch-message-direction.label                 "پیغام کی سمت بدلیں">
+<!ENTITY menu-bidimail-switch-page-direction.label                    "صفحے کی سمت بدلیں">
+<!ENTITY menu-bidimail-switch-document-direction.accesskey            "w">
+<!ENTITY key-bidimail-switch-document-direction.keycode               "X">
+<!ENTITY key-bidimail-switch-document-direction.modifiers             "accel,shift">
+<!ENTITY key-bidimail-switch-paragraph-direction.keycode              "E">
+<!ENTITY key-bidimail-switch-paragraph-direction.modifiers            "accel">
+
+<!ENTITY menu-bidimail-switch-paragraph-direction.label               "پیرا کی سمت بدلیں">
+<!ENTITY menu-bidimail-switch-paragraph-direction.accesskey           "w">
+<!ENTITY menu-bidimail-clear-paragraph-direction.label                "پیرا کی سمت صاف کریں">
+<!ENTITY menu-bidimail-clear-paragraph-direction.accesskey            "a">
+
+<!ENTITY bidimail-ltr-button.label                                    "ل‌ٹ‌ر">
+<!ENTITY bidimail-ltr-button.tip                                      "بائیں سے دائیں سمت کریں">
+<!ENTITY bidimail-rtl-button.label                                    "ر‌ٹ‌ل">
+<!ENTITY bidimail-rtl-button.tip                                      "دائیں سے بائیں سمت کریں">
+
+<!ENTITY bidimailui-forcing-menubutton.label                          "Direction">
+<!ENTITY bidimailui-forcing-menubutton.tip                            "Message Direction Control">
+<!ENTITY bidimailui-forcing-menu.label                                "Message Direction Control:">
+<!ENTITY bidimailui-forcing-menu-autodetect.label                     "Autodetect Directions">
+<!ENTITY bidimailui-forcing-menu-ltr.label                            "Force Left-to-Right">
+<!ENTITY bidimailui-forcing-menu-rtl.label                            "Force Right-to-Left">
+
+
+<!ENTITY menu-bidimail-contol-character.label                         "کنٹرول حرف">
+<!ENTITY menu-bidimail-contol-character.accesskey                     "n">
+<!ENTITY menu-bidimail-insert-contol-character.label                  "کنٹرول حرف ڈالیں">
+<!ENTITY menu-bidimail-insert-contol-character.accesskey              "I">
+<!ENTITY menu-bidimail-lrm.label                                      "بائیں سے دائیں نشان">
+<!ENTITY menu-bidimail-lrm.accesskey                                  "L">
+<!ENTITY menu-bidimail-rlm.label                                      "دائیں سے بائیں نشان">
+<!ENTITY menu-bidimail-rlm.accesskey                                  "R">
