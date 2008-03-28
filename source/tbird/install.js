@@ -77,10 +77,10 @@ if(retval == SUCCESS)
 
     registerChrome(contentFlag, folder, "content/" + name + "/");
     registerChrome(localeFlag, folder, "locale/en-US/" + name + "/");
-    registerChrome(localeFlag, folder, "locale/he-IL/" + name + "/");
+    registerChrome(localeFlag, folder, "locale/he/" + name + "/");
     registerChrome(localeFlag, folder, "locale/ar/" + name + "/");
     registerChrome(localeFlag, folder, "locale/fa/" + name + "/");
-    registerChrome(localeFlag, folder, "locale/ur-PK/" + name + "/");
+    registerChrome(localeFlag, folder, "locale/ur/" + name + "/");
     registerChrome(skinFlag, folder, "skin/classic/" + name + "/");
 
     // Default Prefs File
