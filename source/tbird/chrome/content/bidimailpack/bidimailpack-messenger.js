@@ -36,15 +36,6 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#ifdef DEBUG
-// The following 2 lines enable logging messages to the javascript console:
-var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
-jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
-
-// Here is an example of a console log message describing a DOM node:
-// jsConsoleService.logStringMessage('visiting node: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
-#endif
-
 // workaround for bug 12469
 var gMessageURI = null;
 
@@ -125,10 +116,6 @@ function onMessageDirectionButtonClick(whichButton)
 
 function browserOnLoadHandler()
 {
-  if (!gUnicodeConverter)
-    gUnicodeConverter = Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]
-                                  .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
-
 #ifdef DEBUG_browserOnLoadHandler
   jsConsoleService.logStringMessage("--- browserOnLoadHandler() ---");
 #endif
@@ -752,17 +739,7 @@ function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredChars
     // TODO: some of these are only relevant for UTF-8 misdecoded as windows-1252 
     // (or iso-8859-1; mozilla cheats and uses windows-1252), 
     //
-    // Hebrew
-    "(\\xD7([ \\u017E\\u0152\\u0153\\u02DC\\u2013-\\u2022\\u203A\\u2220\\u2122\\u0090-\\u00BF]|&#65533;) ?\"?){3}" +
-    "|" + 
-    // Arabic
-    "((\\xD8[\\x8C-\\xBF])|(\\xD9[\\x80-\\xB9])|(\\xEF\\xAD[\\x90-\\xBF])|(\\xEF[\\xAE-\\xBA][\\x80-\\xBF])|(\\xEF\\xBB[\\x80-\\xBC])){3}" +
-    "|" + 
-    "\\uFFFD{3,}" +
-    "|" + 
-    "\\u00EF\\u00BB\\u00BF" + // UTF-8 BOM octets
-    "|" +
-    "(\\u05F3[\\u2018-\\u2022\\xA9]){2}");
+    MISDETECTED_UTF8_SEQUENCE);
 
   haveUTF8Text = matchInText(element, contentToMatch);
 

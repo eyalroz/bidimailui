@@ -37,14 +37,29 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-var gBidimailuiStrings =
-  Components.classes["@mozilla.org/intl/stringbundle;1"]
-            .getService(Components.interfaces.nsIStringBundleService)
-            .createBundle("chrome://bidimailpack/locale/bidimailpack.properties");
+__defineGetter__("gBidimailuiStrings", function() {
+  delete this.gBidimailuiStrings;
+  return this.gBidimailuiStrings =
+    Components.classes["@mozilla.org/intl/stringbundle;1"]
+              .getService(Components.interfaces.nsIStringBundleService)
+              .createBundle("chrome://bidimailpack/locale/bidimailpack.properties");
+});
 
-// used in performCorrectiveRecoding()
+__defineGetter__("gUnicodeConverter", function() {
+  delete this.gUnicodeConverter;
+  return this.gUnicodeConverter =
+    Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]
+              .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
+});
 
-var gUnicodeConverter = null;
+#ifdef DEBUG
+__defineGetter__("jsConsoleService", function() {
+  delete this.jsConsoleService;
+  return this.jsConsoleService =
+    Components.classes['@mozilla.org/consoleservice;1']
+              .getService(Components.interfaces.nsIConsoleService);
+});
+#endif
 
 // number to hexadecimal representation
 
@@ -74,16 +89,12 @@ function stringToScanCodes(str)
 
 // Prefs helper
 var gBDMPrefs = {
-  _prefService: null,
-
   get prefService()
   {
-    if (!this._prefService) 
-      this._prefService =
-        Components.classes["@mozilla.org/preferences-service;1"]
-                  .getService(Components.interfaces.nsIPrefBranch);
-
-    return this._prefService;
+    delete this._prefService;
+    return this._prefService =
+      Components.classes["@mozilla.org/preferences-service;1"]
+                .getService(Components.interfaces.nsIPrefBranch);
   },
 
   getBoolPref: function(prefName, defaultValue) {
@@ -224,6 +235,41 @@ function GetMessageContentElement(domDoc) {
   return firstSubBody;
 }
 
+const MISDETECTED_RTL_CHARACTER = "[\\xBF-\\xD6\\xD8-\\xFF]"
+const MISDETECTED_RTL_SEQUENCE = MISDETECTED_RTL_CHARACTER + "{2,}";
+
+// TODO: some of these are only relevant for UTF-8 misdecoded as windows-1252 
+// (or iso-8859-1; mozilla cheats and uses windows-1252), while some of these
+// are only relevant for UTF-8 misdecoded as windows-1255
+
+// Rationale: Since we know that this message is a misdecoded RTL-codepage
+// message, we assume that every text field with a misdetected RTL 'word' has
+// no non-windows-1255 chars and hence can be recoded (plus we relaxed the
+// definition of a word)
+//
+// TODO: I would like to use \b's instead of the weird combination here,
+// but for some reason if I use \b's, I don't match the strings EE E4 20 and
+// E7 E3 22 F9 
+const CODEPAGE_MISDETECTION_SEQUENCE =
+  MISDETECTED_RTL_CHARACTER + "{3,}" + "|" +  "(" + "(\\s|\"|\W|^)" +
+  MISDETECTED_RTL_CHARACTER + "{2,}(\"|\\s|\W|$)" + ")";
+
+// TODO: maybe it's better to undecode first, then check whether it's UTF-8;
+// that will probably allow using a char range instead of so many individual
+// chars
+const MISDETECTED_UTF8_SEQUENCE = 
+  // Hebrew
+  "(\\xD7([ \\u017E\\u0152\\u0153\\u02DC\\u2013-\\u2022\\u203A\\u2220\\u2122\\u0090-\\u00BF]|&#65533;) ?\"?){3}" +
+  "|" + 
+  // Arabic
+  "((\\xD8[\\x8C-\\xBF])|(\\xD9[\\x80-\\xB9])|(\\xEF\\xAD[\\x90-\\xBF])|(\\xEF[\\xAE-\\xBA][\\x80-\\xBF])|(\\xEF\\xBB[\\x80-\\xBC])){3}" +
+  "|" + 
+  "\\uFFFD{3,}" +
+  "|" + 
+  "\\u00EF\\u00BB\\u00BF" + // UTF-8 BOM octets
+  "|" +
+  "(\\u05F3[\\u2018-\\u2022\\xA9]){2}";
+    
 // Note: if both doCharset and doUTF8 is false, we only correct HTML entities
 function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType,doCharset,doUTF8)
 {
@@ -241,40 +287,11 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
 #endif
     return;
   }
-  var misdetectedRTLCharacter = "[\\xBF-\\xD6\\xD8-\\xFF]"
-  var misdetectedRTLSequence = misdetectedRTLCharacter + "{2,}";
 
-  // Rationale: Since we know that this message is a misdecoded RTL-codepage message,
-  // we assume that every text field with a misdetected RTL 'word' has no non-windows-1255 chars
-  // and hence can be recoded (plus we relaxed the definition of a word)
-  //
-  // TODO: I would like to use \b's instead of the weird combination here,
-  // but for some reason if I use \b's, I don't match the strings EE E4 20 and E7 E3 22 F9 
 
-  var codepageMisdetectionExpression = 
-    new RegExp (misdetectedRTLCharacter + "{3,}" +
-                "|" +
-                "(" + "(\\s|\"|\W|^)" + misdetectedRTLCharacter + "{2,}(\"|\\s|\W|$)" + ")" );
 
-  // TODO: some of these are only relevant for UTF-8 misdecoded as windows-1252 
-  // (or iso-8859-1; mozilla cheats and uses windows-1252), while some of these
-  // are only relevant for UTF-8 misdecoded as windows-1255
-  
-  // TODO: maybe it's better to undecode first, then check whether it's UTF-8; that will probably allow
-  // using a char range instead of so many individual chars
-  var misdetectedUTF8Sequence = 
-    // Hebrew
-    "(\\xD7([ \\u017E\\u0152\\u0153\\u02DC\\u2013-\\u2022\\u203A\\u2220\\u2122\\u0090-\\u00BF]|&#65533;) ?\"?){3}" +
-    "|" + 
-    // Arabic
-    "((\\xD8[\\x8C-\\xBF])|(\\xD9[\\x80-\\xB9])|(\\xEF\\xAD[\\x90-\\xBF])|(\\xEF[\\xAE-\\xBA][\\x80-\\xBF])|(\\xEF\\xBB[\\x80-\\xBC])){3}" +
-    "|" + 
-    "\\uFFFD{3,}" +
-    "|" + 
-    "\\u00EF\\u00BB\\u00BF" + // UTF-8 BOM octets
-    "|" +
-    "(\\u05F3[\\u2018-\\u2022\\xA9]){2}";
-  var utf8MisdetectionExpression = new RegExp (misdetectedUTF8Sequence);
+  var codepageMisdetectionExpression = new RegExp (CODEPAGE_MISDETECTION_SEQUENCE);
+  var utf8MisdetectionExpression = new RegExp (MISDETECTED_UTF8_SEQUENCE);
 
   var treeWalker = document.createTreeWalker(
     element,
@@ -282,13 +299,13 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
     null, // additional filter function
     false
   );
-  while((node = treeWalker.nextNode())) {
-  
+
+  while((node = treeWalker.nextNode())) {  
     var lines = node.data.split('\n');
 #ifdef DEBUG_performCorrectiveRecoding
     jsConsoleService.logStringMessage("processing text node with " + lines.length + " lines");
 #endif
-    for(i = 0; i < lines.length; i++) {
+    for(var i = 0; i < lines.length; i++) {
       var workingStr; 
 
 #ifdef DEBUG_performCorrectiveRecoding
@@ -326,12 +343,12 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
           // We see a lot of D7 20's instead of D7 A0's which are the 2-byte sequence for 
           // the Hebrew letter Nun; I guess some clients or maybe even Mozilla replace A0
           // (a non-breaking space in windows-1252) with 20 (a normal space)
-          workingStr = workingStr.replace(/([\xD7-\xD9])\x20/g,'$1\xA0');
+          workingStr = workingStr.replace(/([\xD7-\xD9])\x20/g, "$1\xA0");
 
           // remove some higher-than-0x7F characters originating in HTML entities, such as &nbsp;
           // (we remove them only if they're not the second byte of a two-byte sequence; we ignore
           // the possibility of their being part of a 3-to-6-byte sequence)
-          workingStr = workingStr.replace(/(^|[\x00-\xBF])\xA0+/g,'$1 ');
+          workingStr = workingStr.replace(/(^|[\x00-\xBF])\xA0+/g, "$1 ");
 
           // decode any numeric HTML entities ; weird stuff
           // will be replaced with the UTF-8 encoding of a \uFFFD (unicode replacement char)
@@ -339,12 +356,12 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
             /[\xC2–\xDF]*&#(\d+);/g,
             function() {
               var res = String.fromCharCode(RegExp.$1);
-	      return ((res.charCodeAt(0) > 0xBF) ? '\xEF\xBF\xBD' : res);
+	      return ((res.charCodeAt(0) > 0xBF) ? "\xEF\xBF\xBD" : res);
             }
             );
 
           // first byte of a two-byte sequence followed by a byte not completing the sequence
-          workingStr = workingStr.replace(/[\xD7-\xD9]([^\x80-\xBF]|$)/g,'$1');
+          workingStr = workingStr.replace(/[\xD7-\xD9]([^\x80-\xBF]|$)/g, "$1");
 
 #ifdef DEBUG_scancodes
           jsConsoleService.logStringMessage(
@@ -439,7 +456,7 @@ function matchInText(element, expression, matchResults)
     null, // additional filter function
     false
   );
-  while((node = treeWalker.nextNode())) {
+  while ((node = treeWalker.nextNode())) {
 #ifdef DEBUG_matchInText
 #ifdef DEBUG_scancodes
     jsConsoleService.logStringMessage(node.data + "\n" + stringToScanCodes(node.data));
@@ -485,6 +502,21 @@ function neutralsOnly(str)
   return neutrals.test(str);
 }
 
+const RTL_CHARACTER_INNER =
+ "\\u0590-\\u05FF\\uFB1D-\\uFB4F\\u0600-\\u06FF\\uFB50-\\uFDFF\\uFE70-\\uFEFC";
+const RTL_CHARACTER = "[" + RTL_CHARACTER_INNER + "]";
+const RTL_SEQUENCE = "(" +  RTL_CHARACTER + "{2,}|" + RTL_CHARACTER + "\"" +
+                     RTL_CHARACTER + ")";
+const LTR_SEQUENCE = "(" +  "\\w" + "[\\-@\\.']?" + ")" + "{2,}";
+const NEUTRAL_CHARACTER_INNER =
+  " \\f\\r\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\{-\xA0\u2013\\u2014\\uFFFD";
+const NEUTRAL_CHARACTER = "[" + NEUTRAL_CHARACTER_INNER + "]";
+const NEUTRAL_CHARACTER_NEW_LINE = "[\\n" + NEUTRAL_CHARACTER_INNER + "]";
+const IGNORABLE_CHARACTER = "[" + NEUTRAL_CHARACTER_INNER +
+  RTL_CHARACTER_INNER + "]";
+const IGNORABLE_CHARACTER_NEW_LINE = "[" + NEUTRAL_CHARACTER_INNER +
+  RTL_CHARACTER_INNER + "\\n]";
+  
 // returns "rtl", "ltr", "neutral" or "mixed"; but only an element
 // with more than one text node can be mixed
 function directionCheck(obj)
@@ -497,33 +529,24 @@ function directionCheck(obj)
   // or ends with two such words (excluding any punctuation/spacing/
   // numbering at the beginnings and ends of lines)
 
-  var rtlCharacterInner = "\\u0590-\\u05FF\\uFB1D-\\uFB4F\\u0600-\\u06FF\\uFB50-\\uFDFF\\uFE70-\\uFEFC";
-  var rtlCharacter = "[" + rtlCharacterInner + "]";
   // note we're allowing sequences of initials, e.g W"ERBEH
-  var rtlSequence = "(" +  rtlCharacter + "{2,}|" + rtlCharacter + "\"" + rtlCharacter + ")";
-  var ltrSequence = "(" +  "\\w" + "[\\-@\\.']?" + ")" + "{2,}";
-  var neutralCharacterInner = " \\f\\r\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\{-\xA0\u2013\\u2014\\uFFFD";
-  var neutralCharacter = "[" + neutralCharacterInner + "]";
-  var neutralCharacterWithNewLine = "[\\n" + neutralCharacterInner + "]";
-  var ignorableCharacter = "[" + neutralCharacterInner + rtlCharacterInner + "]";
-  var ignorableCharacterWithNewline = "[" + neutralCharacterInner + rtlCharacterInner + "\\n]";
   var allNeutralExpression = new RegExp (
-    "^" + neutralCharacterWithNewLine + "*" + "$");
+    "^" + NEUTRAL_CHARACTER_NEW_LINE + "*" + "$");
   var rtlLineExpression = new RegExp (
     // either the text has no non-RTL characters and some RTL characters
-    "(" + "^" + ignorableCharacterWithNewline + "*" + rtlCharacter + ignorableCharacterWithNewline + "*" + "$" + ")" +
+    "(" + "^" + IGNORABLE_CHARACTER_NEW_LINE + "*" + RTL_CHARACTER + IGNORABLE_CHARACTER_NEW_LINE + "*" + "$" + ")" +
     "|" +
     // or it has only one non-RTL 'word', with an RTL 'word' before it
-    "(" + "^" + ignorableCharacter + "*" + rtlSequence + ignorableCharacter + "+" + ltrSequence + ignorableCharacter + "*" +  "$" + ")" +
+    "(" + "^" + IGNORABLE_CHARACTER + "*" + RTL_SEQUENCE + IGNORABLE_CHARACTER + "+" + LTR_SEQUENCE + IGNORABLE_CHARACTER + "*" +  "$" + ")" +
     "|" +
     // or it has only one non-RTL 'word', with an RTL 'word' after it
-    "(" + "^" + ignorableCharacter + "*" + ltrSequence + ignorableCharacter + "+" + rtlSequence + ignorableCharacter + "*" +  "$" + ")" +
+    "(" + "^" + IGNORABLE_CHARACTER + "*" + LTR_SEQUENCE + IGNORABLE_CHARACTER + "+" + RTL_SEQUENCE + IGNORABLE_CHARACTER + "*" +  "$" + ")" +
     "|" +
     // or it has a line with two RTL 'words' before any non-RTL characters
-    "(" + "(^|\\n)" + ignorableCharacter + "*" + rtlSequence + neutralCharacter + "+" + rtlSequence + ")" +
+    "(" + "(^|\\n)" + IGNORABLE_CHARACTER + "*" + RTL_SEQUENCE + NEUTRAL_CHARACTER + "+" + RTL_SEQUENCE + ")" +
     "|" +
     // or it has a line with two RTL 'words' after all non-RTL characters
-    "(" + rtlSequence + neutralCharacter + "+" + rtlSequence + ignorableCharacter + "*" + "($|\\n)" + ")" );
+    "(" + RTL_SEQUENCE + NEUTRAL_CHARACTER + "+" + RTL_SEQUENCE + IGNORABLE_CHARACTER + "*" + "($|\\n)" + ")" );
 
   if (typeof obj == 'string') {
     if (allNeutralExpression.test(obj)) {
@@ -550,7 +573,7 @@ function directionCheck(obj)
 #ifdef DEBUG_directionCheck
       jsConsoleService.logStringMessage("object is NOT NEUTRAL");
 #endif
-    var matchResults = new Object;
+    var matchResults = {};
     matchInText(obj, rtlLineExpression, matchResults);
 #ifdef DEBUG_directionCheck
     jsConsoleService.logStringMessage("directionCheck - object "+obj+"\nis " + (matchResults.hasMatching ?

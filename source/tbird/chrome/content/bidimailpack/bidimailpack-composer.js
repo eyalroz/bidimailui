@@ -37,15 +37,6 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#ifdef DEBUG
-// The following 2 lines enable logging messages to the javascript console:
-var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
-jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
-
-// Here is an example of a console log message describing a DOM node:
-// jsConsoleService.logStringMessage('visiting node: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\ninnerHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.outerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
-#endif
-
 const nsISelectionController = Components.interfaces.nsISelectionController;
 
 // Globals
@@ -57,11 +48,8 @@ var gAlternativeEnterBehavior;
                             // is to close a paragraph and begin a new one
 var gParagraphVerticalMargin;
                             // Amount of space to add to paragraphs in HTML mail messages
-var bidiKeyboardService = Components.classes['@mozilla.org/widget/bidikeyboard;1'].getService();
-bidiKeyboardService.QueryInterface(Components.interfaces.nsIBidiKeyboard);
-                            // Used for determining whether the current keyboard layout
-                            // is RTL or LTR
-gBodyReadyListener = {
+
+var gBodyReadyListener = {
   messageParams: null,
 
   NotifyComposeFieldsReady : function() { },
@@ -82,14 +70,6 @@ gBodyReadyListener = {
     SetInitialDirection(this.messageParams);
   }
 };
-
-
-function KeyboardLayoutIsRTL()
-{
-    var obj = {};
-    bidiKeyboardService.isLangRTL(obj);
-    return obj.value;
-}
 
 function GetCurrentSelectionDirection()
 {
