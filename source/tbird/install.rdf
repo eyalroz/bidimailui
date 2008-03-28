@@ -101,10 +101,10 @@
       <Description about="urn:mozilla:extension:file:bidimailpack.jar">
         <em:package>content/bidimailpack/</em:package>
         <em:locale>locale/en-US/bidimailpack/</em:locale>
-        <em:locale>locale/he-IL/bidimailpack/</em:locale>
+        <em:locale>locale/he/bidimailpack/</em:locale>
         <em:locale>locale/ar/bidimailpack/</em:locale>
         <em:locale>locale/fa/bidimailpack/</em:locale>
-        <em:locale>locale/ur-PK/bidimailpack/</em:locale>
+        <em:locale>locale/ur/bidimailpack/</em:locale>
         <em:skin>skin/classic/bidimailpack/</em:skin>
       </Description>
     </em:file>
