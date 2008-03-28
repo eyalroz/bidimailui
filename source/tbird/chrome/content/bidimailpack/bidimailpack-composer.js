@@ -57,7 +57,7 @@ var gBodyReadyListener = {
   SaveInFolderDone : function(folderName) { },
   NotifyComposeBodyReady : function() {
 #ifdef DEBUG_gBodyReadyListener
-    jsConsoleService.logStringMessage('body ready');
+    gJSConsoleService.logStringMessage('body ready');
 #endif
     if (this.messageParams.isReply) {
       performCorrectiveRecoding(
@@ -74,7 +74,7 @@ var gBodyReadyListener = {
 function GetCurrentSelectionDirection()
 {
 #ifdef DEBUG_GetCurrentSelectionDirection
-   jsConsoleService.logStringMessage('----- in GetCurrentSelectionDirection() -----');
+   gJSConsoleService.logStringMessage('----- in GetCurrentSelectionDirection() -----');
 #endif
 
   // The current selection is a forest of DOM nodes,
@@ -124,15 +124,15 @@ function GetCurrentSelectionDirection()
     }
 
 #ifdef DEBUG_GetCurrentSelectionDirection
-    jsConsoleService.logStringMessage('commonAncestorContainer:' + cac + "\ntype:" + cac.nodeType + "\nHTML:\n" + cac.innerHTML);
-    jsConsoleService.logStringMessage('commonAncestorContainer:' + cac + "\ntype:" + cac.nodeType + "\nvalue:\n" + cac.nodeValue + "\nis LTR = " + cacIsLTR + "; is RTL = " + cacIsRTL);
+    gJSConsoleService.logStringMessage('commonAncestorContainer:' + cac + "\ntype:" + cac.nodeType + "\nHTML:\n" + cac.innerHTML);
+    gJSConsoleService.logStringMessage('commonAncestorContainer:' + cac + "\ntype:" + cac.nodeType + "\nvalue:\n" + cac.nodeValue + "\nis LTR = " + cacIsLTR + "; is RTL = " + cacIsRTL);
 #endif
 
     if (cac.nodeType == Node.TEXT_NODE) {
       // the range is some text within a single DOM leaf node
       // so there's no need for any traversal
 #ifdef DEBUG_GetCurrentSelectionDirection
-      jsConsoleService.logStringMessage('just a text node, continuing');
+      gJSConsoleService.logStringMessage('just a text node, continuing');
 #endif
       hasLTR = hasLTR || cacIsLTR;
       hasRTL = hasRTL || cacIsRTL;
@@ -171,7 +171,7 @@ function GetCurrentSelectionDirection()
   
       while (node != cac) {
 #ifdef DEBUG_GetCurrentSelectionDirection
-        jsConsoleService.logStringMessage('visiting start slope node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
+        gJSConsoleService.logStringMessage('visiting start slope node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
 #endif
         if (node.nodeType == Node.ELEMENT_NODE) {
           var nodeStyle = view.getComputedStyle(node, "");
@@ -183,7 +183,7 @@ function GetCurrentSelectionDirection()
               case "ltr":
                 hasLTR = true;
 #ifdef DEBUG_GetCurrentSelectionDirection
-                jsConsoleService.logStringMessage('found LTR');
+                gJSConsoleService.logStringMessage('found LTR');
 #endif
                 if (hasRTL)
                   return "complex";
@@ -191,7 +191,7 @@ function GetCurrentSelectionDirection()
               case "rtl":
                 hasRTL = true;
 #ifdef DEBUG_GetCurrentSelectionDirection
-                jsConsoleService.logStringMessage('found RTL');
+                gJSConsoleService.logStringMessage('found RTL');
 #endif
                 if (hasLTR)
                   return "complex";
@@ -211,7 +211,7 @@ function GetCurrentSelectionDirection()
 
     do {
 #ifdef DEBUG_GetCurrentSelectionDirection
-      jsConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
+      gJSConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
 #endif
 
       // check the current node's direction
@@ -229,7 +229,7 @@ function GetCurrentSelectionDirection()
             case "ltr":
               hasLTR = true;
 #ifdef DEBUG_GetCurrentSelectionDirection
-              jsConsoleService.logStringMessage('found LTR');
+              gJSConsoleService.logStringMessage('found LTR');
 #endif
               if (hasRTL)
                 return "complex";
@@ -237,7 +237,7 @@ function GetCurrentSelectionDirection()
             case "rtl":
               hasRTL = true;
 #ifdef DEBUG_GetCurrentSelectionDirection
-              jsConsoleService.logStringMessage('found RTL');
+              gJSConsoleService.logStringMessage('found RTL');
 #endif
               if (hasLTR)
                 return "complex";
@@ -247,7 +247,7 @@ function GetCurrentSelectionDirection()
         else if (node.parentNode == cac) {
           // there is a non-block child of cac, so we use cac's data
 #ifdef DEBUG_GetCurrentSelectionDirection
-          jsConsoleService.logStringMessage('non-block child of cac, using cac direction');
+          gJSConsoleService.logStringMessage('non-block child of cac, using cac direction');
 #endif
           hasLTR = hasLTR || cacIsLTR;
           hasRTL = hasRTL || cacIsRTL;
@@ -258,7 +258,7 @@ function GetCurrentSelectionDirection()
 
       if (node == range.endContainer) {
 #ifdef DEBUG_GetCurrentSelectionDirection
-        jsConsoleService.logStringMessage('at end container, stopping traversal');
+        gJSConsoleService.logStringMessage('at end container, stopping traversal');
 #endif
         break; // proceed to the next selection range
       }
@@ -267,7 +267,7 @@ function GetCurrentSelectionDirection()
 
       if (node.firstChild) {
 #ifdef DEBUG_GetCurrentSelectionDirection
-        jsConsoleService.logStringMessage('descending to first child');
+        gJSConsoleService.logStringMessage('descending to first child');
 #endif
         node = node.firstChild;
         // fallthrough to sibling search in case first child is a text node
@@ -275,7 +275,7 @@ function GetCurrentSelectionDirection()
           continue; // we've found the next node to visit
         else if (node == range.endContainer) {
 #ifdef DEBUG_GetCurrentSelectionDirection
-          jsConsoleService.logStringMessage('at TEXT_NODE endContainer, stopping traversal');        
+          gJSConsoleService.logStringMessage('at TEXT_NODE endContainer, stopping traversal');        
 #endif
           break; // if the next node is the end container as well as a
                  // text node, we don't need to to check its direction,
@@ -291,7 +291,7 @@ function GetCurrentSelectionDirection()
         if (node.nextSibling) {
           node = node.nextSibling;
 #ifdef DEBUG_GetCurrentSelectionDirection
-          jsConsoleService.logStringMessage('moving to next sibling');
+          gJSConsoleService.logStringMessage('moving to next sibling');
 #endif
           if  (node.nodeType != Node.TEXT_NODE)
             break; // we've found the next node to visit
@@ -299,7 +299,7 @@ function GetCurrentSelectionDirection()
         }
         else node = node.parentNode;
 #ifdef DEBUG_GetCurrentSelectionDirection
-        jsConsoleService.logStringMessage('moving back up');
+        gJSConsoleService.logStringMessage('moving back up');
 #endif
       } while (node != cac);
 
@@ -321,7 +321,7 @@ function GetCurrentSelectionDirection()
 function SetDocumentDirection(direction)
 {
 #ifdef DEBUG_SetDocumentDirection
-  jsConsoleService.logStringMessage('--- SetDocumentDirection( \'' + direction + '\' ) ---');
+  gJSConsoleService.logStringMessage('--- SetDocumentDirection( \'' + direction + '\' ) ---');
 #endif
 
   document.getElementById("content-frame").contentDocument.documentElement.style.direction = direction;
@@ -419,7 +419,7 @@ function LoadParagraphMode()
 function GetDisplayedCopyParams(messageURI,messageParams)
 {
 #ifdef DEBUG_GetDisplayedCopyParams
-    jsConsoleService.logStringMessage('GetDisplayedCopyParams for message\n' + messageURI);
+    gJSConsoleService.logStringMessage('GetDisplayedCopyParams for message\n' + messageURI);
 #endif
   // Note: there may be more than one window
   // which displays the message we are replying to;
@@ -453,14 +453,14 @@ function GetDisplayedCopyParams(messageURI,messageParams)
       continue;
 
 #ifdef DEBUG_GetDisplayedCopyParams
-    jsConsoleService.logStringMessage('found a window displaying our message');
+    gJSConsoleService.logStringMessage('found a window displaying our message');
 #endif
 
 
     var displayedCopyBody = displayedCopyBrowser.contentDocument.body;
 
 #ifdef DEBUG_GetDisplayedCopyParams
-    jsConsoleService.logStringMessage('body is ' + displayedCopyBody);
+    gJSConsoleService.logStringMessage('body is ' + displayedCopyBody);
 #endif
 
     for (var i=0; i < displayedCopyBody.childNodes.length; i++) {
@@ -514,7 +514,7 @@ function SetInitialDirection(messageParams)
   }
   else {
 #ifdef DEBUG_SetInitialDocumentDirection
-    jsConsoleService.logStringMessage('shouldn\'t get here... probably no URI for this reply');
+    gJSConsoleService.logStringMessage('shouldn\'t get here... probably no URI for this reply');
 #endif
     // we shouldn't be able to get here - when replying, the original
     // window should be in existence
@@ -534,7 +534,7 @@ function ComposeWindowOnActualLoad()
     document.getElementById("content-frame").contentDocument.body;
 
 #ifdef DEBUG_ComposeWindowOnActualLoad
-  jsConsoleService.logStringMessage('--- ComposeWindowOnActualLoad() --- ');
+  gJSConsoleService.logStringMessage('--- ComposeWindowOnActualLoad() --- ');
 #endif
   HandleDirectionButtons();
   // Track "Show Direction Buttons" pref.
@@ -569,7 +569,7 @@ function ComposeWindowOnActualLoad()
     
   DetermineNewMessageParams(messageBody,messageParams);
 #ifdef DEBUG_ComposeWindowOnActualLoad
-  jsConsoleService.logStringMessage('isReply = ' + messageParams.isReply + 
+  gJSConsoleService.logStringMessage('isReply = ' + messageParams.isReply + 
     '\ngMsgCompose.originalMsgURI = ' +
     (gMsgCompose? gMsgCompose.originalMsgURI : 'no gMsgCompose') +
     '\noriginalDisplayDirection = ' + messageParams.originalDisplayDirection + 
@@ -661,22 +661,22 @@ var gReopenCount = 0;
 function DebugLoadHandler(ev)
 {
   gLoadCount++;
-  jsConsoleService.logStringMessage('load event #' + gLoadCount + ' :\ncurrentTarget = ' + ev.currentTarget + ' ; originalTarget = ' + ev.originalTarget + ' ; explicitOriginalTarget = ' + ev.explicitOriginalTarget);
+  gJSConsoleService.logStringMessage('load event #' + gLoadCount + ' :\ncurrentTarget = ' + ev.currentTarget + ' ; originalTarget = ' + ev.originalTarget + ' ; explicitOriginalTarget = ' + ev.explicitOriginalTarget);
 }
 
 function DebugLoadHandlerNonCapturing()
 {
-  jsConsoleService.logStringMessage('this is a non-capturing load event');
+  gJSConsoleService.logStringMessage('this is a non-capturing load event');
 }
 
 function DebugReopenHandler(ev)
 {
   gReopenCount++;
-  jsConsoleService.logStringMessage('compose-window-reopen event #' + gReopenCount + ' :\ncurrentTarget = ' + ev.currentTarget + ' ; originalTarget = ' + ev.originalTarget + ' ; explicitOriginalTarget = ' + ev.explicitOriginalTarget);
+  gJSConsoleService.logStringMessage('compose-window-reopen event #' + gReopenCount + ' :\ncurrentTarget = ' + ev.currentTarget + ' ; originalTarget = ' + ev.originalTarget + ' ; explicitOriginalTarget = ' + ev.explicitOriginalTarget);
 }
 function DebugReopenHandlerNonCapturing()
 {
-  jsConsoleService.logStringMessage('this is a non-capturing compose-window-reopen event');
+  gJSConsoleService.logStringMessage('this is a non-capturing compose-window-reopen event');
 }
 
 #endif
@@ -718,7 +718,7 @@ function FindClosestBlockElement(node)
 function ApplyToSelectionBlockElements(evalStr)
 {
 #ifdef DEBUG_ApplyToSelectionBlockElements
-  jsConsoleService.logStringMessage('----- ApplyToSelectionBlockElements() -----');
+  gJSConsoleService.logStringMessage('----- ApplyToSelectionBlockElements() -----');
 #endif
   var editor = GetCurrentEditor();
   if (!editor) {
@@ -744,7 +744,7 @@ function ApplyToSelectionBlockElements(evalStr)
         }
         
 #ifdef DEBUG_ApplyToSelectionBlockElements
-        jsConsoleService.logStringMessage('endContainer:' + endContainer + "\ntype: " + endContainer.nodeType + "\nHTML:\n" + endContainer.innerHTML + "\nvalue:\n" + endContainer.nodeValue);
+        gJSConsoleService.logStringMessage('endContainer:' + endContainer + "\ntype: " + endContainer.nodeType + "\nHTML:\n" + endContainer.innerHTML + "\nvalue:\n" + endContainer.nodeValue);
 #endif
 
         var node = startContainer;
@@ -752,19 +752,19 @@ function ApplyToSelectionBlockElements(evalStr)
         // giving our directionality style to everything on our way
         do {
 #ifdef DEBUG_ApplyToSelectionBlockElements
-          jsConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
+          gJSConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
 #endif
 
           var closestBlockElement = FindClosestBlockElement(node);
           if (closestBlockElement) {
 #ifdef DEBUG_ApplyToSelectionBlockElements
-            jsConsoleService.logStringMessage('found closestBlockElement:' + closestBlockElement + "\ntype: " + closestBlockElement.nodeType + "\nHTML:\n" + closestBlockElement.innerHTML + "\nvalue:\n" + closestBlockElement.nodeValue);
+            gJSConsoleService.logStringMessage('found closestBlockElement:' + closestBlockElement + "\ntype: " + closestBlockElement.nodeType + "\nHTML:\n" + closestBlockElement.innerHTML + "\nvalue:\n" + closestBlockElement.nodeValue);
 #endif
             eval(evalStr);
           }
           else {
 #ifdef DEBUG_ApplyToSelectionBlockElements
-            jsConsoleService.logStringMessage('could not find cbe');
+            gJSConsoleService.logStringMessage('could not find cbe');
 #endif
             break;
           }
@@ -773,7 +773,7 @@ function ApplyToSelectionBlockElements(evalStr)
           // condition, to handle cases where begin == end
           if (node == endContainer) {
 #ifdef DEBUG_ApplyToSelectionBlockElements
-            jsConsoleService.logStringMessage('at end container, stopping traversal');
+            gJSConsoleService.logStringMessage('at end container, stopping traversal');
 #endif
             break;
           }
@@ -781,13 +781,13 @@ function ApplyToSelectionBlockElements(evalStr)
           // Traverse through the tree in order
           if (node.firstChild) {
 #ifdef DEBUG_ApplyToSelectionBlockElements
-            jsConsoleService.logStringMessage('descending to first child');
+            gJSConsoleService.logStringMessage('descending to first child');
 #endif
             node = node.firstChild;
           }
           else if (node.nextSibling) {
 #ifdef DEBUG_ApplyToSelectionBlockElements
-            jsConsoleService.logStringMessage('moving to next sibling');
+            gJSConsoleService.logStringMessage('moving to next sibling');
 #endif
             node = node.nextSibling;
           }
@@ -795,12 +795,12 @@ function ApplyToSelectionBlockElements(evalStr)
             // find a parent node which has anything after
             while (node = node.parentNode) {
 #ifdef DEBUG_ApplyToSelectionBlockElements
-              jsConsoleService.logStringMessage('moved up to parent node');
+              gJSConsoleService.logStringMessage('moved up to parent node');
 #endif
               if (node.nextSibling) {
                 node = node.nextSibling;
 #ifdef DEBUG_ApplyToSelectionBlockElements
-                jsConsoleService.logStringMessage('moved to next sibling');
+                gJSConsoleService.logStringMessage('moved to next sibling');
 #endif
                 break;
               }
@@ -891,12 +891,12 @@ function onKeyPress(ev)
 
         // combine the two paragraphs into a single paragraph
 #ifdef DEBUG_keypress
-        var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
-        jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
+        var gJSConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
+        gJSConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 
-        jsConsoleService.logStringMessage('unifying paragraphs\n------------------------');
-        jsConsoleService.logStringMessage('prevPar is:' + prevPar + "\ntype: " + prevPar.nodeType + "\nname: " + prevPar.nodeName + "\nHTML:\n" + prevPar.innerHTML + "\nOuter HTML:\n" + prevPar.innerHTML + "\nvalue:\n" + prevPar.nodeValue);
-        jsConsoleService.logStringMessage('par is:' + par + "\ntype: " + par.nodeType + "\nname: " + par.nodeName + "\nHTML:\n" + par.innerHTML + "\nOuter HTML:\n" + par.innerHTML + "\nvalue:\n" + par.nodeValue);
+        gJSConsoleService.logStringMessage('unifying paragraphs\n------------------------');
+        gJSConsoleService.logStringMessage('prevPar is:' + prevPar + "\ntype: " + prevPar.nodeType + "\nname: " + prevPar.nodeName + "\nHTML:\n" + prevPar.innerHTML + "\nOuter HTML:\n" + prevPar.innerHTML + "\nvalue:\n" + prevPar.nodeValue);
+        gJSConsoleService.logStringMessage('par is:' + par + "\ntype: " + par.nodeType + "\nname: " + par.nodeName + "\nHTML:\n" + par.innerHTML + "\nOuter HTML:\n" + par.innerHTML + "\nvalue:\n" + par.nodeValue);
 #endif
         editor.beginTransaction();
  
@@ -907,7 +907,7 @@ function onKeyPress(ev)
         // we won't add the extra <br>
         if (par.childNodes.length == 1 && pChild.nodeName == "BR") {
 #ifdef DEBUG_keypress
-          jsConsoleService.logStringMessage('just removing an empty paragraph');
+          gJSConsoleService.logStringMessage('just removing an empty paragraph');
 #endif
           prevPar.parentNode.removeChild(par);
         }
@@ -918,7 +918,7 @@ function onKeyPress(ev)
         //if (npChild && par.lastChild) {
         //  if ((npChild.nodeType == Node.TEXT_NODE) && (par.lastChild.nodeType == Node.TEXT_NODE)) {
         //    par.lastChild.nodeValue = par.lastChild.nodeValue + npChild.nodeValue;
-        //    //jsConsoleService.logStringMessage('par.lastChild.nodeValue = \"' + par.lastChild.nodeValue + '\"');
+        //    //gJSConsoleService.logStringMessage('par.lastChild.nodeValue = \"' + par.lastChild.nodeValue + '\"');
         //    npChild = npChild.nextSibling;
         //  }
         //}
@@ -928,7 +928,7 @@ function onKeyPress(ev)
             var pc2 = pChild;
             pChild = pChild.nextSibling;
 #ifdef DEBUG_keypress
-            jsConsoleService.logStringMessage('copying pcClone:' + pcClone + "\ntype: " + pcClone.nodeType + "\nname: " + pcClone.nodeName + "\nHTML:\n" + pcClone.innerHTML + "\nOuter HTML:\n" + pcClone.innerHTML + "\nvalue:\n" + pcClone.nodeValue);
+            gJSConsoleService.logStringMessage('copying pcClone:' + pcClone + "\ntype: " + pcClone.nodeType + "\nname: " + pcClone.nodeName + "\nHTML:\n" + pcClone.innerHTML + "\nOuter HTML:\n" + pcClone.innerHTML + "\nvalue:\n" + pcClone.nodeValue);
 #endif
             newPar.appendChild(pc2);
           }
@@ -938,7 +938,7 @@ function onKeyPress(ev)
         }
         editor.endTransaction();
 #ifdef DEBUG_keypress
-        jsConsoleService.logStringMessage('done');
+        gJSConsoleService.logStringMessage('done');
 #endif
         ev.preventDefault();
         ev.stopPropagation();
