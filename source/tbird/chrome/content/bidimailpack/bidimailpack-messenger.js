@@ -43,7 +43,7 @@ function setMessageDirectionForcing(forcedDirection)
 {
   // we assume forcedDirection is 'rtl', 'ltr' or null
 #ifdef DEBUG_setMessageDirectionForcing
-  jsConsoleService.logStringMessage('SetMessageDirection(' + forcedDirection + ')');
+  gJSConsoleService.logStringMessage('SetMessageDirection(' + forcedDirection + ')');
 #endif
   var body = getMessageBrowser().contentDocument.body;
   setDirections(body,forcedDirection);
@@ -59,7 +59,7 @@ function setMessageDirectionForcing(forcedDirection)
 function cycleDirectionSettings()
 {
 #ifdef DEBUG_cycleDirectionSettings
-  jsConsoleService.logStringMessage('until now, direction was FORCED RTL');
+  gJSConsoleService.logStringMessage('until now, direction was FORCED RTL');
 #endif
   var body = getMessageBrowser().contentDocument.body;
   switch (body.getAttribute('bidimailui-forced-direction')) {
@@ -78,7 +78,7 @@ function cycleDirectionSettings()
 function updateDirectionMenuButton(forcedDirection,disabled)
 {
 #ifdef DEBUG_updateDirectionMenuButton
-  jsConsoleService.logStringMessage('updateDirectionMenuButton(forcedDirection='+forcedDirection+',disabled='+disabled+')');
+  gJSConsoleService.logStringMessage('updateDirectionMenuButton(forcedDirection='+forcedDirection+',disabled='+disabled+')');
 #endif
   menubutton = document.getElementById('bidimailui-forcing-menubutton');
   if (menubutton) {
@@ -117,7 +117,7 @@ function onMessageDirectionButtonClick(whichButton)
 function browserOnLoadHandler()
 {
 #ifdef DEBUG_browserOnLoadHandler
-  jsConsoleService.logStringMessage("--- browserOnLoadHandler() ---");
+  gJSConsoleService.logStringMessage("--- browserOnLoadHandler() ---");
 #endif
 
   // First, let's make sure we can poke the:
@@ -127,7 +127,7 @@ function browserOnLoadHandler()
 
   if (!msgWindow) {
 #ifdef DEBUG_browserOnLoadHandler
-    jsConsoleService.logStringMessage("couldn't get msgWindow");
+    gJSConsoleService.logStringMessage("couldn't get msgWindow");
 #endif
     updateDirectionMenuButton(null,true);
     return;
@@ -135,7 +135,7 @@ function browserOnLoadHandler()
   var loadedMessageURI = GetLoadedMessage();
   if (loadedMessageURI == gMessageURI) {
 #ifdef DEBUG_browserOnLoadHandler
-    jsConsoleService.logStringMessage("loadedMessageURI == gMessageURI");
+    gJSConsoleService.logStringMessage("loadedMessageURI == gMessageURI");
 #endif
   }
   var domDocument;
@@ -144,7 +144,7 @@ function browserOnLoadHandler()
   }
   catch (ex) {
 #ifdef DEBUG_browserOnLoadHandler
-    jsConsoleService.logStringMessage("couldn't get DOMDocument");
+    gJSConsoleService.logStringMessage("couldn't get DOMDocument");
 #endif
     dump(ex);
     return;
@@ -160,7 +160,7 @@ function browserOnLoadHandler()
   var body = domDocument.body;
   if (!body) {
 #ifdef DEBUG_browserOnLoadHandler
-    jsConsoleService.logStringMessage("couldn't get DOMDocument body");
+    gJSConsoleService.logStringMessage("couldn't get DOMDocument body");
 #endif
     updateDirectionMenuButton(null,true);
     return;
@@ -175,7 +175,7 @@ function browserOnLoadHandler()
       Components.interfaces.nsIPrefLocalizedString).data;
 
 #ifdef DEBUG_browserOnLoadHandler
-    jsConsoleService.logStringMessage("charsetPref = " + charsetPref);
+    gJSConsoleService.logStringMessage("charsetPref = " + charsetPref);
 #endif
       
     // if the charset pref is not one we can use for detecting mis-decoded
@@ -192,7 +192,7 @@ function browserOnLoadHandler()
         gBidimailuiStrings.GetStringFromName("bidimailui.chraset_dialog.leave_as_is")];
       var selected = {};
 #ifdef DEBUG_browserOnLoadHandler
-      jsConsoleService.logStringMessage("gBidimailuiStrings.GetStringFromName(\"bidimailui.chraset_dialog.set_to_windows_1255\") =\n" + gBidimailuiStrings.GetStringFromName("bidimailui.chraset_dialog.set_to_windows_1255"));
+      gJSConsoleService.logStringMessage("gBidimailuiStrings.GetStringFromName(\"bidimailui.chraset_dialog.set_to_windows_1255\") =\n" + gBidimailuiStrings.GetStringFromName("bidimailui.chraset_dialog.set_to_windows_1255"));
 #endif
       var ok = prompts.select(
         window,
@@ -201,7 +201,7 @@ function browserOnLoadHandler()
         list.length, list, selected);
       if (ok) {
 #ifdef DEBUG_browserOnLoadHandler
-      jsConsoleService.logStringMessage("ok!");
+      gJSConsoleService.logStringMessage("ok!");
 #endif
         var str = 
           Components.classes["@mozilla.org/supports-string;1"]
@@ -223,7 +223,7 @@ function browserOnLoadHandler()
         }
       }
 #ifdef DEBUG_browserOnLoadHandler
-      else jsConsoleService.logStringMessage("not ok!");
+      else gJSConsoleService.logStringMessage("not ok!");
 #endif
     }
   }
@@ -247,7 +247,7 @@ function browserOnLoadHandler()
   }
 
 #ifdef DEBUG_browserOnLoadHandler
-  jsConsoleService.logStringMessage("completed charset correction phase");
+  gJSConsoleService.logStringMessage("completed charset correction phase");
 #endif
 
   // make quote bars behave properly with RTL quoted text
@@ -279,7 +279,7 @@ function browserOnLoadHandler()
 function splitTextElementsInPlainMessageDOMTree(subBody)
 {
 #ifdef DEBUG_splitTextElementsInPlainMessageDOMTree
-  jsConsoleService.logStringMessage("in splitTextElementsInPlainMessageDOMTree()");
+  gJSConsoleService.logStringMessage("in splitTextElementsInPlainMessageDOMTree()");
 #endif
   var treeWalker = document.createTreeWalker(
     subBody,
@@ -290,7 +290,7 @@ function splitTextElementsInPlainMessageDOMTree(subBody)
   var node = treeWalker.nextNode();
   while (node) {
 #ifdef DEBUG_splitTextElementsInPlainMessageDOMTree
-    jsConsoleService.logStringMessage("-----\ntext node\n-----\n" + node.nodeValue);
+    gJSConsoleService.logStringMessage("-----\ntext node\n-----\n" + node.nodeValue);
 #endif
     // TODO: ensure the parent's a PRE or BLOCKQUOTE or something else that's nice
     if (! /\n[ \f\r\t\v\n\u00A0\\u2028\\u2029!-@\[-`{-\xA0\u2013\u2014\uFFFD]*\n/m.test(node.nodeValue)) {
@@ -298,7 +298,7 @@ function splitTextElementsInPlainMessageDOMTree(subBody)
        continue;
     }
 #ifdef DEBUG_splitTextElementsInPlainMessageDOMTree
-    jsConsoleService.logStringMessage(RegExp.leftContext + "\n-----\n"+RegExp.lastMatch+"\n-----\n"+RegExp.rightContext);
+    gJSConsoleService.logStringMessage(RegExp.leftContext + "\n-----\n"+RegExp.lastMatch+"\n-----\n"+RegExp.rightContext);
 #endif
 
     var restOfText = node.cloneNode(false);
@@ -314,7 +314,7 @@ function splitTextElementsInPlainMessageDOMTree(subBody)
     // everything before it remains
     while (node.nextSibling) {
 #ifdef DEBUG_splitTextElementsInPlainMessageDOMTree
-//    jsConsoleService.logStringMessage("nextsibling =\n" + node.nextSibling + "\nvalue:\n"+(node.nextSibling ? node.nextSibling.nodeValue : null));
+//    gJSConsoleService.logStringMessage("nextsibling =\n" + node.nextSibling + "\nvalue:\n"+(node.nextSibling ? node.nextSibling.nodeValue : null));
 #endif
       var tempNode = node.nextSibling;
       firstPartOfParent.removeChild(node.nextSibling);
@@ -351,7 +351,7 @@ function wrapTextNodesInFlowedMessageDOMTree(subBody)
         (node.parentNode.nodeName != 'BLOCKQUOTE')) {
       // and other such elements within moz-text-flowed messages
 #ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
-      jsConsoleService.logStringMessage("not handling node\n" + node.nodeValue + "\nwith parent node name " + node.parentNode.nodeName);
+      gJSConsoleService.logStringMessage("not handling node\n" + node.nodeValue + "\nwith parent node name " + node.parentNode.nodeName);
 #endif
       continue;
     }
@@ -359,12 +359,12 @@ function wrapTextNodesInFlowedMessageDOMTree(subBody)
         ((node.parentNode.nodeName == 'A') &&
         (node.parentNode.parentNode.hasAttribute('bidimailui-generated')))) {
 #ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
-      jsConsoleService.logStringMessage("already handled node\n"+ node.nodeValue);
+      gJSConsoleService.logStringMessage("already handled node\n"+ node.nodeValue);
 #endif
       continue;
     }
 #ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
-    jsConsoleService.logStringMessage("wrapping with DIV, node\n" + node.nodeValue);
+    gJSConsoleService.logStringMessage("wrapping with DIV, node\n" + node.nodeValue);
 #endif
     var wrapperDiv = clonedDiv.cloneNode(false);
 
@@ -388,7 +388,7 @@ function wrapTextNodesInFlowedMessageDOMTree(subBody)
     while (sibling = wrapperDiv.nextSibling) {
       if (sibling.nodeName == 'BLOCKQUOTE') {
 #ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
-        jsConsoleService.logStringMessage("hit blockquote, finishing walk");
+        gJSConsoleService.logStringMessage("hit blockquote, finishing walk");
 #endif
         break;
       }
@@ -400,12 +400,12 @@ function wrapTextNodesInFlowedMessageDOMTree(subBody)
           wrapperDiv.parentNode.removeChild(sibling);
         }
 #ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
-          jsConsoleService.logStringMessage("hit BR with emptyLine = " + emptyLine + "\nfinishing walk");
+          gJSConsoleService.logStringMessage("hit BR with emptyLine = " + emptyLine + "\nfinishing walk");
 #endif
         break;
       }
 #ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
-      jsConsoleService.logStringMessage("adding node " + sibling + " to DIV\nnode name:" + node.nodeName + "\nnode value\n" + node.nodeValue);
+      gJSConsoleService.logStringMessage("adding node " + sibling + " to DIV\nnode name:" + node.nodeName + "\nnode value\n" + node.nodeValue);
 #endif
       wrapperDiv.parentNode.removeChild(sibling);
       wrapperDiv.appendChild(sibling);
@@ -417,7 +417,7 @@ function wrapTextNodesInFlowedMessageDOMTree(subBody)
     }
 #ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
     if (!sibling)
-      jsConsoleService.logStringMessage("walk ends after last sibling!");
+      gJSConsoleService.logStringMessage("walk ends after last sibling!");
 #endif
   }
 }
@@ -425,18 +425,18 @@ function wrapTextNodesInFlowedMessageDOMTree(subBody)
 function preprocessMessageDOM(body)
 {
 #ifdef DEBUG_preprocessMessageDOM
-  jsConsoleService.logStringMessage("preprocessMessageDOM);
+  gJSConsoleService.logStringMessage("preprocessMessageDOM);
   if (body.childNodes.item(1))
-    jsConsoleService.logStringMessage("body.childNodes.item(1).className = " + body.childNodes.item(1).className);
+    gJSConsoleService.logStringMessage("body.childNodes.item(1).className = " + body.childNodes.item(1).className);
   else
-    jsConsoleService.logStringMessage("body has no children");
+    gJSConsoleService.logStringMessage("body has no children");
 #endif
 
   for (var i=0; i < body.childNodes.length; i++) {
     var subBody = body.childNodes.item(i);
 
 #ifdef DEBUG_preprocessMessageDOM
-    jsConsoleService.logStringMessage('subbody ' + i + ' is ' + subBody.className);
+    gJSConsoleService.logStringMessage('subbody ' + i + ' is ' + subBody.className);
 #endif
 
     if (subBody.className == "moz-text-plain") {
@@ -463,7 +463,7 @@ function gatherElementsRequiringDirectionSetting(
     elementsRequiringExplicitDirection.push(subBody);
 
 #ifdef DEBUG_gatherElementsRequiringDirectionSetting
-    jsConsoleService.logStringMessage('subbody ' + i + ' is ' + subBody.className);
+    gJSConsoleService.logStringMessage('subbody ' + i + ' is ' + subBody.className);
 #endif
 
     var nodes;
@@ -493,7 +493,7 @@ function gatherElementsRequiringDirectionSetting(
 function detectAndSetDirections(body, loadedMessageURI)
 {
 #ifdef DEBUG_detectAndSetDirections
-  jsConsoleService.logStringMessage("in detectAndSetDirections for message\n" + loadedMessageURI);
+  gJSConsoleService.logStringMessage("in detectAndSetDirections for message\n" + loadedMessageURI);
 #endif
   
   var elementsRequiringExplicitDirection = new Array;
@@ -501,7 +501,7 @@ function detectAndSetDirections(body, loadedMessageURI)
     body, elementsRequiringExplicitDirection);
 
 #ifdef DEBUG_detectAndSetDirections
-  jsConsoleService.logStringMessage("elementsRequiringExplicitDirection.length = " + elementsRequiringExplicitDirection.length);
+  gJSConsoleService.logStringMessage("elementsRequiringExplicitDirection.length = " + elementsRequiringExplicitDirection.length);
 #endif
 
   // direction-check all of the elements whose direction should be set explicitly
@@ -511,12 +511,12 @@ function detectAndSetDirections(body, loadedMessageURI)
     try {
    
 #ifdef DEBUG_detectAndSetDirections
-      jsConsoleService.logStringMessage('elementsRequiringExplicitDirection[ ' + i + ']: ' + node + "\ntype: " + node.nodeType + "\nclassName: " + node.className + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+      gJSConsoleService.logStringMessage('elementsRequiringExplicitDirection[ ' + i + ']: ' + node + "\ntype: " + node.nodeType + "\nclassName: " + node.className + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
 #endif
         
       var detectedDirection = directionCheck(node);
 #ifdef DEBUG_detectAndSetDirections
-      jsConsoleService.logStringMessage("detected direction: " + detectedDirection);
+      gJSConsoleService.logStringMessage("detected direction: " + detectedDirection);
 #endif
       if (detectedDirection != "neutral") {
         // "mixed" -> "rtl" as far as direction is concerned
@@ -526,7 +526,7 @@ function detectAndSetDirections(body, loadedMessageURI)
     // otherwise, let's not set the direction of an all-neutral-char node
     } catch(ex) {
 #ifdef DEBUG_detectAndSetDirections
-      jsConsoleService.logStringMessage(ex);
+      gJSConsoleService.logStringMessage(ex);
 #endif
     }
   }
@@ -535,7 +535,7 @@ function detectAndSetDirections(body, loadedMessageURI)
 function setDirections(body, forcedDirection)
 {
 #ifdef DEBUG_setDirections
-  jsConsoleService.logStringMessage('settings directions to ' + (forcedDirection ? forcedDirection : 'detected directions'));
+  gJSConsoleService.logStringMessage('settings directions to ' + (forcedDirection ? forcedDirection : 'detected directions'));
 #endif
   var elementsRequiringExplicitDirection = new Array;
   gatherElementsRequiringDirectionSetting(
@@ -577,7 +577,7 @@ function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredChars
   var contentToMatch;
 
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-  jsConsoleService.logStringMessage('in fixLoadedMessageCharsetIssues()');
+  gJSConsoleService.logStringMessage('in fixLoadedMessageCharsetIssues()');
 #endif
  
   // If preferredCodepageCharset is not set to one of windows-1255/6, we will 
@@ -645,7 +645,7 @@ function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredChars
   // this sets parameter no. 2
   var mailnewsDecodingType;
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-  jsConsoleService.logStringMessage('msgWindow.mailCharacterSet = ' + msgWindow.mailCharacterSet);
+  gJSConsoleService.logStringMessage('msgWindow.mailCharacterSet = ' + msgWindow.mailCharacterSet);
 #endif
   if ((preferredCharset != null) &&
       (msgWindow.mailCharacterSet == preferredCharset))
@@ -671,7 +671,7 @@ function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredChars
       mailnewsDecodingType = "UTF-8"; break;
     default: 
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-  jsConsoleService.logStringMessage('returning since msgWindow.mailCharacterSet = ' + msgWindow.mailCharacterSet);
+  gJSConsoleService.logStringMessage('returning since msgWindow.mailCharacterSet = ' + msgWindow.mailCharacterSet);
 #endif
       return true;
   }
@@ -744,7 +744,7 @@ function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredChars
   haveUTF8Text = matchInText(element, contentToMatch);
 
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-  jsConsoleService.logStringMessage("--------\n " +
+  gJSConsoleService.logStringMessage("--------\n " +
     (mustKeepCharset ? "Y" : "N") +
     ((mailnewsDecodingType == "latin-charset") ? "N" :
      ((mailnewsDecodingType == "preferred-charset") ? "C" : "U")) +
@@ -778,7 +778,7 @@ function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredChars
             //NNYY
             if (performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType,true,true)) {
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-              jsConsoleService.logStringMessage(
+              gJSConsoleService.logStringMessage(
                 "re-applying charset - bug workaround");
 #endif
               // need to re-apply the same charset, as a workaround for a weird mailnews bug

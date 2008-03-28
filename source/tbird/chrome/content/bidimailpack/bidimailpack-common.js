@@ -53,9 +53,9 @@ __defineGetter__("gUnicodeConverter", function() {
 });
 
 #ifdef DEBUG
-__defineGetter__("jsConsoleService", function() {
-  delete this.jsConsoleService;
-  return this.jsConsoleService =
+__defineGetter__("gJSConsoleService", function() {
+  delete this.gJSConsoleService;
+  return this.gJSConsoleService =
     Components.classes['@mozilla.org/consoleservice;1']
               .getService(Components.interfaces.nsIConsoleService);
 });
@@ -276,14 +276,14 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
   var needCharsetReapplication = false;
 
 #ifdef DEBUG_performCorrectiveRecoding
-          jsConsoleService.logStringMessage('---------------------------------\nin performCorrectiveRecoding(' + 
+          gJSConsoleService.logStringMessage('---------------------------------\nin performCorrectiveRecoding(' + 
           preferredCharset + ', ' + mailnewsDecodingType + ", " + (doCharset ? "doCharset" : "!doCharset") + ", " + 
           (doUTF8 ? "doUTF8" : "!doUTF8") + ")");
-          jsConsoleService.logStringMessage('element textContent (all nodes together):\n\n' + element.textContent);
+          gJSConsoleService.logStringMessage('element textContent (all nodes together):\n\n' + element.textContent);
 #endif
   if (!doCharset && !doUTF8) {
 #ifdef DEBUG_performCorrectiveRecoding
-    jsConsoleService.logStringMessage('nothing to do, returning');
+    gJSConsoleService.logStringMessage('nothing to do, returning');
 #endif
     return;
   }
@@ -303,7 +303,7 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
   while((node = treeWalker.nextNode())) {  
     var lines = node.data.split('\n');
 #ifdef DEBUG_performCorrectiveRecoding
-    jsConsoleService.logStringMessage("processing text node with " + lines.length + " lines");
+    gJSConsoleService.logStringMessage("processing text node with " + lines.length + " lines");
 #endif
     for(var i = 0; i < lines.length; i++) {
       var workingStr; 
@@ -311,9 +311,9 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
 #ifdef DEBUG_performCorrectiveRecoding
       if (doUTF8 && !utf8MisdetectionExpression.test(lines[i])) {
 #ifdef DEBUG_scancodes
-        jsConsoleService.logStringMessage("line is not misdecoded UTF-8:\n" + lines[i] + "\n----\n" + stringToScanCodes(lines[i]));
+        gJSConsoleService.logStringMessage("line is not misdecoded UTF-8:\n" + lines[i] + "\n----\n" + stringToScanCodes(lines[i]));
 #else
-        jsConsoleService.logStringMessage("line is not misdecoded UTF-8:\n" + lines[i]);
+        gJSConsoleService.logStringMessage("line is not misdecoded UTF-8:\n" + lines[i]);
 #endif
       }
 #endif
@@ -327,7 +327,7 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
           gUnicodeConverter.charset =
             (mailnewsDecodingType == "latin-charset") ? 'windows-1252' : preferredCharset;
 #ifdef DEBUG_scancodes
-          jsConsoleService.logStringMessage(
+          gJSConsoleService.logStringMessage(
             "decoded as " + gUnicodeConverter.charset + ":\n" + workingStr + "\n----\n" + stringToScanCodes(workingStr));
 #endif
 
@@ -337,7 +337,7 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
           workingStr += gUnicodeConverter.Finish();
 
 #ifdef DEBUG_scancodes
-          jsConsoleService.logStringMessage("undecoded bytes:\n" + workingStr  + "\n----\n" + stringToScanCodes(workingStr));
+          gJSConsoleService.logStringMessage("undecoded bytes:\n" + workingStr  + "\n----\n" + stringToScanCodes(workingStr));
 #endif
 
           // We see a lot of D7 20's instead of D7 A0's which are the 2-byte sequence for 
@@ -364,7 +364,7 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
           workingStr = workingStr.replace(/[\xD7-\xD9]([^\x80-\xBF]|$)/g, "$1");
 
 #ifdef DEBUG_scancodes
-          jsConsoleService.logStringMessage(
+          gJSConsoleService.logStringMessage(
             "after preprocessing (decoding of HTML entities, removing NBSPs (A0's)," + 
             "removing unterminated 2-byte sequences):\n" + workingStr +
             "\n----\n" + stringToScanCodes(workingStr));
@@ -374,12 +374,12 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
           workingStr = gUnicodeConverter.ConvertToUnicode(workingStr);
           
 #ifdef DEBUG_scancodes
-          jsConsoleService.logStringMessage("decoded UTF-8:\n" + workingStr + "\n----\n" + stringToScanCodes(lines[i]));
+          gJSConsoleService.logStringMessage("decoded UTF-8:\n" + workingStr + "\n----\n" + stringToScanCodes(lines[i]));
 #endif
           lines[i] = workingStr;
         } catch(ex) {
 #ifdef DEBUG_scancodes
-          jsConsoleService.logStringMessage("Exception while trying to recode \n" + lines[i] + "\n\n" + ex);
+          gJSConsoleService.logStringMessage("Exception while trying to recode \n" + lines[i] + "\n\n" + ex);
 #else
           dump("Exception while trying to recode \n" + lines[i] + "\n\n" + ex);
 #endif
@@ -397,7 +397,7 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
           gUnicodeConverter.charset =
             (mailnewsDecodingType == "latin-charset") ? 'windows-1252' : "UTF-8";
 #ifdef DEBUG_scancodes
-          jsConsoleService.logStringMessage(
+          gJSConsoleService.logStringMessage(
             "decoded as " + gUnicodeConverter.charset + ":\n" + lines[i] + "\n----\n" + stringToScanCodes(lines[i]));
 #endif
         
@@ -406,16 +406,16 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
           // TODO: not sure we need this next line
           workingStr += gUnicodeConverter.Finish();
 #ifdef DEBUG_scancodes
-          jsConsoleService.logStringMessage("undecoded bytes:\n" + workingStr  + "\n----\n" + stringToScanCodes(workingStr));
+          gJSConsoleService.logStringMessage("undecoded bytes:\n" + workingStr  + "\n----\n" + stringToScanCodes(workingStr));
 #endif
           gUnicodeConverter.charset = preferredCharset;
           lines[i] = gUnicodeConverter.ConvertToUnicode(workingStr);
 #ifdef DEBUG_scancodes
-          jsConsoleService.logStringMessage("decoded " + preferredCharset + ":\n" + lines[i] + "\n----\n" + stringToScanCodes(lines[i]));
+          gJSConsoleService.logStringMessage("decoded " + preferredCharset + ":\n" + lines[i] + "\n----\n" + stringToScanCodes(lines[i]));
 #endif
         //} catch(ex) {
 #ifdef DEBUG_scancodes
-        //  jsConsoleService.logStringMessage("Exception while trying to recode \n" + line + "\n\n" + ex);
+        //  gJSConsoleService.logStringMessage("Exception while trying to recode \n" + line + "\n\n" + ex);
 #else
         //  dump("Exception while trying to recode \n" + line + "\n\n" + ex);
 #endif
@@ -423,16 +423,16 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
       }
     }
 #ifdef DEBUG_scancodes
-//    jsConsoleService.logStringMessage("lines:\n");
+//    gJSConsoleService.logStringMessage("lines:\n");
 //    for(i = 0; i < lines.length; i++) {
-//      jsConsoleService.logStringMessage(lines[i]);
+//      gJSConsoleService.logStringMessage(lines[i]);
 //    }
 #endif
     if (doUTF8 || doCharset) {
       node.data = lines.join('\n');
     }
 #ifdef DEBUG_scancodes
-//    jsConsoleService.logStringMessage("node.data is now\n" + node.data);
+//    gJSConsoleService.logStringMessage("node.data is now\n" + node.data);
 #endif
   }
   if (doUTF8) {
@@ -447,7 +447,7 @@ function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType
 function matchInText(element, expression, matchResults)
 {
 #ifdef DEBUG_matchInText
-  jsConsoleService.logStringMessage("---------------------------------------------\n" +
+  gJSConsoleService.logStringMessage("---------------------------------------------\n" +
     "matching " + expression + "\nin element" + element);
 #endif
   var treeWalker = document.createTreeWalker(
@@ -459,9 +459,9 @@ function matchInText(element, expression, matchResults)
   while ((node = treeWalker.nextNode())) {
 #ifdef DEBUG_matchInText
 #ifdef DEBUG_scancodes
-    jsConsoleService.logStringMessage(node.data + "\n" + stringToScanCodes(node.data));
+    gJSConsoleService.logStringMessage(node.data + "\n" + stringToScanCodes(node.data));
 #else
-    jsConsoleService.logStringMessage(node.data);
+    gJSConsoleService.logStringMessage(node.data);
 #endif
 #endif
     if (expression.test(node.data)) {
@@ -470,7 +470,7 @@ function matchInText(element, expression, matchResults)
       }
       else {
 #ifdef DEBUG_matchInText
-        jsConsoleService.logStringMessage("found match.\n---------------------------------------------");
+        gJSConsoleService.logStringMessage("found match.\n---------------------------------------------");
 #endif
         return true;
       }
@@ -481,12 +481,12 @@ function matchInText(element, expression, matchResults)
     
 #ifdef DEBUG_matchInText
     if (!matchResults) {
-      jsConsoleService.logStringMessage("... node doesn't match.\n");
+      gJSConsoleService.logStringMessage("... node doesn't match.\n");
     }
 #endif
   }
 #ifdef DEBUG_matchInText
-  jsConsoleService.logStringMessage( 
+  gJSConsoleService.logStringMessage( 
     ((matchResults ? matchResults.hasMatching : false) ? "found" : "no") +
     " match.\n---------------------------------------------");
 #endif
@@ -496,7 +496,7 @@ function matchInText(element, expression, matchResults)
 function neutralsOnly(str)
 {
 #ifdef DEBUG_neutralsOnly
-  jsConsoleService.logStringMessage("in neutralsOnly for\n\n" + str);
+  gJSConsoleService.logStringMessage("in neutralsOnly for\n\n" + str);
 #endif
   var neutrals = new RegExp("^[ \\f\\r\\n\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\{-\xA0\u2013\\u2014\\uFFFD]*$");
   return neutrals.test(str);
@@ -522,7 +522,7 @@ const IGNORABLE_CHARACTER_NEW_LINE = "[" + NEUTRAL_CHARACTER_INNER +
 function directionCheck(obj)
 {
 #ifdef DEBUG_directionCheck
-  jsConsoleService.logStringMessage("in directionCheck(" + obj + ")");
+  gJSConsoleService.logStringMessage("in directionCheck(" + obj + ")");
 #endif
   // we check whether there exists a line which either begins
   // with a word consisting solely of characters of an RTL script,
@@ -551,32 +551,32 @@ function directionCheck(obj)
   if (typeof obj == 'string') {
     if (allNeutralExpression.test(obj)) {
 #ifdef DEBUG_directionCheck
-      jsConsoleService.logStringMessage("directionCheck - string\n\n"+obj+"\n\nis NEUTRAL");
+      gJSConsoleService.logStringMessage("directionCheck - string\n\n"+obj+"\n\nis NEUTRAL");
 #endif
       return "neutral";
     }
 #ifdef DEBUG_directionCheck
-    jsConsoleService.logStringMessage("directionCheck - string\n\n"+obj+"\n\nis " + (rtlLineExpression.test(obj) ? "RTL" : "LTR") );
+    gJSConsoleService.logStringMessage("directionCheck - string\n\n"+obj+"\n\nis " + (rtlLineExpression.test(obj) ? "RTL" : "LTR") );
 #endif
     return (rtlLineExpression.test(obj) ? "rtl" : "ltr");
   }
   else { // it's a DOM node
 #ifdef DEBUG_scancodes
-    jsConsoleService.logStringMessage("obj.textContent:\n" + obj.textContent + "\n" + stringToScanCodes(obj.textContent));
+    gJSConsoleService.logStringMessage("obj.textContent:\n" + obj.textContent + "\n" + stringToScanCodes(obj.textContent));
 #endif
     if (allNeutralExpression.test(obj.textContent)) {
 #ifdef DEBUG_directionCheck
-      jsConsoleService.logStringMessage("directionCheck - object "+obj+"\nis NEUTRAL");
+      gJSConsoleService.logStringMessage("directionCheck - object "+obj+"\nis NEUTRAL");
 #endif
       return "neutral";
     }
 #ifdef DEBUG_directionCheck
-      jsConsoleService.logStringMessage("object is NOT NEUTRAL");
+      gJSConsoleService.logStringMessage("object is NOT NEUTRAL");
 #endif
     var matchResults = {};
     matchInText(obj, rtlLineExpression, matchResults);
 #ifdef DEBUG_directionCheck
-    jsConsoleService.logStringMessage("directionCheck - object "+obj+"\nis " + (matchResults.hasMatching ?
+    gJSConsoleService.logStringMessage("directionCheck - object "+obj+"\nis " + (matchResults.hasMatching ?
             (matchResults.hasNonMatching ? "MIXED" : "RTL") : "LTR") );
 #endif
     return (matchResults.hasMatching ?
