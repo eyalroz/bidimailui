@@ -63,13 +63,13 @@ __defineGetter__("jsConsoleService", function() {
 
 // number to hexadecimal representation
 
-var gHexDigits="0123456789ABCDEF";
+const HEX_DIGITS = "0123456789ABCDEF";
 
 function num2hex(num) {
-  var hexString = gHexDigits.substr(num & 15, 1);
+  var hexString = HEX_DIGITS.substr(num & 15, 1);
   while(num > 15) {
     num >>= 4;
-    hexString = gHexDigits.substr(num & 15, 1) + hexString;
+    hexString = HEX_DIGITS.substr(num & 15, 1) + hexString;
   }
   return hexString;
 }
