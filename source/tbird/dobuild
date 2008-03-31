@@ -12,7 +12,7 @@ case "$TARGET" in
         TARGET=suitelegacy
         DEFS="-DMOZ_SUITE -DMOZ_SUITE_LEGACY"
         ;;
-    suiterunner | sr | suiterunner)
+    suiterunner | sr | srunner)
         TARGET=suiterunner
         DEFS="-DMOZ_SUITE -DMOZ_SUITERUNNER"
         ;;
