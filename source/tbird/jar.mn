@@ -55,7 +55,7 @@ bidimailpack.jar:
     locale/ur/bidimailpack/contents.rdf                    (chrome/locale/ur/bidimailpack/contents.rdf)
     locale/en-US/bidimailpack/contents.rdf                    (chrome/locale/en-US/bidimailpack/contents.rdf)
     locale/he/bidimailpack/contents.rdf                    (chrome/locale/he/bidimailpack/contents.rdf)
-    content/bidimailpack/composeOverlay.xul                   (chrome/content/bidimailpack/composeOverlay-suite.xul)
+*   content/bidimailpack/composeOverlay.xul                   (chrome/content/bidimailpack/composeOverlay-suite.xul)
     content/bidimailpack/editorOverlay.xul                    (chrome/content/bidimailpack/editorOverlay.xul)
     content/bidimailpack/editorContextMenuOverlayOverlay.xul  (chrome/content/bidimailpack/editorContextMenuOverlayOverlay.xul)
     content/bidimailpack/bidimailpack-editor.js               (chrome/content/bidimailpack/bidimailpack-editor.js)
