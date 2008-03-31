@@ -59,10 +59,15 @@ bidimailpack.jar:
     content/bidimailpack/editorOverlay.xul                    (chrome/content/bidimailpack/editorOverlay.xul)
     content/bidimailpack/editorContextMenuOverlayOverlay.xul  (chrome/content/bidimailpack/editorContextMenuOverlayOverlay.xul)
     content/bidimailpack/bidimailpack-editor.js               (chrome/content/bidimailpack/bidimailpack-editor.js)
+#ifdef MOZ_SUITE_LEGACY
 *   content/bidimailpack/bidimailpack-prefs.js                (chrome/content/bidimailpack/bidimailpack-prefs-suite.js)
     content/bidimailpack/bidimailpack-prefs.xul               (chrome/content/bidimailpack/bidimailpack-prefs-suite.xul)
     content/bidimailpack/bidimailpack-preftree.xul            (chrome/content/bidimailpack/bidimailpack-preftree.xul)
     content/bidimailpack/contents.rdf                         (chrome/content/bidimailpack/contents.rdf)
+#else
+    content/bidimailpack/bidimailpack-prefs.xul                   (chrome/content/bidimailpack/bidimailpack-prefs-tbird.xul)
+    content/bidimailpack/bidimailpack-prefs.js                    (chrome/content/bidimailpack/bidimailpack-prefs-tbird.js)
+#endif
 #endif
 
 #ifdef MOZ_THUNDERBIRD
