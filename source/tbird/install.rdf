@@ -45,8 +45,8 @@
     <em:id>{54e72d7b-ed31-4736-854f-f517358f21ee}</em:id>
 #expand    <em:version>__VERSION__</em:version>
 
-    <!-- Target Application this extension can install into, 
-         with minimum and maximum supported versions. --> 
+    <!-- Target Application this extension can install into,
+         with minimum and maximum supported versions. -->
 
 #ifdef MOZ_THUNDERBIRD
     <!-- Thunderbird -->
@@ -92,7 +92,7 @@
 
     <em:iconURL>chrome://bidimailpack/content/bidimailpack.png</em:iconURL>
 
-#ifdef MOZ_THUNDERBIRD
+#ifndef MOZ_SUITE_LEGACY
     <em:optionsURL>chrome://bidimailpack/content/bidimailpack-prefs.xul</em:optionsURL>
 #endif
 
@@ -108,5 +108,5 @@
         <em:skin>skin/classic/bidimailpack/</em:skin>
       </Description>
     </em:file>
-  </Description>      
+  </Description>
 </RDF>

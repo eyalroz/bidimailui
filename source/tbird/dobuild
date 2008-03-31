@@ -8,12 +8,16 @@ case "$TARGET" in
         TARGET=tbird
         DEFS="-DMOZ_THUNDERBIRD"
         ;;
-    suite | sm | seamonkey)
-        TARGET=suite
-        DEFS="-DMOZ_SEAMONKEY"
+    suitelegacy)
+        TARGET=suitelegacy
+        DEFS="-DMOZ_SUITE -DMOZ_SUITE_LEGACY"
+        ;;
+    suiterunner)
+        TARGET=suiterunner
+        DEFS="-DMOZ_SUITE -DMOZ_SUITERUNNER"
         ;;
     *)
-	echo "please specify either tbird or suite"
+	echo "please specify either, suitelegcay or suiterunner"
 	exit 1
 	;;
 esac
@@ -85,16 +89,23 @@ case "$TARGET" in
 	  install.rdf \
 	  chrome.manifest || exit
         ;;
-    suite)
-        $BUILDTOOLSDIR/preprocessor.pl $DEFS chrome.manifest > $BUILDDIR/chrome.manifest
+    suitelegcay)
         $BUILDTOOLSDIR/preprocessor.pl $DEFS install.js > $BUILDDIR/install.js
         cd $BUILDDIR
 	zip -r $XPINAME  \
 	  chrome/bidimailpack.jar \
 	  defaults/ \
 	  install.rdf \
-	  chrome.manifest \
 	  install.js || exit
+        ;;
+    suiterunner)
+        $BUILDTOOLSDIR/preprocessor.pl $DEFS chrome.manifest > $BUILDDIR/chrome.manifest
+        cd $BUILDDIR
+	zip -r $XPINAME  \
+	  chrome/bidimailpack.jar \
+	  defaults/ \
+	  install.rdf \
+	  chrome.manifest || exit
         ;;
 esac
 
