@@ -97,7 +97,9 @@ formatting toolbar buttons are per-paragraph direction controls, the
 main toolbar buttons are whole-document direction controls -->
 
 <toolbar id="composeToolbar">
+#ifdef MOZ_SUITE_LEGACY
   <hbox id="toolbar_button_box">
+#endif
     <hbox id="directionality-main-toolbar-section"
           insertafter="button-save"
           dir="ltr">
@@ -117,7 +119,9 @@ main toolbar buttons are whole-document direction controls -->
     <toolbarseparator id="directionality-separator-main-bar"
                       insertafter="button-save"
                       class="toolbarseparator-primary"/>
+#ifdef MOZ_SUITE_LEGACY
   </hbox>
+#endif
 </toolbar>
   
 <toolbar id="FormatToolbar">
