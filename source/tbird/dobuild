@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 SHORTNAME="bidimailui"
 VERSION="0.9"
@@ -89,7 +89,7 @@ case "$TARGET" in
 	  install.rdf \
 	  chrome.manifest || exit
         ;;
-    suitelegcay)
+    suitelegacy)
         $BUILDTOOLSDIR/preprocessor.pl $DEFS install.js > $BUILDDIR/install.js
         cd $BUILDDIR
 	zip -r $XPINAME  \
