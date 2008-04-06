@@ -80,8 +80,12 @@
 
 #ifdef MOZ_THUNDERBIRD
   <toolbarpalette id="MailToolbarPalette">
-#else
+#endif
+#ifdef MOZ_SUITERUNNER
   <toolbar id="msgToolbar">
+#endif
+#ifdef MOZ_SUITE_LEGACY
+  <hbox id="toolbar_button_box">
 #endif
     <toolbarbutton id="bidimailui-forcing-menubutton"
                    oncommand="cycleDirectionSettings();"
@@ -116,8 +120,11 @@
     </toolbarbutton>
 #ifdef MOZ_THUNDERBIRD
   </toolbarpalette>
-#else
+#endif
+#ifdef MOZ_SUITERUNNER
   </toolbar>
 #endif
-
+#ifdef MOZ_SUITE_LEGACY
+   </hbox>
+#endif
 </overlay>
