@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash 
 
 SHORTNAME="bidimailui"
 VERSION="0.9"
