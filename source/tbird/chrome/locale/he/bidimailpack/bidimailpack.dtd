@@ -38,12 +38,16 @@
    - ***** END LICENSE BLOCK ***** -->
 
 <!ENTITY menu-bidimail-switch-message-direction.label        "הפוך כיוון הודעה">
+<!ENTITY menu-bidimail-cycle-message-direction.label         "עבור לאופן כיוון ההודעה הבא בסבב">
 <!ENTITY menu-bidimail-switch-page-direction.label           "הפוך כיוון דף">
 <!ENTITY menu-bidimail-switch-document-direction.accesskey   "ה">
-<!ENTITY key-bidimail-switch-document-direction.keycode      "X">
+<!ENTITY key-bidimail-switch-document-direction.keycode      "ה">
 <!ENTITY key-bidimail-switch-document-direction.modifiers    "accel,shift">
-<!ENTITY key-bidimail-switch-paragraph-direction.keycode     "E">
+<!ENTITY key-bidimail-switch-paragraph-direction.keycode     "פ">
 <!ENTITY key-bidimail-switch-paragraph-direction.modifiers   "accel">
+<!ENTITY menu-bidimail-cycle-document-direction.accesskey    "ע">
+<!ENTITY key-bidimail-cycle-document-direction.keycode       "ע">
+<!ENTITY key-bidimail-cycle-document-direction.modifiers     "accel,shift">
 
 <!ENTITY menu-bidimail-switch-paragraph-direction.label      "הפוך כיוון פיסקה">
 <!ENTITY menu-bidimail-switch-paragraph-direction.accesskey  "פ">
@@ -61,7 +65,6 @@
 <!ENTITY bidimailui-forcing-menu-autodetect.label            "זיהוי כיוונים אוטומטי">
 <!ENTITY bidimailui-forcing-menu-ltr.label                   "כפה כיוון משמאל-לימין">
 <!ENTITY bidimailui-forcing-menu-rtl.label                   "כפה כיוון מימין-לשמאל">
-
 
 <!ENTITY menu-bidimail-contol-character.label                "תו בקרה">
 <!ENTITY menu-bidimail-contol-character.accesskey            "ב">
