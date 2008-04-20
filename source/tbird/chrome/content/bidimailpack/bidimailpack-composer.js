@@ -51,13 +51,15 @@ var gParagraphVerticalMargin;
 
 var gBodyReadyListener = {
   messageParams: null,
+  workaroundForcingTimeoutId : null,
 
   NotifyComposeFieldsReady : function() { },
   ComposeProcessDone : function(result) { },
   SaveInFolderDone : function(folderName) { },
   NotifyComposeBodyReady : function() {
+
 #ifdef DEBUG_gBodyReadyListener
-    gJSConsoleService.logStringMessage('body ready');
+    gJSConsoleService.logStringMessage('in gBodyReadyListener.NotifyComposeBodyReady');
 #endif
     if (this.messageParams.isReply) {
       performCorrectiveRecoding(
@@ -68,6 +70,7 @@ var gBodyReadyListener = {
         this.messageParams.recodedUTF8);
     }
     SetInitialDirection(this.messageParams);
+    clearTimeout(this.workaroundForcingTimeoutId);
   }
 };
 
@@ -494,7 +497,9 @@ function DetermineNewMessageParams(messageBody,messageParams)
 
 function SetInitialDirection(messageParams)
 {
-
+#ifdef DEBUG_SetInitialDirection
+    gJSConsoleService.logStringMessage('in SetInitialDirection');
+#endif
   // determine whether we need to use the default direction;
   // this happens for new documents (e.g. new e-mail message,
   // or new composer page), and also for mail/news replies if the
@@ -513,7 +518,7 @@ function SetInitialDirection(messageParams)
     SetDocumentDirection(messageParams.originalDisplayDirection);
   }
   else {
-#ifdef DEBUG_SetInitialDocumentDirection
+#ifdef DEBUG_SetInitialDirection
     gJSConsoleService.logStringMessage('shouldn\'t get here... probably no URI for this reply');
 #endif
     // we shouldn't be able to get here - when replying, the original
@@ -568,6 +573,26 @@ function ComposeWindowOnActualLoad()
   };
     
   DetermineNewMessageParams(messageBody,messageParams);
+  if (messageParams.isReply) {
+    if (!gUnicodeConverter)
+      gUnicodeConverter =
+        Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]
+                  .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
+  }                
+  gBodyReadyListener.messageParams = messageParams;
+  // It seems that, in some cases, the listener does
+  // not actually get notified when the body is ready,
+  // so let's bet the body is ready within a short while... see 
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=429008
+  // 
+  // the value of 100ms is based on some trial and error with SM and TB
+  // on a couple of computers... it may be that a different value is
+  // necessary on some systems to get past the point when the direction
+  // is set to LTR (not by us)
+  gBodyReadyListener.workaroundForcingTimeoutId = 
+    setTimeout("gBodyReadyListener.NotifyComposeBodyReady()", 100);
+
+
 #ifdef DEBUG_ComposeWindowOnActualLoad
   gJSConsoleService.logStringMessage('isReply = ' + messageParams.isReply + 
     '\ngMsgCompose.originalMsgURI = ' +
@@ -595,19 +620,14 @@ function ComposeWindowOnActualLoad()
       LoadParagraphMode();
   }
 
-  if (messageParams.isReply) {
-    if (!gUnicodeConverter)
-      gUnicodeConverter =
-        Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]
-                  .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
-  }                
-  gBodyReadyListener.messageParams = messageParams;
-  gMsgCompose.RegisterStateListener(gBodyReadyListener);
   directionSwitchController.setAllCasters();
 }
 
 function ComposeWindowOnUnload()
 {
+#ifdef DEBUG_ComposeWindowOnUnload
+  gJSConsoleService.logStringMessage('in ComposeWindowOnUnload()');
+#endif
   // Stop tracking "Show Direction Buttons" pref.
   try {
     var pbi =
@@ -619,7 +639,9 @@ function ComposeWindowOnUnload()
   catch(ex) {
     dump("Failed to remove pref observer: " + ex + "\n");
   }
-  gMsgCompose.UnregisterStateListener(gBodyReadyListener);
+  try {
+    gMsgCompose.UnregisterStateListener(gBodyReadyListener);
+  } catch(ex) {};
 }
 
 function ComposeWindowOnLoad()
