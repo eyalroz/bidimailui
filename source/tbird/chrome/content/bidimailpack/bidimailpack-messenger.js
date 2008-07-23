@@ -181,7 +181,9 @@ function browserOnLoadHandler()
     // if the charset pref is not one we can use for detecting mis-decoded
     // codepage charsets, maybe we should tell the user about it
       
-    if ((charsetPref != "windows-1255") &&
+    if ((charsetPref != "ISO-8859-8-I") &&
+        (charsetPref != "ISO-8859-8") &&
+        (charsetPref != "windows-1255") &&
         (charsetPref != "windows-1256") &&
         (!gBDMPrefs.getBoolPref("display.user_accepts_unusable_charset_pref", false))) {
       var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
@@ -209,12 +211,12 @@ function browserOnLoadHandler()
         switch (selected.value) {
           case 0:
             str.data = charsetPref = "windows-1255";
-            prefs.setComplexValue("mailnews.view_default_charset", 
+            gBDMPrefs.prefService.setComplexValue("mailnews.view_default_charset", 
               Components.interfaces.nsISupportsString, str);
               break;
           case 1:
             str.data = charsetPref = "windows-1256";
-            prefs.setComplexValue("mailnews.view_default_charset", 
+            gBDMPrefs.prefService.setComplexValue("mailnews.view_default_charset", 
                   Components.interfaces.nsISupportsString, str);
             break;
           case 2:
@@ -570,8 +572,9 @@ function InstallBrowserHandler()
     browser.addEventListener("load", browserOnLoadHandler, true);
 }
 
-// Detect and attempt to reload/recode content of wholly or partially mis-decoded messages
-// (return false if the message has been set to be reloaded)
+// Detect and attempt to reload/recode content of wholly or partially 
+// mis-decoded messages (return false if the message has been set to 
+// be reloaded)
 function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredCharset)
 {
   var contentToMatch;
@@ -579,10 +582,21 @@ function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredChars
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
   gJSConsoleService.logStringMessage('in fixLoadedMessageCharsetIssues()');
 #endif
+
+  // for our purposes at the moment, we 'prefer' windows-1255 out of the
+  // three single-byte Hebrew charsets
+
+  if ((preferredCharset = "windows-1255") ||
+      (preferredCharset = "ISO-8859-8-I") ||
+      (preferredCharset = "ISO-8859-8")) {
+      preferredCharset = "windows-1255";
+  }
  
-  // If preferredCodepageCharset is not set to one of windows-1255/6, we will 
-  // completely ignore text in those codepages - we won't try to recover it in 
-  // any way (but we will try to recover UTF-8 text)
+  // If preferredCodepageCharset is not set to one of windows-1255/6 or
+  // equivalents, we will completely ignore text in those codepages - we
+  // won't try to recover it in  any way (but we will try to recover 
+  // UTF-8 text)
+
 
   if ((preferredCharset != "windows-1255") &&
       (preferredCharset != "windows-1256")) {
@@ -652,8 +666,8 @@ function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredChars
     mailnewsDecodingType = "preferred-charset";
   else if (((msgWindow.mailCharacterSet == "ISO-8859-8-I") ||
             (msgWindow.mailCharacterSet == "ISO-8859-8")) && 
-       (preferredCharset == "windows-1255")) {
-     mailnewsDecodingType = "preferred-charset";
+          (preferredCharset == "windows-1255") ) {
+    mailnewsDecodingType = "preferred-charset";
   }
   else switch(msgWindow.mailCharacterSet) {
     case "US-ASCII":
