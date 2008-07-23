@@ -836,13 +836,13 @@ function ApplyToSelectionBlockElements(evalStr)
 
 function ClearParagraphDirection()
 {
-  var evalStr = 'editor.removeAttribute(closestBlockElement, \'dir\');';
+  var evalStr = 'closestBlockElement.style.direction = null;';
   ApplyToSelectionBlockElements(evalStr);
 }
 
 function SetParagraphDirection(dir)
 {
-  var evalStr = 'editor.setAttribute(closestBlockElement, \'dir\', \'' + dir + '\');';
+  var evalStr = 'closestBlockElement.style.direction = \'' + dir + '\';';
   ApplyToSelectionBlockElements(evalStr);
 }
 
