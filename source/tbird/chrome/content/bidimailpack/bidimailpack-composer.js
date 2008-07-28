@@ -668,8 +668,8 @@ function ComposeWindowOnReopen()
     // having already run once, is being replicated for use with a (possibly)
     // different message 
     ComposeWindowOnActualLoad();
-    document.removeEventListener("compose-window-reopen", ComposeWindowOnLoad, true);
-    document.removeEventListener("load", ComposeWindowOnReopen, true);
+    document.removeEventListener("compose-window-reopen", ComposeWindowOnReopen, true);
+    document.removeEventListener("load", ComposeWindowOnLoad, true);
   }
   else {
     dump("gMsgCompose not ready for this message in ComposeWindowOnReopen()");
