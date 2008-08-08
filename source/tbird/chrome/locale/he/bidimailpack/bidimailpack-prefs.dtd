@@ -44,6 +44,8 @@
 <!ENTITY ltr.accesskey                           "ש">
 <!ENTITY rtl.label                               "מימין־לשמאל">
 <!ENTITY rtl.accesskey                           "מ">
+<!ENTITY last_used.label                         "כוון זהה לכיוון ההודעה האחרונה שנכתבה">
+<!ENTITY last_used.accesskey                     "א">
 <!ENTITY always-reply-in-default-dir.label       "ענה להודעות תמיד בכיוון ברירת־המחדל">
 <!ENTITY always-reply-in-default-dir.accesskey   "ע">
 <!ENTITY more-info                               "למידע נוסף:">
