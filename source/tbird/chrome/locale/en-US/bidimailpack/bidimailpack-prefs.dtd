@@ -43,6 +43,8 @@
 <!ENTITY ltr.accesskey                           "L">
 <!ENTITY rtl.label                               "Right to Left">
 <!ENTITY rtl.accesskey                           "R">
+<!ENTITY last_used.label                         "Same as the last message direction used">
+<!ENTITY last_used.accesskey                     "u">
 <!ENTITY always-reply-in-default-dir.label       "Always reply in default direction">
 <!ENTITY always-reply-in-default-dir.accesskey   "A">
 <!ENTITY more-info                               "For more information:">
