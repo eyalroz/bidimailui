@@ -74,6 +74,10 @@
                  value="rtl"
                  label="&rtl.label;"
                  accesskey="&rtl.accesskey;"/>
+          <radio id="bidimailpack-default-dir-last-used"
+                 value="last_used"
+                 label="&last_used.label;"
+                 accesskey="&last_used.accesskey;"/>
         </radiogroup>
       </hbox>
       <spacer/>
