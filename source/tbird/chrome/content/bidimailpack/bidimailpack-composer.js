@@ -333,6 +333,7 @@ function SetDocumentDirection(direction)
   // message body, since XUL elements' dir attribute means something else than
   // this attribute for HTML elements. But we can set it for its input field...
   document.getElementById("msgSubject").inputField.style.direction = direction;
+  gBDMPrefs.setCharPref("compose.last_used_direction", direction);
 }
 
 function InsertControlCharacter(controlCharacter)
@@ -510,7 +511,16 @@ function SetInitialDirection(messageParams)
     var defaultDirection =
       gBDMPrefs.getCharPref("compose.default_direction",
                              "ltr").toLowerCase();
-    SetDocumentDirection(defaultDirection == "rtl" ? "rtl" : "ltr");
+    switch(defaultDirection) {
+      case "last_used": 
+        SetDocumentDirection(
+          gBDMPrefs.getCharPref("compose.last_used_direction","ltr"));
+        break;
+      case "rtl": 
+      case "ltr": 
+        SetDocumentDirection(defaultDirection);
+        break;
+    }
     return;
   }
   else if (messageParams.isReply && messageParams.originalDisplayDirection)

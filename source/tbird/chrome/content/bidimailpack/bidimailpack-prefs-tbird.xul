@@ -80,6 +80,7 @@
       <radiogroup preference="bidiui.mail.compose.default_direction">
         <radio value="ltr" label="&ltr.label;" accesskey="&ltr.accesskey;"/>
         <radio value="rtl" label="&rtl.label;" accesskey="&rtl.accesskey;"/>
+        <radio value="last_used" label="&last_used.label;" accesskey="&last_used.accesskey;"/>
       </radiogroup>
     </hbox>
 
