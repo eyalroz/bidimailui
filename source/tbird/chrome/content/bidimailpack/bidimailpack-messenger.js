@@ -36,8 +36,9 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// workaround for bug 12469
-var gMessageURI = null;
+// We set this flag before reloading a message due to 
+// character set mis-detection, to prevent repeated reloading
+var gDontReload = false;
 
 function setMessageDirectionForcing(forcedDirection)
 {
@@ -117,7 +118,8 @@ function onMessageDirectionButtonClick(whichButton)
 function browserOnLoadHandler()
 {
 #ifdef DEBUG_browserOnLoadHandler
-  gJSConsoleService.logStringMessage("--- browserOnLoadHandler() ---");
+  gJSConsoleService.logStringMessage("--- browserOnLoadHandler() ---\n" +
+    "message URI: " + GetLoadedMessage());
 #endif
 
   // First, let's make sure we can poke the:
@@ -131,12 +133,6 @@ function browserOnLoadHandler()
 #endif
     updateDirectionMenuButton(null,true);
     return;
-  }
-  var loadedMessageURI = GetLoadedMessage();
-  if (loadedMessageURI == gMessageURI) {
-#ifdef DEBUG_browserOnLoadHandler
-    gJSConsoleService.logStringMessage("loadedMessageURI == gMessageURI");
-#endif
   }
   var domDocument;
   try {
@@ -230,13 +226,14 @@ function browserOnLoadHandler()
     }
   }
 
-  if (!fixLoadedMessageCharsetIssues(body,loadedMessageURI,charsetPref)) {
+  if (!fixLoadedMessageCharsetIssues(body,charsetPref)) {
     // the message will be reloaded, let's not do anything else 
     // with it until then
+    gDontReload = true;
     return;
   }
-
-  gMessageURI = loadedMessageURI;
+  
+  gDontReload = false;
 
   if (msgWindow.charsetOverride) {
     body.setAttribute('bidimailui-charset-is-forced',true);
@@ -265,7 +262,7 @@ function browserOnLoadHandler()
 
   if (gBDMPrefs.getBoolPref("display.autodetect_direction", true)) {
     preprocessMessageDOM(domDocument.body);
-    detectAndSetDirections(domDocument.body,loadedMessageURI,null);
+    detectAndSetDirections(domDocument.body,null);
     updateDirectionMenuButton(null,false);
   }
   else {
@@ -492,10 +489,10 @@ function gatherElementsRequiringDirectionSetting(
   }
 }
 
-function detectAndSetDirections(body, loadedMessageURI)
+function detectAndSetDirections(body)
 {
 #ifdef DEBUG_detectAndSetDirections
-  gJSConsoleService.logStringMessage("in detectAndSetDirections for message\n" + loadedMessageURI);
+  gJSConsoleService.logStringMessage("in detectAndSetDirections for message\n" + GetLoadedMessage());
 #endif
   
   var elementsRequiringExplicitDirection = new Array;
@@ -575,7 +572,7 @@ function InstallBrowserHandler()
 // Detect and attempt to reload/recode content of wholly or partially 
 // mis-decoded messages (return false if the message has been set to 
 // be reloaded)
-function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredCharset)
+function fixLoadedMessageCharsetIssues(element, preferredCharset)
 {
   var contentToMatch;
 
@@ -653,8 +650,7 @@ function fixLoadedMessageCharsetIssues(element, loadedMessageURI, preferredChars
   */
   
   // this sets parameter no. 1
-  var mustKeepCharset = 
-    (loadedMessageURI == gMessageURI) || msgWindow.charsetOverride;
+  var mustKeepCharset = gDontReload || msgWindow.charsetOverride;
 
   // this sets parameter no. 2
   var mailnewsDecodingType;
