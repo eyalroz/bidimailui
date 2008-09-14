@@ -486,6 +486,12 @@ function gatherElementsRequiringDirectionSetting(
         elementsRequiringExplicitDirection.push(nodes[j]);
       }
     }
+    else if (subBody.className == "moz-text-html") {
+      nodes =  subBody.getElementsByTagName("DIV");
+      for (var j = 0; j < nodes.length; j++ ) {
+        elementsRequiringExplicitDirection.push(nodes[j]);
+      }
+    }
   }
 }
 
@@ -542,6 +548,10 @@ function setDirections(body, forcedDirection)
 
   if (forcedDirection != null) {
     for (i=0; i < elementsRequiringExplicitDirection.length; i++) {
+#ifdef DEBUG_detectAndSetDirections
+      node =  elementsRequiringExplicitDirection[i];
+      gJSConsoleService.logStringMessage('elementsRequiringExplicitDirection[ ' + i + ']: ' + node + "\ntype: " + node.nodeType + "\nclassName: " + node.className + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+#endif
       elementsRequiringExplicitDirection[i].style.direction = forcedDirection;
     }
     return;
