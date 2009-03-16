@@ -394,6 +394,9 @@ function HandleDirectionButtons()
 
 function LoadParagraphMode()
 {
+#ifdef DEBUG_LoadParagraphMode
+  gJSConsoleService.logStringMessage('LoadParagraphMode()');
+#endif
   // Get the desired space between the paragraphs we add
   // We use global variables in order to avoid different margins in the same document
   gParagraphVerticalMargin =
@@ -414,6 +417,9 @@ function LoadParagraphMode()
       par.style.marginTop = 0;
     }
   } catch(ex) {
+#ifdef DEBUG_LoadParagraphMode
+    gJSConsoleService.logStringMessage('LoadParagraphMode failed:\n' + ex);
+#endif
     // since the window is not 'ready', something might throw
     // an exception here, like inability to focus etc.
     dump(ex);
