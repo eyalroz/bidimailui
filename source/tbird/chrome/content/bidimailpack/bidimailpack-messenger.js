@@ -46,7 +46,7 @@ function setMessageDirectionForcing(forcedDirection)
 #ifdef DEBUG_setMessageDirectionForcing
   gJSConsoleService.logStringMessage('SetMessageDirection(' + forcedDirection + ')');
 #endif
-  var body = getMessageBrowser().contentDocument.body;
+  var body = getMessageBody();
   setDirections(body,forcedDirection);
   updateDirectionMenuButton(forcedDirection,false);
   if (!forcedDirection) {
@@ -62,7 +62,7 @@ function cycleDirectionSettings()
 #ifdef DEBUG_cycleDirectionSettings
   gJSConsoleService.logStringMessage('until now, direction was FORCED RTL');
 #endif
-  var body = getMessageBrowser().contentDocument.body;
+  var body = getMessageBody();
   switch (body.getAttribute('bidimailui-forced-direction')) {
     case 'ltr':
       newForcedDirection = 'rtl';
@@ -94,12 +94,18 @@ function updateDirectionMenuButton(forcedDirection,disabled)
   }
 }
 
+function getMessageBody()
+{
+  var browser = document.getElementById("messagepane");
+  return browser.contentDocument.body;
+}
+
 function onMessageDirectionButtonClick(whichButton)
 {
   if (!gBDMPrefs.getBoolPref("display.autodetect_direction", true)) {
     return;
   }
-  var body = getMessageBrowser().contentDocument.body;
+  var body = getCurrentMessageBody();
   switch (body.getAttribute('bidimailui-forced-direction')) {
     case 'ltr': // only 'ltr' button currently in pressed state
       newForcedDirection  = 
@@ -574,7 +580,7 @@ function setDirections(body, forcedDirection)
 
 function InstallBrowserHandler()
 {
-  var browser = getMessageBrowser();
+  var browser = document.getElementById("messagepane");
   if (browser)
     browser.addEventListener("load", browserOnLoadHandler, true);
 }
