@@ -349,6 +349,8 @@ function SwitchDocumentDirection()
   var body = document.getElementById("content-frame").contentDocument.body;
   var currentDir = window.getComputedStyle(body, null).direction;
 
+  // Note: Null/empty value means LTR, so we check for RTL only
+
   if (currentDir == "rtl")
     directionSwitchController.doCommand("cmd_ltr_document");
   else
@@ -865,10 +867,8 @@ function SetParagraphDirection(dir)
 function SwitchParagraphDirection()
 {
   var evalStr =
-    'var dir = (closestBlockElement.ownerDocument.defaultView' +
-                                   '.getComputedStyle(closestBlockElement, "")' +
-                                   '.getPropertyValue("direction") == "rtl"? "ltr" : "rtl");' +
-    'editor.setAttribute(closestBlockElement, "dir", dir);';
+    'var dir = closestBlockElement.style.direction; '+
+    'closestBlockElement.style.direction = (dir == "rtl" ? "ltr" : "rtl");';
   ApplyToSelectionBlockElements(evalStr);
 }
 
