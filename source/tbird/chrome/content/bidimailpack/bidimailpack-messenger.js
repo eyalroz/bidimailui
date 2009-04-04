@@ -230,19 +230,24 @@ function browserOnLoadHandler()
       else gJSConsoleService.logStringMessage("not ok!");
 #endif
     }
-  }
 
-  if (!fixLoadedMessageCharsetIssues(body,charsetPref)) {
-    // the message will be reloaded, let's not do anything else 
-    // with it until then
-    gDontReload = true;
-    return;
-  }
+    if (!fixLoadedMessageCharsetIssues(body,charsetPref)) {
+      // the message will be reloaded, let's not do anything else 
+      // with it until then
+      gDontReload = true;
+      return;
+    }
+     
+    gDontReload = false;
   
-  gDontReload = false;
+    if (msgWindow.charsetOverride) {
+      body.setAttribute('bidimailui-charset-is-forced',true);
+    }
 
-  if (msgWindow.charsetOverride) {
-    body.setAttribute('bidimailui-charset-is-forced',true);
+#ifdef DEBUG_browserOnLoadHandler
+    gJSConsoleService.logStringMessage("completed charset correction phase");
+#endif
+
   }
 
   if (gBDMPrefs.getBoolPref("display.decode_numeric_html_entities", false)) {
@@ -250,10 +255,6 @@ function browserOnLoadHandler()
       body.setAttribute('bidimailui-found-numeric-entities',true);
     }
   }
-
-#ifdef DEBUG_browserOnLoadHandler
-  gJSConsoleService.logStringMessage("completed charset correction phase");
-#endif
 
   // make quote bars behave properly with RTL quoted text
   
@@ -790,6 +791,9 @@ function fixLoadedMessageCharsetIssues(element, preferredCharset)
           }
           else {
             // NNNY
+#ifdef DEBUG_fixLoadedMessageCharsetIssues
+            gJSConsoleService.logStringMessage("Forcing charset UTF-8");
+#endif
             MessengerSetForcedCharacterSet("utf-8");
             return false;
           }
@@ -797,6 +801,9 @@ function fixLoadedMessageCharsetIssues(element, preferredCharset)
         else {
           if (!haveUTF8Text) {
             //NNYN 
+#ifdef DEBUG_fixLoadedMessageCharsetIssues
+            gJSConsoleService.logStringMessage("Forcing charset " + preferredCharset);
+#endif
             MessengerSetForcedCharacterSet(preferredCharset);
             return false;
           }
@@ -821,6 +828,9 @@ function fixLoadedMessageCharsetIssues(element, preferredCharset)
           }
           else {
             // NCNY
+#ifdef DEBUG_fixLoadedMessageCharsetIssues
+            gJSConsoleService.logStringMessage("Forcing charset UTF-8");
+#endif
             MessengerSetForcedCharacterSet("utf-8");
             return false;
           }
@@ -831,6 +841,9 @@ function fixLoadedMessageCharsetIssues(element, preferredCharset)
           }
           else {
             // NCYY
+#ifdef DEBUG_fixLoadedMessageCharsetIssues
+            gJSConsoleService.logStringMessage("Forcing charset windows-1252");
+#endif
             MessengerSetForcedCharacterSet("windows-1252");
             return false;
           }
@@ -848,11 +861,17 @@ function fixLoadedMessageCharsetIssues(element, preferredCharset)
         else {
           if (!haveUTF8Text) {
             // NUYN
+#ifdef DEBUG_fixLoadedMessageCharsetIssues
+            gJSConsoleService.logStringMessage("Forcing charset " + preferredCharset);
+#endif
             MessengerSetForcedCharacterSet(preferredCharset);
             return false;
           }
           else {
             // NUYY
+#ifdef DEBUG_fixLoadedMessageCharsetIssues
+            gJSConsoleService.logStringMessage("Forcing charset windows-1252");
+#endif
             MessengerSetForcedCharacterSet("windows-1252");
             return false;
           }
