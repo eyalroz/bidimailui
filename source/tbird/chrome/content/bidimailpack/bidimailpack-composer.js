@@ -38,6 +38,8 @@
  * ***** END LICENSE BLOCK ***** */
 
 const nsISelectionController = Components.interfaces.nsISelectionController;
+const CtrlKeyCode  = 17;
+const ShiftKeyCode = 16;
 
 // Globals
 var gLastWindowToHaveFocus; // used to prevent doing unncessary work when a focus
@@ -48,6 +50,22 @@ var gAlternativeEnterBehavior;
                             // is to close a paragraph and begin a new one
 var gParagraphVerticalMargin;
                             // Amount of space to add to paragraphs in HTML mail messages
+
+// We have implemented a Mealy automaton for implementing the Ctrl+Shift
+// detection hack, see bug 15075. The automaton has as input the sequence of
+// keyboard events; let their alphabet be pairs of the form xy, where x is one
+// of the three types of events - keypress (P), keyup(U) and keydown (D) - and
+// y is a keycode - Ctrl, Shift or any other keycode (C, S and O respectively).
+// The automaton tests for the following regular expression :
+//
+// DC DS (PC + PS + DC + DS )*  (UC + US)
+//
+// and switches the direction whenever it matches this sequence. The automaton
+// implementation (appearig in the keyboard event handler functions) requires 
+// two bits for state memory:
+var gCtrlShiftSequence1;
+var gCtrlShiftSequence2;
+
 
 var gBodyReadyListener = {
   messageParams: null,
@@ -737,6 +755,10 @@ function InstallComposeWindowEventHandlers()
                             ComposeWindowOnReopen, true);
   window.addEventListener("unload", ComposeWindowOnUnload, true);
   window.addEventListener("keypress", onKeyPress, true);
+  if (gBDMPrefs.getBoolPref("compose.ctrl_shift_switches_direction", true)) {
+    document.addEventListener("keydown", onKeyDown, true);
+    document.addEventListener("keyup", onKeyUp, true);
+  }
 }
 
 function FindClosestBlockElement(node)
@@ -872,16 +894,143 @@ function SwitchParagraphDirection()
   ApplyToSelectionBlockElements(evalStr);
 }
 
-function onKeyPress(ev)
+function onKeyDown(ev)
 {
-  if (!gAlternativeEnterBehavior ||  // preffed off
-      // text-plain message
-      !IsHTMLEditor() ||
-      // The editor element isn't focused
+  if (
+      // The content element isn't focused
       top.document.commandDispatcher.focusedWindow != content ||
       // The preventDefault flag is set on the event
       // (see http://bugzilla.mozdev.org/show_bug.cgi?id=12748)
       ev.getPreventDefault())
+    return;
+
+  // detect Ctrl+Shift key combination, and switch direction if it
+  // is used
+
+#ifdef DEBUG_keypress
+  if (ev.keyCode == ShiftKeyCode)
+    gJSConsoleService.logStringMessage('key down    : Shift');
+  else if (ev.keyCode == CtrlKeyCode)
+    gJSConsoleService.logStringMessage('key down    : Ctrl');
+  else gJSConsoleService.logStringMessage('key up      : Other');
+#endif
+
+  if ((ev.keyCode == ShiftKeyCode) || (ev.keyCode == CtrlKeyCode)) {
+    if (ev.keyCode == CtrlKeyCode) {
+      // Ctrl going down begins the Ctrl+Shift press sequence
+      gCtrlShiftSequence1 = true;
+      gCtrlShiftSequence2 = false;
+    }
+    else { // ev.keyCode == ShiftKeyCode
+      if (gCtrlShiftSequence1) {
+        // Shift going down immediately after Ctrl going is part 2 of
+        // the Ctrl+Shift press sequence
+        gCtrlShiftSequence2 = true;
+      }
+      else { // gCtrlShiftSequence1 == false
+        // If the Shift goes down but not right after the Ctrl, then it's
+        // not the relevant sequence
+        gCtrlShiftSequence2 = false;
+      }
+    }
+  } else {
+    gCtrlShiftSequence1 = false;
+    gCtrlShiftSequence2 = false;
+  }
+
+#ifdef DEBUG_keypress
+  gJSConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
+  gJSConsoleService.logStringMessage('sequence vars: ' + (gCtrlShiftSequence1 ? 'T ' : 'F ') + (gCtrlShiftSequence2 ? 'T ' : 'F '));
+#endif
+}
+
+function onKeyUp(ev)
+{
+  if (
+      // The content element isn't focused
+      top.document.commandDispatcher.focusedWindow != content ||
+      // The preventDefault flag is set on the event
+      // (see http://bugzilla.mozdev.org/show_bug.cgi?id=12748)
+      ev.getPreventDefault())
+    return;
+
+  // detect Ctrl+Shift key combination, and switch direction if it
+  // is used
+
+#ifdef DEBUG_keypress
+  if (ev.keyCode == ShiftKeyCode)
+    gJSConsoleService.logStringMessage('key up      : Shift');
+  else if (ev.keyCode == CtrlKeyCode)
+    gJSConsoleService.logStringMessage('key up      : Ctrl');
+  else gJSConsoleService.logStringMessage('key up      : Other');
+#endif
+
+  if ((ev.keyCode == ShiftKeyCode) || (ev.keyCode == CtrlKeyCode)) {
+    if (gCtrlShiftSequence1 && gCtrlShiftSequence2) {
+      if (IsHTMLEditor()) {
+#ifdef DEBUG_keypress
+        gJSConsoleService.logStringMessage('SWITCHING paragraph');
+#endif
+        SwitchParagraphDirection();
+      }
+      else {
+#ifdef DEBUG_keypress
+        gJSConsoleService.logStringMessage('SWITCHING document');
+#endif
+        SwitchDocumentDirection();
+      }
+      directionSwitchController.setAllCasters();
+      // if Shift has gone up, Ctrl is still down and the next
+      // Ctrl+Shift does need releasing it
+      gCtrlShiftSequence1 = (ev.keyCode == ShiftKeyCode);
+      gCtrlShiftSequence2 = false;
+    }
+  } else {
+    gCtrlShiftSequence1 = false;
+    gCtrlShiftSequence2 = false;
+  }
+
+#ifdef DEBUG_keypress
+gJSConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
+  gJSConsoleService.logStringMessage('sequence vars: ' + (gCtrlShiftSequence1 ? 'T ' : 'F ') + (gCtrlShiftSequence2 ? 'T ' : 'F '));
+#endif
+
+}
+
+function onKeyPress(ev)
+{
+  if (// The preventDefault flag is set on the event
+      // (see http://bugzilla.mozdev.org/show_bug.cgi?id=12748)
+      ev.getPreventDefault())
+    return;
+
+  // detect Ctrl+Shift key combination, and switch direction if it
+  // is used
+
+#ifdef DEBUG_keypress
+  if (ev.keyCode == ShiftKeyCode)
+    gJSConsoleService.logStringMessage('key pressed : Shift');
+  else if (ev.keyCode == CtrlKeyCode)
+    gJSConsoleService.logStringMessage('key pressed : Ctrl');
+  else gJSConsoleService.logStringMessage('key up      : Other');
+#endif
+
+  if ((ev.keyCode != ShiftKeyCode) && (ev.keyCode != CtrlKeyCode)) {
+    gCtrlShiftSequence1 = false;
+    gCtrlShiftSequence2 = false;
+  }
+
+#ifdef DEBUG_keypress
+  gJSConsoleService.logStringMessage('sequence vars: ' + (gCtrlShiftSequence1 ? 'T ' : 'F ') + (gCtrlShiftSequence2 ? 'T ' : 'F '));
+#endif
+
+  if (
+    // alternative Enter key handling preffed off
+    !gAlternativeEnterBehavior ||  
+    // The editor element isn't focused
+    top.document.commandDispatcher.focusedWindow != content ||
+    // text-plain message, no paragraph-related issues when pressing Enter
+    !IsHTMLEditor())
     return;
 
   var editor = GetCurrentEditor();

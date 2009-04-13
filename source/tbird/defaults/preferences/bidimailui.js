@@ -11,3 +11,4 @@ pref("bidiui.mail.compose.alternative_enter_behavior", true);
 pref("bidiui.mail.display.user_accepts_unusable_charset_pref", false);
 pref("bidiui.mail.display.decode_numeric_html_entities", true);
 pref("bidiui.mail.compose.last_used_direction", "ltr");
+pref("bidiui.mail.compose.ctrl_shift_switches_direction",true);
