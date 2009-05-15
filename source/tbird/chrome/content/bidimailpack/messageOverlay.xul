@@ -78,14 +78,10 @@
               oncommand="cycleDirectionSettings()" />
   </popup>
 
-#ifdef MOZ_THUNDERBIRD
-  <toolbarpalette id="MailToolbarPalette">
-#endif
-#ifdef MOZ_SUITERUNNER
-  <toolbar id="msgToolbar">
-#endif
-#ifdef MOZ_SUITE_LEGACY
+#ifdef MOZ_PRETOOLKIT_SEAMONKEY
   <hbox id="toolbar_button_box">
+#else
+  <toolbarpalette id="MailToolbarPalette">
 #endif
     <toolbarbutton id="bidimailui-forcing-menubutton"
                    oncommand="cycleDirectionSettings();"
@@ -94,7 +90,7 @@
                    type="menu-button"
                    selectedItem="autodetect"
                    disabled="true"
-#ifndef MOZ_THUNDERBIRD
+#ifdef MOZ_PRETOOLKIT_SEAMONKEY
                    insertafter="button-stop"
 #endif
                    class="toolbarbutton-1 chromeclass-toolbar-additional custombutton">
@@ -118,13 +114,9 @@
           oncommand="setMessageDirectionForcing('rtl');" />
       </menupopup>
     </toolbarbutton>
-#ifdef MOZ_THUNDERBIRD
+#ifdef MOZ_PRETOOLKIT_SEAMONKEY
+  </hbox>
+#else
   </toolbarpalette>
-#endif
-#ifdef MOZ_SUITERUNNER
-  </toolbar>
-#endif
-#ifdef MOZ_SUITE_LEGACY
-   </hbox>
 #endif
 </overlay>
