@@ -52,7 +52,7 @@ var gParagraphVerticalMargin;
                             // Amount of space to add to paragraphs in HTML mail messages
 
 // We have implemented a Mealy automaton for implementing the Ctrl+Shift
-// detection hack, see bug 15075. The automaton has as input the sequence of
+// detection hack; see bug 15075. The automaton has as input the sequence of
 // keyboard events; let their alphabet be pairs of the form xy, where x is one
 // of the three types of events - keypress (P), keyup(U) and keydown (D) - and
 // y is a keycode - Ctrl, Shift or any other keycode (C, S and O respectively).
@@ -61,7 +61,7 @@ var gParagraphVerticalMargin;
 // DC DS (PC + PS + DC + DS )*  (UC + US)
 //
 // and switches the direction whenever it matches this sequence. The automaton
-// implementation (appearig in the keyboard event handler functions) requires 
+// implementation (appearing in the keyboard event handler functions) requires 
 // two bits for state memory:
 var gCtrlShiftSequence1;
 var gCtrlShiftSequence2;
