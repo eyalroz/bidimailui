@@ -600,9 +600,9 @@ function fixLoadedMessageCharsetIssues(element, preferredCharset)
   // for our purposes at the moment, we 'prefer' windows-1255 out of the
   // three single-byte Hebrew charsets
 
-  if ((preferredCharset = "windows-1255") ||
-      (preferredCharset = "ISO-8859-8-I") ||
-      (preferredCharset = "ISO-8859-8")) {
+  if ((preferredCharset == "windows-1255") ||
+      (preferredCharset == "ISO-8859-8-I") ||
+      (preferredCharset == "ISO-8859-8")) {
       preferredCharset = "windows-1255";
   }
  
