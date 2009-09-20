@@ -185,6 +185,7 @@ function browserOnLoadHandler()
       
     if ((charsetPref != "ISO-8859-8-I") &&
         (charsetPref != "ISO-8859-8") &&
+        (charsetPref != "ISO-8859-6") &&
         (charsetPref != "windows-1255") &&
         (charsetPref != "windows-1256") &&
         (!gBDMPrefs.getBoolPref("display.user_accepts_unusable_charset_pref", false))) {
@@ -597,14 +598,19 @@ function fixLoadedMessageCharsetIssues(element, preferredCharset)
   gJSConsoleService.logStringMessage('in fixLoadedMessageCharsetIssues()');
 #endif
 
-  // for our purposes at the moment, we 'prefer' windows-1255 out of the
-  // three single-byte Hebrew charsets
+  // for our purposes at the moment, we 'prefer' windows-1255/6 over
+  // the ISO single-byte charsets
 
   if ((preferredCharset == "windows-1255") ||
       (preferredCharset == "ISO-8859-8-I") ||
       (preferredCharset == "ISO-8859-8")) {
       preferredCharset = "windows-1255";
   }
+  if ((preferredCharset == "windows-1256") ||
+      (preferredCharset == "ISO-8859-6")) {
+      preferredCharset = "windows-1256";
+  }
+ 
  
   // If preferredCodepageCharset is not set to one of windows-1255/6 or
   // equivalents, we will completely ignore text in those codepages - we
@@ -677,9 +683,11 @@ function fixLoadedMessageCharsetIssues(element, preferredCharset)
   if ((preferredCharset != null) &&
       (msgWindow.mailCharacterSet == preferredCharset))
     mailnewsDecodingType = "preferred-charset";
-  else if (((msgWindow.mailCharacterSet == "ISO-8859-8-I") ||
-            (msgWindow.mailCharacterSet == "ISO-8859-8")) && 
-          (preferredCharset == "windows-1255") ) {
+  else if ((((msgWindow.mailCharacterSet == "ISO-8859-8-I") ||
+             (msgWindow.mailCharacterSet == "ISO-8859-8")) && 
+            (preferredCharset == "windows-1255") ) ||
+           ((msgWindow.mailCharacterSet == "ISO-8859-6") && 
+            (preferredCharset == "windows-1255") ) ) {
     mailnewsDecodingType = "preferred-charset";
   }
   else switch(msgWindow.mailCharacterSet) {
