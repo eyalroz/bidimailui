@@ -17,7 +17,7 @@ case "$TARGET" in
         DEFS="-DMOZ_SUITE -DMOZ_SUITERUNNER"
         ;;
     *)
-	echo "please specify either, suitelegacy or suiterunner"
+	echo "please specify either thunderbird, suitelegacy or suiterunner"
 	exit 1
 	;;
 esac
