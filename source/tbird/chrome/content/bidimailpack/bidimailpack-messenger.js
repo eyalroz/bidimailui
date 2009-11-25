@@ -457,13 +457,15 @@ function preprocessMessageDOM(body)
 
 // Gather all the elements whose contents' direction 
 // we need to check and whose direction we set accordingly
-// (or to force, as the case may be)
+// (or force, as the case may be)
 function gatherElementsRequiringDirectionSetting(
   body, elementsRequiringExplicitDirection)
 {
   for (var i=0; i < body.childNodes.length; i++) {
     var subBody = body.childNodes.item(i);
 
+    // Not touching elements which aren't moz-text-something,
+    // as we don't know what to do with them
     if (! /^moz-text/.test(subBody.className))
       continue;
     
@@ -479,15 +481,13 @@ function gatherElementsRequiringDirectionSetting(
       for (var j = 0; j < nodes.length; j++ ) {
         elementsRequiringExplicitDirection.push(nodes[j]);
       }
-      nodes =  subBody.getElementsByTagName("BLOCKQUOTE");
-      for (var j = 0; j < nodes.length; j++ ) {
-        elementsRequiringExplicitDirection.push(nodes[j]);
-      }
     }
     else if (subBody.className == "moz-text-flowed") {
       nodes =  subBody.getElementsByTagName("DIV");
       for (var j = 0; j < nodes.length; j++ ) {
 
+        // Not touching elements which aren't moz-text-something,
+        // as we don't know what to do with them
         if (/^moz-text/.test(nodes[j].className))
           continue;
 
@@ -499,6 +499,11 @@ function gatherElementsRequiringDirectionSetting(
       for (var j = 0; j < nodes.length; j++ ) {
         elementsRequiringExplicitDirection.push(nodes[j]);
       }
+    }
+    // set directions for blockquote elements for all message types
+    nodes =  subBody.getElementsByTagName("BLOCKQUOTE");
+    for (var j = 0; j < nodes.length; j++ ) {
+      elementsRequiringExplicitDirection.push(nodes[j]);
     }
   }
 }
