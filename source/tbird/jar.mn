@@ -7,6 +7,7 @@ bidimailpack.jar:
 *   content/bidimailpack/weakrtl.css                              (chrome/content/bidimailpack/weakrtl.css)
 *   content/bidimailpack/insertMenuOverlay.xul                    (chrome/content/bidimailpack/insertMenuOverlay.xul)
 *   content/bidimailpack/messageOverlay.xul                       (chrome/content/bidimailpack/messageOverlay.xul)
+*   content/bidimailpack/composeOverlay.xul                       (chrome/content/bidimailpack/composeOverlay.xul)
 *   locale/he/bidimailpack/bidimailpack.properties                (chrome/locale/he/bidimailpack/bidimailpack.properties)
 *   locale/he/bidimailpack/bidimailpack.dtd                       (chrome/locale/he/bidimailpack/bidimailpack.dtd)
 *   locale/he/bidimailpack/bidimailpack-prefs.dtd                 (chrome/locale/he/bidimailpack/bidimailpack-prefs.dtd)
@@ -36,7 +37,6 @@ bidimailpack.jar:
     skin/classic/bidimailpack/rtl-formatting-bar.png              (chrome/skin-tbird/classic/bidimailpack/rtl-formatting-bar.png)
     skin/classic/bidimailpack/ltr-formatting-bar.png              (chrome/skin-tbird/classic/bidimailpack/ltr-formatting-bar.png)
     skin/classic/bidimailpack/format-buttons-rtl.png              (chrome/skin-tbird/classic/bidimailpack/format-buttons-rtl.png)
-    content/bidimailpack/composeOverlay.xul                       (chrome/content/bidimailpack/composeOverlay-tbird.xul)
     content/bidimailpack/bidimailpack-prefs.xul                   (chrome/content/bidimailpack/bidimailpack-prefs-tbird.xul)
     content/bidimailpack/bidimailpack-prefs.js                    (chrome/content/bidimailpack/bidimailpack-prefs-tbird.js)
 #else
@@ -45,7 +45,6 @@ bidimailpack.jar:
     locale/ur/bidimailpack/contents.rdf                    (chrome/locale/ur/bidimailpack/contents.rdf)
     locale/en-US/bidimailpack/contents.rdf                    (chrome/locale/en-US/bidimailpack/contents.rdf)
     locale/he/bidimailpack/contents.rdf                    (chrome/locale/he/bidimailpack/contents.rdf)
-*   content/bidimailpack/composeOverlay.xul                   (chrome/content/bidimailpack/composeOverlay-suite.xul)
     content/bidimailpack/editorOverlay.xul                    (chrome/content/bidimailpack/editorOverlay.xul)
     content/bidimailpack/editorContextMenuOverlayOverlay.xul  (chrome/content/bidimailpack/editorContextMenuOverlayOverlay.xul)
     content/bidimailpack/bidimailpack-editor.js               (chrome/content/bidimailpack/bidimailpack-editor.js)
