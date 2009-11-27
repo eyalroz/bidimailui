@@ -78,7 +78,7 @@
               oncommand="cycleDirectionSettings()" />
   </popup>
 
-#ifdef MOZ_PRETOOLKIT_SEAMONKEY
+#ifdef MOZ_SUITE_LEGACY
   <hbox id="toolbar_button_box">
 #else
   <toolbarpalette id="MailToolbarPalette">
@@ -90,7 +90,7 @@
                    type="menu-button"
                    selectedItem="autodetect"
                    disabled="true"
-#ifdef MOZ_PRETOOLKIT_SEAMONKEY
+#ifdef MOZ_SUITE_LEGACY
                    insertafter="button-stop"
 #endif
                    class="toolbarbutton-1 chromeclass-toolbar-additional custombutton">
@@ -114,7 +114,7 @@
           oncommand="setMessageDirectionForcing('rtl');" />
       </menupopup>
     </toolbarbutton>
-#ifdef MOZ_PRETOOLKIT_SEAMONKEY
+#ifdef MOZ_SUITE_LEGACY
   </hbox>
 #else
   </toolbarpalette>
