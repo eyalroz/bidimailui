@@ -8,7 +8,7 @@ case "$TARGET" in
         TARGET=tbird
         DEFS="-DMOZ_THUNDERBIRD"
         ;;
-    suitelegacy)
+    suitelegacy | sl | slegacy)
         TARGET=suitelegacy
         DEFS="-DMOZ_SUITE -DMOZ_SUITE_LEGACY"
         ;;
