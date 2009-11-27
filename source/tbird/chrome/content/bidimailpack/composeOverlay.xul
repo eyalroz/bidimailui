@@ -43,9 +43,11 @@
 %bidimailpackDTD;
 ]>
 
+#ifdef MOZ_SUITE_LEGACY
 <?xml-stylesheet href="chrome://bidimailpack/skin/bidimailpack.css"
                  type="text/css"?>
 
+#endif
 <overlay
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
@@ -64,12 +66,6 @@
 </broadcasterset>
 
 <commandset id="composerStyleMenuItems">
-  <command id="cmd_rtl_document"
-           oncommand="goDoCommand('cmd_rtl_document');"/>
-  <command id="cmd_ltr_document"
-           oncommand="goDoCommand('cmd_ltr_document');"/>
-  <command id="cmd_switch_document"
-           oncommand="goDoCommand('cmd_switch_document');"/>
   <command id="cmd_rtl_paragraph"
            oncommand="goDoCommand('cmd_rtl_paragraph');"
            commandupdater="true"
@@ -85,6 +81,12 @@
            commandupdater="true"
            events="focus"
            oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
+  <command id="cmd_rtl_document"
+           oncommand="goDoCommand('cmd_rtl_document');"/>
+  <command id="cmd_ltr_document"
+           oncommand="goDoCommand('cmd_ltr_document');"/>
+  <command id="cmd_switch_document"
+           oncommand="goDoCommand('cmd_switch_document');"/>
   <command id="cmd_clear_paragraph_dir"
            oncommand="goDoCommand('cmd_clear_paragraph_dir');"
            commandupdater="true"
@@ -92,38 +94,42 @@
            oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
 </commandset>
 
-<!-- there are two button sets, on two different toolbars; the
-formatting toolbar buttons are per-paragraph direction controls, the
-main toolbar buttons are whole-document direction controls -->
+<!-- There are two button sets, on two different toolbars:
+The formatting toolbar buttons are per-paragraph direction controls,
+the main toolbar buttons are whole-document direction controls. -->
 
-<toolbar id="composeToolbar">
 #ifdef MOZ_SUITE_LEGACY
+<toolbar id="composeToolbar">
   <hbox id="toolbar_button_box">
-#endif
     <hbox id="directionality-main-toolbar-section"
           insertafter="button-save"
           dir="ltr">
-      <toolbarbutton id="button-direction-ltr-main-bar"
-                     command="cmd_ltr_document"
-                     observes="ltr-document-direction-broadcaster"
-                     class="toolbarbutton-1"
-                     label="&bidimail-ltr-button.label;"
-                     tooltiptext="&bidimail-ltr-button.tip;"/>
-      <toolbarbutton id="button-direction-rtl-main-bar"
-                     command="cmd_rtl_document"
-                     observes="rtl-document-direction-broadcaster"
-                     class="toolbarbutton-1"
-                     label="&bidimail-rtl-button.label;"
-                     tooltiptext="&bidimail-rtl-button.tip;"/>
+#else
+<toolbarpalette id="MsgComposeToolbarPalette">
+#endif
+  <toolbarbutton id="button-direction-ltr-main-bar"
+                 class="toolbarbutton-1"
+                 command="cmd_ltr_document"
+                 observes="ltr-document-direction-broadcaster"
+                 label="&bidimail-ltr-button.label;"
+                 tooltiptext="&bidimail-ltr-button.tip;"/>
+  <toolbarbutton id="button-direction-rtl-main-bar"
+                 class="toolbarbutton-1"
+                 command="cmd_rtl_document"
+                 observes="rtl-document-direction-broadcaster"
+                 label="&bidimail-rtl-button.label;"
+                 tooltiptext="&bidimail-rtl-button.tip;"/>
+#ifdef MOZ_SUITE_LEGACY
     </hbox>
     <toolbarseparator id="directionality-separator-main-bar"
                       insertafter="button-save"
                       class="toolbarseparator-primary"/>
-#ifdef MOZ_SUITE_LEGACY
   </hbox>
-#endif
 </toolbar>
-  
+#else
+</toolbarpalette>
+#endif
+
 <toolbar id="FormatToolbar">
   <hbox id="directionality-formatting-toolbar-section"
         insertafter="IncreaseFontSizeButton"
@@ -131,17 +137,17 @@ main toolbar buttons are whole-document direction controls -->
     <toolbarbutton id="button-direction-ltr-formatting-bar"
                    command="cmd_ltr_paragraph"
                    observes="ltr-paragraph-direction-broadcaster"
-                   checked="false"
-                   tooltiptext="&bidimail-ltr-button.tip;"/>
+                   tooltiptext="&bidimail-ltr-button.tip;"
+                   checked="false"/>
     <toolbarbutton id="button-direction-rtl-formatting-bar"
                    command="cmd_rtl_paragraph"
                    observes="rtl-paragraph-direction-broadcaster"
-                   checked="false"
-                   tooltiptext="&bidimail-rtl-button.tip;"/>
+                   tooltiptext="&bidimail-rtl-button.tip;"
+                   checked="false"/>
   </hbox>
-  <toolbarseparator class="toolbarseparator-standard"
+  <toolbarseparator id="directionality-separator-formatting-bar"
                     insertafter="IncreaseFontSizeButton"
-                    id="directionality-separator-formatting-bar"/>
+                    class="toolbarseparator-standard"/>
 </toolbar>
 
 <keyset id="tasksKeys">
@@ -171,12 +177,12 @@ main toolbar buttons are whole-document direction controls -->
     <menupopup id="menu_Context_ControlCharacters_Popup">
       <menuitem id="contextInsertLRM"
                 oncommand="InsertControlCharacter('\u200e');"
-                accesskey="&menu-bidimail-lrm.accesskey;"
-                label="&menu-bidimail-lrm.label;"/>
+                label="&menu-bidimail-lrm.label;"
+                accesskey="&menu-bidimail-lrm.accesskey;"/>
       <menuitem id="contextInsertRLM"
                 oncommand="InsertControlCharacter('\u200f');"
-                accesskey="&menu-bidimail-rlm.accesskey;"
-                label="&menu-bidimail-rlm.label;"/>
+                label="&menu-bidimail-rlm.label;"
+                accesskey="&menu-bidimail-rlm.accesskey;"/>
     </menupopup>
   </menu>
 </popup>
