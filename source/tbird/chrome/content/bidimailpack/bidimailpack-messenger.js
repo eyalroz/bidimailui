@@ -538,7 +538,9 @@ function detectAndSetDirections(body)
 #endif
       if (detectedDirection != "neutral") {
         // "mixed" -> "rtl" as far as direction is concerned
-        node.style.direction = (detectedDirection == "ltr" ? "ltr" : "rtl");
+        var newDirection = (detectedDirection == "ltr" ? "ltr" : "rtl");
+        node.style.direction = newDirection;
+        node.setAttribute('dir',newDirection);
       }
       node.setAttribute('bidimailui-direction-uniformity',detectedDirection);
     // otherwise, let's not set the direction of an all-neutral-char node
@@ -566,6 +568,8 @@ function setDirections(body, forcedDirection)
       gJSConsoleService.logStringMessage('elementsRequiringExplicitDirection[ ' + i + ']: ' + node + "\ntype: " + node.nodeType + "\nclassName: " + node.className + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
 #endif
       elementsRequiringExplicitDirection[i].style.direction = forcedDirection;
+      elementsRequiringExplicitDirection[i].setAttribute('dir',forcedDirection);
+
     }
     return;
   }
@@ -578,7 +582,9 @@ function setDirections(body, forcedDirection)
     // we're assuming detectedDirection is not null
     if (detectedDirection != "neutral") {
       // "mixed" -> "rtl" as far as direction is concerned
-      node.style.direction = (detectedDirection == "ltr" ? "ltr" : "rtl");
+      var newDirection = (detectedDirection == "ltr" ? "ltr" : "rtl");
+      node.style.direction = newDirection;
+      node.setAttribute('dir',newDirection);
     }
   }
 }
