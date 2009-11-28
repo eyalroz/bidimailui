@@ -56,6 +56,4 @@ style chrome://messenger/content/messenger.xul chrome://bidimailpack/skin/bidima
 #ifdef MOZ_SUITERUNNER
 skin bidimailpack modern/1.0 jar:chrome/bidimailpack.jar!/skin/modern/bidimailpack/
 #endif
-#ifndef MOZ_PRETOOLKIT_SEAMONKEY
 style chrome://global/content/customizeToolbar.xul chrome://bidimailpack/skin/bidimailpack.css
-#endif
