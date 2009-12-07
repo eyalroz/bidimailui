@@ -394,17 +394,17 @@ function HandleDirectionButtons()
     !gBDMPrefs.getBoolPref("compose.show_direction_buttons", true);
   var isHTMLEditor = IsHTMLEditor();
 
-#ifdef MOZ_THUNDERBIRD
-   // Note: the main toolbar buttons are never hidden, since that toolbar
-   //       is customizable in Thunderbird anyway
-#else
+#ifdef MOZ_SUITE_LEGACY
    var hideMainToolbarButtons = hiddenButtonsPref || isHTMLEditor;
 
    document.getElementById("directionality-main-toolbar-section")
            .setAttribute("hidden", hideMainToolbarButtons);
    document.getElementById("directionality-separator-main-bar")
            .hidden = hideMainToolbarButtons;
+
 #endif
+  // Note: In Thunderbird and Seamonkey 2.x, the main toolbar buttons are
+  // never hidden, since that toolbar is customizable
 
   document.getElementById("directionality-formatting-toolbar-section")
           .setAttribute("hidden", hiddenButtonsPref);
