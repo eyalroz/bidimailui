@@ -42,7 +42,7 @@
 <!ENTITY % bidimailpackDTD SYSTEM "chrome://bidimailpack/locale/bidimailpack.dtd">
 %bidimailpackDTD;
 ]>
-#ifndef MOZ_THUNDERBIRD
+#ifdef MOZ_SUITE_LEGACY
 <?xml-stylesheet href="chrome://bidimailpack/skin/bidimailpack.css" type="text/css"?>
 #endif
 
