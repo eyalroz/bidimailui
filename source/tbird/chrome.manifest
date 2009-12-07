@@ -36,9 +36,7 @@
 #
 # **** END LICENSE BLOCK ****
 
-#ifdef MOZ_SUITERUNNER
 content bidimailpack jar:chrome/bidimailpack.jar!/content/bidimailpack/ contentaccessible=yes
-#endif
 content bidimailpack jar:chrome/bidimailpack.jar!/content/bidimailpack/
 locale bidimailpack en-US jar:chrome/bidimailpack.jar!/locale/en-US/bidimailpack/
 locale bidimailpack he jar:chrome/bidimailpack.jar!/locale/he/bidimailpack/
@@ -53,7 +51,5 @@ overlay chrome://editor/content/editorOverlay.xul chrome://bidimailpack/content/
 style chrome://messenger/content/messengercompose/messengercompose.xul chrome://bidimailpack/skin/bidimailpack.css
 style chrome://messenger/content/messageWindow.xul chrome://bidimailpack/skin/bidimailpack.css
 style chrome://messenger/content/messenger.xul chrome://bidimailpack/skin/bidimailpack.css
-#ifdef MOZ_SUITERUNNER
-skin bidimailpack modern/1.0 jar:chrome/bidimailpack.jar!/skin/modern/bidimailpack/
-#endif
+skin bidimailpack modern/1.0 jar:chrome/bidimailpack.jar!/skin/modern/bidimailpack/ application={92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}
 style chrome://global/content/customizeToolbar.xul chrome://bidimailpack/skin/bidimailpack.css
