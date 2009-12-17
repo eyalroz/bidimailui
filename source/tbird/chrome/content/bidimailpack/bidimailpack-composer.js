@@ -777,10 +777,10 @@ function FindClosestBlockElement(node)
   return node;
 }
 
-function ApplyToSelectionBlockElements(evalStr)
+function ApplyDirectionSetterToSelectionBlockElements(newDirectionSetter)
 {
-#ifdef DEBUG_ApplyToSelectionBlockElements
-  gJSConsoleService.logStringMessage('----- ApplyToSelectionBlockElements() -----');
+#ifdef DEBUG_ApplyDirectionSetterToSelectionBlockElements
+  gJSConsoleService.logStringMessage('----- ApplyDirectionSetterToSelectionBlockElements() -----');
 #endif
   var editor = GetCurrentEditor();
   if (!editor) {
@@ -805,7 +805,7 @@ function ApplyToSelectionBlockElements(evalStr)
           endContainer = range.startContainer.lastChild;
         }
         
-#ifdef DEBUG_ApplyToSelectionBlockElements
+#ifdef DEBUG_ApplyDirectionSetterToSelectionBlockElements
         gJSConsoleService.logStringMessage('endContainer:' + endContainer + "\ntype: " + endContainer.nodeType + "\nHTML:\n" + endContainer.innerHTML + "\nvalue:\n" + endContainer.nodeValue);
 #endif
 
@@ -813,19 +813,20 @@ function ApplyToSelectionBlockElements(evalStr)
         // walk the tree till we find the endContainer of the selection range,
         // giving our directionality style to everything on our way
         do {
-#ifdef DEBUG_ApplyToSelectionBlockElements
+#ifdef DEBUG_ApplyDirectionSetterToSelectionBlockElements
           gJSConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
 #endif
 
           var closestBlockElement = FindClosestBlockElement(node);
           if (closestBlockElement) {
-#ifdef DEBUG_ApplyToSelectionBlockElements
+#ifdef DEBUG_ApplyDirectionSetterToSelectionBlockElements
             gJSConsoleService.logStringMessage('found closestBlockElement:' + closestBlockElement + "\ntype: " + closestBlockElement.nodeType + "\nHTML:\n" + closestBlockElement.innerHTML + "\nvalue:\n" + closestBlockElement.nodeValue);
 #endif
-            eval(evalStr);
+            closestBlockElement.style.direction =
+              newDirectionSetter(closestBlockElement.style.direction);
           }
           else {
-#ifdef DEBUG_ApplyToSelectionBlockElements
+#ifdef DEBUG_ApplyDirectionSetterToSelectionBlockElements
             gJSConsoleService.logStringMessage('could not find cbe');
 #endif
             break;
@@ -834,7 +835,7 @@ function ApplyToSelectionBlockElements(evalStr)
           // This check should be placed here, not as the 'while'
           // condition, to handle cases where begin == end
           if (node == endContainer) {
-#ifdef DEBUG_ApplyToSelectionBlockElements
+#ifdef DEBUG_ApplyDirectionSetterToSelectionBlockElements
             gJSConsoleService.logStringMessage('at end container, stopping traversal');
 #endif
             break;
@@ -842,13 +843,13 @@ function ApplyToSelectionBlockElements(evalStr)
 
           // Traverse through the tree in order
           if (node.firstChild) {
-#ifdef DEBUG_ApplyToSelectionBlockElements
+#ifdef DEBUG_ApplyDirectionSetterToSelectionBlockElements
             gJSConsoleService.logStringMessage('descending to first child');
 #endif
             node = node.firstChild;
           }
           else if (node.nextSibling) {
-#ifdef DEBUG_ApplyToSelectionBlockElements
+#ifdef DEBUG_ApplyDirectionSetterToSelectionBlockElements
             gJSConsoleService.logStringMessage('moving to next sibling');
 #endif
             node = node.nextSibling;
@@ -856,12 +857,12 @@ function ApplyToSelectionBlockElements(evalStr)
           else
             // find a parent node which has anything after
             while (node = node.parentNode) {
-#ifdef DEBUG_ApplyToSelectionBlockElements
+#ifdef DEBUG_ApplyDirectionSetterToSelectionBlockElements
               gJSConsoleService.logStringMessage('moved up to parent node');
 #endif
               if (node.nextSibling) {
                 node = node.nextSibling;
-#ifdef DEBUG_ApplyToSelectionBlockElements
+#ifdef DEBUG_ApplyDirectionSetterToSelectionBlockElements
                 gJSConsoleService.logStringMessage('moved to next sibling');
 #endif
                 break;
@@ -876,22 +877,23 @@ function ApplyToSelectionBlockElements(evalStr)
 
 function ClearParagraphDirection()
 {
-  var evalStr = 'closestBlockElement.style.direction = null;';
-  ApplyToSelectionBlockElements(evalStr);
+  ApplyDirectionSetterToSelectionBlockElements(
+    function(oldDirection) { return null; }
+    );
 }
 
 function SetParagraphDirection(dir)
 {
-  var evalStr = 'closestBlockElement.style.direction = \'' + dir + '\';';
-  ApplyToSelectionBlockElements(evalStr);
+  ApplyDirectionSetterToSelectionBlockElements(
+    function(oldDirection) { return dir; }
+    );
 }
 
 function SwitchParagraphDirection()
 {
-  var evalStr =
-    'var dir = closestBlockElement.style.direction; '+
-    'closestBlockElement.style.direction = (dir == "rtl" ? "ltr" : "rtl");';
-  ApplyToSelectionBlockElements(evalStr);
+  ApplyDirectionSetterToSelectionBlockElements(
+    function(oldDirection) { return (oldDirection == "rtl" ? "ltr" : "rtl"); }
+    );
 }
 
 function onKeyDown(ev)
