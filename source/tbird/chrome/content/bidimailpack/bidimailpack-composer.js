@@ -562,7 +562,10 @@ function SetInitialDirection(messageParams)
     // XXX TODO: but we do get here for drafts
     var detectionDirection = directionCheck(
       document.getElementById("content-frame").contentDocument.body);
-    if ((detectionDirection  == "rtl") && (detectionDirection != "mixed"))
+#ifdef DEBUG_SetInitialDirection
+    gJSConsoleService.logStringMessage('detectionDirection is ' + detectionDirection );
+#endif
+    if ((detectionDirection  == "rtl") || (detectionDirection == "mixed"))
       SetDocumentDirection("rtl");
     else if (detectionDirection == "ltr")
       SetDocumentDirection("ltr");
