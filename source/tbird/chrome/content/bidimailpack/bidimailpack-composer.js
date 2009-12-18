@@ -629,7 +629,7 @@ function ComposeWindowOnActualLoad()
   // necessary on some systems to get past the point when the direction
   // is set to LTR (not by us)
   gBodyReadyListener.workaroundForcingTimeoutId = 
-    setTimeout("gBodyReadyListener.NotifyComposeBodyReady()", 100);
+    setTimeout("gBodyReadyListener.NotifyComposeBodyReady()", 200);
 
 
 #ifdef DEBUG_ComposeWindowOnActualLoad
