@@ -6,15 +6,15 @@ TARGET="$1"
 case "$TARGET" in
     tbird | tb | thunderbird)
         TARGET=tbird
-        DEFS="-DMOZ_THUNDERBIRD"
+        PREPROCESSOR_PARAMS="-DMOZ_THUNDERBIRD"
         ;;
     suitelegacy | sl | slegacy)
         TARGET=suitelegacy
-        DEFS="-DMOZ_SUITE -DMOZ_SUITE_LEGACY"
+        PREPROCESSOR_PARAMS="-DMOZ_SUITE -DMOZ_SUITE_LEGACY"
         ;;
     suiterunner | sr | srunner)
         TARGET=suiterunner
-        DEFS="-DMOZ_SUITE -DMOZ_SUITERUNNER"
+        PREPROCESSOR_PARAMS="-DMOZ_SUITE -DMOZ_SUITERUNNER"
         ;;
     *)
 	echo "please specify either thunderbird, suitelegacy or suiterunner"
@@ -40,15 +40,17 @@ esac
 shift 1
 
 if [ -n "$1" ]; then
-	DEFS+=" -DDEBUG"
+	PREPROCESSOR_PARAMS+=" -DDEBUG"
 	while [ -n "$1" ]; do
-		DEFS="$DEFS -DDEBUG_$1"
+		PREPROCESSOR_PARAMS="$PREPROCESSOR_PARAMS -DDEBUG_$1"
 		shift 1
 	done
+else
+        PREPROCESSOR_PARAMS+=" --no-line-comments"
 fi
 
-DEFS="$DEFS -DVERSION=$VERSION"
-echo -e "Building the XPI with the following definitions:\n\n$DEFS\n"
+PREPROCESSOR_PARAMS="$PREPROCESSOR_PARAMS -DVERSION=$VERSION"
+echo -e "Building the XPI with the following definitions:\n\n$PREPROCESSOR_PARAMS\n"
 BUILDDIR="build/$TARGET"
 XPINAME="${SHORTNAME}_${TARGET}.xpi"
 BUILDTOOLSDIR="../buildtools"
@@ -58,10 +60,10 @@ export PERL5LIB="`pwd`/$BUILDTOOLSDIR"
 if [ ! -d build ] ; then mkdir build; fi
 if [ ! -d $BUILDDIR ] ; then mkdir $BUILDDIR; else rm -rf $BUILDDIR/*; fi
 
-$BUILDTOOLSDIR/preprocessor.pl $DEFS jar.mn > $BUILDDIR/jar.mn
-$BUILDTOOLSDIR/make-jars.pl -v -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $DEFS"  -s . -d . < $BUILDDIR/jar.mn || exit
+$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILDDIR/jar.mn
+$BUILDTOOLSDIR/make-jars.pl -v -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILDDIR/jar.mn || exit
 echo -e "\nJAR files ready\n"
-$BUILDTOOLSDIR/preprocessor.pl $DEFS install.rdf > $BUILDDIR/install.rdf
+$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.rdf > $BUILDDIR/install.rdf
 rm -rf bidimailpack
 rm -rf bidimailpack-mac-skin
 rm -f installed-chrome.txt
@@ -78,7 +80,7 @@ case "$TARGET" in
         mkdir $BUILDDIR/platform/Darwin
         mkdir $BUILDDIR/platform/Darwin/chrome
         mv bidimailpack-mac-skin.jar $BUILDDIR/platform/Darwin/chrome
-        $BUILDTOOLSDIR/preprocessor.pl $DEFS chrome.manifest > $BUILDDIR/chrome.manifest
+        $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
         cp platform/Darwin/chrome.manifest $BUILDDIR/platform/Darwin/chrome.manifest
         cd $BUILDDIR
 	zip -r $XPINAME  \
@@ -90,7 +92,7 @@ case "$TARGET" in
 	  chrome.manifest || exit
         ;;
     suitelegacy)
-        $BUILDTOOLSDIR/preprocessor.pl $DEFS install.js > $BUILDDIR/install.js
+        $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.js > $BUILDDIR/install.js
         cd $BUILDDIR
 	zip -r $XPINAME  \
 	  chrome/bidimailpack.jar \
@@ -99,7 +101,7 @@ case "$TARGET" in
 	  install.js || exit
         ;;
     suiterunner)
-        $BUILDTOOLSDIR/preprocessor.pl $DEFS chrome.manifest > $BUILDDIR/chrome.manifest
+        $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
         cd $BUILDDIR
 	zip -r $XPINAME  \
 	  chrome/bidimailpack.jar \
