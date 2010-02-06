@@ -462,30 +462,56 @@ function GetDisplayedCopyParams(messageURI,messageParams)
 
   var win, loadedMessageURI, displayedCopyBrowser;
   var windowManager = Components.classes["@mozilla.org/appshell/window-mediator;1"]
-                                .getService(nsIWindowMediator);
+                                .getService(Components.interfaces.nsIWindowMediator);
   var messengerWindowList = windowManager.getEnumerator("mail:3pane");
   var messageWindowList = windowManager.getEnumerator("mail:messageWindow");
+  var tabInfo,tabIndex;
 
   while (true) {
-    if (messengerWindowList.hasMoreElements())
-      win = messengerWindowList.getNext();
-    else if (messageWindowList.hasMoreElements())
-      win = messageWindowList.getNext();
-    else
-      break;
+  
+    // get the next browser for a loaded message
+    
+    if (tabInfo) {
+      if (tabIndex == tabInfo.length) {
+        tabInfo = null;
+        continue;
+      }
+      displayedCopyBrowser = tabInfo[selectedIndex].browser;
+      tabIndex++;
+    }
+    else {
+      if (messengerWindowList.hasMoreElements())
+        win = messengerWindowList.getNext();
+      else if (messageWindowList.hasMoreElements())
+        win = messageWindowList.getNext();
+      else
+        break;
 
-    loadedMessageURI = win.GetLoadedMessage();
-    if (loadedMessageURI != messageURI)
-      continue;
+      try {
+        loadedMessageURI = win.GetLoadedMessage();
+        displayedCopyBrowser = win.getMessageBrowser();
+      } catch(ex) {
+        // we're in Thunderbird 3 and this is a tabbed window
+        tabInfo =  win.getElementById("tabmail").tabInfo;
+        tabIndex = 0;
+        continue;
+      }
+    }
 
-    displayedCopyBrowser = win.getMessageBrowser();
+    // at this point we have a valid browser for a loaded message,
+    // from some window or some tab
+
     if (!displayedCopyBrowser)
       continue;
 
-#ifdef DEBUG_GetDisplayedCopyParams
-    gJSConsoleService.logStringMessage('found a window displaying our message');
-#endif
+    loadedMessageURI = displayedCopyBrowser.contentDocument.documentURI;
 
+    if (loadedMessageURI != messageURI)
+      continue;
+
+#ifdef DEBUG_GetDisplayedCopyParams
+    gJSConsoleService.logStringMessage('found a window/tab displaying our message');
+#endif
 
     var displayedCopyBody = displayedCopyBrowser.contentDocument.body;
 
