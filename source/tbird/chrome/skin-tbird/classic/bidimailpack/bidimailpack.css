@@ -198,7 +198,3 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
 #button-direction-rtl-formatting-bar[disabled="true"] {
   -moz-image-region: rect(0px 38px 18px 19px) !important;
 }
-
-#FormatToolbar > toolbarbutton[rtlmode="true"] {
-  list-style-image: url("chrome://bidimailpack/skin/format-buttons-rtl.png")  !important;
-}
