@@ -1171,4 +1171,28 @@ Content-Transfer-Encoding: 8bit
 
 ------=_NextPart_000_15216_01C9ABC1.49601040--
 
+From - Mon Jan 11 13:06:52 2010
+X-Account-Key: account2
+X-UIDL: 2694-1197382732
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
+Message-Id: <20100407115742.B6444232BF6@messaging.couchsurfing.com>
+Date: Sun, 27 Feb 2006 21:17:44 +0200
+From: some@one.com
+To: some@one.com
+Subject: Message 27
+Content-Type: text/html; charset="windows-1255"
+
+<html>
+<body>
+Some text before the table.
+<table border="1">
+<tr>
+<td>First cell</td>
+<td>I'm taking the <span style="background-color: cyan">&nbsp;מכונ</span>ית for a spin.</td>
+</tr>
+</table>
+</body>
+</html>
 
