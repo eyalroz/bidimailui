@@ -2,6 +2,7 @@ bidimailpack.jar:
     content/bidimailpack/bidimailpack.png                         (chrome/content/bidimailpack/bidimailpack.png)
 *   content/bidimailpack/bidimailpack-common.js                   (chrome/content/bidimailpack/bidimailpack-common.js)
 *   content/bidimailpack/bidimailpack-composer.js                 (chrome/content/bidimailpack/bidimailpack-composer.js)
+*   content/bidimailpack/bidimailpack-display-logic.js            (chrome/content/bidimailpack/bidimailpack-display-logic.js)
 *   content/bidimailpack/bidimailpack-messenger.js                (chrome/content/bidimailpack/bidimailpack-messenger.js)
 *   content/bidimailpack/quotebar.css                             (chrome/content/bidimailpack/quotebar.css)
 *   content/bidimailpack/weakrtl.css                              (chrome/content/bidimailpack/weakrtl.css)
