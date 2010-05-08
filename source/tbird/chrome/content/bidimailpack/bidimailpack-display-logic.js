@@ -118,10 +118,32 @@ function BDMActionPhase_quoteBarsCSSFix(domDocument)
 
 function BDMActionPhase_directionAutodetection(body)
 {
-  if (gBDMPrefs.getBoolPref("display.autodetect_direction", true)) {
-    preprocessMessageDOM(body);
-    detectAndSetDirections(body,null);
+  if (!gBDMPrefs.getBoolPref("display.autodetect_direction", true))
+    return;
+
+  var detectedOverallDirection = directionCheck(body);
+#ifdef DEBUG_directionAutodetection
+  gJSConsoleService.logStringMessage("detected overall direction: " + detectedDirection);
+#endif
+  if (detectedOverallDirection != "mixed") {
+    // The message is either neutral in direction, all-LTR or all-RTL,
+    // so we can just set the direction for the entire body
+
+    if ((detectedOverallDirection == "rtl") ||
+        (detectedOverallDirection == "ltr")) {
+      body.style.direction = detectedOverallDirection;
+      body.setAttribute('dir',detectedOverallDirection);
+    }
+    body.setAttribute('bidimailui-direction-uniformity',detectedOverallDirection);
+    return;
   }
+  
+  // The message has both LTR and RTL content in the message,
+  // so we'll break it up into smaller block elements whose direction can be set separately
+  // and detect-and-set for each such element
+  
+  preprocessMessageDOM(body);
+  detectAndSetDirections(body,null);
 }    
 
 
