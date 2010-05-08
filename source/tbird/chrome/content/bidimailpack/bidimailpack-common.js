@@ -37,9 +37,9 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-__defineGetter__("gBidimailuiStrings", function() {
-  delete this.gBidimailuiStrings;
-  return this.gBidimailuiStrings =
+__defineGetter__("gBDMStrings", function() {
+  delete this.gBDMStrings;
+  return this.gBDMStrings =
     Components.classes["@mozilla.org/intl/stringbundle;1"]
               .getService(Components.interfaces.nsIStringBundleService)
               .createBundle("chrome://bidimailpack/locale/bidimailpack.properties");
