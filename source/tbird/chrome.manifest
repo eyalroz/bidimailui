@@ -44,8 +44,10 @@ locale bidimailpack ar jar:chrome/bidimailpack.jar!/locale/ar/bidimailpack/
 locale bidimailpack fa jar:chrome/bidimailpack.jar!/locale/fa/bidimailpack/
 locale bidimailpack ur jar:chrome/bidimailpack.jar!/locale/ur/bidimailpack/
 skin bidimailpack classic/1.0 jar:chrome/bidimailpack.jar!/skin/classic/bidimailpack/
-overlay chrome://messenger/content/mailWindowOverlay.xul chrome://bidimailpack/content/messageOverlay.xul contentaccessible=yes
-overlay chrome://messenger/content/mailWindowOverlay.xul chrome://bidimailpack/content/messageOverlay.xul
+overlay chrome://messenger/content/messenger.xul chrome://bidimailpack/content/messageOverlay.xul contentaccessible=yes
+overlay chrome://messenger/content/messenger.xul chrome://bidimailpack/content/messageOverlay.xul
+overlay chrome://messenger/content/messageWindow.xul chrome://bidimailpack/content/messageOverlay.xul contentaccessible=yes
+overlay chrome://messenger/content/messageWindow.xul  chrome://bidimailpack/content/messageOverlay.xul
 overlay chrome://messenger/content/messengercompose/messengercompose.xul chrome://bidimailpack/content/composeOverlay.xul
 overlay chrome://editor/content/editorOverlay.xul chrome://bidimailpack/content/insertMenuOverlay.xul
 style chrome://messenger/content/messengercompose/messengercompose.xul chrome://bidimailpack/skin/bidimailpack.css
