@@ -35,6 +35,10 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+// Code outside BiDi Mail UI should only use the BDMAction and BDMActionPhase
+// functions: BDMActionPhase functions are the four phases of action performed
+// when loading a message; BDMActions may be performed afterwards, repeatedly
+
 function BDMAction_setMessageDirectionForcing(body,forcedDirection)
 {
   // we assume forcedDirection is 'rtl', 'ltr' or null
@@ -48,56 +52,6 @@ function BDMAction_setMessageDirectionForcing(body,forcedDirection)
   else {
     body.setAttribute('bidimailui-forced-direction',forcedDirection);
   }
-}
-
-function promptForDefaultCharsetChange()
-{
-  var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-                          .getService(Components.interfaces.nsIPromptService);
-  var list = [
-    gBDMStrings.GetStringFromName("bidimailui.chraset_dialog.set_to_windows_1255"),
-    gBDMStrings.GetStringFromName("bidimailui.chraset_dialog.set_to_windows_1256"),
-    gBDMStrings.GetStringFromName("bidimailui.chraset_dialog.leave_as_is")];
-  var selected = {};
-
-#ifdef DEBUG_promptForDefaultCharsetChange
-  gJSConsoleService.logStringMessage("gBDMStrings.GetStringFromName(\"bidimailui.chraset_dialog.set_to_windows_1255\") =\n" + gBDMStrings.GetStringFromName("bidimailui.chraset_dialog.set_to_windows_1255"));
-#endif
-
-  var ok = prompts.select(
-    window,
-    gBDMStrings.GetStringFromName("bidimailui.chraset_dialog.window_title"),
-    gBDMStrings.GetStringFromName("bidimailui.chraset_dialog.dialog_message"),
-    list.length, list, selected);
-
-  if (ok) {
-
-#ifdef DEBUG_promptForDefaultCharsetChange
-  gJSConsoleService.logStringMessage("ok!");
-#endif
-
-    var str = 
-      Components.classes["@mozilla.org/supports-string;1"]
-                .createInstance(Components.interfaces.nsISupportsString);
-    switch (selected.value) {
-      case 0:
-        str.data = charsetPref = "windows-1255";
-        gBDMPrefs.prefService.setComplexValue("mailnews.view_default_charset", 
-          Components.interfaces.nsISupportsString, str);
-          break;
-      case 1:
-        str.data = charsetPref = "windows-1256";
-        gBDMPrefs.prefService.setComplexValue("mailnews.view_default_charset", 
-              Components.interfaces.nsISupportsString, str);
-        break;
-      case 2:
-        gBDMPrefs.setBoolPref("display.user_accepts_unusable_charset_pref", true);
-        break;
-    }
-  }
-#ifdef DEBUG_promptForDefaultCharsetChange
-  else gJSConsoleService.logStringMessage("not ok!");
-#endif
 }
 
 function BDMActionPhase_charsetMisdetectionCorrection(BDMCharsetPhaseParams)
@@ -169,6 +123,59 @@ function BDMActionPhase_directionAutodetection(body)
     detectAndSetDirections(body,null);
   }
 }    
+
+
+// Functions from here on should not be used by code outside this file
+
+function promptForDefaultCharsetChange()
+{
+  var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+                          .getService(Components.interfaces.nsIPromptService);
+  var list = [
+    gBDMStrings.GetStringFromName("bidimailui.chraset_dialog.set_to_windows_1255"),
+    gBDMStrings.GetStringFromName("bidimailui.chraset_dialog.set_to_windows_1256"),
+    gBDMStrings.GetStringFromName("bidimailui.chraset_dialog.leave_as_is")];
+  var selected = {};
+
+#ifdef DEBUG_promptForDefaultCharsetChange
+  gJSConsoleService.logStringMessage("gBDMStrings.GetStringFromName(\"bidimailui.chraset_dialog.set_to_windows_1255\") =\n" + gBDMStrings.GetStringFromName("bidimailui.chraset_dialog.set_to_windows_1255"));
+#endif
+
+  var ok = prompts.select(
+    window,
+    gBDMStrings.GetStringFromName("bidimailui.chraset_dialog.window_title"),
+    gBDMStrings.GetStringFromName("bidimailui.chraset_dialog.dialog_message"),
+    list.length, list, selected);
+
+  if (ok) {
+
+#ifdef DEBUG_promptForDefaultCharsetChange
+  gJSConsoleService.logStringMessage("ok!");
+#endif
+
+    var str = 
+      Components.classes["@mozilla.org/supports-string;1"]
+                .createInstance(Components.interfaces.nsISupportsString);
+    switch (selected.value) {
+      case 0:
+        str.data = charsetPref = "windows-1255";
+        gBDMPrefs.prefService.setComplexValue("mailnews.view_default_charset", 
+          Components.interfaces.nsISupportsString, str);
+          break;
+      case 1:
+        str.data = charsetPref = "windows-1256";
+        gBDMPrefs.prefService.setComplexValue("mailnews.view_default_charset", 
+              Components.interfaces.nsISupportsString, str);
+        break;
+      case 2:
+        gBDMPrefs.setBoolPref("display.user_accepts_unusable_charset_pref", true);
+        break;
+    }
+  }
+#ifdef DEBUG_promptForDefaultCharsetChange
+  else gJSConsoleService.logStringMessage("not ok!");
+#endif
+}
 
 // split elements in the current message (we assume it's moz-text-plain)
 // so that \n\n in the message text means moving to another block element
