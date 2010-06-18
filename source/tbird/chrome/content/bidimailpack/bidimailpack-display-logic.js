@@ -513,14 +513,23 @@ function setDirections(body, forcedDirection)
 
 
 // Detect and attempt to reload/recode content of wholly or partially 
-// mis-decoded messages (return false if the message has been set to 
-// be reloaded)
+// mis-decoded messages
+//
+// Return value: 
+//   False if the message has been set to be reloaded, True otherwise
+//
 function fixLoadedMessageCharsetIssues(
   element,
   preferredCharset,
   BDMCharsetPhaseParams)
 {
   var contentToMatch;
+  
+  var messageSubject;
+  if (BDMCharsetPhaseParams.messageHeader) {
+    messageSubject =
+      BDMCharsetPhaseParams.messageHeader.mime2DecodedSubject;
+  }
 
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
   gJSConsoleService.logStringMessage('in fixLoadedMessageCharsetIssues()');
@@ -592,23 +601,23 @@ function fixLoadedMessageCharsetIssues(
          
   Extra Notes:
 
-  1. If we tell mailnews to change the charset, the message will be reloaded and
-     this function will be triggered again
-  2. There's 'waste' in this algorithm - after recoding, we again check for UTF-8
-     and windows-1255/6 text although we actually know the answer; but how to safely
-     convey this information to the next load event?
-  3. We're not specifically checking the subject line
+  - If we tell mailnews to change the charset, the message will be reloaded and
+    this function will be triggered again
+  - There's 'waste' in this algorithm - after recoding, we again check for UTF-8
+    and windows-1255/6 text although we actually know the answer; but how to safely
+    convey this information to the next load event?
+  - We're not specifically checking the subject line
   */
   
-  // this sets parameter no. 1
+  // This sets parameter no. 1
   var mustKeepCharset = 
     BDMCharsetPhaseParams.dontReload ||
     BDMCharsetPhaseParams.charsetOverrideInEffect;
 
-  // this sets parameter no. 2
+  // This sets parameter no. 2
   var mailnewsDecodingType;
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-  gJSConsoleService.logStringMessage('current charset used for decoding' + BDMCharsetPhaseParams.currentCharset);
+  gJSConsoleService.logStringMessage('current charset used for decoding:\n' + BDMCharsetPhaseParams.currentCharset);
 #endif
   if ((preferredCharset != null) &&
       (BDMCharsetPhaseParams.currentCharset == preferredCharset))
@@ -645,7 +654,7 @@ function fixLoadedMessageCharsetIssues(
   element.setAttribute('bidimailui-detected-decoding-type',mailnewsDecodingType);
 
 
-  // this sets parameter no. 3
+  // This sets parameter no. 3 
   // (note its value depends on parameter no. 2)
   var havePreferredCharsetText;
 
@@ -684,13 +693,15 @@ function fixLoadedMessageCharsetIssues(
         // of this rather than the odd encoding error or what-not
         "\\uFFFD{3,}");
     }    
-    havePreferredCharsetText = matchInText(element, contentToMatch);
+    havePreferredCharsetText = 
+      matchInText(element, contentToMatch) ||
+      contentToMatch.test(messageSubject);
   }
   else {
     havePreferredCharsetText = false;
   }
   
-  // this sets parameter no. 4
+  // This sets parameter no. 4
   // (note its value depends on parameter no. 2)
   var haveUTF8Text;
   
@@ -708,7 +719,9 @@ function fixLoadedMessageCharsetIssues(
     //
     MISDETECTED_UTF8_SEQUENCE);
 
-  haveUTF8Text = matchInText(element, contentToMatch);
+  haveUTF8Text = 
+    matchInText(element, contentToMatch) ||
+    contentToMatch.test(messageSubject);
 
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
   gJSConsoleService.logStringMessage("--------\n " +

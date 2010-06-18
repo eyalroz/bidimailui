@@ -126,13 +126,23 @@ function browserOnLoadHandler()
     updateDirectionMenuButton(null,true);
     return;
   }
+  
+  // We're assuming only one message is selected
+
+  var msgHdr;
+  try {
+    msgHdr = gMessageDisplay.displayedMessage;
+  } catch(ex) {
+    msgHdr = messenger.msgHdrFromURI(GetLoadedMessage());
+  }
 
   var BDMCharsetPhaseParams = {
     body: domDocument.body,
     charsetOverrideInEffect: msgWindow.charsetOverride,
     currentCharset: msgWindow.mailCharacterSet,
     needCharsetForcing: false,
-    charsetToForce: null
+    charsetToForce: null,
+    messageHeader: msgHdr
   };
   BDMActionPhase_charsetMisdetectionCorrection(BDMCharsetPhaseParams);
   if (BDMCharsetPhaseParams.needCharsetForcing) {
@@ -142,6 +152,7 @@ function browserOnLoadHandler()
     return;
   }
   gDontReload = false; // clearing gDontReload for other messages
+
   BDMActionPhase_htmlNumericEntitiesDecoding(body);
   BDMActionPhase_quoteBarsCSSFix(domDocument);
   BDMActionPhase_directionAutodetection(body);
@@ -160,4 +171,3 @@ function InstallBrowserHandler()
   if (browser)
     browser.addEventListener("load", browserOnLoadHandler, true);
 }
-
