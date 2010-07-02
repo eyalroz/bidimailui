@@ -301,6 +301,8 @@ function performCorrectiveRecoding(
     false
   );
 
+  var node;
+
   while((node = treeWalker.nextNode())) {  
     var lines = node.data.split('\n');
 #ifdef DEBUG_performCorrectiveRecoding
