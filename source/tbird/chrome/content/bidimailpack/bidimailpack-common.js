@@ -271,7 +271,8 @@ const MISDETECTED_UTF8_SEQUENCE =
   "(\\u05F3[\\u2018-\\u2022\\xA9]){2}";
     
 // Note: if both doCharset and doUTF8 is false, we only correct HTML entities
-function performCorrectiveRecoding(element,preferredCharset,mailnewsDecodingType,doCharset,doUTF8)
+function performCorrectiveRecoding(
+  element,preferredCharset,mailnewsDecodingType,doCharset,doUTF8)
 {
   var needCharsetReapplication = false;
 
