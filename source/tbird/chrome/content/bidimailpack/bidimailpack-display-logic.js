@@ -104,46 +104,46 @@ function BDMActionPhase_htmlNumericEntitiesDecoding(body)
   }
 }
 
-function BDMActionPhase_quoteBarsCSSFix(domDocument)
+function appendBDMStyleSheet(domDocument, sheetFileName)
 {
   var head = domDocument.getElementsByTagName("head")[0];
   if (head) {
     var newSS = domDocument.createElement("link");
     newSS.rel  = "stylesheet";
     newSS.type = "text/css";
-    newSS.href = "chrome://bidimailpack/content/quotebar.css";
+    newSS.href = 'chrome://bidimailpack/content/'+sheetFileName;
     head.appendChild(newSS);
   }
 }
 
-function BDMActionPhase_directionAutodetection(body)
+function BDMActionPhase_quoteBarsCSSFix(domDocument)
+{
+  appendBDMStyleSheet(domDocument, 'quotebar.css');
+}
+
+function BDMActionPhase_directionAutodetection(domDocument)
 {
   if (!gBDMPrefs.getBoolPref("display.autodetect_direction", true))
     return;
 
+  var body = domDocument.body;
+  appendBDMStyleSheet(domDocument, 'direction-autodetection.css');
   var detectedOverallDirection = directionCheck(body);
 #ifdef DEBUG_directionAutodetection
   gJSConsoleService.logStringMessage("detected overall direction: " + detectedDirection);
 #endif
-  if (detectedOverallDirection != "mixed") {
-    // The message is either neutral in direction, all-LTR or all-RTL,
-    // so we can just set the direction for the entire body
-
-    if ((detectedOverallDirection == "rtl") ||
-        (detectedOverallDirection == "ltr")) {
-      body.style.direction = detectedOverallDirection;
-      body.setAttribute('dir',detectedOverallDirection);
-    }
-    body.setAttribute('bidimailui-direction-uniformity',detectedOverallDirection);
-    return;
+  body.setAttribute('bidimailui-direction-uniformity',detectedOverallDirection);
+  if (detectedOverallDirection == "mixed") {
+    // The message has both LTR and RTL content in the message,
+    // so we'll break it up into smaller block elements whose direction
+    // can be set separately and detect-and-set for each such element
+    preprocessMessageDOM(body);
+    detectDirections(body);
   }
-  
-  // The message has both LTR and RTL content in the message,
-  // so we'll break it up into smaller block elements whose direction can be set separately
-  // and detect-and-set for each such element
-  
-  preprocessMessageDOM(body);
-  detectAndSetDirections(body,null);
+  // If the body isn't mixed, the message is either neutral in 
+  // direction, all-LTR or all-RTL, in all which cases it's enough 
+  // that we set the direction for the entire body
+  setDirections(body,null);
 }    
 
 
@@ -429,7 +429,7 @@ function gatherElementsRequiringDirectionSetting(
   }
 }
 
-function detectAndSetDirections(body)
+function detectDirections(body)
 {
 #ifdef DEBUG_detectAndSetDirections
   gJSConsoleService.logStringMessage("in detectAndSetDirections for message\n" + GetLoadedMessage());
@@ -457,14 +457,7 @@ function detectAndSetDirections(body)
 #ifdef DEBUG_detectAndSetDirections
       gJSConsoleService.logStringMessage("detected direction: " + detectedDirection);
 #endif
-      if (detectedDirection != "neutral") {
-        // "mixed" -> "rtl" as far as direction is concerned
-        var newDirection = (detectedDirection == "ltr" ? "ltr" : "rtl");
-        node.style.direction = newDirection;
-        node.setAttribute('dir',newDirection);
-      }
       node.setAttribute('bidimailui-direction-uniformity',detectedDirection);
-    // otherwise, let's not set the direction of an all-neutral-char node
     } catch(ex) {
 #ifdef DEBUG_detectAndSetDirections
       gJSConsoleService.logStringMessage(ex);
@@ -475,41 +468,70 @@ function detectAndSetDirections(body)
 
 function setDirections(body, forcedDirection)
 {
+  // Our logic is currently as follows:
+  //
+  // - Forcing LTR or RTL behaves the same way regardless of whether we have
+  //   autodetect preffed on or off: We set a style rule for the body element
+  //   (so if other elements have specific definition we don't interfere; perhaps
+  //   we should?)
+  // - If autodetect is preffed off, forcedDirection null means using the original
+  //   directions, by restoring the body's original CSS direction property (usually
+  //   none).
+  // - If autodetect is preffed on, forcedDirection null means setting the body
+  //   parent's class so that all elements under it (including the body) behave
+  //   according to the rules for the classes assigned to them by the autodetection.
+  //
+  //   Note that in all 3 cases, the document's own style rules may prevail
+  //   over anything we have set. We consider this to be appropriate.
+
+
 #ifdef DEBUG_setDirections
-  gJSConsoleService.logStringMessage('settings directions to ' + (forcedDirection ? forcedDirection : 'detected directions'));
+  gJSConsoleService.logStringMessage('settings directions to ' + (forcedDirection ? forcedDirection : 'detected/original directions'));
 #endif
-  var elementsRequiringExplicitDirection = new Array;
-  gatherElementsRequiringDirectionSetting(
-    body, elementsRequiringExplicitDirection);
 
-  if (forcedDirection != null) {
-    for (i=0; i < elementsRequiringExplicitDirection.length; i++) {
-#ifdef DEBUG_detectAndSetDirections
-      node =  elementsRequiringExplicitDirection[i];
-      gJSConsoleService.logStringMessage('elementsRequiringExplicitDirection[ ' + i + ']: ' + node + "\ntype: " + node.nodeType + "\nclassName: " + node.className + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
-#endif
-      elementsRequiringExplicitDirection[i].style.direction = forcedDirection;
-      elementsRequiringExplicitDirection[i].setAttribute('dir',forcedDirection);
-
-    }
-    return;
-  }
-  
-  // need to revert to the detected directions
-
-  for (i=0; i < elementsRequiringExplicitDirection.length; i++) {
-    var node = elementsRequiringExplicitDirection[i];
-    detectedDirection = node.getAttribute('bidimailui-direction-uniformity');
-    // we're assuming detectedDirection is not null
-    if (detectedDirection != "neutral") {
-      // "mixed" -> "rtl" as far as direction is concerned
-      var newDirection = (detectedDirection == "ltr" ? "ltr" : "rtl");
-      node.style.direction = newDirection;
-      node.setAttribute('dir',newDirection);
-    }
+  switch(forcedDirection) {
+    case 'ltr': 
+    case 'rtl': 
+      try {
+        body.parentNode.classList.remove('bidimailui-use-detected-directions');
+      } catch(ex) {
+        // this is an old build, no classList... bummer;
+        // let's remove manually from the list of class names
+        var re = / *bidimailui-use-detected-directions */;
+        if (re.test(body.parentNode.className)) {
+          body.parentNode.className = RegExp.leftContext + 
+            ((re.rightContext == '') ? ' ' : '') +  RegExp.rightContext;
+        }
+      }
+      if (!body.hasAttribute('bidimailui-original-direction')) {
+        body.setAttribute('bidimailui-original-direction',
+          body.style.direction);
+      }
+      body.style.direction = forcedDirection;
+      break;
+    default:
+      var originalBodyCSSDirectionProperty =
+        body.getAttribute('bidimailui-original-direction');
+      if (originalBodyCSSDirectionProperty &&
+          (originalBodyCSSDirectionProperty != "") ) {
+        body.style.direction = originalBodyCSSDirectionProperty;
+      }
+      else {
+        body.style.removeProperty('direction');
+      }
+      try {
+        body.parentNode.classList.add('bidimailui-use-detected-directions');
+      } catch(ex) {
+        // this is an old build, no classList... bummer;
+        // let's add manually to the list of class names
+        if (body.parentNode.className.indexOf('bidimailui-use-detected-directions') == -1) {
+          body.parentNode.className += 
+            ((body.parentNode.className != "") ? ' ' : '') +
+            'bidimailui-use-detected-directions';
+        }
+      }
   }
 }
-
 
 
 // Detect and attempt to reload/recode content of wholly or partially 

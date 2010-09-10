@@ -5,6 +5,7 @@ bidimailpack.jar:
 *   content/bidimailpack/bidimailpack-display-logic.js            (chrome/content/bidimailpack/bidimailpack-display-logic.js)
 *   content/bidimailpack/bidimailpack-messenger.js                (chrome/content/bidimailpack/bidimailpack-messenger.js)
 *   content/bidimailpack/quotebar.css                             (chrome/content/bidimailpack/quotebar.css)
+*   content/bidimailpack/direction-autodetection.css              (chrome/content/bidimailpack/direction-autodetection.css)
 *   content/bidimailpack/insertMenuOverlay.xul                    (chrome/content/bidimailpack/insertMenuOverlay.xul)
 *   content/bidimailpack/messageOverlay.xul                       (chrome/content/bidimailpack/messageOverlay.xul)
 *   content/bidimailpack/composeOverlay.xul                       (chrome/content/bidimailpack/composeOverlay.xul)

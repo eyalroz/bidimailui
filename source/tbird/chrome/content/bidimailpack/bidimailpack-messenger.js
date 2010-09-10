@@ -59,17 +59,16 @@ function cycleDirectionSettings()
       newForcedDirection = 'ltr';
   }
   BDMAction_setMessageDirectionForcing(body,newForcedDirection);
-  updateDirectionMenuButton(newForcedDirection,false);
+  updateDirectionMenuButton(newForcedDirection);
 }
 
-function updateDirectionMenuButton(forcedDirection,disabled)
+function updateDirectionMenuButton(forcedDirection)
 {
 #ifdef DEBUG_updateDirectionMenuButton
-  gJSConsoleService.logStringMessage('updateDirectionMenuButton(forcedDirection='+forcedDirection+',disabled='+disabled+')');
+  gJSConsoleService.logStringMessage('updateDirectionMenuButton(forcedDirection='+forcedDirection'');
 #endif
-  menubutton = document.getElementById('bidimailui-forcing-menubutton');
+  var menubutton = document.getElementById('bidimailui-forcing-menubutton');
   if (menubutton) {
-    menubutton.setAttribute('disabled', disabled);
     menubutton.setAttribute('selectedItem', (forcedDirection ? forcedDirection : 'autodetect'));
     document.getElementById('bidimailui-forcing-menu-autodetect')
             .setAttribute('checked', (!forcedDirection));
@@ -155,14 +154,9 @@ function browserOnLoadHandler()
 
   BDMActionPhase_htmlNumericEntitiesDecoding(body);
   BDMActionPhase_quoteBarsCSSFix(domDocument);
-  BDMActionPhase_directionAutodetection(body);
+  BDMActionPhase_directionAutodetection(domDocument);
 
-  if (gBDMPrefs.getBoolPref("display.autodetect_direction", true)) {
-    updateDirectionMenuButton(null,false);
-  }
-  else {
-    updateDirectionMenuButton(null,true);
-  }
+  updateDirectionMenuButton(null);
 }    
 
 function InstallBrowserHandler()
