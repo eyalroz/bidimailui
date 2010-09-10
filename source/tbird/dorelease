@@ -49,6 +49,18 @@ cvs -d $CVSROOT tag -d ${RELEASE_TAG}
 cvs -d $CVSROOT tag ${RELEASE_TAG}
 
 
+# Workaround for a mozdev cvs tagging bug, see
+# https://www.mozdev.org/bugs/show_bug.cgi?id=14797
+# and
+# http://www.mozdev.org/drupal/wiki/MozdevCVSTipsTroubleshooting
+# for details
+
+mkdir ${SRCDIR}/${TEMPDIR}
+cd ${SRCDIR}/${TEMPDIR}
+cvs -d $CVSROOT export -r ${RELEASE_TAG} -d ${SHORTNAME} ${SHORTNAME}/src
+cd ${SRCDIR}
+rm -r ${SRCDIR}/${TEMPDIR}
+
 # add the release to the CVS repository
 # (it gets propagated to the mozdev download mirrors)
 
