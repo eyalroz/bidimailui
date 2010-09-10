@@ -90,7 +90,6 @@
                    tooltiptext="&bidimailui-forcing-menubutton.tip;"
                    type="menu-button"
                    selectedItem="autodetect"
-                   disabled="true"
 #ifdef MOZ_SUITE_LEGACY
                    insertafter="button-stop"
 #endif
