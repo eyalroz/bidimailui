@@ -42,36 +42,6 @@
 <hr>
 </div>
 
-<h3><a name="replying_to_messages">מענה להודעות</a></h3>
-
-<div class="faq-item">
-<div class="question">כשאני עונה להודעה הכתובה מימין לשמאל, קו ציון הציטוט ממשיך להופיע משמאל לתוכן ההודעה המקורית, ולא עובר לצד ימין. האם אפשר לגרום לו להתנהג אחרת?</div>
-<div class="answer">
-<p>בעייה זו נפתרה בגירסה 0.5.1 של התוסף.</p>
-<p>אם תרצה/י, הנה כמה חוקים להוספה ל-<code>userContent.css</code> אשר ישנו את צבע מלל הציטוט בהתאם לעומק הציטוט:</p>
-<div class="code-segment">blockquote[type="cite"] {
-  color: #660066 !important;
-}
-blockquote[type="cite"] blockquote {
-  color: #007777 !important;
-}
-blockquote[type="cite"] blockquote blockquote {
-  color: #990000 !important;
-}
-blockquote[type="cite"] blockquote blockquote blockquote {
-  color: #000099 !important;
-}
-blockquote[type="cite"] blockquote blockquote blockquote blockquote {
-  color: #bb6600 !important;
-}
-</div>
-<p>כמו-כן זכור כי ניתן למנוע את הופעת קו הציטוט לחלוטין ולראות את סימני הציטוט הרגילים (סימני '&gt;'), באמצעות קביעת ערך <code>false</code> להעדפה <code>mail.quoted_graphical</code>; כדי לעשות זאת ניתן להשתמש ב-URL <code>about:config</code> במוזילה, או להוסיף את השורה הבאה לקובץ <code>user.js</code> שלך:
-<div class="code-segment">pref("mail.quoted_graphical", false);
-</div>
-<p>תשובה זו הועתקה בחלקה ממופי :-)</p>
-<hr>
-</div>
-
 <h3><a name="miscellany">שונות</a></h3>
 
 <div class="faq-item">

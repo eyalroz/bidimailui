@@ -44,36 +44,6 @@
 <hr>
 </div>
 
-<h3><a name="replying_to_messages">Replying to Messages</a></h3>
-
-<div class="faq-item">
-<div class="question">When I reply to a Right-to-Left message, the message-quote bar continues to appear on the left of the message instead of moving over to the right. Can I make it behave the way I want to?</div>
-<div class="answer">
-<p>This issue has been fixed in version 0.5.1 .</p>
-<p>Also, here are some extra rules for <code>userContent.css</code> which will change the color of quoted text based on the quote depth:</p>
-<div class="code-segment">blockquote[type="cite"] {
-  color: #660066 !important;
-}
-blockquote[type="cite"] blockquote {
-  color: #007777 !important;
-}
-blockquote[type="cite"] blockquote blockquote {
-  color: #990000 !important;
-}
-blockquote[type="cite"] blockquote blockquote blockquote {
-  color: #000099 !important;
-}
-blockquote[type="cite"] blockquote blockquote blockquote blockquote {
-  color: #bb6600 !important;
-}
-</div>
-<p>Remember you can disable the bar altogether and see the textual quote '&gt;' marks, by the setting the preference <code>mail.quoted_graphical</code> to <code>false</code>; do so using the <code>about:config</code> URL in the Mozilla suite or by adding the following line to your profile's <code>user.js</code> file:
-<div class="code-segment">pref("mail.quoted_graphical", false);</div>
-<p>This FAQ item has been partially ripped off from Moofie :-)</p>
-</div>
-<hr>
-</div>
-
 <h3><a name="miscellany">Miscellany</a></h3>
 
 <div class="faq-item">
