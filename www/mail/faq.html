@@ -93,6 +93,21 @@ blockquote[type="cite"] blockquote blockquote blockquote blockquote {
 <hr>
 </div>
 
+<div class="faq-item">
+<div class="question">When I write HTML messages in Paragraph mode, I can't figure out where I have paragraph transitions and where there's just a line break. What can I do?</div>
+<div class="answer">
+<p>You can have a visual indication of paragraph ends by adding an appropriate rule to <code>userContent.css</code>:</p>
+<div class="code-segment">blockquote[type="cite"] {
+body[_moz_dirty] p:after
+{
+	content: "\B6";
+}
+</div>
+<p>This is actually the character ¶ (the escaping is for avoiding charset issues if your .css file isn't UTF-8 encoded).
+</div>
+<hr>
+</div>
+
 
 <div class="faq-item">
 <div class="question">I have another issue which is not covered in this FAQ...</div>
