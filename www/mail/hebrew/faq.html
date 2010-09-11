@@ -95,8 +95,7 @@ blockquote[type="cite"] blockquote blockquote blockquote blockquote {
 <div class="question">כשאני כותב הודעות HTML במצב Paragraph (מצב פסקה), אני לא מצליח להבין איפה יש מעברי פסקה ואיפה יש סתם מעברי שורה. מה לעשות?</div>
 <div class="answer">
 <p>אפשר לסמן את סופי הפסקה בסימן מיוחד באמצעות הוספת כלל מתאים ל-<code>userContent.css</code>:</p>
-<div class="code-segment">blockquote[type="cite"] {
-body[_moz_dirty] p:after
+<div class="code-segment">body[_moz_dirty] p:after {
 {
 	content: "\B6";
 }
