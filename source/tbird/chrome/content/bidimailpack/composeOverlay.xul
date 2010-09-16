@@ -54,8 +54,7 @@
   <script type="application/x-javascript" src="bidimailpack-common.js"/>
   <script type="application/x-javascript" src="bidimailpack-composer.js"/>
   <script type="application/x-javascript">
-    gBDMPrefs.migrateOldPrefs();
-    InstallComposeWindowEventHandlers();
+    BiDiMailUI.Composition.installComposeWindowEventHandlers();
   </script>
 
 <broadcasterset>
@@ -70,17 +69,17 @@
            oncommand="goDoCommand('cmd_rtl_paragraph');"
            commandupdater="true"
            events="focus"
-           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
+           oncommandupdate="BiDiMailUI.Composition.commandUpdate_MsgComposeDirection()"/>
   <command id="cmd_ltr_paragraph"
            oncommand="goDoCommand('cmd_ltr_paragraph');"
            commandupdater="true"
            events="focus"
-           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
+           oncommandupdate="BiDiMailUI.Composition.commandUpdate_MsgComposeDirection()"/>
   <command id="cmd_switch_paragraph"
            oncommand="goDoCommand('cmd_switch_paragraph');"
            commandupdater="true"
            events="focus"
-           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
+           oncommandupdate="BiDiMailUI.Composition.commandUpdate_MsgComposeDirection()"/>
   <command id="cmd_rtl_document"
            oncommand="goDoCommand('cmd_rtl_document');"/>
   <command id="cmd_ltr_document"
@@ -91,7 +90,7 @@
            oncommand="goDoCommand('cmd_clear_paragraph_dir');"
            commandupdater="true"
            events="focus"
-           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
+           oncommandupdate="BiDiMailUI.Composition.commandUpdate_MsgComposeDirection()"/>
 </commandset>
 
 <!-- There are two button sets, on two different toolbars:
@@ -176,11 +175,11 @@ the main toolbar buttons are whole-document direction controls. -->
         accesskey="&menu-bidimail-insert-contol-character.accesskey;">
     <menupopup id="menu_Context_ControlCharacters_Popup">
       <menuitem id="contextInsertLRM"
-                oncommand="InsertControlCharacter('\u200e');"
+                oncommand="BiDiMailUI.Composition.insertControlCharacter(('\u200e');"
                 label="&menu-bidimail-lrm.label;"
                 accesskey="&menu-bidimail-lrm.accesskey;"/>
       <menuitem id="contextInsertRLM"
-                oncommand="InsertControlCharacter('\u200f');"
+                oncommand="BiDiMailUI.Composition.insertControlCharacter(('\u200f');"
                 label="&menu-bidimail-rlm.label;"
                 accesskey="&menu-bidimail-rlm.accesskey;"/>
     </menupopup>

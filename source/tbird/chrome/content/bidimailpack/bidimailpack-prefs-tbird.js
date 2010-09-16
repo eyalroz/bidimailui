@@ -36,7 +36,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-var gBDMPrefPane = {
+var BiDiMailUI.PrefPane = {
   init: function() {
     window.addEventListener("dialoghelp", this.openGuide, true);
   },
@@ -63,8 +63,8 @@ var gBDMPrefPane = {
     aEvent.stopPropagation();
   },
 
-  _getBDMPrefElement: function(prefName) {
-    return document.getElementById("bidiui.mail." + prefName);
+  _getPrefElement: function(prefName) {
+    return document.getElementById(BiDiMailUI.Prefs.preferencePrefix + prefName);
   },
 
   getSpaceBetweenParagraphsValue: function() {
@@ -72,7 +72,7 @@ var gBDMPrefPane = {
       document.getElementById("space_between_paragraphs_value_text").value;
     var rv = 0;
 
-    if (this._getBDMPrefElement("compose.space_between_paragraphs.scale")
+    if (this._getPrefElement("compose.space_between_paragraphs.scale")
             .value != "px") {
       var floatVal = parseFloat(txtBoxValue, 10);
       if (!isNaN(floatVal))
@@ -88,7 +88,7 @@ var gBDMPrefPane = {
   },
 
   updateSpaceBetweenParagraphsValue: function() {
-    this._getBDMPrefElement("compose.space_between_paragraphs.value").value = 
+    this._getPrefElement("compose.space_between_paragraphs.value").value = 
       this.getSpaceBetweenParagraphsValue();
   }
 };

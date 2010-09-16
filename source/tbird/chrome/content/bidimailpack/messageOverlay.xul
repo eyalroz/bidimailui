@@ -53,21 +53,22 @@
   <script type="application/x-javascript" src="bidimailpack-display-logic.js"/>
   <script type="application/x-javascript" src="bidimailpack-messenger.js"/>
   <script type="application/x-javascript">
-    InstallBrowserHandler();
+    BiDiMailUI.MessageOverlay.installComposeWindowEventHandlers();
   </script>
 
   <keyset id="mailKeys">
     <key id="key-bidimail-switch"
          modifiers="&key-bidimail-cycle-document-direction.modifiers;"
          key="&key-bidimail-cycle-document-direction.keycode;"
-         oncommand="cycleDirectionSettings()" />
+         oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
   </keyset>
 
   <menupopup id="menu_View_Popup">
     <menuitem insertafter="mailviewCharsetMenu"
               label="&menu-bidimail-cycle-message-direction.label;"
               accesskey="&menu-bidimail-cycle-document-direction.accesskey;" 
-              key="key-bidimail-switch" oncommand="cycleDirectionSettings()" />
+              key="key-bidimail-switch" 
+              oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
   </menupopup>
   
   <popup id="messagePaneContext">
@@ -75,7 +76,7 @@
     <menuitem label="&menu-bidimail-switch-message-direction.label;"
               key="key-bidimail-switch"
               accesskey="&menu-bidimail-cycle-document-direction.accesskey;"
-              oncommand="cycleDirectionSettings()" />
+              oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
   </popup>
 
 #ifdef MOZ_SUITE_LEGACY
@@ -84,7 +85,7 @@
   <toolbarpalette id="MailToolbarPalette">
 #endif
     <toolbarbutton id="bidimailui-forcing-menubutton"
-                   oncommand="cycleDirectionSettings();"
+                   oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings();"
                    label="&bidimailui-forcing-menubutton.label;"
                    tooltiptext="&bidimailui-forcing-menubutton.tip;"
                    type="menu-button"
@@ -100,17 +101,17 @@
           type="radio"
           id="bidimailui-forcing-menu-autodetect"
           label="&bidimailui-forcing-menu-autodetect.label;"
-          oncommand="setMessageDirectionForcing(null);" />
+          oncommand="BiDiMailUI.Display.setMessageDirectionForcing(null);" />
         <menuitem 
           type="radio"
           id="bidimailui-forcing-menu-ltr"
           label="&bidimailui-forcing-menu-ltr.label;"
-          oncommand="setMessageDirectionForcing('ltr');" />
+          oncommand="BiDiMailUI.Display.setMessageDirectionForcing('ltr');" />
         <menuitem 
           type="radio"
           id="bidimailui-forcing-menu-rtl"
           label="&bidimailui-forcing-menu-rtl.label;"
-          oncommand="setMessageDirectionForcing('rtl');" />
+          oncommand="BiDiMailUI.Display.setMessageDirectionForcing('rtl');" />
       </menupopup>
     </toolbarbutton>
 #ifdef MOZ_SUITE_LEGACY
