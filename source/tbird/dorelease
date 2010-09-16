@@ -1,7 +1,8 @@
-#!/bin/sh 
+#!/bin/sh -e
 #
 # run this from the source directory!
 
+set -o errexit
 
 if [ -z $1 ]; then
 	echo "Enter CVS username"
@@ -58,7 +59,7 @@ cvs -d $CVSROOT tag ${RELEASE_TAG}
 mkdir ${SRCDIR}/${TEMPDIR}
 cd ${SRCDIR}/${TEMPDIR}
 cvs -d $CVSROOT export -r ${RELEASE_TAG} -d ${SHORTNAME} ${SHORTNAME}/src
-cd ${SRCDIR}
+cd ${SRCDIR} || exit
 rm -r ${SRCDIR}/${TEMPDIR}
 
 # add the release to the CVS repository
