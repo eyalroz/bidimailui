@@ -52,7 +52,7 @@
 <script type="application/x-javascript" src="bidimailpack-composer.js"/>
 <script type="application/x-javascript" src="bidimailpack-editor.js"/>
 <script type="application/x-javascript">
-  InstallEditorWindowEventHandlers();
+  BiDiMailUI.Editor.installEditorWindowEventHandlers ();
 </script>
 
 <broadcasterset id="broadcasterset">
@@ -73,22 +73,22 @@
            oncommand="goDoCommand('cmd_rtl_paragraph');"
            commandupdater="true"
            events="focus"
-           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
+           oncommandupdate="BiDiMailUI.Composition.commandUpdate_MsgComposeDirection()"/>
   <command id="cmd_ltr_paragraph"
            oncommand="goDoCommand('cmd_ltr_paragraph');"
            commandupdater="true"
            events="focus"
-           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
+           oncommandupdate="BiDiMailUI.Composition.commandUpdate_MsgComposeDirection()"/>
   <command id="cmd_switch_paragraph"
            oncommand="goDoCommand('cmd_switch_paragraph');"
            commandupdater="true"
            events="focus"
-           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
+           oncommandupdate="BiDiMailUI.Composition.commandUpdate_MsgComposeDirection()"/>
   <command id="cmd_clear_paragraph_dir"
            oncommand="goDoCommand('cmd_clear_paragraph_dir');"
            commandupdater="true"
            events="focus"
-           oncommandupdate="CommandUpdate_MsgComposeDirection()"/>
+           oncommandupdate="BiDiMailUI.Composition.commandUpdate_MsgComposeDirection()"/>
 </commandset>
 
 <toolbar id="FormatToolbar">

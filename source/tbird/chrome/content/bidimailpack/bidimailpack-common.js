@@ -37,72 +37,95 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-__defineGetter__("gBDMStrings", function() {
-  delete this.gBDMStrings;
-  return this.gBDMStrings =
-    Components.classes["@mozilla.org/intl/stringbundle;1"]
-              .getService(Components.interfaces.nsIStringBundleService)
-              .createBundle("chrome://bidimailpack/locale/bidimailpack.properties");
-});
+//uncomment the following when this file becomes a module
+//var EXPORTED_SYMBOLS = [ "BiDiMailUI" ];
 
-__defineGetter__("gUnicodeConverter", function() {
-  delete this.gUnicodeConverter;
-  return this.gUnicodeConverter =
-    Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]
-              .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
-});
+if ("undefined" == typeof(BiDiMailUI)) {
+  var BiDiMailUI = {};
+};
 
 #ifdef DEBUG
-__defineGetter__("gJSConsoleService", function() {
-  delete this.gJSConsoleService;
-  return this.gJSConsoleService =
+// The following enables logging messages to the javascript console:
+BiDiMailUI.__defineGetter__("JSConsoleService", function() {
+  delete BiDiMailUI.JSConsoleService;
+  return BiDiMailUI.JSConsoleService =
     Components.classes['@mozilla.org/consoleservice;1']
               .getService(Components.interfaces.nsIConsoleService);
-});
+  });
 #endif
 
-// number to hexadecimal representation
+// localized strings
+BiDiMailUI.__defineGetter__("Strings", function() {
+  delete BiDiMailUI.Strings;
+  return BiDiMailUI.Strings =
+    Components.classes["@mozilla.org/intl/stringbundle;1"]
+      .getService(Components.interfaces.nsIStringBundleService)
+      .createBundle("chrome://bidimailpack/locale/bidimailpack.properties");
+  });
 
-const HEX_DIGITS = "0123456789ABCDEF";
+BiDiMailUI.__defineGetter__("UnicodeConverter", function() {
+  delete BiDiMailUI.UnicodeConverter;
+  return BiDiMailUI.UnicodeConverter =
+    Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]
+      .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
+});
 
-function num2hex(num) {
-  var hexString = HEX_DIGITS.substr(num & 15, 1);
-  while(num > 15) {
-    num >>= 4;
-    hexString = HEX_DIGITS.substr(num & 15, 1) + hexString;
-  }
-  return hexString;
-}
+//---------------------------------------------------------
+
+// General-purpose Javascript stuff
+
+BiDiMailUI.JS = {
+
+  // number to hexadecimal representation
+  hexDigits : "0123456789ABCDEF",
+
+  num2hex : function(num) {
+    var hexString = BiDiMailUI.JS.hexDigits.substr(num & 15, 1);
+    while(num > 15) {
+      num >>= 4;
+      hexString = BiDiMailUI.JS.hexDigits.substr(num & 15, 1) + hexString;
+    }
+    return hexString;
+  },
 
 #ifdef DEBUG
-function stringToScanCodes(str) 
-{
-  if (str == null)
-    return null;
-  var scanCodesString = "";
-  for(var i = 0; i < str.length; i++) {
-    scanCodesString += num2hex(str.charCodeAt(i)) + " ";  
-  }
-  return scanCodesString;
-}
+  stringToScanCodes : function(str) 
+  {
+    if (str == null)
+      return null;
+    var scanCodesString = "";
+    for(var i = 0; i < str.length; i++) {
+      scanCodesString += BiDiMailUI.JS.num2hex(str.charCodeAt(i)) + " ";  
+    }
+    return scanCodesString;
+  },
 #endif
+}
 
-// Prefs helper
-var gBDMPrefs = {
-  
+//---------------------------------------------------------
+
+// Preferences
+
+BiDiMailUI.Prefs = {
+
+  // const
   preferencePrefix : "bidiui.mail.",
-  
+
+  _prefService: null,
+
   get prefService()
   {
-    delete this._prefService;
-    return this._prefService =
-      Components.classes["@mozilla.org/preferences-service;1"]
-                .getService(Components.interfaces.nsIPrefBranch);
+    if (!this._prefService) 
+      this._prefService =
+        Components.classes["@mozilla.org/preferences-service;1"]
+                  .getService(Components.interfaces.nsIPrefBranch);
+    return this._prefService;
   },
 
   getBoolPref: function(prefName, defaultValue) {
     try {
-      return this.prefService.getBoolPref(preferencePrefix + prefName);
+      return this.prefService.getBoolPref(
+        BiDiMailUI.Prefs.preferencePrefix + prefName);
     } catch(ex) {
       if (defaultValue != undefined)
         return defaultValue;
@@ -113,7 +136,20 @@ var gBDMPrefs = {
 
   getCharPref: function(prefName, defaultValue) {
     try {
-      return this.prefService.getCharPref(preferencePrefix + prefName);
+      return this.prefService.getCharPref(
+        BiDiMailUI.Prefs.preferencePrefix + prefName);
+    } catch(ex) {
+      if (defaultValue != undefined)
+        return defaultValue;
+
+      throw(ex);
+    }
+  },
+
+  getIntPref: function(prefName, defaultValue) {
+    try {
+      return this.prefService.getIntPref(
+        BiDiMailUI.Prefs.preferencePrefix + prefName);
     } catch(ex) {
       if (defaultValue != undefined)
         return defaultValue;
@@ -123,43 +159,32 @@ var gBDMPrefs = {
   },
 
   setBoolPref: function(prefName, val) {
-    this.prefService.setBoolPref(preferencePrefix + prefName, val);
+    this.prefService.setBoolPref(
+      BiDiMailUI.Prefs.preferencePrefix + prefName, val);
   },
 
   setCharPref: function(prefName, val) {
-    this.prefService.setCharPref(preferencePrefix + prefName, val);
+    this.prefService.setCharPref(
+      BiDiMailUI.Prefs.preferencePrefix + prefName, val);
   },
 
+  setIntPref: function(prefName, val) {
+    this.prefService.setIntPref(
+      BiDiMailUI.Prefs.preferencePrefix + prefName, val);
+  },
+  
 }
 
-function GetMessageContentElement(domDoc) {
-  if (!domDoc)
-    throw("Called GetMessageContentElement with no document");
+//---------------------------------------------------------
 
-  var bodyElement = domDoc.body;
-  if (!bodyElement)
-    throw("Cannot get the message content element without a body element");
+// Some regexp string constants
 
-  // Try to find the DIV element which contains the message content
-  var firstSubBody = null;
-  var elementsRequiringExplicitDirection = bodyElement.getElementsByTagName("div");
-  for (var i = 0; i < elementsRequiringExplicitDirection.length && !firstSubBody; i++) {
-    if (/^moz-text/.test(elementsRequiringExplicitDirection[i].className))
-      firstSubBody = elementsRequiringExplicitDirection[i];
-  }
-
-  // If there's no such element or if the element has no text under it (happens
-  // when "Simple HTML" mode is used see Mozilla bug 282476), the meesage 
-  // content element is inside the body element itself
-  if (!firstSubBody || gatherTextUnder(firstSubBody) == "")
-    return bodyElement;
-
-  return firstSubBody;
-}
-
-const MISDETECTED_RTL_CHARACTER = "[\\xBF-\\xD6\\xD8-\\xFF]"
-const MISDETECTED_RTL_SEQUENCE = MISDETECTED_RTL_CHARACTER + "{2,}";
-
+BiDiMailUI.RegExpStrings = {};
+BiDiMailUI.RegExpStrings.MISDETECTED_RTL_CHARACTER =
+  "[\\xBF-\\xD6\\xD8-\\xFF]";
+BiDiMailUI.RegExpStrings.MISDETECTED_RTL_SEQUENCE =
+  BiDiMailUI.RegExpStrings.MISDETECTED_RTL_CHARACTER + "{2,}";
+  
 // TODO: some of these are only relevant for UTF-8 misdecoded as windows-1252 
 // (or iso-8859-1; mozilla cheats and uses windows-1252), while some of these
 // are only relevant for UTF-8 misdecoded as windows-1255
@@ -172,14 +197,16 @@ const MISDETECTED_RTL_SEQUENCE = MISDETECTED_RTL_CHARACTER + "{2,}";
 // TODO: I would like to use \b's instead of the weird combination here,
 // but for some reason if I use \b's, I don't match the strings EE E4 20 and
 // E7 E3 22 F9 
-const CODEPAGE_MISDETECTION_SEQUENCE =
-  MISDETECTED_RTL_CHARACTER + "{3,}" + "|" +  "(" + "(\\s|\"|\W|^)" +
-  MISDETECTED_RTL_CHARACTER + "{2,}(\"|\\s|\W|$)" + ")";
+BiDiMailUI.RegExpStrings.CODEPAGE_MISDETECTION_SEQUENCE =
+  BiDiMailUI.RegExpStrings.MISDETECTED_RTL_CHARACTER +
+  "{3,}" + "|" +  "(" + "(\\s|\"|\W|^)" +
+  BiDiMailUI.RegExpStrings.MISDETECTED_RTL_CHARACTER +
+  "{2,}(\"|\\s|\W|$)" + ")";
 
 // TODO: maybe it's better to undecode first, then check whether it's UTF-8;
 // that will probably allow using a char range instead of so many individual
 // chars
-const MISDETECTED_UTF8_SEQUENCE = 
+BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE =
   // Hebrew
   "(\\xD7([ \\u017E\\u0152\\u0153\\u02DC\\u2013-\\u2022\\u203A\\u2220\\u2122\\u0090-\\u00BF]|&#65533;) ?\"?){3}" +
   "|" + 
@@ -191,30 +218,30 @@ const MISDETECTED_UTF8_SEQUENCE =
   "\\u00EF\\u00BB\\u00BF" + // UTF-8 BOM octets
   "|" +
   "(\\u05F3[\\u2018-\\u2022\\xA9]){2}";
-    
+   
 // Note: if both doCharset and doUTF8 is false, we only correct HTML entities
-function performCorrectiveRecoding(
-  element,preferredCharset,mailnewsDecodingType,doCharset,doUTF8)
-{
+BiDiMailUI.performCorrectiveRecoding = function (
+  element,preferredCharset,mailnewsDecodingType,doCharset,doUTF8) {
+    
   var needCharsetReapplication = false;
 
 #ifdef DEBUG_performCorrectiveRecoding
-          gJSConsoleService.logStringMessage('---------------------------------\nin performCorrectiveRecoding(' + 
+          BiDiMailUI.JSConsoleService.logStringMessage('---------------------------------\nin performCorrectiveRecoding(' + 
           preferredCharset + ', ' + mailnewsDecodingType + ", " + (doCharset ? "doCharset" : "!doCharset") + ", " + 
           (doUTF8 ? "doUTF8" : "!doUTF8") + ")");
-          gJSConsoleService.logStringMessage('element textContent (all nodes together):\n\n' + element.textContent);
+          BiDiMailUI.JSConsoleService.logStringMessage('element textContent (all nodes together):\n\n' + element.textContent);
 #endif
   if (!doCharset && !doUTF8) {
 #ifdef DEBUG_performCorrectiveRecoding
-    gJSConsoleService.logStringMessage('nothing to do, returning');
+    BiDiMailUI.JSConsoleService.logStringMessage('nothing to do, returning');
 #endif
     return;
   }
 
-
-
-  var codepageMisdetectionExpression = new RegExp (CODEPAGE_MISDETECTION_SEQUENCE);
-  var utf8MisdetectionExpression = new RegExp (MISDETECTED_UTF8_SEQUENCE);
+  var codepageMisdetectionExpression =
+    new RegExp (BiDiMailUI.RegExpStrings.CODEPAGE_MISDETECTION_SEQUENCE);
+  var utf8MisdetectionExpression =
+    new RegExp (BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE);
 
   var treeWalker = document.createTreeWalker(
     element,
@@ -228,7 +255,8 @@ function performCorrectiveRecoding(
   while((node = treeWalker.nextNode())) {  
     var lines = node.data.split('\n');
 #ifdef DEBUG_performCorrectiveRecoding
-    gJSConsoleService.logStringMessage("processing text node with " + lines.length + " lines");
+    BiDiMailUI.JSConsoleService.logStringMessage(
+      "processing text node with " + lines.length + " lines");
 #endif
     for(var i = 0; i < lines.length; i++) {
       var workingStr; 
@@ -236,9 +264,12 @@ function performCorrectiveRecoding(
 #ifdef DEBUG_performCorrectiveRecoding
       if (doUTF8 && !utf8MisdetectionExpression.test(lines[i])) {
 #ifdef DEBUG_scancodes
-        gJSConsoleService.logStringMessage("line is not misdecoded UTF-8:\n" + lines[i] + "\n----\n" + stringToScanCodes(lines[i]));
+        BiDiMailUI.JSConsoleService.logStringMessage(
+          "line is not misdecoded UTF-8:\n" + lines[i] +
+          "\n----\n" + BiDiMailUI.JS.stringToScanCodes(lines[i]));
 #else
-        gJSConsoleService.logStringMessage("line is not misdecoded UTF-8:\n" + lines[i]);
+        BiDiMailUI.JSConsoleService.logStringMessage(
+          "line is not misdecoded UTF-8:\n" + lines[i]);
 #endif
       }
 #endif
@@ -249,20 +280,23 @@ function performCorrectiveRecoding(
           workingStr = lines[i];
           
           // at this point, mailnewsDecodingType can only be latin or preferred
-          gUnicodeConverter.charset =
-            (mailnewsDecodingType == "latin-charset") ? 'windows-1252' : preferredCharset;
+          BiDiMailUI.UnicodeConverter.charset =
+            (mailnewsDecodingType == "latin-charset") ?
+             'windows-1252' : preferredCharset;
 #ifdef DEBUG_scancodes
-          gJSConsoleService.logStringMessage(
-            "decoded as " + gUnicodeConverter.charset + ":\n" + workingStr + "\n----\n" + stringToScanCodes(workingStr));
+          BiDiMailUI.JSConsoleService.logStringMessage(
+            "decoded as " + BiDiMailUI.UnicodeConverter.charset + ":\n" +
+            workingStr + "\n----\n" + BiDiMailUI.JS.stringToScanCodes(workingStr));
 #endif
 
         
-          workingStr = gUnicodeConverter.ConvertFromUnicode(workingStr);
+          workingStr = BiDiMailUI.UnicodeConverter.ConvertFromUnicode(workingStr);
           // TODO: not sure we need this next line
-          workingStr += gUnicodeConverter.Finish();
+          workingStr += BiDiMailUI.UnicodeConverter.Finish();
 
 #ifdef DEBUG_scancodes
-          gJSConsoleService.logStringMessage("undecoded bytes:\n" + workingStr  + "\n----\n" + stringToScanCodes(workingStr));
+          BiDiMailUI.JSConsoleService.logStringMessage("undecoded bytes:\n" +
+            workingStr  + "\n----\n" + BiDiMailUI.JS.stringToScanCodes(workingStr));
 #endif
 
           // We see a lot of D7 20's instead of D7 A0's which are the 2-byte sequence for 
@@ -281,7 +315,7 @@ function performCorrectiveRecoding(
             /[\xC2–\xDF]*&#(\d+);/g,
             function() {
               var res = String.fromCharCode(RegExp.$1);
-	      return ((res.charCodeAt(0) > 0xBF) ? "\xEF\xBF\xBD" : res);
+              return ((res.charCodeAt(0) > 0xBF) ? "\xEF\xBF\xBD" : res);
             }
             );
 
@@ -289,22 +323,22 @@ function performCorrectiveRecoding(
           workingStr = workingStr.replace(/[\xD7-\xD9]([^\x80-\xBF]|$)/g, "$1");
 
 #ifdef DEBUG_scancodes
-          gJSConsoleService.logStringMessage(
+          BiDiMailUI.JSConsoleService.logStringMessage(
             "after preprocessing (decoding of HTML entities, removing NBSPs (A0's)," + 
             "removing unterminated 2-byte sequences):\n" + workingStr +
-            "\n----\n" + stringToScanCodes(workingStr));
+            "\n----\n" + BiDiMailUI.JS.stringToScanCodes(workingStr));
 #endif
 
-          gUnicodeConverter.charset = "UTF-8";
-          workingStr = gUnicodeConverter.ConvertToUnicode(workingStr);
+          BiDiMailUI.UnicodeConverter.charset = "UTF-8";
+          workingStr = BiDiMailUI.UnicodeConverter.ConvertToUnicode(workingStr);
           
 #ifdef DEBUG_scancodes
-          gJSConsoleService.logStringMessage("decoded UTF-8:\n" + workingStr + "\n----\n" + stringToScanCodes(lines[i]));
+          BiDiMailUI.JSConsoleService.logStringMessage("decoded UTF-8:\n" + workingStr + "\n----\n" + BiDiMailUI.JS.stringToScanCodes(lines[i]));
 #endif
           lines[i] = workingStr;
         } catch(ex) {
 #ifdef DEBUG_scancodes
-          gJSConsoleService.logStringMessage("Exception while trying to recode \n" + lines[i] + "\n\n" + ex);
+          BiDiMailUI.JSConsoleService.logStringMessage("Exception while trying to recode \n" + lines[i] + "\n\n" + ex);
 #else
           dump("Exception while trying to recode \n" + lines[i] + "\n\n" + ex);
 #endif
@@ -319,28 +353,30 @@ function performCorrectiveRecoding(
       else if (doCharset && codepageMisdetectionExpression.test(lines[i])) {
         //try{
           // at this point, mailnewsDecodingType can only be latin or UTF-8
-          gUnicodeConverter.charset =
+          BiDiMailUI.UnicodeConverter.charset =
             (mailnewsDecodingType == "latin-charset") ? 'windows-1252' : "UTF-8";
 #ifdef DEBUG_scancodes
-          gJSConsoleService.logStringMessage(
-            "decoded as " + gUnicodeConverter.charset + ":\n" + lines[i] + "\n----\n" + stringToScanCodes(lines[i]));
+          BiDiMailUI.JSConsoleService.logStringMessage(
+            "decoded as " + BiDiMailUI.UnicodeConverter.charset + ":\n" + lines[i] + "\n----\n" + BiDiMailUI.JS.stringToScanCodes(lines[i]));
 #endif
         
           workingStr = lines[i];
-          workingStr = gUnicodeConverter.ConvertFromUnicode(lines[i]);
+          workingStr = BiDiMailUI.UnicodeConverter.ConvertFromUnicode(lines[i]);
           // TODO: not sure we need this next line
-          workingStr += gUnicodeConverter.Finish();
+          workingStr += BiDiMailUI.UnicodeConverter.Finish();
 #ifdef DEBUG_scancodes
-          gJSConsoleService.logStringMessage("undecoded bytes:\n" + workingStr  + "\n----\n" + stringToScanCodes(workingStr));
+          BiDiMailUI.JSConsoleService.logStringMessage(
+            "undecoded bytes:\n" + workingStr  + "\n----\n" + BiDiMailUI.JS.stringToScanCodes(workingStr));
 #endif
-          gUnicodeConverter.charset = preferredCharset;
-          lines[i] = gUnicodeConverter.ConvertToUnicode(workingStr);
+          BiDiMailUI.UnicodeConverter.charset = preferredCharset;
+          lines[i] = BiDiMailUI.UnicodeConverter.ConvertToUnicode(workingStr);
 #ifdef DEBUG_scancodes
-          gJSConsoleService.logStringMessage("decoded " + preferredCharset + ":\n" + lines[i] + "\n----\n" + stringToScanCodes(lines[i]));
+          BiDiMailUI.JSConsoleService.logStringMessage(
+            "decoded " + preferredCharset + ":\n" + lines[i] + "\n----\n" + BiDiMailUI.JS.stringToScanCodes(lines[i]));
 #endif
         //} catch(ex) {
 #ifdef DEBUG_scancodes
-        //  gJSConsoleService.logStringMessage("Exception while trying to recode \n" + line + "\n\n" + ex);
+        //  BiDiMailUI.JSConsoleService.logStringMessage("Exception while trying to recode \n" + line + "\n\n" + ex);
 #else
         //  dump("Exception while trying to recode \n" + line + "\n\n" + ex);
 #endif
@@ -348,16 +384,16 @@ function performCorrectiveRecoding(
       }
     }
 #ifdef DEBUG_scancodes
-//    gJSConsoleService.logStringMessage("lines:\n");
+//    BiDiMailUI.JSConsoleService.logStringMessage("lines:\n");
 //    for(i = 0; i < lines.length; i++) {
-//      gJSConsoleService.logStringMessage(lines[i]);
+//      BiDiMailUI.JSConsoleService.logStringMessage(lines[i]);
 //    }
 #endif
     if (doUTF8 || doCharset) {
       node.data = lines.join('\n');
     }
 #ifdef DEBUG_scancodes
-//    gJSConsoleService.logStringMessage("node.data is now\n" + node.data);
+//    BiDiMailUI.JSConsoleService.logStringMessage("node.data is now\n" + node.data);
 #endif
   }
   if (doUTF8) {
@@ -369,10 +405,10 @@ function performCorrectiveRecoding(
   return needCharsetReapplication;
 }
 
-function matchInText(element, expression, matchResults)
-{
+BiDiMailUI.matchInText = function(element, expression, matchResults) {
 #ifdef DEBUG_matchInText
-  gJSConsoleService.logStringMessage("---------------------------------------------\n" +
+  BiDiMailUI.JSConsoleService.logStringMessage(
+    "---------------------------------------------\n" +
     "matching " + expression + "\nin element" + element);
 #endif
   var treeWalker = document.createTreeWalker(
@@ -384,9 +420,10 @@ function matchInText(element, expression, matchResults)
   while ((node = treeWalker.nextNode())) {
 #ifdef DEBUG_matchInText
 #ifdef DEBUG_scancodes
-    gJSConsoleService.logStringMessage(node.data + "\n" + stringToScanCodes(node.data));
+    BiDiMailUI.JSConsoleService.logStringMessage(node.data +
+      "\n" + BiDiMailUI.JS.stringToScanCodes(node.data));
 #else
-    gJSConsoleService.logStringMessage(node.data);
+    BiDiMailUI.JSConsoleService.logStringMessage(node.data);
 #endif
 #endif
     if (expression.test(node.data)) {
@@ -395,7 +432,8 @@ function matchInText(element, expression, matchResults)
       }
       else {
 #ifdef DEBUG_matchInText
-        gJSConsoleService.logStringMessage("found match.\n---------------------------------------------");
+        BiDiMailUI.JSConsoleService.logStringMessage(
+          "found match.\n---------------------------------------------");
 #endif
         return true;
       }
@@ -406,48 +444,51 @@ function matchInText(element, expression, matchResults)
     
 #ifdef DEBUG_matchInText
     if (!matchResults) {
-      gJSConsoleService.logStringMessage("... node doesn't match.\n");
+      BiDiMailUI.JSConsoleService.logStringMessage(
+        "... node doesn't match.\n");
     }
 #endif
   }
 #ifdef DEBUG_matchInText
-  gJSConsoleService.logStringMessage( 
+  BiDiMailUI.JSConsoleService.logStringMessage( 
     ((matchResults ? matchResults.hasMatching : false) ? "found" : "no") +
     " match.\n---------------------------------------------");
 #endif
   return (matchResults ? matchResults.hasMatching : false);
 }
 
-function neutralsOnly(str)
-{
+BiDiMailUI.neutralsOnly = function(str) {
 #ifdef DEBUG_neutralsOnly
-  gJSConsoleService.logStringMessage("in neutralsOnly for\n\n" + str);
+  BiDiMailUI.JSConsoleService.logStringMessage("in neutralsOnly for\n\n" + str);
 #endif
-  var neutrals = new RegExp("^[ \\f\\r\\n\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\{-\xA0\u2013\\u2014\\uFFFD]*$");
+  var neutrals =
+    new RegExp("^[ \\f\\r\\n\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\{-\xA0\u2013\\u2014\\uFFFD]*$");
   return neutrals.test(str);
 }
 
-const RTL_CHARACTER_INNER =
- "\\u0590-\\u05FF\\uFB1D-\\uFB4F\\u0600-\\u06FF\\uFB50-\\uFDFF\\uFE70-\\uFEFC";
-const RTL_CHARACTER = "[" + RTL_CHARACTER_INNER + "]";
-const RTL_SEQUENCE = "(" +  RTL_CHARACTER + "{2,}|" + RTL_CHARACTER + "\"" +
-                     RTL_CHARACTER + ")";
-const LTR_SEQUENCE = "(" +  "\\w" + "[\\-@\\.']?" + ")" + "{2,}";
-const NEUTRAL_CHARACTER_INNER =
-  " \\f\\r\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\{-\xA0\u2013\\u2014\\uFFFD";
-const NEUTRAL_CHARACTER = "[" + NEUTRAL_CHARACTER_INNER + "]";
-const NEUTRAL_CHARACTER_NEW_LINE = "[\\n" + NEUTRAL_CHARACTER_INNER + "]";
-const IGNORABLE_CHARACTER = "[" + NEUTRAL_CHARACTER_INNER +
-  RTL_CHARACTER_INNER + "]";
-const IGNORABLE_CHARACTER_NEW_LINE = "[" + NEUTRAL_CHARACTER_INNER +
-  RTL_CHARACTER_INNER + "\\n]";
   
 // returns "rtl", "ltr", "neutral" or "mixed"; but only an element
 // with more than one text node can be mixed
-function directionCheck(obj)
-{
+BiDiMailUI.directionCheck = function(obj) {
+
+  const RTL_CHARACTER_INNER =
+   "\\u0590-\\u05FF\\uFB1D-\\uFB4F\\u0600-\\u06FF\\uFB50-\\uFDFF\\uFE70-\\uFEFC";
+  const RTL_CHARACTER = "[" + RTL_CHARACTER_INNER + "]";
+  const RTL_SEQUENCE = "(" +  RTL_CHARACTER + "{2,}|" + RTL_CHARACTER + "\"" +
+           RTL_CHARACTER + ")";
+  const LTR_SEQUENCE = "(" +  "\\w" + "[\\-@\\.']?" + ")" + "{2,}";
+  const NEUTRAL_CHARACTER_INNER =
+    " \\f\\r\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\{-\xA0\u2013\\u2014\\uFFFD";
+  const NEUTRAL_CHARACTER = "[" + NEUTRAL_CHARACTER_INNER + "]";
+  const NEUTRAL_CHARACTER_NEW_LINE = "[\\n" + NEUTRAL_CHARACTER_INNER + "]";
+  const IGNORABLE_CHARACTER = "[" + NEUTRAL_CHARACTER_INNER +
+    RTL_CHARACTER_INNER + "]";
+  const IGNORABLE_CHARACTER_NEW_LINE = "[" + NEUTRAL_CHARACTER_INNER +
+    RTL_CHARACTER_INNER + "\\n]";
+
+
 #ifdef DEBUG_directionCheck
-  gJSConsoleService.logStringMessage("in directionCheck(" + obj + ")");
+  BiDiMailUI.JSConsoleService.logStringMessage("in directionCheck(" + obj + ")");
 #endif
   // we check whether there exists a line which either begins
   // with a word consisting solely of characters of an RTL script,
@@ -476,32 +517,32 @@ function directionCheck(obj)
   if (typeof obj == 'string') {
     if (allNeutralExpression.test(obj)) {
 #ifdef DEBUG_directionCheck
-      gJSConsoleService.logStringMessage("directionCheck - string\n\n"+obj+"\n\nis NEUTRAL");
+      BiDiMailUI.JSConsoleService.logStringMessage("directionCheck - string\n\n"+obj+"\n\nis NEUTRAL");
 #endif
       return "neutral";
     }
 #ifdef DEBUG_directionCheck
-    gJSConsoleService.logStringMessage("directionCheck - string\n\n"+obj+"\n\nis " + (rtlLineExpression.test(obj) ? "RTL" : "LTR") );
+    BiDiMailUI.JSConsoleService.logStringMessage("directionCheck - string\n\n"+obj+"\n\nis " + (rtlLineExpression.test(obj) ? "RTL" : "LTR") );
 #endif
     return (rtlLineExpression.test(obj) ? "rtl" : "ltr");
   }
   else { // it's a DOM node
 #ifdef DEBUG_scancodes
-    gJSConsoleService.logStringMessage("obj.textContent:\n" + obj.textContent + "\n" + stringToScanCodes(obj.textContent));
+    BiDiMailUI.JSConsoleService.logStringMessage("obj.textContent:\n" + obj.textContent + "\n" + BiDiMailUI.JS.stringToScanCodes(obj.textContent));
 #endif
     if (allNeutralExpression.test(obj.textContent)) {
 #ifdef DEBUG_directionCheck
-      gJSConsoleService.logStringMessage("directionCheck - object "+obj+"\nis NEUTRAL");
+      BiDiMailUI.JSConsoleService.logStringMessage("directionCheck - object "+obj+"\nis NEUTRAL");
 #endif
       return "neutral";
     }
 #ifdef DEBUG_directionCheck
-      gJSConsoleService.logStringMessage("object is NOT NEUTRAL");
+      BiDiMailUI.JSConsoleService.logStringMessage("object is NOT NEUTRAL");
 #endif
     var matchResults = {};
-    matchInText(obj, rtlLineExpression, matchResults);
+    BiDiMailUI.matchInText(obj, rtlLineExpression, matchResults);
 #ifdef DEBUG_directionCheck
-    gJSConsoleService.logStringMessage("directionCheck - object "+obj+"\nis " + (matchResults.hasMatching ?
+    BiDiMailUI.JSConsoleService.logStringMessage("directionCheck - object "+obj+"\nis " + (matchResults.hasMatching ?
             (matchResults.hasNonMatching ? "MIXED" : "RTL") : "LTR") );
 #endif
     return (matchResults.hasMatching ?
