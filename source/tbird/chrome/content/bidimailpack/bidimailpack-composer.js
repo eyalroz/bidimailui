@@ -482,21 +482,26 @@ BiDiMailUI.Composition = {
 #ifdef DEBUG_getDisplayedCopyParams
         BiDiMailUI.JSConsoleService.logStringMessage('trying tab ' + tabIndex);
 #endif
-        if (tabInfo[tabIndex].messageDisplay._singleMessage == false) {
+        if (tabInfo[tabIndex].messageDisplay) {
+          if (tabInfo[tabIndex].messageDisplay._singleMessage == false) {
 #ifdef DEBUG_getDisplayedCopyParams
-          BiDiMailUI.JSConsoleService.logStringMessage('multi-message mode in this tab');
+            BiDiMailUI.JSConsoleService.logStringMessage('multi-message mode in this tab');
 #endif
-          tabIndex++;
-          continue;
-        }
+            tabIndex++;
+            continue;
+          }
 #ifdef DEBUG_getDisplayedCopyParams
-        if (tabInfo[tabIndex].messageDisplay.displayedMessage)
-          BiDiMailUI.JSConsoleService.logStringMessage('displayed message ID is ' +
-            tabInfo[tabIndex].messageDisplay.displayedMessage.messageId);
-        else 
-          BiDiMailUI.JSConsoleService.logStringMessage('no displayed message');
+          if (tabInfo[tabIndex].messageDisplay.displayedMessage)
+            BiDiMailUI.JSConsoleService.logStringMessage('displayed message ID is ' +
+              tabInfo[tabIndex].messageDisplay.displayedMessage.messageId);
+          else 
+            BiDiMailUI.JSConsoleService.logStringMessage('no displayed message');
 #endif
         //displayedCopyBrowser = tabInfo[tabIndex].browser;
+        }
+#ifdef DEBUG_getDisplayedCopyParams
+          BiDiMailUI.JSConsoleService.logStringMessage('no tabInfo.messageDisplay');
+#endif
         tabIndex++;
       }
       else {
