@@ -52,6 +52,7 @@
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
   <script type="application/x-javascript" src="bidimailpack-common.js"/>
+  <script type="application/x-javascript" src="bidimailpack-display-logic.js"/>
   <script type="application/x-javascript" src="bidimailpack-composer.js"/>
   <script type="application/x-javascript">
     BiDiMailUI.Composition.installComposeWindowEventHandlers();

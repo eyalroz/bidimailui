@@ -145,10 +145,10 @@ BiDiMailUI.MessageOverlay = {
       body: domDocument.body,
       charsetOverrideInEffect: msgWindow.charsetOverride,
       currentCharset: msgWindow.mailCharacterSet,
-      needCharsetForcing: false,
-      charsetToForce: null,
       messageHeader: msgHdr,
-      unusableCharsetHandler : BiDiMailUI.MessageOverlay.promptForDefaultCharsetChange
+      unusableCharsetHandler : BiDiMailUI.MessageOverlay.promptForDefaultCharsetChange,
+      needCharsetForcing: false, // this is an out parameter
+      charsetToForce: null       // this is an out parameter
     };
     BiDiMailUI.Display.ActionPhases.charsetMisdetectionCorrection(charsetPhaseParams);
     if (charsetPhaseParams.needCharsetForcing) {
@@ -208,20 +208,21 @@ BiDiMailUI.MessageOverlay = {
           str.data = charsetPref = "windows-1255";
           BiDiMailUI.Prefs.prefService.setComplexValue("mailnews.view_default_charset", 
             Components.interfaces.nsISupportsString, str);
-            break;
+          return str.data;
         case 1:
           str.data = charsetPref = "windows-1256";
           BiDiMailUI.Prefs.prefService.setComplexValue("mailnews.view_default_charset", 
                 Components.interfaces.nsISupportsString, str);
-          break;
+          return str.data;
         case 2:
           BiDiMailUI.Prefs.setBoolPref("display.user_accepts_unusable_charset_pref", true);
           break;
       }
     }
 #ifdef DEBUG_promptForDefaultCharsetChange
-    else BiDiMailUI.JSConsoleService.logStringMessage("not ok!");
+    else BiDiMailUI.JSConsoleService.logStringMessage("user cancelled the dialog box!");
 #endif
+    return null;
   }
   
 }
