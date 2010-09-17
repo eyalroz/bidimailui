@@ -83,21 +83,52 @@ BiDiMailUI.Composition = {
       BiDiMailUI.JSConsoleService.logStringMessage('in BiDiMailUI.Composition.bodyReadyListener.NotifyComposeBodyReady');
 #endif
 
-      if (this.messageParams.isReply) {
-        // we know how we're displaying it, let's act according to that
-        BiDiMailUI.performCorrectiveRecoding(
-          document.getElementById("content-frame").contentDocument.body,
-          this.messageParams.recodedCharset,
-          this.messageParams.mailnewsDecodingType,
-          (this.messageParams.recodedCharset != null),
-          this.messageParams.recodedUTF8);
+      var cMCParams = {
+        body: document.getElementById("content-frame").contentDocument.body,
+        charsetOverrideInEffect: true,
+          // it seems we can't trigger a reload by changing the charset
+          // during composition, the change only affects how the message
+          // is encoded eventually based on what we already have in the 
+          // window
+        currentCharset: gMsgCompose.compFields.characterSet,
+        messageHeader:
+          (this.messageParams.isReply ? 
+          gMsgCompose.originalMsgURI : null),
+        unusableCharsetHandler : function() { return null; },
+          //
+        needCharsetForcing: false,
+          // this is an out parameter, irrelevant in our case
+        charsetToForce: null,
+          // this is an out parameter, irrelevant in our case
       }
+      
+      // Note: we can't base ourselves on the way the charset
+      // was handled in the original message, since the option
+      // of reloading with a different charset is unavailable.
+      
+      if (!this.messageParams.isReply ||
+          !this.messageParams.gotDisplayedCopyParams ||
+          this.messageParams.charsetWasForced ||
+          this.messageParams.correctiveRecodedUTF8 ||
+          this.messageParams.correctiveRecodedCharset) {
+        BiDiMailUI.Display.ActionPhases.charsetMisdetectionCorrection(cMCParams);
+      }
+#ifdef DEBUG_GetCurrentSelectionDirection
+      else {
+        BiDiMailUI.JSConsoleService.logStringMessage(
+          'original message is known to have had no charset issues;' +
+          'avoiding charsetMisdetectionCorrection');
+      }
+#endif
+      BiDiMailUI.Composition.setInitialDirection(this.messageParams);
+      clearTimeout(this.workaroundForcingTimeoutId);
     }
   },
 
   getCurrentSelectionDirection : function() {
 #ifdef DEBUG_GetCurrentSelectionDirection
-     BiDiMailUI.JSConsoleService.logStringMessage('----- in GetCurrentSelectionDirection() -----');
+     BiDiMailUI.JSConsoleService.logStringMessage(
+       '----- in GetCurrentSelectionDirection() -----');
 #endif
 
     // The current selection is a forest of DOM nodes,
@@ -119,7 +150,8 @@ BiDiMailUI.Composition = {
         return null;
     }
     catch(ex) {
-      // the editor is apparently unavailable... although it should be available!
+      // the editor is apparently unavailable... 
+      // although it should be available!
       dump(ex);
       return null;
     }
@@ -592,9 +624,13 @@ BiDiMailUI.Composition = {
           continue;
         messageParams.originalDisplayDirection = subBody.style.direction;
       }
-      messageParams.recodedUTF8 = displayedCopyBody.hasAttribute('bidimailui-recoded-utf8');
-      messageParams.recodedCharset = displayedCopyBody.getAttribute('bidimailui-recoded-charset');
+      messageParams.correctiveRecodedUTF8 = displayedCopyBody.hasAttribute('bidimailui-recoded-utf8');
+      messageParams.correctiveRecodedCharset = displayedCopyBody.getAttribute('bidimailui-recoded-charset');
       messageParams.mailnewsDecodingType = displayedCopyBody.getAttribute('bidimailui-detected-decoding-type');
+      messageParams.charsetWasForced = 
+        (displayedCopyBody.hasAttribute('bidimailui-charset-is-forced') ?
+         (displayedCopyBody.getAttribute('bidimailui-charset-is-forced')=="true") : false);
+      messageParams.gotDisplayedCopyParams = true;
     }
   },
 
@@ -693,11 +729,14 @@ BiDiMailUI.Composition = {
     // direction
 
     var messageParams = {
+      gotDisplayedCopyParams : false,
       isReply: false,
+      // the following will only be set if we can locate the message browser
+      // displaying the message we're replying to
       originalDisplayDirection: null,
-      recodedUTF8: true,
-      recodedCharset: null,
-      mailnewsDecodingType : 'latin-charset'
+      correctiveRecodedUTF8: true,
+      correctiveRecodedCharset: null,
+      mailnewsDecodingType : null,
     };
 
     BiDiMailUI.Composition.determineNewMessageParams(messageBody,messageParams);
@@ -729,9 +768,11 @@ BiDiMailUI.Composition = {
       '\ngMsgCompose.originalMsgURI = ' +
       (gMsgCompose? gMsgCompose.originalMsgURI : 'no gMsgCompose') +
       '\noriginalDisplayDirection = ' + messageParams.originalDisplayDirection + 
-      '\nUTF-8 recoded = ' + messageParams.recodedUTF8 +
-      '\ncharset recoded = ' + messageParams.recodedCharset +
-      '\nmailnews decoding type = ' + messageParams.mailnewsDecodingType );
+      '\nUTF-8 recoded = ' + messageParams.correctiveRecodedUTF8 +
+      '\ncharset recoded = ' + messageParams.correctiveRecodedCharset +
+      '\nmailnews decoding type = ' + messageParams.mailnewsDecodingType +
+      '\ncharset was forced = ' + messageParams.charsetWasForced      
+      );
 #endif
 
     var isHTMLEditor = IsHTMLEditor();
