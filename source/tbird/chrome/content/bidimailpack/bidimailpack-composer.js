@@ -920,7 +920,8 @@ BiDiMailUI.Composition = {
 
   applyDirectionSetterToSelectionBlockElements : function(newDirectionSetter) {
 #ifdef DEBUG_applyDirectionSetterToSelectionBlockElements
-    BiDiMailUI.JSConsoleService.logStringMessage('----- BiDiMailUI.Composition.applyDirectionSetterToSelectionBlockElements() -----');
+    BiDiMailUI.JSConsoleService.logStringMessage(
+      '----- BiDiMailUI.Composition.applyDirectionSetterToSelectionBlockElements() -----');
 #endif
     var editor = GetCurrentEditor();
     if (!editor) {
@@ -972,7 +973,7 @@ BiDiMailUI.Composition = {
                 closestBlockElement.nodeValue);
 #endif
               closestBlockElement.style.direction =
-               newDirectionSetter(closestBlockElement.style.direction);
+                newDirectionSetter(closestBlockElement.style.direction);
             }
             else {
 #ifdef DEBUG_applyDirectionSetterToSelectionBlockElements
@@ -990,7 +991,7 @@ BiDiMailUI.Composition = {
               break;
             }
 
-            // Traverse through the tree in order
+            // Traverse the tree in order
             if (node.firstChild) {
 #ifdef DEBUG_applyDirectionSetterToSelectionBlockElements
               BiDiMailUI.JSConsoleService.logStringMessage('descending to first child');
@@ -1356,7 +1357,8 @@ BiDiMailUI.Composition = {
 
     // -- Remember the old style rules before we move into paragraph mode --
 
-    // will be ignord
+    // we need to pass these objects to the GetTextProperty function,
+    // but we don't need the return values
     var allHas = { value: false };
     var anyHas = { value: false };
 
@@ -1447,6 +1449,8 @@ BiDiMailUI.Composition = {
     // If the previous paragraph has a dir attribute, apply it to the new paragraph
     if (prevPar.hasAttribute("dir"))
       editor.setAttribute(par, "dir", prevPar.getAttribute("dir"));
+    par.style.direction = prevPar.style.direction;
+
     // ------------------------------- "set old style" ------
 
     // Make sure the line in which the caret is in is visible
