@@ -36,7 +36,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-var BiDiMailUI.PrefPane = {
+BiDiMailUI.PrefPane = {
   init: function() {
     window.addEventListener("dialoghelp", this.openGuide, true);
   },
