@@ -73,6 +73,8 @@
     </preferences>
 
     <script type="application/x-javascript"
+            src="chrome://bidimailpack/content/bidimailpack-common.js"/>
+    <script type="application/x-javascript"
             src="chrome://bidimailpack/content/bidimailpack-prefs.js"/>
 
     <description>&default-dir;</description>
