@@ -11,6 +11,7 @@ fi
 
 CVS_USERNAME=$1
 CVSROOT=":pserver:${CVS_USERNAME}@www.mozdev.org:/cvs"
+CVS_MODULE_NAME="bidiui"
 SRCDIR=`pwd`
 # the following are paths relative to the source dir ${SRCDIR}
 DOWNLOADS="../../downloads"
@@ -37,8 +38,8 @@ fi
 (./dobuild suiterunner && ./dobuild suitelegacy && ./dobuild tbird ) || exit
 
 for target in tbird suiterunner suitelegacy; do
-        cp build/${target}/${SHORTNAME}_${target}.xpi ${DOWNLOADS}/${VERSION}/${SHORTNAME}_${VERSION}_${target}.xpi
-        cp build/${target}/${SHORTNAME}_${target}.xpi ${DOWNLOADS}/latest/
+        cp build/${target}/${SHORTNAME}_${VERSION}_${target}.xpi ${DOWNLOADS}/${VERSION}/${SHORTNAME}_${VERSION}_${target}.xpi
+        cp build/${target}/${SHORTNAME}_${VERSION}_${target}.xpi ${DOWNLOADS}/latest/
 done
 
 
@@ -63,7 +64,7 @@ if [ ! -d ${TEMPDIR} ]; then
         mkdir ${TEMPDIR}
 fi
 cd ${TEMPDIR}
-cvs -d $CVSROOT export -r ${RELEASE_TAG} -d ${SHORTNAME} ${SHORTNAME}/src
+cvs -d $CVSROOT export -r ${RELEASE_TAG} -d ${CVS_MODULE_NAME} ${CVS_MODULE_NAME}/source
 cd ${SRCDIR}
 rm -r ${TEMPDIR}
 
@@ -72,9 +73,11 @@ rm -r ${TEMPDIR}
 
 cd ${SRCDIR}/${DOWNLOADS}
 
-grep xpi "${VERSION}/CVS/Entries" > /dev/null 
-if [ $? != 0 ]; then
+if [ ! -e ${VERSION}/CVS ]; then
 	cvs -d $CVSROOT add ${VERSION}/
-	cvs -d $CVSROOT add `ls ${VERSION}/*.xpi`
+fi
+XPI_ENTIRES_IN_VERSION_DIR=`grep xpi ${VERSION}/CVS/Entries | wc -l`
+if [ ${XPI_ENTIRES_IN_VERSION_DIR} == 0 ]; then
+        cvs -d $CVSROOT add `ls ${VERSION}/*.xpi`
 fi
 cvs -d $CVSROOT ci ${VERSION}/ latest/
