@@ -15,19 +15,21 @@ SRCDIR=`pwd`
 # the following are paths relative to the source dir ${SRCDIR}
 DOWNLOADS="../../downloads"
 BUILDTOOLS="../buildtools"
+TEMPDIR="${SRCDIR}/tmp"
 
 # determine version number
-VERSION=`grep VERSION=\" dobuild | cut -d\" -f2`
+VERSION=`grep VERSION=\" dobuild | cut -d\" -f2 | head -1`
 SHORTNAME=`grep SHORTNAME=\" dobuild | cut -d\" -f2`
 USCORED_VERSION=`echo $VERSION | tr . _`
 CAPS_SHORTNAME=`echo ${SHORTNAME} | tr a-z A-Z`
 RELEASE_TAG="${CAPS_SHORTNAME}_RELEASE_${USCORED_VERSION}"
+# make dobuild not build a beta
 export BIDIUI_RELEASE=1
 
 # create new version directory
 
-if [ ! -d ${DOWNLOADS}/${VERSION} ]; then
-        mkdir ${DOWNLOADS}/${VERSION}
+if [ ! -d "${DOWNLOADS}/${VERSION}" ]; then
+        mkdir "${DOWNLOADS}/${VERSION}"
 fi
 
 # build the release versions and place them in the appropriate directories
@@ -57,11 +59,13 @@ cvs -d $CVSROOT tag ${RELEASE_TAG}
 # http://www.mozdev.org/drupal/wiki/MozdevCVSTipsTroubleshooting
 # for details
 
-mkdir ${SRCDIR}/${TEMPDIR}
-cd ${SRCDIR}/${TEMPDIR}
+if [ ! -d ${TEMPDIR} ]; then
+        mkdir ${TEMPDIR}
+fi
+cd ${TEMPDIR}
 cvs -d $CVSROOT export -r ${RELEASE_TAG} -d ${SHORTNAME} ${SHORTNAME}/src
-cd ${SRCDIR} || exit
-rm -r ${SRCDIR}/${TEMPDIR}
+cd ${SRCDIR}
+rm -r ${TEMPDIR}
 
 # add the release to the CVS repository
 # (it gets propagated to the mozdev download mirrors)
