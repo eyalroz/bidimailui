@@ -46,8 +46,6 @@ BiDiMailUI.Composition = {
     // The default behavior of the Enter key in HTML mail messages
     // is to insert a <br>; the alternative behavior we implement
     // is to close a paragraph and begin a new one
-  paragraphVerticalMargin : null,
-    // Amount of space to add to paragraphs in HTML mail messages
 
   CtrlShiftMachine : {
     // We have implemented a Mealy automaton for implementing the Ctrl+Shift
@@ -122,8 +120,9 @@ BiDiMailUI.Composition = {
 #endif
 
       if (IsHTMLEditor()) {
+        BiDiMailUI.Composition.setParagraphMarginsRule();
         if (BiDiMailUI.Composition.alternativeEnterBehavior)
-          BiDiMailUI.Composition.loadParagraphMode();
+          BiDiMailUI.Composition.setParagraphMode();
       }
 
       BiDiMailUI.Composition.setInitialDirection(this.messageParams);
@@ -393,7 +392,7 @@ BiDiMailUI.Composition = {
     BiDiMailUI.Prefs.setCharPref("compose.last_used_direction", direction);
   },
 
-  // Thins inserts any character, actually
+  // This inserts any character, actually
   insertControlCharacter : function(controlCharacter) {
     editor = GetCurrentEditor();
     editor.beginTransaction();
@@ -417,12 +416,45 @@ BiDiMailUI.Composition = {
     if (IsHTMLEditor()) {
       var editor = GetCurrentEditor();
       if (!editor) {
-        dump("Could not acquire editor object.");
+#ifdef DEBUG_handleComposeReplyCSS
+        BiDiMailUI.JSConsoleService.logStringMessage('handleComposeReplyCSS failed to acquire editor object.');
+#endif
+        dump('handleComposeReplyCSS failed to acquire editor object.');
         return;
       }
       editor.QueryInterface(nsIEditorStyleSheets);
       editor.addOverrideStyleSheet("chrome://bidimailpack/content/quotebar.css");
     }
+  },
+
+  getMessageHead : function() {
+    // assuming the head is the edited document element's first child
+    return document.getElementById("content-frame")
+      .contentDocument.documentElement.firstChild;
+  },
+  
+  addMessageStyleRules : function(styleRulesText) {
+    var editor = GetCurrentEditor();
+    if (!editor) {
+#ifdef DEBUG_addMessageStyleRules
+      BiDiMailUI.JSConsoleService.logStringMessage('addMessageStyleRules failed to acquire editor object.');
+#endif
+      dump('addMessageStyleRules failed to acquire editor object.');
+      return;
+    }
+
+    editor.beginTransaction();
+
+    var css = document.createElement('style');
+    css.type = 'text/css';
+    if (css.styleSheet) {
+      css.styleSheet.cssText = styleRulesText;
+    }
+    else {
+      css.appendChild(document.createTextNode(styleRulesText));
+    }
+    BiDiMailUI.Composition.getMessageHead().appendChild(css);  
+    editor.endTransaction();
   },
 
   handleDirectionButtons : function() {
@@ -448,40 +480,33 @@ BiDiMailUI.Composition = {
       .hidden = hiddenButtonsPref;
   },
 
-  loadParagraphMode : function() {
-#ifdef DEBUG_loadParagraphMode
-    BiDiMailUI.JSConsoleService.logStringMessage('loadParagraphMode()');
-#endif
-    // Get the desired space between the paragraphs we add
-    // We use global variables in order to avoid different margins in the same document
-    BiDiMailUI.Composition.paragraphVerticalMargin =
-      BiDiMailUI.Composition.getParagraphMarginFromPref("compose.space_between_paragraphs");
+  setParagraphMarginsRule : function() {
+    // add a style rule to the document with the paragraph
+    // vertical margins dictated by the prefs
+    
+    var margin =
+      BiDiMailUI.Composition.getParagraphMarginFromPrefs();
+    BiDiMailUI.Composition.addMessageStyleRules(
+      "body p { margin-bottom: " + margin + "; margin-top: 0pt; } ");
+  },
 
-    // our extension likes paragraph text entry, not 'body text' - since
-    // paragraph are block elements, with a direction setting
-    try {
-      var editor = GetCurrentEditor();
-      if (editor) {
-        editor.setParagraphFormat("p");
-        // as we don't use doStatefulCommand, we need to update the command
-        // state attribute...
-        document.getElementById("cmd_paragraphState").setAttribute("state", "p");
-        var par = BiDiMailUI.Composition.findClosestBlockElement(editor.selection.focusNode);
-        // Set "Space between paragraphs"
-        par.style.marginBottom = BiDiMailUI.Composition.paragraphVerticalMargin;
-        par.style.marginTop = 0;
-#ifdef DEBUG_loadParagraphMode
-        BiDiMailUI.JSConsoleService.logStringMessage('loadParagraphMode done.');
+  // Our extension likes "Paragraph Mode" rather than "Body Text" mode
+  // for composing messages, - since paragraph are block elements, with
+  // a direction setting
+
+  setParagraphMode : function() {
+    var editor = GetCurrentEditor();
+    if (!editor) {
+#ifdef DEBUG_handleComposeReplyCSS
+      BiDiMailUI.JSConsoleService.logStringMessage('setParagraphMode  failed to acquire editor object.');
 #endif
-      }
-    } catch(ex) {
-#ifdef DEBUG_loadParagraphMode
-      BiDiMailUI.JSConsoleService.logStringMessage('loadParagraphMode failed:\n' + ex);
-#endif
-      // since the window is not 'ready', something might throw
-      // an exception here, like inability to focus etc.
-      dump(ex);
+      dump('setParagraphMode failed to acquire editor object.');
+      return;
     }
+    editor.setParagraphFormat("p");
+    // as we don't use doStatefulCommand, we need to update the command
+    // state attribute...
+    document.getElementById("cmd_paragraphState").setAttribute("state", "p");
   },
 
   getDisplayedCopyParams : function(messageURI,messageParams) {
@@ -1331,7 +1356,8 @@ BiDiMailUI.Composition = {
       return false;
   },
 
-  getParagraphMarginFromPref : function(basePrefName) {
+  getParagraphMarginFromPrefs : function() {
+    var basePrefName = "compose.space_between_paragraphs";
     var marginScale = BiDiMailUI.Prefs.getCharPref(basePrefName + ".scale", "cm");
     var marginVal;
     if (marginScale != "px") {
@@ -1354,6 +1380,9 @@ BiDiMailUI.Composition = {
   insertParagraph : function() {
     var editor = GetCurrentEditor();
     if (!editor) {
+#ifdef DEBUG_insertParagraph
+      BiDiMailUI.JSConsoleService.logStringMessage('Could not acquire editor object.');
+#endif
       dump("Could not acquire editor object.");
       return;
     }
@@ -1432,10 +1461,6 @@ BiDiMailUI.Composition = {
       if (!isFirstNode)
         editor.deleteNode(node);
     }
-
-    // Set "Space between paragraphs"
-    par.style.marginBottom = BiDiMailUI.Composition.paragraphVerticalMargin;
-    par.style.marginTop = 0;
 
     editor.endTransaction();
 
