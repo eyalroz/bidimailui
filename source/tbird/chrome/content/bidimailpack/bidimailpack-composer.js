@@ -387,6 +387,7 @@ BiDiMailUI.Composition = {
     BiDiMailUI.Prefs.setCharPref("compose.last_used_direction", direction);
   },
 
+  // Thins inserts any character, actually
   insertControlCharacter : function(controlCharacter) {
     editor = GetCurrentEditor();
     editor.beginTransaction();
@@ -463,6 +464,9 @@ BiDiMailUI.Composition = {
         // Set "Space between paragraphs"
         par.style.marginBottom = BiDiMailUI.Composition.paragraphVerticalMargin;
         par.style.marginTop = 0;
+#ifdef DEBUG_loadParagraphMode
+        BiDiMailUI.JSConsoleService.logStringMessage('loadParagraphMode done.');
+#endif
       }
     } catch(ex) {
 #ifdef DEBUG_loadParagraphMode
@@ -1491,6 +1495,8 @@ BiDiMailUI.Composition.directionSwitchController = {
       case "cmd_switch_paragraph":
       case "cmd_switch_document":
       case "cmd_clear_paragraph_dir":
+      case "cmd_insert_lrm":
+      case "cmd_insert_rlm":
   return true;
       default:
   return false;
@@ -1517,6 +1523,8 @@ BiDiMailUI.Composition.directionSwitchController = {
         retVal = inMessage;
         break;
       case "cmd_switch_document":
+      case "cmd_insert_lrm":
+      case "cmd_insert_rlm":
         retVal = inMessage || inSubjectBox;
         break;
 
@@ -1625,9 +1633,16 @@ BiDiMailUI.Composition.directionSwitchController = {
       case "cmd_clear_paragraph_dir":
         BiDiMailUI.Composition.clearParagraphDirection();
         break;
+      case "cmd_insert_lrm":
+        BiDiMailUI.Composition.insertControlCharacter('\u200e');
+        break;
+      case "cmd_insert_rlm":
+        BiDiMailUI.Composition.insertControlCharacter('\u200f');
+        break;
+
       default:
         dump("The command \"" + command +
-             "\" isn't supported by the direction switch controller\n");
+             "\" isn't supported by the directionality controller\n");
         return false;
     }
     this.setAllCasters();
