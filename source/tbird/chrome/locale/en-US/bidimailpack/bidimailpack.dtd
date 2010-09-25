@@ -41,12 +41,17 @@
 <!ENTITY menu-bidimail-switch-page-direction.label                    "Switch Page Direction">
 <!ENTITY menu-bidimail-switch-document-direction.accesskey            "w">
 <!ENTITY menu-bidimail-cycle-document-direction.accesskey             "y">
+
 <!ENTITY key-bidimail-switch-document-direction.keycode               "X">
 <!ENTITY key-bidimail-switch-document-direction.modifiers             "accel,shift">
 <!ENTITY key-bidimail-cycle-document-direction.keycode                "X">
 <!ENTITY key-bidimail-cycle-document-direction.modifiers              "accel,shift">
 <!ENTITY key-bidimail-switch-paragraph-direction.keycode              "E">
 <!ENTITY key-bidimail-switch-paragraph-direction.modifiers            "accel">
+<!ENTITY key-bidimail-insert-lrm.keycode                              "L">
+<!ENTITY key-bidimail-insert-lrm.modifiers                            "accel,shift">
+<!ENTITY key-bidimail-insert-rlm.keycode                              "R">
+<!ENTITY key-bidimail-insert-rlm.modifiers                            "accel,shift">
 
 <!ENTITY menu-bidimail-switch-paragraph-direction.label               "Switch Paragraph Direction">
 <!ENTITY menu-bidimail-switch-paragraph-direction.accesskey           "w">
