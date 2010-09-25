@@ -22,6 +22,7 @@ SHORTNAME=`grep SHORTNAME=\" dobuild | cut -d\" -f2`
 USCORED_VERSION=`echo $VERSION | tr . _`
 CAPS_SHORTNAME=`echo ${SHORTNAME} | tr a-z A-Z`
 RELEASE_TAG="${CAPS_SHORTNAME}_RELEASE_${USCORED_VERSION}"
+export BIDIUI_RELEASE=1
 
 # create new version directory
 
