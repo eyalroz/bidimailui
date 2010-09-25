@@ -120,6 +120,12 @@ BiDiMailUI.Composition = {
           'avoiding charsetMisdetectionCorrection');
       }
 #endif
+
+      if (IsHTMLEditor()) {
+        if (BiDiMailUI.Composition.alternativeEnterBehavior)
+          BiDiMailUI.Composition.loadParagraphMode();
+      }
+
       BiDiMailUI.Composition.setInitialDirection(this.messageParams);
       clearTimeout(this.workaroundForcingTimeoutId);
     }
@@ -792,8 +798,8 @@ BiDiMailUI.Composition = {
       // Determine Enter key behavior
       BiDiMailUI.Composition.alternativeEnterBehavior =
         BiDiMailUI.Prefs.getBoolPref("compose.alternative_enter_behavior", true);
-      if (BiDiMailUI.Composition.alternativeEnterBehavior)
-        BiDiMailUI.Composition.loadParagraphMode();
+      // Applying the alternative Enter behavior requires the editor to be
+      // in paragraph mode; but we won't set it until the body is ready
     }
 
     BiDiMailUI.Composition.directionSwitchController.setAllCasters();
