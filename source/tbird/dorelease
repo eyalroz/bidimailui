@@ -72,6 +72,9 @@ rm -r ${TEMPDIR}
 
 cd ${SRCDIR}/${DOWNLOADS}
 
-cvs -d $CVSROOT add ${VERSION}/
-cvs -d $CVSROOT add `ls ${VERSION}/*.xpi`
+grep xpi "${VERSION}/CVS/Entries" > /dev/null 
+if [ $? != 0 ]; then
+	cvs -d $CVSROOT add ${VERSION}/
+	cvs -d $CVSROOT add `ls ${VERSION}/*.xpi`
+fi
 cvs -d $CVSROOT ci ${VERSION}/ latest/
