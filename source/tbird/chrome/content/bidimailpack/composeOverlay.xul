@@ -87,6 +87,10 @@
            oncommand="goDoCommand('cmd_ltr_document');"/>
   <command id="cmd_switch_document"
            oncommand="goDoCommand('cmd_switch_document');"/>
+  <command id="cmd_insert_lrm"
+           oncommand="goDoCommand('cmd_insert_lrm');"/>
+  <command id="cmd_insert_rlm"
+           oncommand="goDoCommand('cmd_insert_rlm');"/>
   <command id="cmd_clear_paragraph_dir"
            oncommand="goDoCommand('cmd_clear_paragraph_dir');"
            commandupdater="true"
@@ -159,6 +163,14 @@ the main toolbar buttons are whole-document direction controls. -->
        command="cmd_switch_paragraph"
        modifiers="&key-bidimail-switch-paragraph-direction.modifiers;"
        key="&key-bidimail-switch-paragraph-direction.keycode;"/>
+  <key id="key-insert-lrm"
+       command="cmd_insert_lrm"
+       modifiers="&key-bidimail-insert-lrm.modifiers;"
+       key="&key-bidimail-insert-lrm.keycode;"/>
+  <key id="key-insert-rlm"
+       command="cmd_insert_rlm"
+       modifiers="&key-bidimail-insert-rlm.modifiers;"
+       key="&key-bidimail-insert-rlm.keycode;"/>
 </keyset>
 
 <popup id="msgComposeContext">
@@ -176,11 +188,11 @@ the main toolbar buttons are whole-document direction controls. -->
         accesskey="&menu-bidimail-insert-contol-character.accesskey;">
     <menupopup id="menu_Context_ControlCharacters_Popup">
       <menuitem id="contextInsertLRM"
-                oncommand="BiDiMailUI.Composition.insertControlCharacter(('\u200e');"
+                command="cmd_insert_lrm"
                 label="&menu-bidimail-lrm.label;"
                 accesskey="&menu-bidimail-lrm.accesskey;"/>
       <menuitem id="contextInsertRLM"
-                oncommand="BiDiMailUI.Composition.insertControlCharacter(('\u200f');"
+                command="cmd_insert_rlm"
                 label="&menu-bidimail-rlm.label;"
                 accesskey="&menu-bidimail-rlm.accesskey;"/>
     </menupopup>
