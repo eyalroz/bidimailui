@@ -53,20 +53,14 @@ cd ${SRCDIR}/${BUILDTOOLS}
 cvs -d $CVSROOT tag -d ${RELEASE_TAG}
 cvs -d $CVSROOT tag ${RELEASE_TAG}
 
+cd ${SRCDIR}
 
 # Workaround for a mozdev cvs tagging bug, see
 # https://www.mozdev.org/bugs/show_bug.cgi?id=14797
 # and
 # http://www.mozdev.org/drupal/wiki/MozdevCVSTipsTroubleshooting
 # for details
-
-if [ ! -d ${TEMPDIR} ]; then
-        mkdir ${TEMPDIR}
-fi
-cd ${TEMPDIR}
-cvs -d $CVSROOT export -r ${RELEASE_TAG} -d ${CVS_MODULE_NAME} ${CVS_MODULE_NAME}/source
-cd ${SRCDIR}
-rm -r ${TEMPDIR}
+./dummy_export ${CVS_USERNAME}
 
 # add the release to the CVS repository
 # (it gets propagated to the mozdev download mirrors)
