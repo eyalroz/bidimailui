@@ -1160,9 +1160,9 @@ BiDiMailUI.Composition = {
         }
         else {
 #ifdef DEBUG_keypress
-    BiDiMailUI.JSConsoleService.logStringMessage('SWITCHING document');
+          BiDiMailUI.JSConsoleService.logStringMessage('SWITCHING document');
 #endif
-    BiDiMailUI.Composition.switchDocumentDirection();
+          BiDiMailUI.Composition.switchDocumentDirection();
         }
         BiDiMailUI.Composition.directionSwitchController.setAllCasters();
         // if Shift has gone up, Ctrl is still down and the next
@@ -1560,7 +1560,7 @@ BiDiMailUI.Composition.directionSwitchController = {
         break;
 
       case "cmd_ltr_document":
-        this.setCasterGroup("document");
+        this.setCasterGroup(inMessage,inSubjectBox,"document");
       case "cmd_rtl_document":
         retVal = inMessage || inSubjectBox;
         // necessary side-effects performed when
@@ -1569,7 +1569,7 @@ BiDiMailUI.Composition.directionSwitchController = {
 
       case "cmd_ltr_paragraph":
         if (IsHTMLEditor())
-          this.setCasterGroup("paragraph");
+          this.setCasterGroup(inMessage,inSubjectBox,"paragraph");
       case "cmd_rtl_paragraph":
         retVal = inMessage;
         // necessary side-effects performed when
@@ -1581,8 +1581,10 @@ BiDiMailUI.Composition.directionSwitchController = {
   },
 
   setCasterGroup: function(casterPair) {
+#ifdef DEBUG_setCasterGroup
+    BiDiMailUI.JSConsoleService.logStringMessage('setting caster group ' + casterPair);
+#endif
     var casterID, oppositeCasterID, command, direction, commandsAreEnabled;
-    var inMessage = (content == top.document.commandDispatcher.focusedWindow);
 
     // window is not ready to run getComputedStyle before some point,
     // and it would cause a crash if we were to continue (see bug 11712)
@@ -1599,9 +1601,6 @@ BiDiMailUI.Composition.directionSwitchController = {
           document.defaultView
             .getComputedStyle(document.getElementById("content-frame")
             .contentDocument.body, "").getPropertyValue("direction");
-        var inSubjectBox =
-          (document.commandDispatcher.focusedElement ==
-           document.getElementById("msgSubject").inputField);
         commandsAreEnabled = inMessage || inSubjectBox;
         break;
       case "paragraph":
@@ -1637,8 +1636,17 @@ BiDiMailUI.Composition.directionSwitchController = {
   },
 
   setAllCasters: function() {
-    this.setCasterGroup("document");
-    this.setCasterGroup("paragraph");
+#ifdef DEBUG_setAllCasters
+      BiDiMailUI.JSConsoleService.logStringMessage('setting casters.');
+#endif
+    var inMessage = (content == top.document.commandDispatcher.focusedWindow);
+    var inSubjectBox = 
+      (document.commandDispatcher.focusedElement ==
+       document.getElementById("msgSubject").inputField);
+    var retVal = false;
+
+    this.setCasterGroup(inMessage,inSubjectBox,"document");
+    this.setCasterGroup(inMessage,inSubjectBox,"paragraph");
   },
 
   doCommand: function(command) {
