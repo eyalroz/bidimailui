@@ -39,7 +39,7 @@ fi
 
 for target in tbird suiterunner suitelegacy; do
         cp build/${target}/${SHORTNAME}_${VERSION}_${target}.xpi ${DOWNLOADS}/${VERSION}/${SHORTNAME}_${VERSION}_${target}.xpi
-        cp build/${target}/${SHORTNAME}_${VERSION}_${target}.xpi ${DOWNLOADS}/latest/
+        cp build/${target}/${SHORTNAME}_${VERSION}_${target}.xpi ${DOWNLOADS}/latest/${SHORTNAME}_${target}.xpi
 done
 
 
