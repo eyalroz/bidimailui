@@ -168,17 +168,38 @@ BiDiMailUI.RegExpStrings.CODEPAGE_MISDETECTION_SEQUENCE =
 // that will probably allow using a char range instead of so many individual
 // chars
 BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE =
+
   // Hebrew
   "(\\xD7([ \\u017E\\u0152\\u0153\\u02DC\\u2013-\\u2022\\u203A\\u2220\\u2122\\u0090-\\u00BF]|&#65533;) ?\"?){3}" +
   "|" + 
+
   // Arabic
   "((\\xD8[\\x8C-\\xBF])|(\\xD9[\\x80-\\xB9])|(\\xEF\\xAD[\\x90-\\xBF])|(\\xEF[\\xAE-\\xBA][\\x80-\\xBF])|(\\xEF\\xBB[\\x80-\\xBC])){3}" +
+
+  // while \uFFFD characters are possible when mis-decoding UTF-8 as windows-1252/5/6
+  // (e.g. windows-1255 doesn't have \x81 as a character),
+  // contiguous sequences of them are highly unlikely,
+  // as most relevant Unicode ranges are such that the first UTF-8 byte will be in
+  // the ASCII range and therefore not be decoded as \uFFFD
+  //"|" + 
+  //"\\uFFFD{3,}" +
+  
+  // UTF-8 BOM octets - undecoded
+  // (perhaps we should allow these not just at the beginning of the line?)
   "|" + 
-  "\\uFFFD{3,}" +
+  "^\\u00EF\\u00BB\\u00BF" + 
+  // UTF-8 BOM octets - misdecoded as windows-1255 
+  // (for some reason Mozilla gives up on the \xBF -> \u00BF third character)
   "|" + 
-  "\\u00EF\\u00BB\\u00BF" + // UTF-8 BOM octets
+  "^\\u05DF\\u00BB[\\u00BF\\uFFFD]" + 
   "|" +
+  // This is heuristic, i.e. you happen to see this sequence here and there
   "(\\u05F3[\\u2018-\\u2022\\xA9]){2}";
+
+// TODO: A botched sequence may differ for windows-1252/5/6; also
+// the FFFDs might be interspersed with single other characters.
+BiDiMailUI.RegExpStrings.BOTCHED_UTF8_DECODING_SEQUENCE =
+  "(^|\x0A)\\uFFFD{3}"; 
    
 BiDiMailUI.performCorrectiveRecoding = function (
   correctiveRecodingParams) {
