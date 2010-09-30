@@ -204,6 +204,11 @@ BiDiMailUI.performCorrectiveRecoding = function (
   var utf8MisdetectionExpression =
     new RegExp (BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE);
 
+  // This redundant setting of the charset is necessary to overcome an
+  // issue with TB 2.x in which the first time you set the charset and
+  // attempted to recode, you'd get a NS_ERROR_FAILURE exception;
+  BiDiMailUI.UnicodeConverter.charset = preferredCharset;
+
   var treeWalker = document.createTreeWalker(
     element,
     NodeFilter.SHOW_TEXT,
