@@ -99,7 +99,11 @@ BiDiMailUI.MessageOverlay = {
     try {
       msgHdr = gMessageDisplay.displayedMessage;
     } catch(ex) {
-      msgHdr = messenger.msgHdrFromURI(gFolderDisplay.selectedMessageUris[0]);
+      try {
+        msgHdr = messenger.msgHdrFromURI(gFolderDisplay.selectedMessageUris[0]);
+      } catch(ex) {
+        msgHdr = messenger.msgHdrFromURI(GetLoadedMessage());
+      }
     }
 
     var charsetPhaseParams = {
