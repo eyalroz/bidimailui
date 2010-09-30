@@ -1,44 +1,10 @@
-Delivered-To: some@one.com
 Message-ID: <20060301145830.14041.some@one.com.mud.yahoo.com>
 To: some@one.com
 From: some@one.com
-Sender: some@one.com
 MIME-Version: 1.0
-Delivered-To: mailing list some@one.com
 Date: Wed, 11 Jan 2006 06:58:30 -0800 (PST)
 Subject: Message 9 מלל בעברית בכותרת
-Reply-To: some@one.com
-Content-Type: multipart/mixed;
- boundary="0-923933992-1141225110=:12118"
-Status: RO
-
---0-923933992-1141225110=:12118
-Content-Type: multipart/alternative;
- boundary="0-1382008728-1141225110=:12118"
-
---0-1382008728-1141225110=:12118
 Content-Type: text/plain; charset=iso-8859-1
 Content-Transfer-Encoding: 8bit
 
-the following content is in The attached file
-   
-מלל בעברית ב-plaintext
-   
---0-1382008728-1141225110=:12118
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: 8bit
-
-<html><body>
-
-
-
-<p>text in english</p>
-<p>מלל בעברית ב-HTML</p>
-
-</body></html>
-
-
---0-1382008728-1141225110=:12118--
-
-
-
+This message's subject has Hebrew in it, but the body does not.

@@ -7,15 +7,6 @@ MIME-Version: 1.0
 Delivered-To: some@one.com
 Date: Sat, 09 Jan 2006 13:40:44 -0800 (PST)
 Subject: Message 7
-Content-Type: multipart/mixed;
- boundary="0-1919901857-1137879644=:29152"
-Status:   
-
---0-1919901857-1137879644=:29152
-Content-Type: multipart/alternative;
- boundary="0-238015320-1137879644=:29152"
-
---0-238015320-1137879644=:29152
 Content-Type: text/html; charset=ISO-8859-1
 Content-Transfer-Encoding: 8bit
 
@@ -25,8 +16,4 @@ Content-Transfer-Encoding: 8bit
 <p>Text in Arabic:<p>
 <p>&#1605;&#1585;&#1603;&#1586; &#1575;&#1604;&#1605;&#1585;&#1571;&#1577;</p> 
 </body></html>
-
-
---0-238015320-1137879644=:29152--
-
 
