@@ -1,9 +1,3 @@
-X-Mozilla-Status: 0001
-X-Mozilla-Status2: 00000000
-X-Sieve: CMU Sieve 2.3
-X-Resolved-to: some@one.com
-X-Delivered-to: some@one.com
-X-Mail-From: some@one.com
 Date: Wed, 04 Jan 2006 22:15:28 +0200
 From: some@one.com
 Subject: Message 4 =?windows-1255?Q?=E3=E1_?=
@@ -32,7 +26,6 @@ Date: Thu, 06 Jan 2006 20:41:23 -0700 (PDT)
 From: some@one.com
 Subject: Message 1 in Message 4 =?WINDOWS-1255?B?4+Eg+fEg4e749+fk?=
 Sender: some@one.com
-X-Sender: some@one.com
 To: some@one.com
 Message-id: <20050617034123.30714.some@one.com.mud.yahoo.com>
 MIME-version: 1.0
@@ -41,8 +34,6 @@ Content-type: multipart/alternative;
 Delivered-to: some@one.com
 Delivered-to: mailing list some@one.com
  HaifAct-some@one.com
-X-Account-Key: account6
-X-Original-To: some@one.com
 
 
 --Boundary_(ID_oew8Xu+1Sna6svhA0Z5szw)
