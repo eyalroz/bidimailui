@@ -286,7 +286,6 @@ dir=3DLTR></span></p>
 
 From some@one.com
 Delivered-To: some@one.com
-X-Sender: some@one.com
 Message-ID: <20060121214044.32860.some@one.com.mud.yahoo.com>
 To: someone <some@one.com>
 From: some@one.com
@@ -295,15 +294,6 @@ MIME-Version: 1.0
 Delivered-To: some@one.com
 Date: Sat, 09 Jan 2006 13:40:44 -0800 (PST)
 Subject: Message 7
-Content-Type: multipart/mixed;
- boundary="0-1919901857-1137879644=:29152"
-Status:   
-
---0-1919901857-1137879644=:29152
-Content-Type: multipart/alternative;
- boundary="0-238015320-1137879644=:29152"
-
---0-238015320-1137879644=:29152
 Content-Type: text/html; charset=ISO-8859-1
 Content-Transfer-Encoding: 8bit
 
@@ -315,52 +305,17 @@ Content-Transfer-Encoding: 8bit
 </body></html>
 
 
---0-238015320-1137879644=:29152--
-
-
 From some@one.com
-Delivered-To: some@one.com
-X-Sender: some@one.com
 Message-ID: <20060301145830.14041.some@one.com.mud.yahoo.com>
 To: some@one.com
 From: some@one.com
-Sender: some@one.com
 MIME-Version: 1.0
-Delivered-To: mailing list some@one.com
 Date: Wed, 11 Jan 2006 06:58:30 -0800 (PST)
 Subject: Message 9 מלל בעברית בכותרת
-Reply-To: some@one.com
-Content-Type: multipart/mixed;
- boundary="0-923933992-1141225110=:12118"
-Status: RO
-
---0-923933992-1141225110=:12118
-Content-Type: multipart/alternative;
- boundary="0-1382008728-1141225110=:12118"
-
---0-1382008728-1141225110=:12118
 Content-Type: text/plain; charset=iso-8859-1
 Content-Transfer-Encoding: 8bit
 
-the following content is in The attached file
-   
-מלל בעברית ב-plaintext
-   
---0-1382008728-1141225110=:12118
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: 8bit
-
-<html><body>
-
-
-
-<p>text in english</p>
-<p>מלל בעברית ב-HTML</p>
-
-</body></html>
-
-
---0-1382008728-1141225110=:12118--
+This message's subject has Hebrew in it, but the body does not.
 
 
 From some@one.com
@@ -527,9 +482,6 @@ Content-Disposition: inline;
  filename*=ISO-8859-1''Re%3A%20%EE%E5%F0%E7%E5%EF%20%F7%F6%F8
 
 Delivered-To: some@one.com
-DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws;
-  s=s1024; d=yahoo.com;
-  h=Message-ID:Received:Date:From:Subject:To:  b=OPxpC0/Ybuz0292csdq1x4+9SEEJ04UmmJwQqHu2VcJ4CkcIPsm2NQeYwRbgfMsn9p/jtleHCiBY6GY4G8+/VOezQxjiiTHkY+n3RfE79vxqwGH1oVscwkRYizS7FgqQ6TF0S8Qd59OtiCvFiC2BfSpnUhldKlLlkm8INBzCsjQ=  ;
 Message-ID: <20060322230059.42437.some@one.com.yahoo.com>
 Date: Wed, 14 Jan 2006 15:00:59 -0800 (PST)
 From: some@one.com
@@ -539,17 +491,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Transfer-Encoding: 8bit
 
-מלל בעברית ב-plaintext
-
-
---- Some One <some@one.com> wrote:
-
-> מלל בעברית  ב-plaintext
-> 
-> 
-
-Text in English
-
+The quick brown fox jumped over the lazy dog.
 
 --------------070006060903030904010202--
 
