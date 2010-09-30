@@ -181,20 +181,20 @@ BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE =
   "(\\u05F3[\\u2018-\\u2022\\xA9]){2}";
    
 BiDiMailUI.performCorrectiveRecoding = function (
-  correctiveRecordingParams) {
+  correctiveRecodingParams) {
 #ifdef DEBUG_performCorrectiveRecoding
   BiDiMailUI.JSConsoleService.logStringMessage(
     '---------------------------------\nin performCorrectiveRecoding(' + 
-    correctiveRecordingParams.preferredCharset + ', ' +
-    correctiveRecordingParams.mailnewsDecodingType + ", " +
-    "correctiveRecordingParams.recodePreferredCharset = " +
-    correctiveRecordingParams.recodePreferredCharset + ", " +
-    "correctiveRecordingParams.recodeUTF8 = " +
-    correctiveRecordingParams.recodeUTF8 + ")");
+    correctiveRecodingParams.preferredCharset + ', ' +
+    correctiveRecodingParams.mailnewsDecodingType + ", " +
+    "correctiveRecodingParams.recodePreferredCharset = " +
+    correctiveRecodingParams.recodePreferredCharset + ", " +
+    "correctiveRecodingParams.recodeUTF8 = " +
+    correctiveRecodingParams.recodeUTF8 + ")");
     BiDiMailUI.JSConsoleService.logStringMessage('element textContent (all nodes together):\n\n' + element.textContent);
 #endif
-  if (!correctiveRecordingParams.recodePreferredCharset &&
-      !correctiveRecordingParams.recodeUTF8) {
+  if (!correctiveRecodingParams.recodePreferredCharset &&
+      !correctiveRecodingParams.recodeUTF8) {
 #ifdef DEBUG_performCorrectiveRecoding
     BiDiMailUI.JSConsoleService.logStringMessage('nothing to do, returning');
 #endif
@@ -205,10 +205,10 @@ BiDiMailUI.performCorrectiveRecoding = function (
   // issue with TB 2.x in which the first time you set the charset and
   // attempted to recode, you'd get a NS_ERROR_FAILURE exception;
   // see bug 
-  BiDiMailUI.UnicodeConverter.charset = correctiveRecordingParams.preferredCharset;
+  BiDiMailUI.UnicodeConverter.charset = correctiveRecodingParams.preferredCharset;
 
   var treeWalker = document.createTreeWalker(
-    correctiveRecordingParams.body,
+    correctiveRecodingParams.body,
     NodeFilter.SHOW_TEXT,
     null, // additional filter function
     false
@@ -217,20 +217,20 @@ BiDiMailUI.performCorrectiveRecoding = function (
   while((node = treeWalker.nextNode())) {
     if (node.data)
       node.data = BiDiMailUI.performCorrectiveRecodingOnText(
-        node.data,correctiveRecordingParams);
+        node.data,correctiveRecodingParams);
   }
-  if (correctiveRecordingParams.recodeUTF8) {
-    correctiveRecordingParams.body.setAttribute('bidimailui-recoded-utf8',true);
+  if (correctiveRecodingParams.recodeUTF8) {
+    correctiveRecodingParams.body.setAttribute('bidimailui-recoded-utf8',true);
   }
-  if (correctiveRecordingParams.recodePreferredCharset) {
-    correctiveRecordingParams.body.setAttribute('bidimailui-recoded-charset',
-      correctiveRecordingParams.preferredCharset);
+  if (correctiveRecodingParams.recodePreferredCharset) {
+    correctiveRecodingParams.body.setAttribute('bidimailui-recoded-charset',
+      correctiveRecodingParams.preferredCharset);
   }
 
-  if (correctiveRecordingParams.subjectSetter) try {
-    correctiveRecordingParams.subjectSetter(
+  if (correctiveRecodingParams.subjectSetter) try {
+    correctiveRecodingParams.subjectSetter(
       BiDiMailUI.performCorrectiveRecodingOnText(
-        correctiveRecordingParams.messageSubject,correctiveRecordingParams));
+        correctiveRecodingParams.messageSubject,correctiveRecodingParams));
   } catch(ex) { }
   return;
 }
@@ -243,14 +243,14 @@ BiDiMailUI.utf8MisdetectionExpression =
 
 
 BiDiMailUI.performCorrectiveRecodingOnText = function(
-  str,correctiveRecordingParams) {
+  str,correctiveRecodingParams) {
 #ifdef DEBUG_performCorrectiveRecodingOnText
   BiDiMailUI.JSConsoleService.logStringMessage(
     "corrective-recording the string:\n" + str);
 #endif
   if (!str) return;
-  if (!correctiveRecordingParams.recodeUTF8 &&
-    !correctiveRecordingParams.recodePreferredCharset) return;
+  if (!correctiveRecodingParams.recodeUTF8 &&
+    !correctiveRecodingParams.recodePreferredCharset) return;
   var lines = str.split('\n');
 #ifdef DEBUG_performCorrectiveRecodingOnText
   BiDiMailUI.JSConsoleService.logStringMessage(
@@ -260,7 +260,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
     var workingStr; 
 
 #ifdef DEBUG_performCorrectiveRecodingOnText
-    if (correctiveRecordingParams.recodeUTF8 &&
+    if (correctiveRecodingParams.recodeUTF8 &&
       !BiDiMailUI.utf8MisdetectionExpression.test(lines[i])) {
 #ifdef DEBUG_scancodes
       BiDiMailUI.JSConsoleService.logStringMessage(
@@ -274,7 +274,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
 #endif
     // Note: It's _important_ to check for UTF-8 first, because that has the 
     // much more distinctive [D7-D9] blah [D7-D9] blah [D7-D9] blah pattern!
-    if (correctiveRecordingParams.recodeUTF8 &&
+    if (correctiveRecodingParams.recodeUTF8 &&
       BiDiMailUI.utf8MisdetectionExpression.test(lines[i])) {
 #ifdef DEBUG_performCorrectiveRecodingOnText
       BiDiMailUI.JSConsoleService.logStringMessage("trying to recode UTF-8");
@@ -282,10 +282,10 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
       try {
         workingStr = lines[i];
         
-        // at this point, correctiveRecordingParams.mailnewsDecodingType can only be latin or preferred
+        // at this point, correctiveRecodingParams.mailnewsDecodingType can only be latin or preferred
         BiDiMailUI.UnicodeConverter.charset =
-          (correctiveRecordingParams.mailnewsDecodingType == "latin-charset") ?
-           'windows-1252' : correctiveRecordingParams.preferredCharset;
+          (correctiveRecodingParams.mailnewsDecodingType == "latin-charset") ?
+           'windows-1252' : correctiveRecodingParams.preferredCharset;
 #ifdef DEBUG_scancodes
         BiDiMailUI.JSConsoleService.logStringMessage(
           "decoded as " + BiDiMailUI.UnicodeConverter.charset + ":\n" +
@@ -358,19 +358,19 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
         }
       }
     }
-    else if (correctiveRecordingParams.recodePreferredCharset &&
+    else if (correctiveRecodingParams.recodePreferredCharset &&
       BiDiMailUI.codepageMisdetectionExpression.test(lines[i])) {
 #ifdef DEBUG_performCorrectiveRecodingOnText
         BiDiMailUI.JSConsoleService.logStringMessage(
           "trying to recode preferred charset");
 #endif
       try {
-        // at this point, correctiveRecordingParams.mailnewsDecodingType can only be latin or UTF-8
+        // at this point, correctiveRecodingParams.mailnewsDecodingType can only be latin or UTF-8
         BiDiMailUI.UnicodeConverter.charset =
-          (correctiveRecordingParams.mailnewsDecodingType == "latin-charset") ? 'windows-1252' : "UTF-8";
+          (correctiveRecodingParams.mailnewsDecodingType == "latin-charset") ? 'windows-1252' : "UTF-8";
 #ifdef DEBUG_performCorrectiveRecodingOnText
         BiDiMailUI.JSConsoleService.logStringMessage(
-          "set charset to" + (correctiveRecordingParams.mailnewsDecodingType == "latin-charset") ? 'windows-1252' : "UTF-8");
+          "set charset to" + (correctiveRecodingParams.mailnewsDecodingType == "latin-charset") ? 'windows-1252' : "UTF-8");
 #endif
 #ifdef DEBUG_scancodes
         BiDiMailUI.JSConsoleService.logStringMessage(
@@ -387,11 +387,11 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
           "undecoded bytes:\n" + workingStr  + "\n----\n" + 
           BiDiMailUI.JS.stringToScanCodes(workingStr));
 #endif
-        BiDiMailUI.UnicodeConverter.charset = correctiveRecordingParams.preferredCharset;
+        BiDiMailUI.UnicodeConverter.charset = correctiveRecodingParams.preferredCharset;
         lines[i] = BiDiMailUI.UnicodeConverter.ConvertToUnicode(workingStr);
 #ifdef DEBUG_scancodes
         BiDiMailUI.JSConsoleService.logStringMessage(
-          "decoded " + correctiveRecordingParams.preferredCharset + ":\n" +
+          "decoded " + correctiveRecodingParams.preferredCharset + ":\n" +
           lines[i] + "\n----\n" + BiDiMailUI.JS.stringToScanCodes(lines[i]));
 #endif
       } catch(ex) {
