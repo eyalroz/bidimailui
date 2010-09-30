@@ -57,6 +57,7 @@ PREPROCESSOR_PARAMS="$PREPROCESSOR_PARAMS -DVERSION=$VERSION"
 echo -e "Building the XPI with the following definitions:\n\n$PREPROCESSOR_PARAMS\n"
 BUILDDIR="build/$TARGET"
 XPINAME="${SHORTNAME}_${VERSION}_${TARGET}.xpi"
+LINKNAME="${SHORTNAME}_${TARGET}.xpi"
 BUILDTOOLSDIR="../buildtools"
 export PERL5LIB="`pwd`/$BUILDTOOLSDIR"
 
@@ -114,5 +115,5 @@ case "$TARGET" in
 	  chrome.manifest || exit
         ;;
 esac
-
+ln $XPINAME $LINKNAME
 echo -e "\nXPI ready\n"
