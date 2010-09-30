@@ -1526,7 +1526,7 @@ BiDiMailUI.Composition.directionSwitchController = {
         break;
 
       case "cmd_ltr_document":
-        this.setCasterGroup(inMessage,inSubjectBox,"document");
+        this.setCasterGroup("document",inMessage,inSubjectBox);
       case "cmd_rtl_document":
         retVal = inMessage || inSubjectBox;
         // necessary side-effects performed when
@@ -1535,7 +1535,7 @@ BiDiMailUI.Composition.directionSwitchController = {
 
       case "cmd_ltr_paragraph":
         if (IsHTMLEditor())
-          this.setCasterGroup(inMessage,inSubjectBox,"paragraph");
+          this.setCasterGroup("paragraph",inMessage,inSubjectBox);
       case "cmd_rtl_paragraph":
         retVal = inMessage;
         // necessary side-effects performed when
@@ -1611,8 +1611,8 @@ BiDiMailUI.Composition.directionSwitchController = {
        document.getElementById("msgSubject").inputField);
     var retVal = false;
 
-    this.setCasterGroup(inMessage,inSubjectBox,"document");
-    this.setCasterGroup(inMessage,inSubjectBox,"paragraph");
+    this.setCasterGroup("document",inMessage,inSubjectBox);
+    this.setCasterGroup("paragraph",inMessage,inSubjectBox);
   },
 
   doCommand: function(command) {
