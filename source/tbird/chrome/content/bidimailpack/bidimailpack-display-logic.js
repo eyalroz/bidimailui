@@ -797,6 +797,33 @@ BiDiMailUI.Display = {
           cMCParams.recodeUTF8 = false;
       }
     }
+
+    // workaround for bug 23322:
+    // Mozilla may be 'cheating' w.r.t. decoding charset
+    if (!cMCParams.needCharsetForcing) {
+      contentToMatch = new RegExp (
+        BiDiMailUI.RegExpStrings.BOTCHED_UTF8_DECODING_SEQUENCE);
+      if (BiDiMailUI.matchInText(cMCParams.body, contentToMatch) ||
+          contentToMatch.test(cMCParams.messageSubject)) {
+#ifdef DEBUG_fixLoadedMessageCharsetIssues
+          BiDiMailUI.JSConsoleService.logStringMessage(
+            "found a long FFFD sequence (see bug 23322)");
+#endif
+        if (mustKeepCharset) {
+#ifdef DEBUG_fixLoadedMessageCharsetIssues
+          BiDiMailUI.JSConsoleService.logStringMessage(
+            "...but we're not allowed to reload!");
+#endif
+        }
+        else {
+          cMCParams.needCharsetForcing = true;
+          // let's be on the safe side
+          cMCParams.charsetToForce = "windows-1252";
+          return;
+        }
+      }
+    }
+
     // at this point we _believe_ there's no need for charset forcing,
     // and we'll only perform corrective recoding
     if (cMCParams.recodeUTF8 || cMCParams.recodePreferredCharset) {
