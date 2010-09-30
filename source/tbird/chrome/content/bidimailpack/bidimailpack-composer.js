@@ -53,6 +53,11 @@ BiDiMailUI.Composition = {
         messageHeader:
           (this.messageParams.isReply ? 
           gMsgCompose.originalMsgURI : null),
+        messageSubject: 
+          document.getElementById("msgSubject").value,
+        subjectSetter: function(str) {
+            document.getElementById("msgSubject").value = str;
+          },
         unusableCharsetHandler : function() { return null; },
           //
         needCharsetForcing: false,
@@ -1541,7 +1546,7 @@ BiDiMailUI.Composition.directionSwitchController = {
     return retVal;
   },
 
-  setCasterGroup: function(casterPair) {
+  setCasterGroup: function(casterPair,inMessage,inSubjectBox) {
 #ifdef DEBUG_setCasterGroup
     BiDiMailUI.JSConsoleService.logStringMessage('setting caster group ' + casterPair);
 #endif
