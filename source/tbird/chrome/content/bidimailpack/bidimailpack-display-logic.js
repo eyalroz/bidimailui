@@ -486,22 +486,22 @@ BiDiMailUI.Display = {
   // Detect and attempt to reload/recode content of wholly or partially 
   // mis-decoded messages
   //
-  // Return value: 
-  //   False if the message has been set to be reloaded, True otherwise
   // Notes: 
+  //   When returning, cMCParams.needCharsetForcing indicates
+  //   whether a reload is necessary
+  //
   //   This function assumes the preferred charset is either windows-1255,
   //   windows-1256 or null; see populatePreferredCharset().
-  //   The function does not receive the subject textbox; it derives the
-  //   subject through using the message header and does not recode it;
-  //   see https://www.mozdev.org/bugs/show_bug.cgi?id=22123
   //
   fixLoadedMessageCharsetIssues : function(cMCParams) {
 
     var contentToMatch;
     
-    var messageSubject;
-    if (cMCParams.messageHeader) {
-      messageSubject =
+    // TODO: perhaps we should prefer the undecoded MIME subject over
+    // the decoded one - and decode it ourselves with the charset
+    // to our liking?
+    if (!cMCParams.messageSubject && cMCParams.messageHeader) {
+      cMCParams.messageSubject =
         cMCParams.messageHeader.mime2DecodedSubject;
     }
 
@@ -564,26 +564,25 @@ BiDiMailUI.Display = {
       cMCParams.charsetOverrideInEffect;
 
     // This sets parameter no. 2
-    var mailnewsDecodingType;
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
     BiDiMailUI.JSConsoleService.logStringMessage('current charset used for decoding:\n' + cMCParams.currentCharset);
 #endif
     if ((cMCParams.preferredCharset != null) &&
         (cMCParams.currentCharset == cMCParams.preferredCharset))
-      mailnewsDecodingType = "preferred-charset";
+      cMCParams.mailnewsDecodingType = "preferred-charset";
     else if ((((cMCParams.currentCharset == "ISO-8859-8-I") ||
                (cMCParams.currentCharset == "ISO-8859-8")) && 
               (cMCParams.preferredCharset == "windows-1255") ) ||
              ((cMCParams.currentCharset == "ISO-8859-6") && 
               (cMCParams.preferredCharset == "windows-1255") ) ) {
-      mailnewsDecodingType = "preferred-charset";
+      cMCParams.mailnewsDecodingType = "preferred-charset";
     }
     else switch(cMCParams.currentCharset) {
       case "US-ASCII":
       case "ISO-8859-1":
       case "windows-1252":
       case null:
-        mailnewsDecodingType = "latin-charset"; break;
+        cMCParams.mailnewsDecodingType = "latin-charset"; break;
       case "":
         // sometimes the charset is misread, and Mozilla sets it to "" while
         // using UTF-8; this is the case specifically for
@@ -591,7 +590,7 @@ BiDiMailUI.Display = {
         // in the message... but we can't know that without streaming the raw
         // message, which is expensive
       case "UTF-8":
-        mailnewsDecodingType = "UTF-8"; break;
+        cMCParams.mailnewsDecodingType = "UTF-8"; break;
       default: 
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
     BiDiMailUI.JSConsoleService.logStringMessage(
@@ -600,7 +599,7 @@ BiDiMailUI.Display = {
 #endif
         return true;
     }
-    cMCParams.body.setAttribute('bidimailui-detected-decoding-type',mailnewsDecodingType);
+    cMCParams.body.setAttribute('bidimailui-detected-decoding-type',cMCParams.mailnewsDecodingType);
 
 
     // This sets parameter no. 3 
@@ -608,7 +607,7 @@ BiDiMailUI.Display = {
     var havePreferredCharsetText;
 
     if (cMCParams.preferredCharset != null) {
-      if (mailnewsDecodingType == "preferred-charset") {
+      if (cMCParams.mailnewsDecodingType == "preferred-charset") {
         // text in the preferred charset is properly decoded, so we only
         // need to look for characters in the Hebrew or Arabic Unicode ranges;
         // we look for a sequence, since some odd character may be the result
@@ -621,7 +620,7 @@ BiDiMailUI.Display = {
         // text in the preferred charset is properly decoded, so we only
         // need to look for a character in the Hebrew or Arabic Unicode range
         contentToMatch = new RegExp(
-          (mailnewsDecodingType == "latin-charset") ?
+          (cMCParams.mailnewsDecodingType == "latin-charset") ?
           // Here we want a sequence of Unicode value of characters whose 
           // windows-1252 octet is such that would be decoded as 'clearly'
           // Hebrew or Arabic text; we could be less or more picky depending
@@ -632,7 +631,7 @@ BiDiMailUI.Display = {
           // Latin letters in windows-1252, whose Unicode values are the
           // same as their octets
           "[\\u00C0-\\u00FF]{3,}" :
-          // Here we know that mailnewsDecodingType == "UTF-8"; if
+          // Here we know that cMCParams.mailnewsDecodingType == "UTF-8"; if
           // you decode windows-1255/6 content as UTF-8, you'll get failures
           // because you see multi-octet-starter octets (11xxxxxx) followed
           // by other multi-octet-starter octets rather than 
@@ -644,7 +643,7 @@ BiDiMailUI.Display = {
       }    
       havePreferredCharsetText = 
         BiDiMailUI.matchInText(cMCParams.body, contentToMatch) ||
-        contentToMatch.test(messageSubject);
+        contentToMatch.test(cMCParams.messageSubject);
     }
     else {
       havePreferredCharsetText = false;
@@ -655,13 +654,13 @@ BiDiMailUI.Display = {
     var haveUTF8Text;
     
     contentToMatch = new RegExp (
-      (mailnewsDecodingType == "UTF-8") ?
+      (cMCParams.mailnewsDecodingType == "UTF-8") ?
       // The only characters we can be sure will be properly decoded in windows-1252
       // when they appear after UTF-8 decoding are those with single octets in UTF-8
       // and the same value as windows-1252; if there's anything else we'll be
       // conservative and assume some UTF-8 decoding is necessary
       "[^\\u0000-\\u007F\\u00A0-\\u00FF]" :
-      // mailnewsDecodingType is latin-charset or preferred-charset
+      // cMCParams.mailnewsDecodingType is latin-charset or preferred-charset
       //
       // TODO: some of these are only relevant for UTF-8 misdecoded as windows-1252 
       // (or iso-8859-1; mozilla cheats and uses windows-1252), 
@@ -670,13 +669,13 @@ BiDiMailUI.Display = {
 
     haveUTF8Text = 
       BiDiMailUI.matchInText(cMCParams.body, contentToMatch) ||
-      contentToMatch.test(messageSubject);
+      contentToMatch.test(cMCParams.messageSubject);
 
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
     BiDiMailUI.JSConsoleService.logStringMessage("--------\n " +
       (mustKeepCharset ? "Y" : "N") +
-      ((mailnewsDecodingType == "latin-charset") ? "N" :
-       ((mailnewsDecodingType == "preferred-charset") ? "C" : "U")) +
+      ((cMCParams.mailnewsDecodingType == "latin-charset") ? "N" :
+       ((cMCParams.mailnewsDecodingType == "preferred-charset") ? "C" : "U")) +
       (havePreferredCharsetText ? "Y" : "N") +
       (haveUTF8Text ? "Y" : "N") + 
       "\n--------");
@@ -685,7 +684,7 @@ BiDiMailUI.Display = {
     // ... and now act based on the parameter values
     
     if (!mustKeepCharset) {
-      switch(mailnewsDecodingType) {
+      switch(cMCParams.mailnewsDecodingType) {
         case "latin-charset":
           if (!havePreferredCharsetText) {
             if (!haveUTF8Text) {
@@ -713,16 +712,9 @@ BiDiMailUI.Display = {
             }
             else {
               //NNYY
-              if (BiDiMailUI.performCorrectiveRecoding(cMCParams.body,cMCParams.preferredCharset,mailnewsDecodingType,true,true)) {
-#ifdef DEBUG_fixLoadedMessageCharsetIssues
-                BiDiMailUI.JSConsoleService.logStringMessage(
-                  "re-applying charset - bug workaround");
-#endif
-                // need to re-apply the same charset, as a workaround for a weird mailnews bug
-                cMCParams.needCharsetForcing = true;
-                cMCParams.charsetToForce = cMCParams.currentCharset;
-                return;
-              }
+              cMCParams.recodeUTF8 = true;
+              cMCParams.recodePreferredCharset = true;
+              // but note we might still need to force the charset!
             }
           }
           break;
@@ -787,71 +779,39 @@ BiDiMailUI.Display = {
           }
       }
     }
-    else { // reloading in different charset is allowed
-      switch(mailnewsDecodingType) {
+    else { // mustKeepCharset
+      switch(cMCParams.mailnewsDecodingType) {
         case "latin-charset":
-          if (!havePreferredCharsetText) {
-            if (!haveUTF8Text) {
-              // YNNN
-            }
-            else {
-              // YNNY
-              BiDiMailUI.performCorrectiveRecoding(cMCParams.body,cMCParams.preferredCharset,mailnewsDecodingType,false,true);
-            }
-          }
-          else {
-            if (!haveUTF8Text) {
-              // YNYN
-              BiDiMailUI.performCorrectiveRecoding(cMCParams.body,cMCParams.preferredCharset,mailnewsDecodingType,true,false);
-            }
-            else {
-              // YNYY
-              BiDiMailUI.performCorrectiveRecoding(cMCParams.body,cMCParams.preferredCharset,mailnewsDecodingType,true,true);
-            }
-          }
+          // YNNN, YNNY, YNYN, YNYY
+          cMCParams.recodePreferredCharset = havePreferredCharsetText;
+          cMCParams.recodeUTF8 = haveUTF8Text;
           break;
         case "preferred-charset":
-          if (!havePreferredCharsetText) {
-            if (!haveUTF8Text) {
-              // YCNN
-            }
-            else {
-              // YCNY
-              BiDiMailUI.performCorrectiveRecoding(cMCParams.body,cMCParams.preferredCharset,mailnewsDecodingType,false,true);
-            }
-          }
-          else {
-            if (!haveUTF8Text) {
-              // YCYN
-            }
-            else {
-              // YCYY
-              BiDiMailUI.performCorrectiveRecoding(cMCParams.body,cMCParams.preferredCharset,mailnewsDecodingType,false,true);
-            }
-          }
+          // YCNN, YCNY, YCYN, YCYY
+          cMCParams.recodePreferredCharset = false;
+          cMCParams.recodeUTF8 = haveUTF8Text;
           break;
         case "UTF-8":
-          if (!havePreferredCharsetText) {
-            if (!haveUTF8Text) {
-              // YUNN
-            }
-            else {
-              // YUNY
-            }
-          }
-          else {
-            if (!haveUTF8Text) {
-              // YUYN
-              BiDiMailUI.performCorrectiveRecoding(cMCParams.body,cMCParams.preferredCharset,mailnewsDecodingType,true,false);
-            }
-            else {
-              // YUYY
-              BiDiMailUI.performCorrectiveRecoding(cMCParams.body,cMCParams.preferredCharset,mailnewsDecodingType,true,false);
-            }
-          }
+          // YUNN, YUNY, YUYN, YUYY
+          cMCParams.recodePreferredCharset = havePreferredCharsetText;
+          cMCParams.recodeUTF8 = false;
       }
     }
-    return true;
+    // at this point we _believe_ there's no need for charset forcing,
+    // and we'll only perform corrective recoding
+    if (cMCParams.recodeUTF8 || cMCParams.recodePreferredCharset) {
+      BiDiMailUI.performCorrectiveRecoding(cMCParams);
+      if (cMCParams.needCharsetForcing) {
+#ifdef DEBUG_fixLoadedMessageCharsetIssues
+        // need to re-apply the same charset, as a workaround for a weird mailnews bug;
+        // see https://www.mozdev.org/bugs/show_bug.cgi?id=18707
+        cMCParams.charsetToForce = cMCParams.currentCharset;
+        BiDiMailUI.JSConsoleService.logStringMessage(
+          "re-applying charset - bug 18707 workaround");
+#endif
+      }
+    }
+    return;
   },
 
 // returns true if numeric entities were found

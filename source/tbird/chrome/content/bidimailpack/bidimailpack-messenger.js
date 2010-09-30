@@ -106,11 +106,41 @@ BiDiMailUI.MessageOverlay = {
       }
     }
 
+    var displayedMessageSubject;
+    try {
+      // This is a very volatile piece of code; it may very well differ
+      // between TB and SM and between versions, with extensions such as
+      // Mnenhy etc.
+      var expandedSubjectBox = document.getElementById('expandedsubjectBox');
+      if (expandedSubjectBox.hasAttribute("headervalue")) {
+        displayedMessageSubject = expandedSubjectBox.getAttribute("headervalue");
+      } 
+      else {
+        var valueNode = document.getAnonymousElementByAttribute(expandedSubjectBox,"anonid","headerValue");
+        if (valueNode.firstChild) {
+          displayedMessageSubject = valueNode.firstChild.data;
+        }
+        else displayedMessageSubject = valueNode.value;
+      }
+    }
+    catch(ex) {
+#ifdef DEBUG_onLoad
+      BiDiMailUI.JSConsoleService.logStringMessage("couldn't get subject:\n" + ex);
+#endif
+    }
+
     var charsetPhaseParams = {
       body: domDocument.body,
       charsetOverrideInEffect: msgWindow.charsetOverride,
       currentCharset: msgWindow.mailCharacterSet,
       messageHeader: msgHdr,
+      messageSubject: displayedMessageSubject,
+      subjectSetter: 
+        function(str) {
+          // using the appropriate setter rather than directly
+          // setting the valueNode's data
+          document.getElementById('expandedsubjectBox').headerValue = str;
+        },
       unusableCharsetHandler : BiDiMailUI.MessageOverlay.promptForDefaultCharsetChange,
       needCharsetForcing: false, // this is an out parameter
       charsetToForce: null       // this is an out parameter
@@ -122,7 +152,8 @@ BiDiMailUI.MessageOverlay = {
       // we're reloading with a different charset, don't do anything else
       return;
     }
-    BiDiMailUI.MessageOverlay.dontReload = false; // clearing BiDiMailUI.MessageOverlay.dontReload for other messages
+    BiDiMailUI.MessageOverlay.dontReload = false; 
+      // clearing BiDiMailUI.MessageOverlay.dontReload for other messages
 
     BiDiMailUI.Display.ActionPhases.htmlNumericEntitiesDecoding(body);
     BiDiMailUI.Display.ActionPhases.quoteBarsCSSFix(domDocument);
