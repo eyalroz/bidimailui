@@ -801,11 +801,14 @@ BiDiMailUI.Display = {
     // and we'll only perform corrective recoding
     if (cMCParams.recodeUTF8 || cMCParams.recodePreferredCharset) {
       BiDiMailUI.performCorrectiveRecoding(cMCParams);
-      if (cMCParams.needCharsetForcing) {
+      // it may be the case that the corrective recoding suggests we need to force
+      // the charset even though we've already done so; currently this is only
+      // possible in the situation of bug 18707
+      if (!mustKeepCharset && cMCParams.needCharsetForcing) {
+        cMCParams.charsetToForce = cMCParams.currentCharset;
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
         // need to re-apply the same charset, as a workaround for a weird mailnews bug;
         // see https://www.mozdev.org/bugs/show_bug.cgi?id=18707
-        cMCParams.charsetToForce = cMCParams.currentCharset;
         BiDiMailUI.JSConsoleService.logStringMessage(
           "re-applying charset - bug 18707 workaround");
 #endif
