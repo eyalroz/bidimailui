@@ -19,11 +19,11 @@
         accesskey="&menu-bidimail-insert-contol-character.accesskey;">
    <menupopup id="menu_Context_ControlCharacters_Popup">
      <menuitem id="contextInsertLRM"
-               oncommand="InsertControlCharacter('\u200e');"
+               command="cmd_insert_lrm"
                accesskey="&menu-bidimail-lrm.accesskey;"
                label="&menu-bidimail-lrm.label;"/>
      <menuitem id="contextInsertRLM"
-               oncommand="InsertControlCharacter('\u200f');"
+               command="cmd_insert_rlm"
                accesskey="&menu-bidimail-rlm.accesskey;"
                label="&menu-bidimail-rlm.label;"/>
    </menupopup>
