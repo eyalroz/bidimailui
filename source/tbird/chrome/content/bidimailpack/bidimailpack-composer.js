@@ -86,6 +86,18 @@ BiDiMailUI.Composition = {
 #endif
 
       if (IsHTMLEditor()) {
+        var defaultToSendBothTextAndHTML =
+          BiDiMailUI.Prefs.getBoolPref("compose.default_to_send_text_with_html", false);
+        
+        var defaultOptionElementId = 
+          (defaultToSendBothTextAndHTML ? "format_both" : "format_html");
+        document.getElementById(defaultOptionElementId)
+                .setAttribute("checked", "true");
+        OutputFormatMenuSelect(
+          {getAttribute: function () {
+            return defaultOptionElementId;
+          }} );
+
         BiDiMailUI.Composition.setParagraphMarginsRule();
         if (BiDiMailUI.Composition.alternativeEnterBehavior)
           BiDiMailUI.Composition.setParagraphMode();
