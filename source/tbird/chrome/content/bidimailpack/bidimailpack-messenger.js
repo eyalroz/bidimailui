@@ -23,6 +23,14 @@ BiDiMailUI.MessageOverlay = {
     BiDiMailUI.MessageOverlay.updateDirectionMenuButton(newForcedDirection);
   },
 
+  forceDirection : function(ev,forcedDirection) {
+    var messagePane = document.getElementById("messagepane");
+    var body = messagePane.contentDocument.body;
+    BiDiMailUI.Display.setMessageDirectionForcing(body,forcedDirection);
+    BiDiMailUI.MessageOverlay.updateDirectionMenuButton(forcedDirection);
+    ev.stopPropagation();
+  },
+
   updateDirectionMenuButton : function(forcedDirection) {
 #ifdef DEBUG_updateDirectionMenuButton
     BiDiMailUI.JSConsoleService.logStringMessage(
