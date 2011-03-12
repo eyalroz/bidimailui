@@ -63,17 +63,17 @@
           type="radio"
           id="bidimailui-forcing-menu-autodetect"
           label="&bidimailui-forcing-menu-autodetect.label;"
-          oncommand="BiDiMailUI.Display.setMessageDirectionForcing(null);" />
+          oncommand="BiDiMailUI.MessageOverlay.forceDirection(event,null);" />
         <menuitem 
           type="radio"
           id="bidimailui-forcing-menu-ltr"
           label="&bidimailui-forcing-menu-ltr.label;"
-          oncommand="BiDiMailUI.Display.setMessageDirectionForcing('ltr');" />
+          oncommand="BiDiMailUI.MessageOverlay.forceDirection(event,'ltr');" />
         <menuitem 
           type="radio"
           id="bidimailui-forcing-menu-rtl"
           label="&bidimailui-forcing-menu-rtl.label;"
-          oncommand="BiDiMailUI.Display.setMessageDirectionForcing('rtl');" />
+          oncommand="BiDiMailUI.MessageOverlay.forceDirection(event,'rtl');" />
       </menupopup>
     </toolbarbutton>
 #ifdef MOZ_SUITE_LEGACY
