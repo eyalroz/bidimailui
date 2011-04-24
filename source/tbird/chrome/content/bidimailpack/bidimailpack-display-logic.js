@@ -546,9 +546,9 @@ BiDiMailUI.Display = {
     YNNY - recode UTF-8 text
     YNYN - recode windows-1255/6 text
     YC*Y - This is very bad, since we're not allowed to change charset;
-           we'll try recording UTF-8 text, but it'll probably won't work well
+           we'll try recoding UTF-8 text, but it probably won't work well
     *UY* - This is very bad, since we're not allowed to change charset;
-           we'll try recording windows-1255/6 text, but it'll probably won't work well
+           we'll try recoding windows-1255/6 text, but it probably won't work well
            
     Extra Notes:
 
