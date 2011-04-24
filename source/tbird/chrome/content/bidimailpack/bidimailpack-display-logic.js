@@ -171,7 +171,9 @@ BiDiMailUI.Display = {
       BiDiMailUI.JSConsoleService.logStringMessage("-----\ntext node\n-----\n" + node.nodeValue);
 #endif
       // TODO: ensure the parent's a PRE or BLOCKQUOTE or something else that's nice
-      if (! /\n[ \f\r\t\v\n\u00A0\\u2028\\u2029!-@\[-`{-\xA0\u2013\u2014\uFFFD]*\n/m.test(node.nodeValue)) {
+      textSplit = new RegExp (BiDiMailUI.RegExpStrings.TEXT_SPLIT_SEQUENCE, "m");
+
+      if (! textSplit.test(node.nodeValue)) {
          node = treeWalker.nextNode();
          continue;
       }
