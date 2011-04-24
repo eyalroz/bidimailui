@@ -141,6 +141,9 @@ BiDiMailUI.Prefs = {
 // Some regexp string constants
 
 BiDiMailUI.RegExpStrings = {};
+BiDiMailUI.RegExpStrings.TEXT_SPLIT_SEQUENCE = 
+ "\\n[ \\f\\r\\t\\v\\n\\u00A0\\u2028\\u2029!-@\\[-`{-\\xA0\\u2013\\u2014\\uFFFD]*\\n";
+ 
 BiDiMailUI.RegExpStrings.MISDETECTED_RTL_CHARACTER =
   "[\\xBF-\\xD6\\xD8-\\xFF]";
 BiDiMailUI.RegExpStrings.MISDETECTED_RTL_SEQUENCE =
