@@ -523,7 +523,8 @@ BiDiMailUI.Display = {
          U = UTF-8, 
        we won't handle any issues with other charsets
     3. Message contains windows-1255/6 text (Y/N)
-    4. Message contains UTF-8 text (Y/N)
+    4. Message contains UTF-8 text (that is, UTF-8 octet sequences 
+       which are not iso-8859-1 chars 0-127) (Y/N)
 
     What should we do for each combination of values? 
     (* means all possible values)
@@ -623,7 +624,7 @@ BiDiMailUI.Display = {
         // need to look for a character in the Hebrew or Arabic Unicode range
         contentToMatch = new RegExp(
           (cMCParams.mailnewsDecodingType == "latin-charset") ?
-          // Here we want a sequence of Unicode value of characters whose 
+          // Here we want a sequence of Unicode values of characters whose 
           // windows-1252 octet is such that would be decoded as 'clearly'
           // Hebrew or Arabic text; we could be less or more picky depending
           // on what we feel about characters like power-of-2, paragraph-mark,
