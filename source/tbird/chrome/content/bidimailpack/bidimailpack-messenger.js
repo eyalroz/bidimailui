@@ -9,6 +9,7 @@ BiDiMailUI.MessageOverlay = {
   cycleDirectionSettings : function() {
     var messagePane = document.getElementById("messagepane");
     var body = messagePane.contentDocument.body;
+    var newForcedDirection;
     switch (body.getAttribute('bidimailui-forced-direction')) {
       case 'ltr':
         newForcedDirection = 'rtl';
