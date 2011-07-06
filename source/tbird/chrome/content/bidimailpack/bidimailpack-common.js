@@ -173,6 +173,7 @@ BiDiMailUI.RegExpStrings.CODEPAGE_MISDETECTION_SEQUENCE =
 BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE =
 
   // Hebrew
+  // ------
   "(?:" +
   // just octet sequences...
   "(?:\\xD6[\xB0-\xBF])|" +
@@ -183,7 +184,8 @@ BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE =
   "|" + 
 
   // Arabic:
-  "(?:" +
+  // ------
+    "(?:" +
   // just octet sequences...
   "(?:\\xD8[\\x8C-\\xBF])|" +
   "(?:\\xD9[\\x80-\\xB9])|" +
@@ -196,13 +198,26 @@ BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE =
   " ?\"?){3}" +
   "|" + 
 
+  // Hebrew or Arabic:
+  // ------------------
+  // just octet sequences - but FFFD instead of D6 or D7, see bug 24175
+  "(?:" +
+  "(?:\\uFFFD[\x80-\xBF])" +
+  // ... and at least four characters, to be on the safe side
+  " ?\"?){3}" +
+  "|" + 
+
   // while \uFFFD characters are possible when mis-decoding UTF-8 as windows-1252/5/6
   // (e.g. windows-1255 doesn't have \x81 as a character),
   // contiguous sequences of them are highly unlikely,
   // as most relevant Unicode ranges are such that the first UTF-8 byte will be in
   // the ASCII range and therefore not be decoded as \uFFFD
-  //"|" + 
+  //
+  // (this has been removed from the pattern due to clashing with certain cases in
+  //  which charset text is misdecoded as UTF-8 with Mozilla 'cheating', see bug 23322)
+  //
   //"\\uFFFD{3,}" +
+  //"|" + 
   
   // UTF-8 BOM octets - undecoded
   // (perhaps we should allow these not just at the beginning of the line?)
