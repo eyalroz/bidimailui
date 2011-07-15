@@ -42,24 +42,12 @@
     <em:contributor>Ayman Hourieh</em:contributor>
     <em:contributor>Reuven Gonen</em:contributor>
     <em:homepageURL>http://bidiui.mozdev.org/</em:homepageURL>
-
+    <em:type>2</em:type> <!-- type=extension -->
     <em:iconURL>chrome://bidimailpack/content/bidimailpack.png</em:iconURL>
 
 #ifndef MOZ_SUITE_LEGACY
     <em:optionsURL>chrome://bidimailpack/content/bidimailpack-prefs.xul</em:optionsURL>
 #endif
 
-    <!-- Packages, Skins and Locales that this extension registers -->
-    <em:file>
-      <Description about="urn:mozilla:extension:file:bidimailpack.jar">
-        <em:package>content/bidimailpack/</em:package>
-        <em:locale>locale/en-US/bidimailpack/</em:locale>
-        <em:locale>locale/he/bidimailpack/</em:locale>
-        <em:locale>locale/ar/bidimailpack/</em:locale>
-        <em:locale>locale/fa/bidimailpack/</em:locale>
-        <em:locale>locale/ur/bidimailpack/</em:locale>
-        <em:skin>skin/classic/bidimailpack/</em:skin>
-      </Description>
-    </em:file>
   </Description>
 </RDF>
