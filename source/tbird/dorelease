@@ -45,13 +45,13 @@ done
 
 # create a CVS tag for the code used to build the release
 
-cvs -d $CVSROOT tag -d ${RELEASE_TAG}
-cvs -d $CVSROOT tag ${RELEASE_TAG}
+until cvs -d $CVSROOT tag -d ${RELEASE_TAG}; do : ; done
+until cvs -d $CVSROOT tag ${RELEASE_TAG}; do : ; done
 
 cd ${SRCDIR}/${BUILDTOOLS}
 
-cvs -d $CVSROOT tag -d ${RELEASE_TAG}
-cvs -d $CVSROOT tag ${RELEASE_TAG}
+until cvs -d $CVSROOT tag -d ${RELEASE_TAG}; do : ; done
+until cvs -d $CVSROOT tag ${RELEASE_TAG}; do : ; done
 
 cd ${SRCDIR}
 
@@ -60,7 +60,7 @@ cd ${SRCDIR}
 # and
 # http://www.mozdev.org/drupal/wiki/MozdevCVSTipsTroubleshooting
 # for details
-./dummy_export ${CVS_USERNAME}
+until ./dummy_export ${CVS_USERNAME}; do : ; done
 
 # add the release to the CVS repository
 # (it gets propagated to the mozdev download mirrors)
@@ -68,10 +68,10 @@ cd ${SRCDIR}
 cd ${SRCDIR}/${DOWNLOADS}
 
 if [ ! -e ${VERSION}/CVS ]; then
-	cvs -d $CVSROOT add ${VERSION}/
+	until cvs -d $CVSROOT add ${VERSION}/; do : ; done
 fi
 XPI_ENTIRES_IN_VERSION_DIR=`grep xpi ${VERSION}/CVS/Entries | wc -l`
 if [ ${XPI_ENTIRES_IN_VERSION_DIR} == 0 ]; then
-        cvs -d $CVSROOT add `ls ${VERSION}/*.xpi`
+        until cvs -d $CVSROOT add `ls ${VERSION}/*.xpi`; do : ; done
 fi
-cvs -d $CVSROOT ci ${VERSION}/ latest/
+until cvs -d $CVSROOT ci ${VERSION}/ latest/; do : ; done
