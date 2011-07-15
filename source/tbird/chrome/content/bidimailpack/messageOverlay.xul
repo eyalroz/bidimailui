@@ -15,7 +15,10 @@
   <script type="application/x-javascript" src="bidimailpack-display-logic.js"/>
   <script type="application/x-javascript" src="bidimailpack-messenger.js"/>
   <script type="application/x-javascript">
-    BiDiMailUI.MessageOverlay.installComposeWindowEventHandlers();
+    window.addEventListener(
+      'load',
+      BiDiMailUI.MessageOverlay.installComposeWindowEventHandlers,
+      true);
   </script>
 
   <keyset id="mailKeys">
