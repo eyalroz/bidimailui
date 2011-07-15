@@ -1,37 +1,37 @@
-﻿<!ENTITY menu-bidimail-switch-message-direction.label        "הפוך כיוון הודעה">
-<!ENTITY menu-bidimail-cycle-message-direction.label         "עבור לאופן כיוון ההודעה הבא בסבב">
-<!ENTITY menu-bidimail-switch-page-direction.label           "הפוך כיוון דף">
-<!ENTITY menu-bidimail-switch-document-direction.accesskey   "ה">
-<!ENTITY key-bidimail-switch-document-direction.keycode      "ה">
-<!ENTITY key-bidimail-switch-document-direction.modifiers    "accel,shift">
-<!ENTITY key-bidimail-switch-paragraph-direction.keycode     "פ">
-<!ENTITY key-bidimail-switch-paragraph-direction.modifiers   "accel">
-<!ENTITY menu-bidimail-cycle-document-direction.accesskey    "ע">
-<!ENTITY key-bidimail-cycle-document-direction.keycode       "ע">
-<!ENTITY key-bidimail-cycle-document-direction.modifiers     "accel,shift">
-
-<!ENTITY menu-bidimail-switch-paragraph-direction.label      "הפוך כיוון פיסקה">
-<!ENTITY menu-bidimail-switch-paragraph-direction.accesskey  "פ">
-<!ENTITY menu-bidimail-clear-paragraph-direction.label       "נקה קביעת כיוון פיסקה">
-<!ENTITY menu-bidimail-clear-paragraph-direction.accesskey   "נ">
-
 <!ENTITY bidimail-ltr-button.label                           "שמאל־לימין">
 <!ENTITY bidimail-ltr-button.tip                             "כוון משמאל־לימין">
 <!ENTITY bidimail-rtl-button.label                           "ימין־לשמאל">
 <!ENTITY bidimail-rtl-button.tip                             "כוון מימין־לשמאל">
-
-<!ENTITY bidimailui-forcing-menubutton.label                 "כיוון">
-<!ENTITY bidimailui-forcing-menubutton.tip                   "בקרת כיוון הודעה">
-<!ENTITY bidimailui-forcing-menu.label                       "בקרת כיוון הודעה:">
 <!ENTITY bidimailui-forcing-menu-autodetect.label            "זיהוי כיוונים אוטומטי">
 <!ENTITY bidimailui-forcing-menu-ltr.label                   "כפה כיוון משמאל-לימין">
 <!ENTITY bidimailui-forcing-menu-rtl.label                   "כפה כיוון מימין-לשמאל">
-
-<!ENTITY menu-bidimail-contol-character.label                "תו בקרה">
+<!ENTITY bidimailui-forcing-menu.label                       "בקרת כיוון הודעה:">
+<!ENTITY bidimailui-forcing-menubutton.label                 "כיוון">
+<!ENTITY bidimailui-forcing-menubutton.tip                   "בקרת כיוון הודעה">
+<!ENTITY key-bidimail-cycle-document-direction.keycode       "ע">
+<!ENTITY key-bidimail-cycle-document-direction.modifiers     "accel,shift">
+<!ENTITY key-bidimail-insert-lrm.keycode                     "ש">
+<!ENTITY key-bidimail-insert-lrm.modifiers                   "accel,shift">
+<!ENTITY key-bidimail-insert-rlm.keycode                     "י">
+<!ENTITY key-bidimail-insert-rlm.modifiers                   "accel,shift">
+<!ENTITY key-bidimail-switch-document-direction.keycode      "ה">
+<!ENTITY key-bidimail-switch-document-direction.modifiers    "accel,shift">
+<!ENTITY key-bidimail-switch-paragraph-direction.keycode     "פ">
+<!ENTITY key-bidimail-switch-paragraph-direction.modifiers   "accel">
+<!ENTITY menu-bidimail-clear-paragraph-direction.accesskey   "נ">
+<!ENTITY menu-bidimail-clear-paragraph-direction.label       "נקה קביעת כיוון פיסקה">
 <!ENTITY menu-bidimail-contol-character.accesskey            "ב">
-<!ENTITY menu-bidimail-insert-contol-character.label         "הוסף תו בקרה">
+<!ENTITY menu-bidimail-contol-character.label                "תו בקרה">
+<!ENTITY menu-bidimail-cycle-document-direction.accesskey    "ע">
+<!ENTITY menu-bidimail-cycle-message-direction.label         "עבור לאופן כיוון ההודעה הבא בסבב">
 <!ENTITY menu-bidimail-insert-contol-character.accesskey     "ב">
-<!ENTITY menu-bidimail-lrm.label                             "משמאל־לימין (LRM)">
+<!ENTITY menu-bidimail-insert-contol-character.label         "הוסף תו בקרה">
 <!ENTITY menu-bidimail-lrm.accesskey                         "ש">
-<!ENTITY menu-bidimail-rlm.label                             "מימין־לשמאל (RLM)">
+<!ENTITY menu-bidimail-lrm.label                             "משמאל־לימין (LRM)">
 <!ENTITY menu-bidimail-rlm.accesskey                         "מ">
+<!ENTITY menu-bidimail-rlm.label                             "מימין־לשמאל (RLM)">
+<!ENTITY menu-bidimail-switch-document-direction.accesskey   "ה">
+<!ENTITY menu-bidimail-switch-message-direction.label        "הפוך כיוון הודעה">
+<!ENTITY menu-bidimail-switch-page-direction.label           "הפוך כיוון דף">
+<!ENTITY menu-bidimail-switch-paragraph-direction.accesskey  "פ">
+<!ENTITY menu-bidimail-switch-paragraph-direction.label      "הפוך כיוון פיסקה">

@@ -1,42 +1,37 @@
-﻿<!ENTITY menu-bidimail-switch-message-direction.label                 "Switch Message Direction">
-<!ENTITY menu-bidimail-cycle-message-direction.label                  "Cycle Message Direction Mode">
-<!ENTITY menu-bidimail-switch-page-direction.label                    "Switch Page Direction">
-<!ENTITY menu-bidimail-switch-document-direction.accesskey            "w">
-<!ENTITY menu-bidimail-cycle-document-direction.accesskey             "y">
-
-<!ENTITY key-bidimail-switch-document-direction.keycode               "X">
-<!ENTITY key-bidimail-switch-document-direction.modifiers             "accel,shift">
-<!ENTITY key-bidimail-cycle-document-direction.keycode                "X">
-<!ENTITY key-bidimail-cycle-document-direction.modifiers              "accel,shift">
-<!ENTITY key-bidimail-switch-paragraph-direction.keycode              "E">
-<!ENTITY key-bidimail-switch-paragraph-direction.modifiers            "accel">
-<!ENTITY key-bidimail-insert-lrm.keycode                              "L">
-<!ENTITY key-bidimail-insert-lrm.modifiers                            "accel,shift">
-<!ENTITY key-bidimail-insert-rlm.keycode                              "R">
-<!ENTITY key-bidimail-insert-rlm.modifiers                            "accel,shift">
-
-<!ENTITY menu-bidimail-switch-paragraph-direction.label               "Switch Paragraph Direction">
-<!ENTITY menu-bidimail-switch-paragraph-direction.accesskey           "w">
-<!ENTITY menu-bidimail-clear-paragraph-direction.label                "Clear Paragraph Direction">
-<!ENTITY menu-bidimail-clear-paragraph-direction.accesskey            "a">
-
 <!ENTITY bidimail-ltr-button.label                                    "LTR">
 <!ENTITY bidimail-ltr-button.tip                                      "Set Left-to-Right Direction">
 <!ENTITY bidimail-rtl-button.label                                    "RTL">
 <!ENTITY bidimail-rtl-button.tip                                      "Set Right-to-Left Direction">
-
-<!ENTITY bidimailui-forcing-menubutton.label                          "Direction">
-<!ENTITY bidimailui-forcing-menubutton.tip                            "Message Direction Control">
-<!ENTITY bidimailui-forcing-menu.label                                "Message Direction Control:">
 <!ENTITY bidimailui-forcing-menu-autodetect.label                     "Autodetect Directions">
 <!ENTITY bidimailui-forcing-menu-ltr.label                            "Force Left-to-Right">
 <!ENTITY bidimailui-forcing-menu-rtl.label                            "Force Right-to-Left">
-
-<!ENTITY menu-bidimail-contol-character.label                         "Control Character">
+<!ENTITY bidimailui-forcing-menu.label                                "Message Direction Control:">
+<!ENTITY bidimailui-forcing-menubutton.label                          "Direction">
+<!ENTITY bidimailui-forcing-menubutton.tip                            "Message Direction Control">
+<!ENTITY key-bidimail-cycle-document-direction.keycode                "X">
+<!ENTITY key-bidimail-cycle-document-direction.modifiers              "accel,shift">
+<!ENTITY key-bidimail-insert-lrm.keycode                              "L">
+<!ENTITY key-bidimail-insert-lrm.modifiers                            "accel,shift">
+<!ENTITY key-bidimail-insert-rlm.keycode                              "R">
+<!ENTITY key-bidimail-insert-rlm.modifiers                            "accel,shift">
+<!ENTITY key-bidimail-switch-document-direction.keycode               "X">
+<!ENTITY key-bidimail-switch-document-direction.modifiers             "accel,shift">
+<!ENTITY key-bidimail-switch-paragraph-direction.keycode              "E">
+<!ENTITY key-bidimail-switch-paragraph-direction.modifiers            "accel">
+<!ENTITY menu-bidimail-clear-paragraph-direction.accesskey            "a">
+<!ENTITY menu-bidimail-clear-paragraph-direction.label                "Clear Paragraph Direction">
 <!ENTITY menu-bidimail-contol-character.accesskey                     "n">
-<!ENTITY menu-bidimail-insert-contol-character.label                  "Insert Control Character">
+<!ENTITY menu-bidimail-contol-character.label                         "Control Character">
+<!ENTITY menu-bidimail-cycle-document-direction.accesskey             "y">
+<!ENTITY menu-bidimail-cycle-message-direction.label                  "Cycle Message Direction Mode">
 <!ENTITY menu-bidimail-insert-contol-character.accesskey              "I">
-<!ENTITY menu-bidimail-lrm.label                                      "Left-to-Right Mark">
+<!ENTITY menu-bidimail-insert-contol-character.label                  "Insert Control Character">
 <!ENTITY menu-bidimail-lrm.accesskey                                  "L">
-<!ENTITY menu-bidimail-rlm.label                                      "Right-to-Left Mark">
+<!ENTITY menu-bidimail-lrm.label                                      "Left-to-Right Mark">
 <!ENTITY menu-bidimail-rlm.accesskey                                  "R">
+<!ENTITY menu-bidimail-rlm.label                                      "Right-to-Left Mark">
+<!ENTITY menu-bidimail-switch-document-direction.accesskey            "w">
+<!ENTITY menu-bidimail-switch-message-direction.label                 "Switch Message Direction">
+<!ENTITY menu-bidimail-switch-page-direction.label                    "Switch Page Direction">
+<!ENTITY menu-bidimail-switch-paragraph-direction.accesskey           "w">
+<!ENTITY menu-bidimail-switch-paragraph-direction.label               "Switch Paragraph Direction">
