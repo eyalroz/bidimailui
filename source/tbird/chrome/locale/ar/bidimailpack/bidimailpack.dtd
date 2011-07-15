@@ -1,37 +1,40 @@
-﻿<!ENTITY menu-bidimail-switch-message-direction.label "اعكس اتّجاه الرّسالة">
-<!ENTITY menu-bidimail-cycle-message-direction.label "بدّل اتجاه الرسالة">
-<!ENTITY menu-bidimail-switch-page-direction.label "اعكس اتّجاه الصفحة">
-<!ENTITY menu-bidimail-switch-document-direction.accesskey "ع">
-<!ENTITY menu-bidimail-cycle-document-direction.accesskey "ب">
-<!ENTITY key-bidimail-switch-document-direction.keycode "X">
-<!ENTITY key-bidimail-switch-document-direction.modifiers "accel,shift">
-<!ENTITY key-bidimail-cycle-document-direction.keycode "X">
-<!ENTITY key-bidimail-cycle-document-direction.modifiers "accel,shift">
-<!ENTITY key-bidimail-switch-paragraph-direction.keycode "E">
-<!ENTITY key-bidimail-switch-paragraph-direction.modifiers "accel">
-
-<!ENTITY menu-bidimail-switch-paragraph-direction.label "اعكس اتّجاه الفقرة">
-<!ENTITY menu-bidimail-switch-paragraph-direction.accesskey "ف">
-<!ENTITY menu-bidimail-clear-paragraph-direction.label "امح اتّجاه الفقرة">
-<!ENTITY menu-bidimail-clear-paragraph-direction.accesskey "م">
-
-<!ENTITY bidimail-ltr-button.label "يسارا إلى يمينا">
+﻿<!ENTITY bidimail-ltr-button.label "يسارا إلى يمينا">
 <!ENTITY bidimail-ltr-button.tip "اجعل الاتّجاه من اليسار إلى اليمين">
 <!ENTITY bidimail-rtl-button.label "يمينا إلى يسارا">
 <!ENTITY bidimail-rtl-button.tip "اجعل الاتّجاه من اليمين إلى اليسار">
-
-<!ENTITY bidimailui-forcing-menubutton.label "الاتجاه">
-<!ENTITY bidimailui-forcing-menubutton.tip "التحكم في اتجاه ارسالة">
-<!ENTITY bidimailui-forcing-menu.label "التحكم في اتجاه ارسالة:">
 <!ENTITY bidimailui-forcing-menu-autodetect.label "تعرف على الاتجاهات آليا">
 <!ENTITY bidimailui-forcing-menu-ltr.label "افرض يسار إلى يمين">
 <!ENTITY bidimailui-forcing-menu-rtl.label "افرض يمين إلى يسار">
-
+<!ENTITY bidimailui-forcing-menu.label "التحكم في اتجاه ارسالة:">
+<!ENTITY bidimailui-forcing-menubutton.label "الاتجاه">
+<!ENTITY bidimailui-forcing-menubutton.tip "التحكم في اتجاه ارسالة">
+<!ENTITY key-bidimail-cycle-document-direction.keycode "ب">
+<!ENTITY key-bidimail-cycle-document-direction.modifiers "accel,shift">
+<!ENTITY key-bidimail-insert-lrm.keycode "س">
+<!ENTITY key-bidimail-insert-lrm.modifiers "accel,shift">
+<!ENTITY key-bidimail-insert-rlm.keycode "م">
+<!ENTITY key-bidimail-insert-rlm.modifiers "accel,shift">
+<!ENTITY key-bidimail-switch-document-direction.keycode "X">
+<!ENTITY key-bidimail-switch-document-direction.modifiers "accel,shift">
+<!ENTITY key-bidimail-switch-paragraph-direction.keycode "E">
+<!ENTITY key-bidimail-switch-paragraph-direction.modifiers "accel">
+<!ENTITY menu-bidimail-clear-paragraph-direction.label "امح اتّجاه الفقرة">
+<!ENTITY menu-bidimail-clear-paragraph-direction.accesskey "م">
 <!ENTITY menu-bidimail-contol-character.label "رمز تحكّم">
 <!ENTITY menu-bidimail-contol-character.accesskey "ت">
-<!ENTITY menu-bidimail-insert-contol-character.label "أدرِج رمز تحكّم">
+<!ENTITY menu-bidimail-cycle-document-direction.accesskey "ب">
+<!ENTITY menu-bidimail-cycle-message-direction.label "بدّل اتجاه الرسالة">
 <!ENTITY menu-bidimail-insert-contol-character.accesskey "ت">
-<!ENTITY menu-bidimail-lrm.label "علامة يسار إلى يمين">
+<!ENTITY menu-bidimail-insert-contol-character.label "أدرِج رمز تحكّم">
 <!ENTITY menu-bidimail-lrm.accesskey "س">
-<!ENTITY menu-bidimail-rlm.label "علامة يمين إلى يسار">
+<!ENTITY menu-bidimail-lrm.label "علامة يسار إلى يمين">
 <!ENTITY menu-bidimail-rlm.accesskey "م">
+<!ENTITY menu-bidimail-rlm.label "علامة يمين إلى يسار">
+<!ENTITY menu-bidimail-switch-document-direction.accesskey "ع">
+<!ENTITY menu-bidimail-switch-message-direction.label "اعكس اتّجاه الرّسالة">
+<!ENTITY menu-bidimail-switch-page-direction.label "اعكس اتّجاه الصفحة">
+<!ENTITY menu-bidimail-switch-paragraph-direction.accesskey "ف">
+<!ENTITY menu-bidimail-switch-paragraph-direction.label "اعكس اتّجاه الفقرة">
+
+
+
