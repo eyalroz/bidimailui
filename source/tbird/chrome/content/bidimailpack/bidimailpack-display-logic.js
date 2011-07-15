@@ -1,7 +1,8 @@
 // Code outside BiDi Mail UI should only use the 
 // BiDiMailUI.Display.ActionPhases and perhaps the
-// BiDiMailUI.Display.setMessageDirectionForcing function: ActionPhase functions
-// are the four phases of action performed when loading a message
+// BiDiMailUI.Display.setMessageDirectionForcing function
+// (ActionPhase functions are the four phases of action 
+// performed when loading a message)
 
 BiDiMailUI.Display = {
   ActionPhases : {
