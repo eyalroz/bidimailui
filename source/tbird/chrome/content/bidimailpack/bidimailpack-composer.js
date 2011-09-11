@@ -774,7 +774,7 @@ BiDiMailUI.Composition = {
     // necessary on some systems to get past the point when the direction
     // is set to LTR (not by us)
     BiDiMailUI.Composition.bodyReadyListener.workaroundForcingTimeoutId = 
-      setTimeout("BiDiMailUI.Composition.bodyReadyListener.NotifyComposeBodyReady()", 200);
+      setTimeout("BiDiMailUI.Composition.bodyReadyListener.NotifyComposeBodyReady()", 400);
 
 
 #ifdef DEBUG_composeWindowOnActualLoad
@@ -856,6 +856,10 @@ BiDiMailUI.Composition = {
     }
     else {
       dump("gMsgCompose not ready for this message in BiDiMailUI.Composition.composeWindowOnReopen()");
+#ifdef DEBUG_ComposeEvents
+      BiDiMailUI.JSConsoleService.logStringMessage(
+        "gMsgCompose not ready for this message in BiDiMailUI.Composition.composeWindowOnReopen()");
+#endif
     }
   },
 
