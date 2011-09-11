@@ -184,19 +184,19 @@ BiDiMailUI.MessageOverlay = {
     var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
                             .getService(Components.interfaces.nsIPromptService);
     var list = [
-      BiDiMailUI.Strings.GetStringFromName("bidimailui.chraset_dialog.set_to_windows_1255"),
-      BiDiMailUI.Strings.GetStringFromName("bidimailui.chraset_dialog.set_to_windows_1256"),
-      BiDiMailUI.Strings.GetStringFromName("bidimailui.chraset_dialog.leave_as_is")];
+      BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.set_to_windows_1255"),
+      BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.set_to_windows_1256"),
+      BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.leave_as_is")];
     var selected = {};
 
 #ifdef DEBUG_promptForDefaultCharsetChange
-    BiDiMailUI.JSConsoleService.logStringMessage("BiDiMailUI.Strings.GetStringFromName(\"bidimailui.chraset_dialog.set_to_windows_1255\") =\n" + BiDiMailUI.Strings.GetStringFromName("bidimailui.chraset_dialog.set_to_windows_1255"));
+    BiDiMailUI.JSConsoleService.logStringMessage("BiDiMailUI.Strings.GetStringFromName(\"bidimailui.charset_dialog.set_to_windows_1255\") =\n" + BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.set_to_windows_1255"));
 #endif
 
     var ok = prompts.select(
       window,
-      BiDiMailUI.Strings.GetStringFromName("bidimailui.chraset_dialog.window_title"),
-      BiDiMailUI.Strings.GetStringFromName("bidimailui.chraset_dialog.dialog_message"),
+      BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.window_title"),
+      BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.dialog_message"),
         list.length, list, selected);
 
     if (ok) {
