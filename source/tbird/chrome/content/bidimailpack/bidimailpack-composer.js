@@ -423,7 +423,8 @@ BiDiMailUI.Composition = {
 
     editor.beginTransaction();
 
-    var css = document.createElement('style');
+    var css = 
+      document.getElementById("content-frame").contentDocument.createElement('style');
     css.type = 'text/css';
     if (css.styleSheet) {
       css.styleSheet.cssText = styleRulesText;
