@@ -1,7 +1,7 @@
 #!/bin/bash 
 
 SHORTNAME="bidimailui"
-VERSION="0.9.6"
+VERSION="0.9.7"
 TARGET="$1"
 case "$TARGET" in
     tbird | tb | thunderbird)
@@ -22,7 +22,7 @@ case "$TARGET" in
 	;;
 esac
 
-if [ -z "$BIDIUI_RELEASE" ]; then
+if [ -z "$EXTENSION_RELEASE" ]; then
 	VERSION="${VERSION}b"
 fi
 
