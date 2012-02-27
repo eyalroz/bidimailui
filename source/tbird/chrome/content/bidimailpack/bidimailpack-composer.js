@@ -1150,7 +1150,7 @@ BiDiMailUI.Composition = {
 #ifdef DEBUG_keypress
     BiDiMailUI.JSConsoleService.logStringMessage('SWITCHING paragraph');
 #endif
-    SwitchParagraphDirection();
+    BiDiMailUI.Composition.SwitchParagraphDirection();
         }
         else {
 #ifdef DEBUG_keypress
