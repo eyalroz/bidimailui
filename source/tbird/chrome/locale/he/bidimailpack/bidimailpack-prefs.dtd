@@ -24,3 +24,6 @@
 <!ENTITY pixelScale.accesskey                    "פ">
 <!ENTITY ptScale.label                           "נקודות">
 <!ENTITY ptScale.accesskey                       "נ">
+
+<!ENTITY default-to-paragraph-mode.label     "התחל חיבור הודעות HTML במצב פסקאות">
+<!ENTITY default-to-paragraph-mode.accesskey "פ">
