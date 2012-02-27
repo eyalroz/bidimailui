@@ -24,3 +24,6 @@
 <!ENTITY pixelScale.accesskey                    "p">
 <!ENTITY ptScale.label                           "پوائنٹ">
 <!ENTITY ptScale.accesskey                       "t">
+
+<!ENTITY default-to-paragraph-mode.label     "Start composing new HTML messages in paragraph mode">
+<!ENTITY default-to-paragraph-mode.accesskey "p">

@@ -15,6 +15,8 @@
 <!ENTITY bidimailpack-preftree-label             "BiDi Mail UI">
 <!ENTITY display-buttons.label                   "Display direction setting buttons">
 <!ENTITY display-buttons.accesskey               "D">
+<!ENTITY default-to-paragraph-mode.label         "Start composing new HTML messages in paragraph mode">
+<!ENTITY default-to-paragraph-mode.accesskey     "p">
 
 <!ENTITY spaceBetweenParagraphs.label            "Space between paragraphs:">
 <!ENTITY spaceBetweenParagraphs.accesskey        "S">

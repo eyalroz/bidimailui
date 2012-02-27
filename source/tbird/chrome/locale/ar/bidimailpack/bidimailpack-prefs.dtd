@@ -24,3 +24,6 @@
 <!ENTITY pixelScale.accesskey "ب">
 <!ENTITY ptScale.label "نقطة">
 <!ENTITY ptScale.accesskey "ن">
+
+<!ENTITY default-to-paragraph-mode.label     "Start composing new HTML messages in paragraph mode">
+<!ENTITY default-to-paragraph-mode.accesskey "p">

@@ -18,41 +18,48 @@
     var panel = "chrome://bidimailpack/content/bidimailpack-prefs.xul";
     var _elementIDs = ["bidimailpack-default-dir",
                        "bidimailpack-reply-in-default-dir",
-                       "bidimailpack-display-buttons"];
+                       "bidimailpack-display-buttons",
+                       "bidimailpack-default-to-paragraph-mode"];
   </script>
 
   <groupbox>
     <caption label="&message-composition-groupbox-caption;"/>
-    <description>&default-dir;</description>
-      <hbox class="indent">
-        <radiogroup id="bidimailpack-default-dir"
-                    prefstring="bidiui.mail.compose.default_direction"
-                    preftype="string">
-          <radio id="bidimailpack-default-dir-ltr"
-                 value="ltr"
-                 label="&ltr.label;"
-                 accesskey="&ltr.accesskey;"/>
-          <radio id="bidimailpack-default-dir-rtl"
-                 value="rtl"
-                 label="&rtl.label;"
-                 accesskey="&rtl.accesskey;"/>
-          <radio id="bidimailpack-default-dir-last-used"
-                 value="last_used"
-                 label="&last_used.label;"
-                 accesskey="&last_used.accesskey;"/>
-        </radiogroup>
-      </hbox>
-      <spacer/>
-      <checkbox id="bidimailpack-reply-in-default-dir"
-                prefstring="bidiui.mail.compose.reply_in_default_direction"
-                label="&always-reply-in-default-dir.label;"
-                accesskey="&always-reply-in-default-dir.accesskey;"
-                autostretch="never"/>
-      <checkbox id="bidimailpack-display-buttons"
-                prefstring="bidiui.mail.compose.show_direction_buttons"
-                label="&display-buttons.label;"
-                accesskey="&display-buttons.accesskey;"
-                autostretch="never"/>
+    <groupbox>
+      <caption>&default-dir;</caption>
+      <radiogroup id="bidimailpack-default-dir"
+                  prefstring="bidiui.mail.compose.default_direction"
+                  preftype="string">
+        <radio id="bidimailpack-default-dir-ltr"
+               value="ltr"
+               label="&ltr.label;"
+               accesskey="&ltr.accesskey;"/>
+        <radio id="bidimailpack-default-dir-rtl"
+               value="rtl"
+               label="&rtl.label;"
+               accesskey="&rtl.accesskey;"/>
+        <radio id="bidimailpack-default-dir-last-used"
+               value="last_used"
+               label="&last_used.label;"
+               accesskey="&last_used.accesskey;"/>
+      </radiogroup>
+    </groupbox>
+    <spacer/>
+    <checkbox id="bidimailpack-reply-in-default-dir"
+              prefstring="bidiui.mail.compose.reply_in_default_direction"
+              label="&always-reply-in-default-dir.label;"
+              accesskey="&always-reply-in-default-dir.accesskey;"
+              autostretch="never"/>
+    <checkbox id="bidimailpack-display-buttons"
+              prefstring="bidiui.mail.compose.show_direction_buttons"
+              label="&display-buttons.label;"
+              accesskey="&display-buttons.accesskey;"
+              autostretch="never"/>
+    <checkbox id="bidimailpack-default-to-paragraph-mode"
+              prefstring="bidiui.mail.compose.start_composition_in_paragraph_mode"
+              label="&bidimailpack-default-to-paragraph-mode.label;"
+              tooltiptext="&bidimailpack-default-to-paragraph-mode.tooltiptext;"
+              accesskey="&bidimailpack-default-to-paragraph-mode.accesskey;"
+              autostretch="never"/>
 
     <spacer style="height: 1em"/>
 

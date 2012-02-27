@@ -6,7 +6,8 @@ BiDiMailUI.Composition = {
   alternativeEnterBehavior : null,
     // The default behavior of the Enter key in HTML mail messages
     // is to insert a <br>; the alternative behavior we implement
-    // is to close a paragraph and begin a new one
+    // is to close a paragraph and begin a new one (assuming we're
+    // in Paragraph Mode)
 
   CtrlShiftMachine : {
     // We have implemented a Mealy automaton for implementing the Ctrl+Shift
@@ -99,7 +100,13 @@ BiDiMailUI.Composition = {
           }} );
 
         BiDiMailUI.Composition.setParagraphMarginsRule();
-        if (BiDiMailUI.Composition.alternativeEnterBehavior)
+        // note that the "alternative Enter key behavior" is only
+        // relevant to paragraph mode; we used to always try to set
+        // paragraph mode to express that behavior, but several users
+        // have been complaining...
+        var startCompositionInParagraphMode =
+          BiDiMailUI.Prefs.getBoolPref("compose.start_composition_in_paragraph_mode", false);
+        if (startCompositionInParagraphMode)
           BiDiMailUI.Composition.setParagraphMode();
       }
 
@@ -803,7 +810,8 @@ BiDiMailUI.Composition = {
       BiDiMailUI.Composition.alternativeEnterBehavior =
         BiDiMailUI.Prefs.getBoolPref("compose.alternative_enter_behavior", true);
       // Applying the alternative Enter behavior requires the editor to be
-      // in paragraph mode; but we won't set it until the body is ready
+      // in paragraph mode; but we won't consider doing that until the body is
+      // ready.
     }
 
     BiDiMailUI.Composition.directionSwitchController.setAllCasters();
@@ -1219,8 +1227,9 @@ BiDiMailUI.Composition = {
       var isParMixed = { value: false }; // would be ignored
       var parState = editor.getParagraphState(isParMixed);
 
-      // we currently apply our own enter behavior to
-      // paragraph states "p" and "h1" through "h6"
+      // We currently apply our own enter behavior to
+      // paragraph states "p" and "h1" through "h6"; specifically,
+      // we don't apply it in Body Text mode 
 
       if (parState != "p" && parState.length != 2 )
         return;
