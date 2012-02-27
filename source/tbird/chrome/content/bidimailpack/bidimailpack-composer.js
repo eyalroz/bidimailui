@@ -107,7 +107,9 @@ BiDiMailUI.Composition = {
         var startCompositionInParagraphMode =
           BiDiMailUI.Prefs.getBoolPref("compose.start_composition_in_paragraph_mode", false);
         if (startCompositionInParagraphMode)
-          BiDiMailUI.Composition.setParagraphMode();
+          BiDiMailUI.Composition.setParagraphMode("p");
+        else 
+          BiDiMailUI.Composition.setParagraphMode("");
       }
 
       BiDiMailUI.Composition.setInitialDirection(this.messageParams);
@@ -477,10 +479,11 @@ BiDiMailUI.Composition = {
   },
 
   // Our extension likes "Paragraph Mode" rather than "Body Text" mode
-  // for composing messages, - since paragraph are block elements, with
-  // a direction setting
+  // for composing messages - since paragraph are block elements, with
+  // a direction setting; this function can set the mode either way,
+  // using "p" or "" (for paragraph and body respectively)
 
-  setParagraphMode : function() {
+  setParagraphMode : function(modeStr) {
     var editor = GetCurrentEditor();
     if (!editor) {
 #ifdef DEBUG_handleComposeReplyCSS
@@ -489,10 +492,10 @@ BiDiMailUI.Composition = {
       dump('setParagraphMode failed to acquire editor object.');
       return;
     }
-    editor.setParagraphFormat("p");
+    editor.setParagraphFormat(modeStr);
     // as we don't use doStatefulCommand, we need to update the command
     // state attribute...
-    document.getElementById("cmd_paragraphState").setAttribute("state", "p");
+    document.getElementById("cmd_paragraphState").setAttribute("state", modeStr);
   },
 
   getDisplayedCopyParams : function(messageURI,messageParams) {
