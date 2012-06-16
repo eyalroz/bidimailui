@@ -22,7 +22,7 @@ case "$TARGET" in
 	;;
 esac
 
-if [ -z "$EXTENSION_RELEASE" ]; then
+if [ -z "$BIDIUI_RELEASE" ]; then
 	VERSION="${VERSION}b"
 fi
 
