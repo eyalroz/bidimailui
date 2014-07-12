@@ -478,6 +478,7 @@ BiDiMailUI.matchInText = function(element, expression, matchResults) {
     null, // additional filter function
     false
   );
+  var node;
   while ((node = treeWalker.nextNode())) {
 #ifdef DEBUG_matchInText
 #ifdef DEBUG_scancodes
