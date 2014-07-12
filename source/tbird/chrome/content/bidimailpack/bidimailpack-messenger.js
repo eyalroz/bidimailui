@@ -210,12 +210,12 @@ BiDiMailUI.MessageOverlay = {
                   .createInstance(Components.interfaces.nsISupportsString);
       switch (selected.value) {
         case 0:
-          str.data = charsetPref = "windows-1255";
+          str.data = "windows-1255";
           BiDiMailUI.Prefs.prefService.setComplexValue("mailnews.view_default_charset", 
             Components.interfaces.nsISupportsString, str);
           return str.data;
         case 1:
-          str.data = charsetPref = "windows-1256";
+          str.data = "windows-1256";
           BiDiMailUI.Prefs.prefService.setComplexValue("mailnews.view_default_charset", 
                 Components.interfaces.nsISupportsString, str);
           return str.data;
@@ -231,5 +231,3 @@ BiDiMailUI.MessageOverlay = {
   }
   
 }
-
-
