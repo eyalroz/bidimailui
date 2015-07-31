@@ -346,34 +346,18 @@ BiDiMailUI.Display = {
       BiDiMailUI.JSConsoleService.logStringMessage('subbody ' + i + ' is ' + subBody.className);
 #endif
 
-      var nodes;
-      if (subBody.className == "moz-text-plain") {
-        nodes =  subBody.getElementsByTagName("PRE");
-        for (var j = 0; j < nodes.length; j++ ) {
-          elementsRequiringExplicitDirection.push(nodes[j]);
-        }
-      }
-      else if (subBody.className == "moz-text-flowed") {
-        nodes =  subBody.getElementsByTagName("DIV");
-        for (var j = 0; j < nodes.length; j++ ) {
+      var tagNames = {
+      	"moz-text-plain"   :"pre, blockquote",
+      	"moz-text-flowed"  :"div, blockquote",
+      	"moz-text-html"    :"div, table, blockquote"};
 
-          // Not touching elements which aren't moz-text-something,
-          // as we don't know what to do with them
-          if (/^moz-text/.test(nodes[j].className))
-            continue;
-
-          elementsRequiringExplicitDirection.push(nodes[j]);
-        }
-      }
-      else if (subBody.className == "moz-text-html") {
-        nodes =  subBody.getElementsByTagName("DIV");
-        for (var j = 0; j < nodes.length; j++ ) {
-          elementsRequiringExplicitDirection.push(nodes[j]);
-        }
-      }
-      // set directions for blockquote elements for all message types
-      nodes =  subBody.getElementsByTagName("BLOCKQUOTE");
+        // On older JS engines you would need to use getElementsByTagName("TAG") for each tag
+      var nodes =  subBody.querySelectorAll(tagNames[subBody.className]);
       for (var j = 0; j < nodes.length; j++ ) {
+        // In flowed messages, not touching elements which aren't moz-text-something,
+        // as we don't know what to do with them
+        if (subBody.className == "moz-text-flowed" && /^moz-text/.test(nodes[j].className))
+          continue;
         elementsRequiringExplicitDirection.push(nodes[j]);
       }
     }
