@@ -1,4 +1,4 @@
-content bidimailpack jar:chrome/bidimailpack.jar!/content/bidimailpack/ contentaccessible=yes
+content bidimailpack-for-message-html jar:chrome/bidimailpack.jar!/content/bidimailpack/ contentaccessible=yes
 content bidimailpack jar:chrome/bidimailpack.jar!/content/bidimailpack/
 locale bidimailpack en-US jar:chrome/bidimailpack.jar!/locale/en-US/bidimailpack/
 locale bidimailpack he jar:chrome/bidimailpack.jar!/locale/he/bidimailpack/
