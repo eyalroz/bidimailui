@@ -84,7 +84,7 @@ BiDiMailUI.Display = {
       var styleSheetLink = domDocument.createElement("link");
       styleSheetLink.rel  = "stylesheet";
       styleSheetLink.type = "text/css";
-      styleSheetLink.href = 'chrome://bidimailpack/content/' + sheetFileName;
+      styleSheetLink.href = 'chrome://bidimailpack-for-message-html/content/' + sheetFileName;
       head.appendChild(styleSheetLink);
     }
   },
@@ -853,3 +853,4 @@ BiDiMailUI.Display = {
     return entitiesFound;
   }
 }
+
