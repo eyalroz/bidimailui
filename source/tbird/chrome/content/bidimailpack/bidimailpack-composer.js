@@ -765,14 +765,6 @@ BiDiMailUI.Composition = {
 
     BiDiMailUI.Composition.determineNewMessageParams(messageBody,messageParams);
 
-    //Shouldn't be necessary with our getter
-    //if (messageParams.isReply) {
-    //  if (!BiDiMailUI.unicodeConverter)
-    //    BiDiMailUI.unicodeConverter =
-    //Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]
-    //    .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
-    //}                
-    
     BiDiMailUI.Composition.bodyReadyListener.messageParams = messageParams;
     // It seems that, in some cases, the listener does
     // not actually get notified when the body is ready,
@@ -1072,14 +1064,27 @@ BiDiMailUI.Composition = {
       );
   },
 
+  getDefaultPreventedWrapper : function(ev) {
+	try {
+      // This should be valid for Thunderbird 13.0 and later, see:
+      // https://bugzilla.mozilla.org/show_bug.cgi?id=708702 
+      return ev.defaultPrevented;
+    }
+    catch() { 
+      return ev.getPreventDefault();
+	}
+  }
+
   onKeyDown : function(ev) {
     if (
-        // The content element isn't focused
-        top.document.commandDispatcher.focusedWindow != content ||
-        // The preventDefault flag is set on the event
-        // (see http://bugzilla.mozdev.org/show_bug.cgi?id=12748)
-        ev.getPreventDefault())
+      // The content element isn't focused
+      top.document.commandDispatcher.focusedWindow != content ||
+      // The defaultPrevented flag is set on the event
+      // (see http://bugzilla.mozdev.org/show_bug.cgi?id=12748)
+      getDefaultPreventedWrapper(ev) ) 
+    {
       return;
+    }
 
     // detect Ctrl+Shift key combination, and switch direction if it
     // is used
@@ -1128,7 +1133,7 @@ BiDiMailUI.Composition = {
         top.document.commandDispatcher.focusedWindow != content ||
         // The preventDefault flag is set on the event
         // (see http://bugzilla.mozdev.org/show_bug.cgi?id=12748)
-        ev.getPreventDefault())
+        getDefaultPreventedWrapper(ev))
       return;
 
     // detect Ctrl+Shift key combination, and switch direction if it
@@ -1179,9 +1184,12 @@ BiDiMailUI.Composition = {
   },
 
   onKeyPress : function(ev) {
+    // TODO: Shouldn't we also check for focus here, like in keyup and keydown?
+	// And if so - should we factor out the check?
+
     if (// The preventDefault flag is set on the event
         // (see http://bugzilla.mozdev.org/show_bug.cgi?id=12748)
-        ev.getPreventDefault())
+        getDefaultPreventedWrapper(ev)) 
       return;
 
     // detect Ctrl+Shift key combination, and switch direction if it
