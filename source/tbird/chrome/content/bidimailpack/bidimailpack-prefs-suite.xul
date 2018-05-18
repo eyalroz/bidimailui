@@ -27,7 +27,7 @@
     <groupbox>
       <caption>&default-dir;</caption>
       <radiogroup id="bidimailpack-default-dir"
-                  prefstring="bidiui.mail.compose.default_direction"
+                  prefstring="extensions.bidiui.mail.compose.default_direction"
                   preftype="string">
         <radio id="bidimailpack-default-dir-ltr"
                value="ltr"
@@ -45,17 +45,17 @@
     </groupbox>
     <spacer/>
     <checkbox id="bidimailpack-reply-in-default-dir"
-              prefstring="bidiui.mail.compose.reply_in_default_direction"
+              prefstring="extensions.bidiui.mail.compose.reply_in_default_direction"
               label="&always-reply-in-default-dir.label;"
               accesskey="&always-reply-in-default-dir.accesskey;"
               autostretch="never"/>
     <checkbox id="bidimailpack-display-buttons"
-              prefstring="bidiui.mail.compose.show_direction_buttons"
+              prefstring="extensions.bidiui.mail.compose.show_direction_buttons"
               label="&display-buttons.label;"
               accesskey="&display-buttons.accesskey;"
               autostretch="never"/>
     <checkbox id="bidimailpack-default-to-paragraph-mode"
-              prefstring="bidiui.mail.compose.start_composition_in_paragraph_mode"
+              prefstring="extensions.bidiui.mail.compose.start_composition_in_paragraph_mode"
               label="&bidimailpack-default-to-paragraph-mode.label;"
               tooltiptext="&bidimailpack-default-to-paragraph-mode.tooltiptext;"
               accesskey="&bidimailpack-default-to-paragraph-mode.accesskey;"
