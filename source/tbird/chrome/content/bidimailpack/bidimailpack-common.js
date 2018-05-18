@@ -70,7 +70,7 @@ BiDiMailUI.JS = {
 BiDiMailUI.Prefs = {
 
   // const
-  preferencePrefix : "bidiui.mail.",
+  preferencePrefix : "extensions.bidiui.mail.",
 
   _prefService: null,
 
