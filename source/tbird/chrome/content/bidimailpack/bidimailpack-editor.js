@@ -100,7 +100,7 @@ BiDiMailUI.Editor = {
 }
 
 BiDiMailUI.Editor.directionButtonsPrefListener = {
-    domain: "bidiui.mail.compose.show_direction_buttons",
+    domain: "extensions.bidiui.mail.compose.show_direction_buttons",
     observe: function(subject, topic, prefName) {
       if (topic != "nsPref:changed")
         return;

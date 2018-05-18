@@ -16,23 +16,23 @@
             helpURI="&guide-url;"
             onpaneload="BiDiMailUI.PrefPane.init();">
     <preferences id="bidiMailUIPrefs">
-      <preference id="bidiui.mail.compose.default_direction"
-                  name="bidiui.mail.compose.default_direction"
+      <preference id="extensions.bidiui.mail.compose.default_direction"
+                  name="extensions.bidiui.mail.compose.default_direction"
                   type="string"/>
-      <preference id="bidiui.mail.compose.reply_in_default_direction"
-                  name="bidiui.mail.compose.reply_in_default_direction"
+      <preference id="extensions.bidiui.mail.compose.reply_in_default_direction"
+                  name="extensions.bidiui.mail.compose.reply_in_default_direction"
                   type="bool"/>
-      <preference id="bidiui.mail.compose.show_direction_buttons"
-                  name="bidiui.mail.compose.show_direction_buttons"
+      <preference id="extensions.bidiui.mail.compose.show_direction_buttons"
+                  name="extensions.bidiui.mail.compose.show_direction_buttons"
                   type="bool"/>
-      <preference id="bidiui.mail.compose.start_composition_in_paragraph_mode"
-                  name="bidiui.mail.compose.start_composition_in_paragraph_mode"
+      <preference id="extensions.bidiui.mail.compose.start_composition_in_paragraph_mode"
+                  name="extensions.bidiui.mail.compose.start_composition_in_paragraph_mode"
                   type="bool"/>
-      <preference id="bidiui.mail.compose.space_between_paragraphs.value"
-                  name="bidiui.mail.compose.space_between_paragraphs.value"
+      <preference id="extensions.bidiui.mail.compose.space_between_paragraphs.value"
+                  name="extensions.bidiui.mail.compose.space_between_paragraphs.value"
                   type="string"/>
-      <preference id="bidiui.mail.compose.space_between_paragraphs.scale"
-                  name="bidiui.mail.compose.space_between_paragraphs.scale"
+      <preference id="extensions.bidiui.mail.compose.space_between_paragraphs.scale"
+                  name="extensions.bidiui.mail.compose.space_between_paragraphs.scale"
                   type="string"
                   onchange="BiDiMailUI.PrefPane.updateSpaceBetweenParagraphsValue();"/>
     </preferences>
@@ -45,7 +45,7 @@
     <groupbox>
       <caption label="&default-dir;"/>
       <hbox>
-        <radiogroup preference="bidiui.mail.compose.default_direction">
+        <radiogroup preference="extensions.bidiui.mail.compose.default_direction">
           <radio value="ltr" label="&ltr.label;" accesskey="&ltr.accesskey;"/>
           <radio value="rtl" label="&rtl.label;" accesskey="&rtl.accesskey;"/>
           <radio value="last_used" label="&last_used.label;" accesskey="&last_used.accesskey;"/>
@@ -55,17 +55,17 @@
 
     <spacer style="height: 0.75em;" />
 
-    <checkbox preference="bidiui.mail.compose.reply_in_default_direction"
+    <checkbox preference="extensions.bidiui.mail.compose.reply_in_default_direction"
               checked="false"
               label="&always-reply-in-default-dir.label;"
               accesskey="&always-reply-in-default-dir.accesskey;"
               autostretch="never"/>
-    <checkbox preference="bidiui.mail.compose.show_direction_buttons"
+    <checkbox preference="extensions.bidiui.mail.compose.show_direction_buttons"
               checked="true"
               label="&display-buttons.label;"
               accesskey="&display-buttons.accesskey;"
               autostretch="never"/>
-    <checkbox preference="bidiui.mail.compose.start_composition_in_paragraph_mode"
+    <checkbox preference="extensions.bidiui.mail.compose.start_composition_in_paragraph_mode"
               checked="true"
               label="&default-to-paragraph-mode.label;"
               accesskey="&default-to-paragraph-mode.accesskey;"
@@ -79,10 +79,10 @@
              control="space_between_paragraphs_value_text"/>
       <textbox id="space_between_paragraphs_value_text"
                size="4"
-               preference="bidiui.mail.compose.space_between_paragraphs.value"
+               preference="extensions.bidiui.mail.compose.space_between_paragraphs.value"
                onsynctopreference="return 
                                    BiDiMailUI.PrefPane.getSpaceBetweenParagraphsValue();"/>
-      <menulist preference="bidiui.mail.compose.space_between_paragraphs.scale">
+      <menulist preference="extensions.bidiui.mail.compose.space_between_paragraphs.scale">
         <menupopup>
           <menuitem value="cm"
                     label="&cmScale.label;"
