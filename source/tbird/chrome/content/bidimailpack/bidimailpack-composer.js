@@ -776,8 +776,10 @@ BiDiMailUI.Composition = {
     // necessary on some systems to get past the point when the direction
     // is set to LTR (not by us)
     BiDiMailUI.Composition.bodyReadyListener.workaroundForcingTimeoutId = 
-      setTimeout("BiDiMailUI.Composition.bodyReadyListener.NotifyComposeBodyReady()", 400);
-
+      setTimeout(
+        function() {
+          BiDiMailUI.Composition.bodyReadyListener.NotifyComposeBodyReady();
+        }, 400);
 
 #ifdef DEBUG_composeWindowOnActualLoad
     BiDiMailUI.JSConsoleService.logStringMessage('isReply = ' + messageParams.isReply + 
