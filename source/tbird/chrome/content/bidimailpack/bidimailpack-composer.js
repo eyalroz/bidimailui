@@ -1070,10 +1070,10 @@ BiDiMailUI.Composition = {
       // https://bugzilla.mozilla.org/show_bug.cgi?id=708702 
       return ev.defaultPrevented;
     }
-    catch() { 
+    catch(ex) { 
       return ev.getPreventDefault();
 	}
-  }
+  },
 
   onKeyDown : function(ev) {
     if (
