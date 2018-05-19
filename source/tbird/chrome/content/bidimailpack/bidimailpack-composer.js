@@ -1081,7 +1081,7 @@ BiDiMailUI.Composition = {
       top.document.commandDispatcher.focusedWindow != content ||
       // The defaultPrevented flag is set on the event
       // (see http://bugzilla.mozdev.org/show_bug.cgi?id=12748)
-      getDefaultPreventedWrapper(ev) ) 
+      BiDiMailUI.Composition.getDefaultPreventedWrapper(ev) ) 
     {
       return;
     }
@@ -1133,7 +1133,7 @@ BiDiMailUI.Composition = {
         top.document.commandDispatcher.focusedWindow != content ||
         // The preventDefault flag is set on the event
         // (see http://bugzilla.mozdev.org/show_bug.cgi?id=12748)
-        getDefaultPreventedWrapper(ev))
+        BiDiMailUI.Composition.getDefaultPreventedWrapper(ev))
       return;
 
     // detect Ctrl+Shift key combination, and switch direction if it
@@ -1189,7 +1189,7 @@ BiDiMailUI.Composition = {
 
     if (// The preventDefault flag is set on the event
         // (see http://bugzilla.mozdev.org/show_bug.cgi?id=12748)
-        getDefaultPreventedWrapper(ev)) 
+      BiDiMailUI.Composition.getDefaultPreventedWrapper(ev)) 
       return;
 
     // detect Ctrl+Shift key combination, and switch direction if it
