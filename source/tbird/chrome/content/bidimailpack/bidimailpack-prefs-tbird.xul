@@ -9,7 +9,8 @@
   %bdmDTD;
 ]>
 
-<prefwindow xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+<prefwindow id="bidimailui-prefwindow"
+            xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
             title="&bidimailpack-settings;"
             dlgbuttons="accept,cancel">
   <prefpane id="bidiMailUIPrefPane"
