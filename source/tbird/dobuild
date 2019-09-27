@@ -68,7 +68,8 @@ if [ ! -d $BUILDDIR ] ; then mkdir $BUILDDIR; else rm -rf $BUILDDIR/*; fi
 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILDDIR/jar.mn
 $BUILDTOOLSDIR/make-jars.pl -v -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILDDIR/jar.mn || exit
 echo -e "\nJAR files ready\n"
-$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.rdf > $BUILDDIR/install.rdf
+$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.rdf > $BUILDDIR/install.rdf # For pre-68 Thunderbird versions
+$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS manifest.json > $BUILDDIR/manifest.json # For Thunderbird 68 and later
 rm -rf bidimailpack
 rm -rf bidimailpack-mac-skin
 rm -f installed-chrome.txt
@@ -94,6 +95,7 @@ case "$TARGET" in
 		platform/Darwin/chrome.manifest \
 		platform/Darwin/chrome/bidimailpack-mac-skin.jar \
 		install.rdf \
+		manifest.json \
 		chrome.manifest || exit
 		;;
 	suiterunner)
