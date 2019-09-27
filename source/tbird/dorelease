@@ -34,9 +34,9 @@ fi
 
 # build the release versions and place them in the appropriate directories
 
-(./dobuild suitelegacy && ./dobuild suiterunner && ./dobuild tbird) || exit
+(./dobuild suiterunner && ./dobuild thunderbird) || exit
 
-for target in tbird suiterunner suitelegacy; do
+for target in tbird suiterunner; do
         cp build/${target}/${SHORTNAME}_${VERSION}_${target}.xpi  ${DOWNLOADS_DIR}/${VERSION}/${SHORTNAME}_${VERSION}_${target}.xpi
         cp build/${target}/${SHORTNAME}_${VERSION}_${target}.xpi ${DOWNLOADS_DIR}/latest/${SHORTNAME}_${target}.xpi
 done
