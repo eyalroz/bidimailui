@@ -1,47 +1,47 @@
-#!/bin/bash 
+#!/bin/bash
 
 SHORTNAME="bidimailui"
 VERSION="0.9.9"
 TARGET="$1"
+BETA_SUBVERSION="4"
+UUID="{54e72d7b-ed31-4736-854f-f517358f21ee}"
+
 case "$TARGET" in
-    tbird | tb | thunderbird)
-        TARGET=tbird
-        PREPROCESSOR_PARAMS="-DMOZ_THUNDERBIRD"
-        ;;
-    suitelegacy | sl | slegacy)
-        TARGET=suitelegacy
-        PREPROCESSOR_PARAMS="-DMOZ_SUITE -DMOZ_SUITE_LEGACY"
-        ;;
-    suiterunner | sr | srunner)
-        TARGET=suiterunner
-        PREPROCESSOR_PARAMS="-DMOZ_SUITE -DMOZ_SUITERUNNER"
-        ;;
-    *)
-	echo "please specify either thunderbird, suitelegacy or suiterunner"
+	tbird | tb | thunderbird)
+		TARGET=tbird
+		PREPROCESSOR_PARAMS="-DMOZ_THUNDERBIRD"
+		;;
+	suiterunner | sr | srunner)
+		TARGET=suiterunner
+		PREPROCESSOR_PARAMS="-DMOZ_SUITE -DMOZ_SUITERUNNER"
+		;;
+	*)
+	echo "Please specify either thunderbird, suiterunner."
 	exit 1
 	;;
 esac
 
+# build betas by default
+
 if [ -z "$EXTENSION_RELEASE" ]; then
-	VERSION="${VERSION}b"
+	VERSION="${VERSION}b${BETA_SUBVERSION}"
 fi
+
+shift 1
 
 # all arguments after the target app are #define 'd in the XUL preprocessor,
 # with a DEBUG_ prefix; so if you want to, say, have debugging code specific
 # to the function myFancyFunc(), write it like so:
 #
-# #ifdef DEBUG_myFancyFunc 
-#   debugging code etc. etc.
-# #endif
-# 
+#   #ifdef DEBUG_myFancyFunc 
+#     debugging code etc. etc.
+#   #endif
+#
 # then invoke
 #
-# dobuild tbird myFancyFunc
+#   dobuild tbird myFancyFunc
 #
 # to have your debugging code enabled
-
-
-shift 1
 
 if [ -n "$1" ]; then
 	PREPROCESSOR_PARAMS+=" -DDEBUG"
@@ -50,10 +50,10 @@ if [ -n "$1" ]; then
 		shift 1
 	done
 else
-        PREPROCESSOR_PARAMS+=" --no-line-comments"
+	PREPROCESSOR_PARAMS+=" --no-line-comments"
 fi
 
-PREPROCESSOR_PARAMS="$PREPROCESSOR_PARAMS -DVERSION=$VERSION"
+PREPROCESSOR_PARAMS="$PREPROCESSOR_PARAMS -DVERSION=$VERSION -DUUID=$UUID -DSHORTNAME=$SHORTNAME"
 echo -e "Building the XPI with the following definitions:\n\n$PREPROCESSOR_PARAMS\n"
 BUILDDIR="build/$TARGET"
 XPINAME="${SHORTNAME}_${VERSION}_${TARGET}.xpi"
@@ -80,40 +80,41 @@ mkdir $BUILDDIR/chrome
 mv bidimailpack.jar $BUILDDIR/chrome/bidimailpack.jar
 
 case "$TARGET" in
-    tbird)
-        mkdir $BUILDDIR/platform/
-        mkdir $BUILDDIR/platform/Darwin
-        mkdir $BUILDDIR/platform/Darwin/chrome
-        mv bidimailpack-mac-skin.jar $BUILDDIR/platform/Darwin/chrome
-        $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
-        cp platform/Darwin/chrome.manifest $BUILDDIR/platform/Darwin/chrome.manifest
-        cd $BUILDDIR
+	tbird)
+		mkdir $BUILDDIR/platform/
+		mkdir $BUILDDIR/platform/Darwin
+		mkdir $BUILDDIR/platform/Darwin/chrome
+		mv bidimailpack-mac-skin.jar $BUILDDIR/platform/Darwin/chrome
+		$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
+		cp platform/Darwin/chrome.manifest $BUILDDIR/platform/Darwin/chrome.manifest
+		cd $BUILDDIR
 	zip -r $XPINAME  \
-	  chrome/bidimailpack.jar \
-	  defaults/ \
-	  platform/Darwin/chrome.manifest \
-	  platform/Darwin/chrome/bidimailpack-mac-skin.jar \
-	  install.rdf \
-	  chrome.manifest || exit
-        ;;
-    suitelegacy)
-        $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.js > $BUILDDIR/install.js
-        cd $BUILDDIR
+		chrome/bidimailpack.jar \
+		defaults/ \
+		platform/Darwin/chrome.manifest \
+		platform/Darwin/chrome/bidimailpack-mac-skin.jar \
+		install.rdf \
+		chrome.manifest || exit
+		;;
+	suiterunner)
+		$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
+		cd $BUILDDIR
 	zip -r $XPINAME  \
-	  chrome/bidimailpack.jar \
-	  defaults/ \
-	  install.rdf \
-	  install.js || exit
-        ;;
-    suiterunner)
-        $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
-        cd $BUILDDIR
-	zip -r $XPINAME  \
-	  chrome/bidimailpack.jar \
-	  defaults/ \
-	  install.rdf \
-	  chrome.manifest || exit
-        ;;
+		chrome/bidimailpack.jar \
+		defaults/ \
+		install.rdf \
+		chrome.manifest || exit
+		;;
+	 suitelegacy)
+		 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.js > $BUILDDIR/install.js
+		 cd $BUILDDIR
+		 zip -r $XPINAME  \
+			chrome/bidimailpack.jar \
+			defaults/ \
+			install.rdf \
+			install.js || exit
+		 ;;
 esac
+
 ln $XPINAME $LINKNAME
 echo -e "\nXPI ready\n"
