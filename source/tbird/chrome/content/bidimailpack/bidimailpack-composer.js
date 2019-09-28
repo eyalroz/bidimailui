@@ -739,16 +739,10 @@ BiDiMailUI.Composition = {
 #endif
     BiDiMailUI.Composition.handleDirectionButtons();
     // Track "Show Direction Buttons" pref.
-    try {
-      var pbi =
-        BiDiMailUI.Prefs.prefService
-           .QueryInterface(Components.interfaces.nsIPrefBranchInternal);
-      pbi.addObserver(BiDiMailUI.Composition.directionButtonsPrefListener.domain,
-          BiDiMailUI.Composition.directionButtonsPrefListener, false);
-    }
-    catch(ex) {
-      dump("Failed to observe prefs: " + ex + "\n");
-    }
+    BiDiMailUI.Prefs.addObserver(
+      BiDiMailUI.Composition.directionButtonsPrefListener.domain,
+      BiDiMailUI.Composition.directionButtonsPrefListener
+    );
 
     BiDiMailUI.Composition.handleComposeReplyCSS();
 
@@ -827,16 +821,10 @@ BiDiMailUI.Composition = {
     BiDiMailUI.JSConsoleService.logStringMessage('in BiDiMailUI.Composition.composeWindowOnUnload()');
 #endif
     // Stop tracking "Show Direction Buttons" pref.
-    try {
-      var pbi =
-        BiDiMailUI.Prefs.prefService
-           .QueryInterface(Components.interfaces.nsIPrefBranchInternal);
-      pbi.removeObserver(BiDiMailUI.Composition.directionButtonsPrefListener.domain,
-             BiDiMailUI.Composition.directionButtonsPrefListener);
-    }
-    catch(ex) {
-      dump("Failed to remove pref observer: " + ex + "\n");
-    }
+    BiDiMailUI.Prefs.removeObserver(
+      BiDiMailUI.Composition.directionButtonsPrefListener.domain,
+      BiDiMailUI.Composition.directionButtonsPrefListener
+    );
     try {
       gMsgCompose.UnregisterStateListener(BiDiMailUI.Composition.bodyReadyListener);
     } catch(ex) {};

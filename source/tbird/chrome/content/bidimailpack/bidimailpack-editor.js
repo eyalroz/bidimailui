@@ -18,17 +18,10 @@ BiDiMailUI.Editor = {
     top.controllers.insertControllerAt(1, BiDiMailUI.Composition.directionSwitchController);
 
     HandleComposerDirectionButtons();
-    // Track "Show Direction Buttons" pref.
-    try {
-      var pbi =
-        BiDiMailUI.Prefs.prefService.QueryInterface(
-          Components.interfaces.nsIPrefBranchInternal);
-      pbi.addObserver(BiDiMailUI.Editor.directionButtonsPrefListener.domain,
-                      BiDiMailUI.Editor.directionButtonsPrefListener, false);
-    }
-    catch(ex) {
-      dump("Failed to observe prefs: " + ex + "\n");
-    }
+    BiDiMailUI.Prefs.addObserver(
+      BiDiMailUI.Editor.directionButtonsPrefListener.domain,
+      BiDiMailUI.Editor.directionButtonsPrefListener
+    );
 
     var documentParams = {
       isEmpty: false
@@ -47,16 +40,10 @@ BiDiMailUI.Editor = {
 
   windowOnUnload : function () {
     // Stop tracking "Show Direction Buttons" pref.
-    try {
-      var pbi =
-        BiDiMailUI.Prefs.prefService.QueryInterface(
-          Components.interfaces.nsIPrefBranchInternal);
-      pbi.removeObserver(BiDiMailUI.Editor.directionButtonsPrefListener.domain,
-                         BiDiMailUI.Editor.directionButtonsPrefListener);
-    }
-    catch(ex) {
-      dump("Failed to remove pref observer: " + ex + "\n");
-    }
+    BiDiMailUI.Prefs.removeObserver(
+      BiDiMailUI.Editor.directionButtonsPrefListener.domain,
+      BiDiMailUI.Editor.directionButtonsPrefListener
+    );  
   },
 
   handleComposerDirectionButtons : function () {

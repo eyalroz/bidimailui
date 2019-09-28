@@ -211,7 +211,50 @@ BiDiMailUI.Prefs = {
         BiDiMailUI.Prefs.prefService.setComplexValue(
           appPrefName, Components.interfaces.nsISupportsString, str);
       }
+  },
+
+  addObserver: function(domain, listener) {
+    try {
+      /* 
+      if (BiDiMailUI.App.versionIsAtLeast("67.0")) {
+        BiDiMailUI.Prefs.prefService.removeObserver(
+          BiDiMailUI.Composition.directionButtonsPrefListener.domain,
+          BiDiMailUI.Composition.directionButtonsPrefListener);
+      } else */
+      {
+        let pbi = BiDiMailUI.Prefs.prefService.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
+        let dontHoldWeakReference = false;
+        pbi.removeObserver(
+          BiDiMailUI.Composition.directionButtonsPrefListener.domain,
+          BiDiMailUI.Composition.directionButtonsPrefListener, 
+          dontHoldWeakReference);
+      }
+    }
+    catch(ex) {
+      dump("Failed adding preference observer: " + ex + "\n");
+    }
+  },
+
+  removeObserver: function(domain, listener) {
+    try {
+      /* 
+      if (BiDiMailUI.App.versionIsAtLeast("67.0")) {
+        BiDiMailUI.Prefs.prefService.removeObserver(
+          BiDiMailUI.Composition.directionButtonsPrefListener.domain,
+          BiDiMailUI.Composition.directionButtonsPrefListener);
+      } else */
+      {
+        var pbi = BiDiMailUI.Prefs.prefService.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
+        pbi.addObserver(
+          BiDiMailUI.Composition.directionButtonsPrefListener.domain,
+          BiDiMailUI.Composition.directionButtonsPrefListener);
+      }
+    }
+    catch(ex) {
+      dump("Failed removing preference observer: " + ex + "\n");
+    }
   }
+
 }
 
 //---------------------------------------------------------
