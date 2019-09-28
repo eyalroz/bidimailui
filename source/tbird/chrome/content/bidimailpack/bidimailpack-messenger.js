@@ -1,3 +1,11 @@
+if (ChromeUtils && ChromeUtils.import) {
+  // Thunderbird 67 or later
+  var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailpack/content/bidimailpack-common.js");
+}
+else {
+  Components.utils.import("chrome://bidimailpack/content/bidimailpack-common.js");
+}
+
 // This file constains UI and glue code only, calling
 // display logic code elsewhere actually act on the displayed message
 
@@ -47,6 +55,14 @@ BiDiMailUI.MessageOverlay = {
       document.getElementById('bidimailui-forcing-menu-rtl')
               .setAttribute('checked', (forcedDirection == 'rtl'));
     }
+  },
+
+  // the following function is a copy of MessengerSetForcedCharacterSet() from
+  // shareglue.js ; somehow, in TB 68, we've lost access to the code in shareglue.js
+  setForcedCharacterSet : function(aCharset) {
+    messenger.setDocumentCharset(aCharset);
+    msgWindow.mailCharacterSet = aCharset;
+    msgWindow.charsetOverride = true;
   },
 
   onLoad : function() {
@@ -156,7 +172,7 @@ BiDiMailUI.MessageOverlay = {
     };
     BiDiMailUI.Display.ActionPhases.charsetMisdetectionCorrection(charsetPhaseParams);
     if (charsetPhaseParams.needCharsetForcing) {
-      MessengerSetForcedCharacterSet(charsetPhaseParams.charsetToForce);
+      BiDiMailUI.MessageOverlay.setForcedCharacterSet(charsetPhaseParams.charsetToForce);
       BiDiMailUI.MessageOverlay.dontReload = true;
       // we're reloading with a different charset, don't do anything else
       return;
@@ -211,13 +227,11 @@ BiDiMailUI.MessageOverlay = {
       switch (selected.value) {
         case 0:
           str.data = "windows-1255";
-          BiDiMailUI.Prefs.prefService.setComplexValue("mailnews.view_default_charset", 
-            Components.interfaces.nsISupportsString, str);
+          BiDiMailUI.Prefs.setAppStringPref("mailnews.view_default_charset", str);
           return str.data;
         case 1:
           str.data = "windows-1256";
-          BiDiMailUI.Prefs.prefService.setComplexValue("mailnews.view_default_charset", 
-                Components.interfaces.nsISupportsString, str);
+          BiDiMailUI.Prefs.setAppStringPref("mailnews.view_default_charset", str);
           return str.data;
         case 2:
           BiDiMailUI.Prefs.setBoolPref("display.user_accepts_unusable_charset_pref", true);
