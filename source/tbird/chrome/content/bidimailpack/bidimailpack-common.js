@@ -1,9 +1,6 @@
-//uncomment the following when this file becomes a module
-//var EXPORTED_SYMBOLS = [ "BiDiMailUI" ];
+var EXPORTED_SYMBOLS = [ "BiDiMailUI" ];
 
-if ("undefined" == typeof(BiDiMailUI)) {
-  var BiDiMailUI = {};
-};
+var BiDiMailUI = { };
 
 #ifdef DEBUG
 // The following enables logging messages to the javascript console:
@@ -88,6 +85,52 @@ BiDiMailUI.JS = {
 
 //---------------------------------------------------------
 
+BiDiMailUI.App = {
+
+  getBuildID : function () {
+    var re = /rv:([0-9.]+).*Gecko\/([0-9]+)/;
+    var arr = re.exec(navigator.userAgent);
+    //var revision = arr[1];
+    return arr[2];
+  },
+
+  // returns true if the app version is equal-or-higher to minVersion, false otherwise;
+  ensureVersion : function(versionThreshold, checkMinimum) {
+    var version;  
+    // Dropping support for super-old versions in this check,
+    // since addons.mozilla.org complains about it; plus,
+    // we have other code which breaks that support anyway.
+    // if ("@mozilla.org/xre/app-info;1" in Components.classes ) {
+      version = 
+        Components.classes["@mozilla.org/xre/app-info;1"]
+                  .getService(Components.interfaces.nsIXULAppInfo).version;  
+    //}
+    // else {
+    //   version =
+    //      Components.classes["@mozilla.org/preferences-service;1"]
+    //               .getService(Components.interfaces.nsIPrefBranch)
+    //               .getCharPref("extensions.lastAppVersion");  
+    // }
+    var versionChecker =
+      Components.classes["@mozilla.org/xpcom/version-comparator;1"]
+                .getService(Components.interfaces.nsIVersionComparator);  
+    
+    var versionCheckResult = versionChecker.compare( version, versionThreshold );
+    return (   (checkMinimum  && (versionCheckResult >= 0))
+            || (!checkMinimum && (versionCheckResult <= 0)));
+  },
+
+  versionIsAtLeast : function(minVersion) {
+  	return this.ensureVersion(minVersion, true);
+  },
+
+  versionIsAtMost : function(maxVersion) {
+  	return this.ensureVersion(maxVersion, false);
+  }
+}
+
+//---------------------------------------------------------
+
 // Preferences
 
 BiDiMailUI.Prefs = {
@@ -156,7 +199,19 @@ BiDiMailUI.Prefs = {
     this.prefService.setIntPref(
       BiDiMailUI.Prefs.preferencePrefix + prefName, val);
   },
-  
+
+  setAppStringPref: function(appPrefName, str) {
+#ifdef MOZ_THUNDERBIRD
+      if (BiDiMailUI.App.versionIsAtLeast("58.0b1")) {
+        BiDiMailUI.Prefs.prefService.setStringPref(appPrefName, str);
+      }
+      else
+#endif
+      {     
+        BiDiMailUI.Prefs.prefService.setComplexValue(
+          appPrefName, Components.interfaces.nsISupportsString, str);
+      }
+  }
 }
 
 //---------------------------------------------------------
@@ -262,7 +317,7 @@ BiDiMailUI.RegExpStrings.BOTCHED_UTF8_DECODING_SEQUENCE =
   "(?:^|\x0A)\\uFFFD{3}"; 
    
 BiDiMailUI.performCorrectiveRecoding = function (
-  correctiveRecodingParams) {
+  document, NodeFilter, correctiveRecodingParams) {
 #ifdef DEBUG_performCorrectiveRecoding
   BiDiMailUI.JSConsoleService.logStringMessage(
     "---------------------------------\nin performCorrectiveRecoding()\n" + 
@@ -504,7 +559,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
 }
 
 
-BiDiMailUI.matchInText = function(element, expression, matchResults) {
+BiDiMailUI.matchInText = function(document, NodeFilter, element, expression, matchResults) {
 #ifdef DEBUG_matchInText
   BiDiMailUI.JSConsoleService.logStringMessage(
     "---------------------------------------------\n" +
@@ -570,7 +625,7 @@ BiDiMailUI.neutralsOnly = function(str) {
   
 // returns "rtl", "ltr", "neutral" or "mixed"; but only an element
 // with more than one text node can be mixed
-BiDiMailUI.directionCheck = function(obj) {
+BiDiMailUI.directionCheck = function(document, NodeFilter, obj) {
 
   const RTL_CHARACTER_INNER =
    "\\u0590-\\u05FF\\uFB1D-\\uFB4F\\u0600-\\u06FF\\uFB50-\\uFDFF\\uFE70-\\uFEFC";
@@ -589,7 +644,7 @@ BiDiMailUI.directionCheck = function(obj) {
 
 
 #ifdef DEBUG_directionCheck
-  BiDiMailUI.JSConsoleService.logStringMessage("in directionCheck(" + obj + ")");
+  BiDiMailUI.JSConsoleService.logStringMessage("in directionCheck of " + obj);
 #endif
   // we check whether there exists a line which either begins
   // with a word consisting solely of characters of an RTL script,
@@ -641,7 +696,7 @@ BiDiMailUI.directionCheck = function(obj) {
       BiDiMailUI.JSConsoleService.logStringMessage("object is NOT NEUTRAL");
 #endif
     var matchResults = {};
-    BiDiMailUI.matchInText(obj, rtlLineExpression, matchResults);
+    BiDiMailUI.matchInText(document, NodeFilter, obj, rtlLineExpression, matchResults);
 #ifdef DEBUG_directionCheck
     BiDiMailUI.JSConsoleService.logStringMessage("directionCheck - object "+obj+"\nis " + (matchResults.hasMatching ?
             (matchResults.hasNonMatching ? "MIXED" : "RTL") : "LTR") );

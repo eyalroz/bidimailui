@@ -1,3 +1,11 @@
+if (ChromeUtils && ChromeUtils.import) {
+  // Thunderbird 67 or later
+  var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailpack/content/bidimailpack-common.js");
+}
+else {
+  Components.utils.import("chrome://bidimailpack/content/bidimailpack-common.js");
+}
+
 BiDiMailUI.Editor = {
 
   loadEventCount : 0,

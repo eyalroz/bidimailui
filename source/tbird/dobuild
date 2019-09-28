@@ -1,31 +1,37 @@
 #!/bin/bash
 
 SHORTNAME="bidimailui"
-VERSION="0.9.9"
+VERSION="0.10.0"
 TARGET="$1"
-BETA_SUBVERSION="4"
+BETA_SUBVERSION="1"
 UUID="{54e72d7b-ed31-4736-854f-f517358f21ee}"
+
+PREPROCESSOR_PARAMS+=" -DUUID=$UUID -DSHORTNAME=$SHORTNAME"
 
 case "$TARGET" in
 	tbird | tb | thunderbird)
 		TARGET=tbird
-		PREPROCESSOR_PARAMS="-DMOZ_THUNDERBIRD"
+		PREPROCESSOR_PARAMS+=" -DMOZ_THUNDERBIRD"
 		;;
 	suiterunner | sr | srunner)
 		TARGET=suiterunner
-		PREPROCESSOR_PARAMS="-DMOZ_SUITE -DMOZ_SUITERUNNER"
+		PREPROCESSOR_PARAMS+=" -DMOZ_SUITE -DMOZ_SUITERUNNER"
+		;;
+	suitelegacy | sl | slegacy)
+		TARGET=suitelegacy
+		PREPROCESSOR_PARAMS+=" -DMOZ_SUITE -DMOZ_SUITE_LEGACY"
 		;;
 	*)
-	echo "Please specify either thunderbird, suiterunner."
+	echo "Please specify either thunderbird, suiterunner or suitelegacy."
 	exit 1
 	;;
 esac
 
-# build betas by default
-
 if [ -z "$EXTENSION_RELEASE" ]; then
 	VERSION="${VERSION}b${BETA_SUBVERSION}"
+	PREPROCESSOR_PARAMS+=" -DIS_BETA_BUILD"
 fi
+PREPROCESSOR_PARAMS+=" -DVERSION=$VERSION"
 
 shift 1
 
@@ -53,8 +59,7 @@ else
 	PREPROCESSOR_PARAMS+=" --no-line-comments"
 fi
 
-PREPROCESSOR_PARAMS="$PREPROCESSOR_PARAMS -DVERSION=$VERSION -DUUID=$UUID -DSHORTNAME=$SHORTNAME"
-echo -e "Building the XPI with the following definitions:\n\n$PREPROCESSOR_PARAMS\n"
+echo -e "Building the XPI with the following definitions:\n\n${PREPROCESSOR_PARAMS}\n"
 BUILDDIR="build/$TARGET"
 XPINAME="${SHORTNAME}_${VERSION}_${TARGET}.xpi"
 LINKNAME="${SHORTNAME}_${TARGET}.xpi"

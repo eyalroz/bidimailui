@@ -1,3 +1,11 @@
+if (ChromeUtils && ChromeUtils.import) {
+  // Thunderbird 67 or later
+  var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailpack/content/bidimailpack-common.js");
+}
+else {
+  Components.utils.import("chrome://bidimailpack/content/bidimailpack-common.js");
+}
+
 BiDiMailUI.Composition = {
 
   lastWindowToHaveFocus : null,
@@ -710,7 +718,7 @@ BiDiMailUI.Composition = {
       // We get here for drafts, for messages without URIs, and due to problems
       // in locating the original message window/tab
       var detectionDirection = BiDiMailUI.directionCheck(
-        document.getElementById("content-frame").contentDocument.body);
+        document, document.getElementById("content-frame").contentDocument.body);
 #ifdef DEBUG_setInitialDirection
       BiDiMailUI.JSConsoleService.logStringMessage('detectionDirection is ' + detectionDirection );
 #endif
