@@ -1,3 +1,11 @@
+if (ChromeUtils && ChromeUtils.import) {
+  // Thunderbird 67 or later
+  var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailpack/content/bidimailpack-common.js");
+}
+else {
+  Components.utils.import("chrome://bidimailpack/content/bidimailpack-common.js");
+}
+
 // Code outside BiDi Mail UI should only use the 
 // BiDiMailUI.Display.ActionPhases and perhaps the
 // BiDiMailUI.Display.setMessageDirectionForcing function
@@ -44,7 +52,7 @@ BiDiMailUI.Display = {
 
       var body = domDocument.body;
       BiDiMailUI.Display.appendStyleSheet(domDocument, 'direction-autodetection.css');
-      var detectedOverallDirection = BiDiMailUI.directionCheck(body);
+      var detectedOverallDirection = BiDiMailUI.directionCheck(document, NodeFilter, body);
 #ifdef DEBUG_directionAutodetection
       BiDiMailUI.JSConsoleService.logStringMessage("detected overall direction: " + detectedOverallDirection);
 #endif
@@ -387,7 +395,7 @@ BiDiMailUI.Display = {
         BiDiMailUI.JSConsoleService.logStringMessage('elementsRequiringExplicitDirection[ ' + i + ']: ' + node + "\ntype: " + node.nodeType + "\nclassName: " + node.className + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
 #endif
           
-        var detectedDirection = BiDiMailUI.directionCheck(node);
+        var detectedDirection = BiDiMailUI.directionCheck(document, NodeFilter, node);
 #ifdef DEBUG_detectAndSetDirections
         BiDiMailUI.JSConsoleService.logStringMessage("detected direction: " + detectedDirection);
 #endif
@@ -630,7 +638,7 @@ BiDiMailUI.Display = {
           "\\uFFFD{3,}");
       }    
       havePreferredCharsetText = 
-        BiDiMailUI.matchInText(cMCParams.body, contentToMatch) ||
+        BiDiMailUI.matchInText(document, NodeFilter, cMCParams.body, contentToMatch) ||
         contentToMatch.test(cMCParams.messageSubject);
     }
     else {
@@ -656,7 +664,7 @@ BiDiMailUI.Display = {
       BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE);
 
     haveUTF8Text = 
-      BiDiMailUI.matchInText(cMCParams.body, contentToMatch) ||
+      BiDiMailUI.matchInText(document, NodeFilter, cMCParams.body, contentToMatch) ||
       contentToMatch.test(cMCParams.messageSubject);
 
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
@@ -791,7 +799,7 @@ BiDiMailUI.Display = {
     if (!cMCParams.needCharsetForcing) {
       contentToMatch = new RegExp (
         BiDiMailUI.RegExpStrings.BOTCHED_UTF8_DECODING_SEQUENCE);
-      if (BiDiMailUI.matchInText(cMCParams.body, contentToMatch) ||
+      if (BiDiMailUI.matchInText(document, NodeFilter, cMCParams.body, contentToMatch) ||
           contentToMatch.test(cMCParams.messageSubject)) {
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
           BiDiMailUI.JSConsoleService.logStringMessage(
@@ -815,7 +823,7 @@ BiDiMailUI.Display = {
     // at this point we _believe_ there's no need for charset forcing,
     // and we'll only perform corrective recoding
     if (cMCParams.recodeUTF8 || cMCParams.recodePreferredCharset) {
-      BiDiMailUI.performCorrectiveRecoding(cMCParams);
+      BiDiMailUI.performCorrectiveRecoding(document, NodeFilter, cMCParams);
       // it may be the case that the corrective recoding suggests we need to force
       // the charset even though we've already done so; currently this is only
       // possible in the situation of bug 18707
