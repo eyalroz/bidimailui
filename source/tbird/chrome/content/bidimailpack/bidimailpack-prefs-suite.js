@@ -1,3 +1,12 @@
+var moduleURI = "chrome://bidimailpack/content/bidimailpack-common.js";
+if (typeof(ChromeUtils) != "undefined") {
+  if (ChromeUtils.import) {
+    var { RemoveDupes } = ChromeUtils.import(moduleURI);
+  }
+  else { Components.utils.import(moduleURI);}
+}
+else { Components.utils.import(moduleURI); }
+
 function Startup() {
   BiDiMailUI.PrefPane.init();
 }
