@@ -1,10 +1,11 @@
-if (ChromeUtils && ChromeUtils.import) {
-  // Thunderbird 67 or later
-  var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailpack/content/bidimailpack-common.js");
+var moduleURI = "chrome://bidimailpack/content/bidimailpack-common.js";
+if (typeof(ChromeUtils) != "undefined") {
+  if (ChromeUtils.import) {
+    var { RemoveDupes } = ChromeUtils.import(moduleURI);
+  }
+  else { Components.utils.import(moduleURI);}
 }
-else {
-  Components.utils.import("chrome://bidimailpack/content/bidimailpack-common.js");
-}
+else { Components.utils.import(moduleURI); }
 
 // Code outside BiDi Mail UI should only use the 
 // BiDiMailUI.Display.ActionPhases and perhaps the
