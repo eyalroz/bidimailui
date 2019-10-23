@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SHORTNAME="bidimailui"
-VERSION="0.10.0"
+VERSION="0.10"
 TARGET="$1"
 BETA_SUBVERSION="1"
 UUID="{54e72d7b-ed31-4736-854f-f517358f21ee}"
