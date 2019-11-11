@@ -56,7 +56,7 @@
       <label value="&spaceBetweenParagraphs.label;"
              accesskey="&spaceBetweenParagraphs.accesskey;"
              control="space_between_paragraphs_value_text"/>
-      <textbox id="space_between_paragraphs_value_text"
+      <html:input id="space_between_paragraphs_value_text"
                size="4"
                preference="extensions.bidiui.mail.compose.space_between_paragraphs.value"
                onsynctopreference="return 
