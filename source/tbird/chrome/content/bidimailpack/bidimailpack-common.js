@@ -220,16 +220,17 @@ BiDiMailUI.Prefs = {
 
   addObserver: function(domain, listener) {
     try {
-      /* 
-      if (BiDiMailUI.App.versionIsAtLeast("67.0")) {
-        BiDiMailUI.Prefs.prefService.removeObserver(
+      if (BiDiMailUI.App.versionIsAtLeast("65.0")) {
+        console.log("version is at least" + BiDiMailUI.App.version());
+        BiDiMailUI.Prefs.prefService.addObserver(
           BiDiMailUI.Composition.directionButtonsPrefListener.domain,
           BiDiMailUI.Composition.directionButtonsPrefListener);
-      } else */
-      {
+      } 
+      else {
+        console.log("version is less than " + BiDiMailUI.App.version());
         let pbi = BiDiMailUI.Prefs.prefService.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
         let dontHoldWeakReference = false;
-        pbi.removeObserver(
+        pbi.addObserver(
           BiDiMailUI.Composition.directionButtonsPrefListener.domain,
           BiDiMailUI.Composition.directionButtonsPrefListener, 
           dontHoldWeakReference);
@@ -242,15 +243,14 @@ BiDiMailUI.Prefs = {
 
   removeObserver: function(domain, listener) {
     try {
-      /* 
-      if (BiDiMailUI.App.versionIsAtLeast("67.0")) {
+      if (BiDiMailUI.App.versionIsAtLeast("65.0")) {
         BiDiMailUI.Prefs.prefService.removeObserver(
           BiDiMailUI.Composition.directionButtonsPrefListener.domain,
           BiDiMailUI.Composition.directionButtonsPrefListener);
-      } else */
-      {
+      } 
+      else {
         var pbi = BiDiMailUI.Prefs.prefService.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
-        pbi.addObserver(
+        pbi.removeObserver(
           BiDiMailUI.Composition.directionButtonsPrefListener.domain,
           BiDiMailUI.Composition.directionButtonsPrefListener);
       }
