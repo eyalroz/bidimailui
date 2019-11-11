@@ -520,6 +520,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
 #endif
         workingStr = BiDiMailUI.decode(workingStr, "UTF-8");
           
+#ifdef DEBUG_performCorrectiveRecodingOnText
 #ifdef DEBUG_scancodes
         BiDiMailUI.JSConsoleService.logStringMessage(
           "Line " + i + " after recoding as UTF-8:\n\n" +
@@ -527,6 +528,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
 #else
         BiDiMailUI.JSConsoleService.logStringMessage(
           "Line " + i + " after recoding as UTF-8:\n\n" + lines[i]);
+#endif
 #endif
         lines[i] = workingStr;
       } catch(ex) {
@@ -579,14 +581,16 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
 #endif
        lines[i] = BiDiMailUI.decode(workingStr, correctiveRecodingParams.preferredCharset);
 
+#ifdef DEBUG_performCorrectiveRecodingOnText
 #ifdef DEBUG_scancodes
         BiDiMailUI.JSConsoleService.logStringMessage(
           "Line " + i + " after recoding as " + correctiveRecodingParams.preferredCharset + "(line & scancodes):\n\n" +
           lines[i] + "\n----\n" + BiDiMailUI.JS.stringToScanCodes(lines[i]));
 #else
-    BiDiMailUI.JSConsoleService.logStringMessage(
+        BiDiMailUI.JSConsoleService.logStringMessage(
             "Line " + i + " after recoding as " + correctiveRecodingParams.preferredCharset + ":\n\n" + 
             lines[i]);
+#endif
 #endif
       } catch(ex) {
 #ifdef DEBUG_performCorrectiveRecodingOnText
