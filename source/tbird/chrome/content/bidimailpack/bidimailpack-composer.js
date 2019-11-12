@@ -379,11 +379,21 @@ BiDiMailUI.Composition = {
     BiDiMailUI.JSConsoleService.logStringMessage('--- SetDocumentDirection( \'' + direction + '\' ) ---');
 #endif
 
-    document.getElementById("content-frame").contentDocument.documentElement.style.direction = direction;
-    document.getElementById("content-frame").contentDocument.body.style.direction = direction;
-    // We can't use the dir attribute of the subject textbox, like we do for the
-    // message body, since XUL elements' dir attribute means something else than
-    // this attribute for HTML elements. But we can set it for its input field...
+    let contentFrame = document.getElementById("content-frame");
+    if (contentFrame) {
+      contentFrame.contentDocument.documentElement.style.direction = direction;
+      contentFrame.contentDocument.body.style.direction = direction;
+    }
+#ifdef DEBUG_SetDocumentDirection
+    else {
+      BiDiMailUI.JSConsoleService.logStringMessage(
+         'could not get the "content-frame" by ID - that shouldn\'t be possible');
+    }
+#endif
+    // We can't use the dir attribute of the subject textbox / html:input, like we 
+    // do for the message body, since XUL elements' dir attribute means something 
+    // else than this attribute for HTML elements. But we can set it for its input 
+    // field...
     document.getElementById("msgSubject").inputField.style.direction = direction;
     BiDiMailUI.Prefs.setCharPref("compose.last_used_direction", direction);
   },
