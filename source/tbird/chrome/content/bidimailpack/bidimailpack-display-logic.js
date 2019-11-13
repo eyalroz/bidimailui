@@ -181,7 +181,7 @@ BiDiMailUI.Display = {
       BiDiMailUI.JSConsoleService.logStringMessage("-----\ntext node\n-----\n" + node.nodeValue);
 #endif
       // TODO: ensure the parent's a PRE or BLOCKQUOTE or something else that's nice
-      textSplit = new RegExp (BiDiMailUI.RegExpStrings.TEXT_SPLIT_SEQUENCE, "m");
+      let textSplit = new RegExp (BiDiMailUI.RegExpStrings.TEXT_SPLIT_SEQUENCE, "m");
 
       if (! textSplit.test(node.nodeValue)) {
          node = treeWalker.nextNode();
@@ -274,7 +274,8 @@ BiDiMailUI.Display = {
       }
       var sibling;
       // add everything within the current 'paragraph' to the new DIV
-      while (sibling = wrapperDiv.nextSibling) {
+      while (wrapperDiv.nextSibling) {
+        sibling = wrapperDiv.nextSibling
         if (sibling.nodeName == 'BLOCKQUOTE') {
 #ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
           BiDiMailUI.JSConsoleService.logStringMessage("hit blockquote, finishing walk");
@@ -320,7 +321,7 @@ BiDiMailUI.Display = {
       BiDiMailUI.JSConsoleService.logStringMessage("body has no children");
 #endif
 
-    for (var i=0; i < body.childNodes.length; i++) {
+    for (let i=0; i < body.childNodes.length; i++) {
       var subBody = body.childNodes.item(i);
 
 #ifdef DEBUG_preprocessMessageDOM
@@ -341,7 +342,7 @@ BiDiMailUI.Display = {
 // (or force, as the case may be)
   gatherElementsRequiringDirectionSetting : function(
     body, elementsRequiringExplicitDirection) {
-    for (var i=0; i < body.childNodes.length; i++) {
+    for (let i=0; i < body.childNodes.length; i++) {
       var subBody = body.childNodes.item(i);
 
       // Not touching elements which aren't moz-text-something,
@@ -362,7 +363,7 @@ BiDiMailUI.Display = {
 
         // On older JS engines you would need to use getElementsByTagName("TAG") for each tag
       var nodes =  subBody.querySelectorAll(tagNames[subBody.className]);
-      for (var j = 0; j < nodes.length; j++ ) {
+      for (let j = 0; j < nodes.length; j++ ) {
         // In flowed messages, not touching elements which aren't moz-text-something,
         // as we don't know what to do with them
         if (subBody.className == "moz-text-flowed" && /^moz-text/.test(nodes[j].className))
@@ -388,7 +389,7 @@ BiDiMailUI.Display = {
 
     // direction-check all of the elements whose direction should be set explicitly
 
-    for (i=0; i < elementsRequiringExplicitDirection.length; i++) {
+    for (let i=0; i < elementsRequiringExplicitDirection.length; i++) {
       var node = elementsRequiringExplicitDirection[i];
       try {
      
@@ -850,7 +851,8 @@ BiDiMailUI.Display = {
       null, // additional filter function
       false
     );
-    while((node = treeWalker.nextNode())) {
+    var node;
+    while((node = treeWalker.nextNode()) != null) {
       node.data = node.data.replace(
         /&#(\d+);/g,
         function() {

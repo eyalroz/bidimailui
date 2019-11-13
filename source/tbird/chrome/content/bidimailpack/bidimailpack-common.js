@@ -70,8 +70,8 @@ BiDiMailUI.JS = {
     if (str == null)
       return null;
     var scanCodesString = "";
-    for(var i = 0; i < str.length; i++) {
-      var charcode = "??";
+    for(let i = 0; i < str.length; i++) {
+      let charcode = "??";
       try {
         charcode = BiDiMailUI.JS.num2hex(str.charCodeAt(i));    	  
       }
@@ -443,7 +443,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
   BiDiMailUI.JSConsoleService.logStringMessage(
     "The string we'll recode has " + lines.length + " lines overall; will now work on each of them independently.");
 #endif
-  for(var i = 0; i < lines.length; i++) {
+  for(let i = 0; i < lines.length; i++) {
     var workingStr; 
 
 #ifdef DEBUG_performCorrectiveRecodingOnText
@@ -623,6 +623,10 @@ BiDiMailUI.matchInText = function(document, NodeFilter, element, expression, mat
     null, // additional filter function
     false
   );
+  if (matchResults) { 
+    matchResults.hasMatching = false; 
+    matchResults.hasNonMatching = false; 
+  }
   var node;
   while ((node = treeWalker.nextNode())) {
 #ifdef DEBUG_matchInText

@@ -158,7 +158,7 @@ BiDiMailUI.Composition = {
     }
 
     var view = document.defaultView;
-    for (i=0; i < editor.selection.rangeCount; ++i ) {
+    for (let i=0; i < editor.selection.rangeCount; ++i ) {
       var range = editor.selection.getRangeAt(i);
       var node = range.startContainer;
       var cacIsLTR = false;
@@ -381,8 +381,8 @@ BiDiMailUI.Composition = {
 
     let contentFrame = document.getElementById("content-frame");
     if (contentFrame) {
-      contentFrame.contentDocument.documentElement.style.direction = direction;
-      contentFrame.contentDocument.body.style.direction = direction;
+      document.getElementById("content-frame").contentDocument.documentElement.style.direction = direction;
+      document.getElementById("content-frame").contentDocument.body.style.direction = direction;
     }
 #ifdef DEBUG_SetDocumentDirection
     else {
@@ -660,7 +660,7 @@ BiDiMailUI.Composition = {
       BiDiMailUI.JSConsoleService.logStringMessage('body is ' + displayedCopyBody);
 #endif
 
-      for (var i=0; i < displayedCopyBody.childNodes.length; i++) {
+      for (let i=0; i < displayedCopyBody.childNodes.length; i++) {
         var subBody = displayedCopyBody.childNodes.item(i);
 
         if (! /^moz-text/.test(subBody.className))
@@ -962,7 +962,7 @@ BiDiMailUI.Composition = {
     if (editor.selection.rangeCount > 0) {
       editor.beginTransaction();
       try {
-        for (var i=0; i < editor.selection.rangeCount; ++i) {
+        for (let i=0; i < editor.selection.rangeCount; ++i) {
           var range = editor.selection.getRangeAt(i);
           var startContainer = range.startContainer;
           var endContainer = range.endContainer;
@@ -1035,8 +1035,9 @@ BiDiMailUI.Composition = {
               node = node.nextSibling;
             }
             else {
-              // find a parent node which has anything after
-              while (node = node.parentNode) {
+              // find an ancestor which has anything else after our node
+              while (node.parentNode != null) {
+                node = node.parentNode;
 #ifdef DEBUG_applyDirectionSetterToSelectionBlockElements
                 BiDiMailUI.JSConsoleService.logStringMessage('moved up to parent node');
 #endif
@@ -1453,7 +1454,7 @@ BiDiMailUI.Composition = {
     // Hunt down and shoot the extra BR. We don't want it.
     // Go up to the last child.
     // e.g. <p><b>foo<br></b></p> -- we accend to B, then to BR.
-    for (var node = prevPar.lastChild; node && node.lastChild; node = node.lastChild);
+    for (let node = prevPar.lastChild; node && node.lastChild; node = node.lastChild);
     // Make sure:
     // 1. It's a BR,
     // 2. It's not the special case of the BR being an only child (thus
