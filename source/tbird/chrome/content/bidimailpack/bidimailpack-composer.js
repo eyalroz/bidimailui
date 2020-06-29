@@ -225,11 +225,11 @@ BiDiMailUI.Composition = {
 
         node = range.startContainer;
 
-        while (node != cac) {
+        while ( (typeof(node) !== "undefined") && (node != cac) ) {
 #ifdef DEBUG_GetCurrentSelectionDirection
           BiDiMailUI.JSConsoleService.logStringMessage('visiting start slope node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
 #endif
-          if (node.nodeType == Node.ELEMENT_NODE) {
+          if ( (typeof(node) !== "undefined") && node.nodeType == Node.ELEMENT_NODE) {
             var nodeStyle = view.getComputedStyle(node, "");
             var display = nodeStyle.getPropertyValue("display");
             if (display == "block" || display == "table-cell" ||
@@ -1428,7 +1428,27 @@ BiDiMailUI.Composition = {
     styleFontFace = editor.getFontFaceState(allHas);
     var isStyleFontColor = { value: false };
     EditorGetTextProperty("font", "color", "", isStyleFontColor, anyHas, allHas);
-    var styleFontColor = editor.getFontColorState(allHas);
+    try {
+      var styleFontColor = editor.getFontColorState(allHas);
+    } catch(ex) {
+#ifdef DEBUG_insertParagraph
+      BiDiMailUI.JSConsoleService.logStringMessage('Failed obtaining the font color using editor.getFontColorState():\n' + ex);
+#endif
+      try {
+        styleFontColor = document.defaultView
+              .getComputedStyle(editor.getSelectionContainer(), "")
+              .getPropertyValue("font-color");
+        var elt = BiDiMailUI.Composition.findClosestBlockElement(editor.getSelectionContainer());
+        isStyleFontColor.value = (styleFontColor != document.defaultView
+                      .getComputedStyle(elt, "")
+                      .getPropertyValue("font-color"));
+      }
+      catch(ex) { 
+#ifdef DEBUG_insertParagraph
+        BiDiMailUI.JSConsoleService.logStringMessage('Failed obtaining the font color using document.defaultView.getComputedStyle():\n' + ex);
+#endif
+      }
+    }   
 
     // solution for <big>, <small> and font-face tags:
     // we compare the computed font-size of the selction to the font-size of
@@ -1454,14 +1474,17 @@ BiDiMailUI.Composition = {
     // Hunt down and shoot the extra BR. We don't want it.
     // Go up to the last child.
     // e.g. <p><b>foo<br></b></p> -- we accend to B, then to BR.
-    for (let node = prevPar.lastChild; node && node.lastChild; node = node.lastChild);
+    var node;
+    for (node = prevPar.lastChild; node && node.lastChild; node = node.lastChild);
     // Make sure:
     // 1. It's a BR,
     // 2. It's not the special case of the BR being an only child (thus
     //    not a candidate for removal -- we need it to keep the P
     //    from becoming empty)
-    if (node && node.nodeType == node.ELEMENT_NODE &&
-        node.tagName.toLowerCase() == "br") {
+    if (node && (nodeType in node) 
+        && node.nodeType == node.ELEMENT_NODE 
+        && node.tagName.toLowerCase() == "br") 
+    {
       var isFirstNode = false;
       var firstNode = prevPar.firstChild;
       while (firstNode) {
@@ -1589,6 +1612,11 @@ BiDiMailUI.Composition.directionSwitchController = {
         // isCommandEnabled is called for cmd_ltr_paragraph
         break;
     }
+
+#ifdef DEBUG_isCommandEnabled
+    BiDiMailUI.JSConsoleService.logStringMessage('isCommandEnabled for command "' + command + '". inMessage: ' + inMessage + ' , inSubjectBox = ' + inSubjectBox + ' , retVal = ' + retVal);
+#endif
+
 
     return retVal;
   },
