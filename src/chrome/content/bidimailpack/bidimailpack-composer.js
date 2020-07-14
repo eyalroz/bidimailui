@@ -1481,7 +1481,7 @@ BiDiMailUI.Composition = {
     // 2. It's not the special case of the BR being an only child (thus
     //    not a candidate for removal -- we need it to keep the P
     //    from becoming empty)
-    if (node && (nodeType in node) 
+    if (node && ('nodeType' in node) 
         && node.nodeType == node.ELEMENT_NODE 
         && node.tagName.toLowerCase() == "br") 
     {
