@@ -41,7 +41,7 @@
     <em:contributor>Prognathous</em:contributor>
     <em:contributor>Ayman Hourieh</em:contributor>
     <em:contributor>Reuven Gonen</em:contributor>
-    <em:homepageURL>http://bidiui.mozdev.org/</em:homepageURL>
+    <em:homepageURL>http://github.com/eyalroz/bidimailui/</em:homepageURL>
     <em:type>2</em:type> <!-- type=extension -->
     <em:iconURL>chrome://bidimailpack/content/bidimailpack.png</em:iconURL>
 
