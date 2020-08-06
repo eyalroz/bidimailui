@@ -42,44 +42,17 @@ bidimailpack.jar:
     content/bidimailpack/editorOverlay.xul                    (chrome/content/bidimailpack/editorOverlay.xul)
     content/bidimailpack/editorContextMenuOverlayOverlay.xul  (chrome/content/bidimailpack/editorContextMenuOverlayOverlay.xul)
     content/bidimailpack/bidimailpack-editor.js               (chrome/content/bidimailpack/bidimailpack-editor.js)
-#ifdef MOZ_SUITE_LEGACY
-    locale/ar/bidimailpack/contents.rdf                       (chrome/locale/ar/bidimailpack/contents.rdf)
-    locale/fa/bidimailpack/contents.rdf                       (chrome/locale/fa/bidimailpack/contents.rdf)
-    locale/ur/bidimailpack/contents.rdf                       (chrome/locale/ur/bidimailpack/contents.rdf)
-    locale/en-US/bidimailpack/contents.rdf                    (chrome/locale/en-US/bidimailpack/contents.rdf)
-    locale/he/bidimailpack/contents.rdf                       (chrome/locale/he/bidimailpack/contents.rdf)
-    content/bidimailpack/contents.rdf                         (chrome/content/bidimailpack/contents.rdf)
-    skin/classic/bidimailpack/format-buttons-rtl.gif          (chrome/skin-suite/classic/bidimailpack/format-buttons-rtl.gif)
-    skin/classic/bidimailpack/main-bar-autodetect.png         (chrome/skin-suite/classic/bidimailpack/main-bar-autodetect.png)
-    skin/classic/bidimailpack/main-bar-ltr.png                (chrome/skin-suite/classic/bidimailpack/main-bar-ltr.png)
-    skin/classic/bidimailpack/main-bar-rtl.png                (chrome/skin-suite/classic/bidimailpack/main-bar-rtl.png)
-    skin/classic/bidimailpack/main-bar-ltr.png                (chrome/skin-suite/classic/bidimailpack/main-bar-ltr.png)
-    skin/classic/bidimailpack/main-bar-rtl.png                (chrome/skin-suite/classic/bidimailpack/main-bar-rtl.png)
-    skin/classic/bidimailpack/ltr-formatting-bar.png          (chrome/skin-suite/classic/bidimailpack/ltr-formatting-bar.png)
-    skin/classic/bidimailpack/rtl-formatting-bar.png          (chrome/skin-suite/classic/bidimailpack/rtl-formatting-bar.png)
-    skin/classic/bidimailpack/contents.rdf                    (chrome/skin-suite/classic/bidimailpack/contents.rdf)
-    skin/classic/bidimailpack/bidimailpack.css                (chrome/skin-suite/classic/bidimailpack/bidimailpack.css)
-#else
-    skin/classic/bidimailpack/format-buttons-rtl.gif          (chrome/skin-suiterunner/classic/bidimailpack/format-buttons-rtl.gif)
     skin/classic/bidimailpack/main-bar-autodetect.png         (chrome/skin-suiterunner/classic/bidimailpack/main-bar-autodetect.png)
     skin/classic/bidimailpack/main-bar-ltr.png                (chrome/skin-suiterunner/classic/bidimailpack/main-bar-ltr.png)
     skin/classic/bidimailpack/main-bar-rtl.png                (chrome/skin-suiterunner/classic/bidimailpack/main-bar-rtl.png)
     skin/classic/bidimailpack/ltr-formatting-bar.png          (chrome/skin-suiterunner/classic/bidimailpack/ltr-formatting-bar.png)
     skin/classic/bidimailpack/rtl-formatting-bar.png          (chrome/skin-suiterunner/classic/bidimailpack/rtl-formatting-bar.png)
-    skin/classic/bidimailpack/contents.rdf                    (chrome/skin-suiterunner/classic/bidimailpack/contents.rdf)
     skin/classic/bidimailpack/bidimailpack.css                (chrome/skin-suiterunner/classic/bidimailpack/bidimailpack.css)
 #endif
-#endif
-#ifdef MOZ_SUITE_LEGACY
-*   content/bidimailpack/bidimailpack-prefs.js                (chrome/content/bidimailpack/bidimailpack-prefs-suite.js)
-    content/bidimailpack/bidimailpack-prefs.xul               (chrome/content/bidimailpack/bidimailpack-prefs-suite.xul)
-    content/bidimailpack/bidimailpack-preftree.xul            (chrome/content/bidimailpack/bidimailpack-preftree.xul)
-#else
     content/bidimailpack/bidimailpack-prefs.xul               (chrome/content/bidimailpack/bidimailpack-prefs-tbird.xul)
     content/bidimailpack/bidimailpack-prefs-68.xul            (chrome/content/bidimailpack/bidimailpack-prefs-tbird-68.xul)
     content/bidimailpack/bidimailpack-set-preference-types.js (chrome/content/bidimailpack/bidimailpack-set-preference-types.js)
     content/bidimailpack/bidimailpack-prefs.js                (chrome/content/bidimailpack/bidimailpack-prefs-tbird.js)
-#endif
 
 #ifdef MOZ_THUNDERBIRD
 bidimailpack-mac-skin.jar:

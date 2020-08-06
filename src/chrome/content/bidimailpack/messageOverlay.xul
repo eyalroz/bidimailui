@@ -4,9 +4,6 @@
 <!ENTITY % bidimailpackDTD SYSTEM "chrome://bidimailpack/locale/bidimailpack.dtd">
 %bidimailpackDTD;
 ]>
-#ifdef MOZ_SUITE_LEGACY
-<?xml-stylesheet href="chrome://bidimailpack/skin/bidimailpack.css" type="text/css"?>
-#endif
 
 <overlay
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -43,20 +40,13 @@
               oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
   </popup>
 
-#ifdef MOZ_SUITE_LEGACY
-  <hbox id="toolbar_button_box">
-#else
   <toolbarpalette id="MailToolbarPalette">
-#endif
     <toolbarbutton id="bidimailui-forcing-menubutton"
                    oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings();"
                    label="&bidimailui-forcing-menubutton.label;"
                    tooltiptext="&bidimailui-forcing-menubutton.tip;"
                    type="menu-button"
                    selectedItem="autodetect"
-#ifdef MOZ_SUITE_LEGACY
-                   insertafter="button-stop"
-#endif
                    class="toolbarbutton-1 chromeclass-toolbar-additional custombutton">
       <menupopup onpopupshowing="">
         <label value="&bidimailui-forcing-menu.label;" style="font-weight: bold"/>
@@ -78,9 +68,5 @@
           oncommand="BiDiMailUI.MessageOverlay.forceDirection(event,'rtl');" />
       </menupopup>
     </toolbarbutton>
-#ifdef MOZ_SUITE_LEGACY
-  </hbox>
-#else
   </toolbarpalette>
-#endif
 </overlay>

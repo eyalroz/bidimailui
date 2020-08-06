@@ -5,11 +5,6 @@
 %bidimailpackDTD;
 ]>
 
-#ifdef MOZ_SUITE_LEGACY
-<?xml-stylesheet href="chrome://bidimailpack/skin/bidimailpack.css"
-                 type="text/css"?>
-
-#endif
 <overlay
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
@@ -63,15 +58,7 @@
 The formatting toolbar buttons are per-paragraph direction controls,
 the main toolbar buttons are whole-document direction controls. -->
 
-#ifdef MOZ_SUITE_LEGACY
-<toolbar id="composeToolbar">
-  <hbox id="toolbar_button_box">
-    <hbox id="directionality-main-toolbar-section"
-          insertafter="button-save"
-          dir="ltr">
-#else
 <toolbarpalette id="MsgComposeToolbarPalette">
-#endif
   <toolbarbutton id="button-direction-ltr-main-bar"
                  class="toolbarbutton-1"
                  command="cmd_ltr_document"
@@ -84,16 +71,7 @@ the main toolbar buttons are whole-document direction controls. -->
                  observes="rtl-document-direction-broadcaster"
                  label="&bidimail-rtl-button.label;"
                  tooltiptext="&bidimail-rtl-button.tip;"/>
-#ifdef MOZ_SUITE_LEGACY
-    </hbox>
-    <toolbarseparator id="directionality-separator-main-bar"
-                      insertafter="button-save"
-                      class="toolbarseparator-primary"/>
-  </hbox>
-</toolbar>
-#else
 </toolbarpalette>
-#endif
 
 <toolbar id="FormatToolbar">
   <hbox id="directionality-formatting-toolbar-section"
