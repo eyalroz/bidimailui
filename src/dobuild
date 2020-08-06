@@ -17,12 +17,8 @@ case "$TARGET" in
 		TARGET=suiterunner
 		PREPROCESSOR_PARAMS+=" -DMOZ_SUITE -DMOZ_SUITERUNNER"
 		;;
-	suitelegacy | sl | slegacy)
-		TARGET=suitelegacy
-		PREPROCESSOR_PARAMS+=" -DMOZ_SUITE -DMOZ_SUITE_LEGACY"
-		;;
 	*)
-	echo "Please specify either thunderbird, suiterunner or suitelegacy."
+	echo "Please specify either thunderbird or suiterunner."
 	exit 1
 	;;
 esac
@@ -110,15 +106,6 @@ case "$TARGET" in
 		install.rdf \
 		chrome.manifest || exit
 		;;
-	 suitelegacy)
-		 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.js > $BUILDDIR/install.js
-		 cd $BUILDDIR
-		 zip -q -r $XPINAME  \
-			chrome/bidimailpack.jar \
-			defaults/ \
-			install.rdf \
-			install.js || exit
-		 ;;
 esac
 
 ln $XPINAME $LINKNAME
