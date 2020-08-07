@@ -59,7 +59,6 @@ else
 	PREPROCESSOR_PARAMS+=" --no-line-comments"
 fi
 
-echo -e "Building the XPI with the following definitions:\n\n${PREPROCESSOR_PARAMS}\n"
 BUILDDIR="build/$TARGET"
 XPINAME="${SHORTNAME}_${VERSION}_${TARGET}.xpi"
 LINKNAME="${SHORTNAME}_${TARGET}.xpi"
@@ -71,8 +70,7 @@ if [ ! -d build ] ; then mkdir build; fi
 if [ ! -d $BUILDDIR ] ; then mkdir $BUILDDIR; else rm -rf $BUILDDIR/*; fi
 
 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILDDIR/jar.mn
-$BUILDTOOLSDIR/make-jars.pl -v -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILDDIR/jar.mn || exit
-echo -e "\nJAR files ready\n"
+$BUILDTOOLSDIR/make-jars.pl -q -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILDDIR/jar.mn || exit
 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.rdf > $BUILDDIR/install.rdf # For pre-68 Thunderbird versions
 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS manifest.json > $BUILDDIR/manifest.json # For Thunderbird 68 and later
 rm -rf bidimailpack
@@ -94,7 +92,7 @@ case "$TARGET" in
 		$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
 		cp platform/Darwin/chrome.manifest $BUILDDIR/platform/Darwin/chrome.manifest
 		cd $BUILDDIR
-	zip -r $XPINAME  \
+	zip -q -r $XPINAME  \
 		chrome/bidimailpack.jar \
 		defaults/ \
 		platform/Darwin/chrome.manifest \
@@ -106,7 +104,7 @@ case "$TARGET" in
 	suiterunner)
 		$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
 		cd $BUILDDIR
-	zip -r $XPINAME  \
+	zip -q -r $XPINAME  \
 		chrome/bidimailpack.jar \
 		defaults/ \
 		install.rdf \
@@ -115,7 +113,7 @@ case "$TARGET" in
 	 suitelegacy)
 		 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.js > $BUILDDIR/install.js
 		 cd $BUILDDIR
-		 zip -r $XPINAME  \
+		 zip -q -r $XPINAME  \
 			chrome/bidimailpack.jar \
 			defaults/ \
 			install.rdf \
@@ -124,4 +122,3 @@ case "$TARGET" in
 esac
 
 ln $XPINAME $LINKNAME
-echo -e "\nXPI ready\n"
