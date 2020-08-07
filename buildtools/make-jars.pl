@@ -112,6 +112,11 @@ if ("$fileformat" eq "both") {
     $zipmoveopt = "-0";
 }
 
+my $zipquietopt = "";
+if ("$fileformat" eq "jar" || "$fileformat" eq "both") {
+    $zipquietopt = "-q";
+}
+
 my $nofilelocks = 0;
 if (defined($::opt_l)) {
     $nofilelocks = 1;
@@ -271,13 +276,13 @@ sub JarIt
 
             #print "$zipprog $zipmoveopt -uX $jarchive $subargs\n";
             #print "Length of subargs: " . length($subargs) . "\n";
-            system("$zipprog $zipmoveopt $argOpt $jarchive $subargs") == 0 or
+            system("$zipprog $zipquietopt $zipmoveopt $argOpt $jarchive $subargs") == 0 or
                 $err = $? >> 8;
             zipErrorCheck($err,$lockfile);
         }
         #print "Length of args: " . length($args) . "\n";
         #print "$zipprog $zipmoveopt -uX $jarchive $args\n";
-        system("$zipprog $zipmoveopt $argOpt $jarchive $args") == 0 or
+        system("$zipprog $zipquietopt $zipmoveopt $argOpt $jarchive $args") == 0 or
             $err = $? >> 8;
         zipErrorCheck($err,$lockfile);
     }
@@ -295,13 +300,13 @@ sub JarIt
 
             #print "$zipprog $zipmoveopt -X $jarchive $subargs\n";       
             #print "Length of subargs: " . length($subargs) . "\n";
-            system("$zipprog $zipmoveopt -X $jarchive $subargs") == 0 or
+            system("$zipprog $zipquietopt $zipmoveopt -X $jarchive $subargs") == 0 or
                 $err = $? >> 8;
             zipErrorCheck($err,$lockfile);
         }
         #print "Length of args: " . length($overrides) . "\n";
         #print "$zipprog $zipmoveopt -X $jarchive $overrides\n";
-        system("$zipprog $zipmoveopt -X $jarchive $overrides\n") == 0 or 
+        system("$zipprog $zipquietopt $zipmoveopt -X $jarchive $overrides\n") == 0 or 
         $err = $? >> 8;
         zipErrorCheck($err,$lockfile);
     }
