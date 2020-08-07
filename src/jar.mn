@@ -26,7 +26,6 @@ bidimailui.jar:
 *   locale/ur/bidimailui.properties                (chrome/locale/ur/bidimailui.properties)
 *   locale/ur/bidimailui-prefs.dtd                 (chrome/locale/ur/bidimailui-prefs.dtd)
 *   locale/ur/bidimailui.dtd                       (chrome/locale/ur/bidimailui.dtd)
-#ifdef MOZ_THUNDERBIRD
     skin/classic/pinstripe-autodetect-main-bar-24x24.png    (chrome/skin-tbird/classic/pinstripe-autodetect-main-bar-24x24.png)
     skin/classic/pinstripe-ltr-main-bar-24x24.png    (chrome/skin-tbird/classic/pinstripe-ltr-main-bar-24x24.png)
     skin/classic/pinstripe-rtl-main-bar-24x24.png    (chrome/skin-tbird/classic/pinstripe-rtl-main-bar-24x24.png)
@@ -40,24 +39,11 @@ bidimailui.jar:
     skin/classic/rtl-formatting-bar.png              (chrome/skin-tbird/classic/rtl-formatting-bar.png)
     skin/classic/ltr-formatting-bar.png              (chrome/skin-tbird/classic/ltr-formatting-bar.png)
     skin/classic/format-buttons-rtl.png              (chrome/skin-tbird/classic/format-buttons-rtl.png)
-#else
-    content/editorOverlay.xul                    (chrome/content/editorOverlay.xul)
-    content/editorContextMenuOverlayOverlay.xul  (chrome/content/editorContextMenuOverlayOverlay.xul)
-    content/bidimailui-editor.js               (chrome/content/bidimailui-editor.js)
-    skin/classic/format-buttons-rtl.gif          (chrome/skin-suiterunner/classic/format-buttons-rtl.gif)
-    skin/classic/main-bar-autodetect.png         (chrome/skin-suiterunner/classic/main-bar-autodetect.png)
-    skin/classic/main-bar-ltr.png                (chrome/skin-suiterunner/classic/main-bar-ltr.png)
-    skin/classic/main-bar-rtl.png                (chrome/skin-suiterunner/classic/main-bar-rtl.png)
-    skin/classic/ltr-formatting-bar.png          (chrome/skin-suiterunner/classic/ltr-formatting-bar.png)
-    skin/classic/rtl-formatting-bar.png          (chrome/skin-suiterunner/classic/rtl-formatting-bar.png)
-    skin/classic/bidimailui.css                (chrome/skin-suiterunner/classic/bidimailui.css)
-#endif
     content/bidimailui-prefs.xul               (chrome/content/bidimailui-prefs-tbird.xul)
     content/bidimailui-prefs-68.xul            (chrome/content/bidimailui-prefs-tbird-68.xul)
     content/bidimailui-set-preference-types.js (chrome/content/bidimailui-set-preference-types.js)
     content/bidimailui-prefs.js                (chrome/content/bidimailui-prefs-tbird.js)
 
-#ifdef MOZ_THUNDERBIRD
 bidimailui-mac-skin.jar:
     skin/classic/bidimailui.css                    (platform/Darwin/chrome/skin/classic/bidimailui.css)
     skin/classic/ltr-formatting-bar.png              (platform/Darwin/chrome/skin/classic/ltr-formatting-bar.png)
@@ -70,4 +56,3 @@ bidimailui-mac-skin.jar:
     skin/classic/rtl-formatting-bar.png              (platform/Darwin/chrome/skin/classic/rtl-formatting-bar.png)
     skin/classic/winstripe-ltr-main-bar-24x24.png    (platform/Darwin/chrome/skin/classic/winstripe-ltr-main-bar-24x24.png)
     skin/classic/winstripe-rtl-main-bar-24x24.png    (platform/Darwin/chrome/skin/classic/winstripe-rtl-main-bar-24x24.png)
-#endif

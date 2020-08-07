@@ -7,9 +7,6 @@ blockquote[type="cite"][bidimailui-direction-uniformity="rtl"] {
   padding-right: 1em !important;
   border-right-style: solid !important;
   border-right-width: thin !important;
-%ifndef MOZ_THUNDERBIRD
-  border-right-color: blue !important;
-%endif
   padding-left: 0 !important;
   border-left: 0 !important;
 }
@@ -20,9 +17,6 @@ blockquote[type="cite"][bidimailui-direction-uniformity="ltr"] {
   padding-left: 1em !important;
   border-left-style: solid !important;
   border-left-width: thin !important;
-%ifndef MOZ_THUNDERBIRD
-  border-left-color: blue !important;
-%endif
 }
 
 blockquote[type="cite"] {
@@ -32,10 +26,6 @@ blockquote[type="cite"] {
   border-left-style: solid !important;
   border-right-width: 1px !important;
   border-left-width: 1px !important;
-%ifndef MOZ_THUNDERBIRD
-  border-right-color: blue !important;
-  border-left-color: blue !important;
-%endif
 }
 
 
