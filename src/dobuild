@@ -73,16 +73,11 @@ mv ${SHORTNAME} $BUILDDIR/chrome
 
 case "$TARGET" in
 	tbird)
-		mkdir -p $BUILDDIR/platform/Darwin
-		mv ${SHORTNAME}-mac-skin $BUILDDIR/platform/Darwin/chrome
 		$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
-		cp platform/Darwin/chrome.manifest $BUILDDIR/platform/Darwin/chrome.manifest
 		cd $BUILDDIR
 	zip -r $XPINAME  \
 		chrome \
 		defaults/ \
-		platform/Darwin/chrome.manifest \
-		platform/Darwin/chrome \
 		install.rdf \
 		manifest.json \
 		chrome.manifest || exit

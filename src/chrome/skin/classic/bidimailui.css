@@ -7,11 +7,16 @@
               first row coordinate after the image,
               first column coordinate of the image);
 	
-	2. Currently, the sizes of the toolbar icons in Qute are:
+	2. Currently, the sizes of the toolbar icons in Qute / Classic (Windows, Linux default theme) are:
 	      main toolbar                    24px width x 24px height
 	      main toolbar small mode         16px width x 16px height
 
-          formatting/styling toolbar    ??px width x ??px height
+	
+	   and the sizes of the toolbar icons in Pinstripe (Darwin platform default theme) are:
+	      main toolbar on                 32px width x 32px height
+	      main toolbar small mode         24px width x 24px height
+
+          what about the formatting/styling toolbar?
 */				  
 
 /* Messenger Main Toolbar - small icons */
@@ -60,6 +65,50 @@ toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
   -moz-image-region: rect(0px 64px 16px 48px) !important;
 }
 
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/skin/winstripe-autodetect-main-bar-16x16.png");
+  -moz-image-region: rect(0px 24px 24px 0px);
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[platform="Darwin"]:hover {
+  -moz-image-region: rect(0px 48px 24px 24px);
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[platform="Darwin"]:hover:active {
+  -moz-image-region: rect(0px 72px 16px 48px);
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/skin/winstripe-ltr-main-bar-16x16.png");
+  -moz-image-region: rect(0px 24px 24px 0px);
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"]:hover {
+  -moz-image-region: rect(0px 48px 24px 24px);
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"]:hover:active {
+  -moz-image-region: rect(0px 72px 16px 48px);
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"][platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/skin/winstripe-rtl-main-bar-16x16.png");
+  -moz-image-region: rect(0px 24px 24px 0px);
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"][platform="Darwin"]:hover {
+  -moz-image-region: rect(0px 48px 24px 24px);
+}
+
+toolbar[iconsize="small"][platform="Darwin"] #bidimailui-forcing-menubutton[selectedItem="rtl"][platform="Darwin"]:hover:active {
+  -moz-image-region: rect(0px 72px 16px 48px);
+}
+
+toolbar[iconsize="small"][platform="Darwin"] #bidimailui-forcing-menubutton[disabled="true"][platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/skin/winstripe-autodetect-main-bar-16x16.png");
+  -moz-image-region: rect(0px 96px 16px 72px) !important;
+}
+
 /* Messenger Main Toolbar Buttons - large icons */
 
 #bidimailui-forcing-menubutton {
@@ -106,6 +155,51 @@ toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
   -moz-image-region: rect(0px 96px 24px 72px) !important;
 }
 
+#bidimailui-forcing-menubutton[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/skin/winstripe-autodetect-main-bar-24x24.png");
+  -moz-image-region: rect(0px 32px 32px 0px);
+}
+
+#bidimailui-forcing-menubutton[platform="Darwin"]:hover {
+  -moz-image-region: rect(0px 64px 32px 32px);
+}
+
+#bidimailui-forcing-menubutton[platform="Darwin"]:hover:active {
+  -moz-image-region: rect(0px 96px 32px 64px);
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/skin/winstripe-ltr-main-bar-24x24.png");
+  -moz-image-region: rect(0px 32px 32px 0px);
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"]:hover {
+  -moz-image-region: rect(0px 64px 32px 32px);
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"]:hover:active {
+  -moz-image-region: rect(0px 96px 32px 64px);
+}
+
+#bidimailui-forcing-menubutton[selectedItem="rtl"][platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/skin/winstripe-rtl-main-bar-24x24.png");
+  -moz-image-region: rect(0px 32px 32px 0px);
+}
+
+#bidimailui-forcing-menubutton[selectedItem="rtl"][platform="Darwin"]:hover {
+  -moz-image-region: rect(0px 64px 32px 32px);
+}
+
+#bidimailui-forcing-menubutton[selectedItem="rtl"][platform="Darwin"]:hover:active {
+  -moz-image-region: rect(0px 96px 32px 64px);
+}
+
+#bidimailui-forcing-menubutton[disabled="true"][platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/skin/winstripe-autodetect-main-bar-24x24.png");
+  -moz-image-region: rect(0px 128px 24px 96px) !important;
+}
+
+
 /* Composer/Editor Main Toolbar - small icons */
 
 toolbar[iconsize="small"] #button-direction-ltr-main-bar {
@@ -140,6 +234,40 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover:active {
 
 toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
   -moz-image-region: rect(0px 64px 16px 48px) !important;
+}
+
+toolbar[iconsize="small"][platform="Darwin"] #button-direction-ltr-main-bar {
+  list-style-image: url("chrome://bidimailui/skin/winstripe-ltr-main-bar-16x16.png");
+  -moz-image-region: rect(0px 24px 24px 0px);
+}
+
+toolbar[iconsize="small"][platform="Darwin"] #button-direction-ltr-main-bar:hover {
+  -moz-image-region: rect(0px 48px 24px 24px);
+}
+
+toolbar[iconsize="small"][platform="Darwin"] #button-direction-ltr-main-bar:hover:active {
+  -moz-image-region: rect(0px 72px 16px 48px);
+}
+
+toolbar[iconsize="small"][platform="Darwin"] #button-direction-ltr-main-bar[disabled="true"] {
+  -moz-image-region: rect(0px 96px 16px 72px) !important;
+}
+
+toolbar[iconsize="small"][platform="Darwin"] #button-direction-rtl-main-bar {
+  list-style-image: url("chrome://bidimailui/skin/winstripe-rtl-main-bar-16x16.png");
+  -moz-image-region: rect(0px 24px 24px 0px);
+}
+
+toolbar[iconsize="small"][platform="Darwin"] #button-direction-rtl-main-bar:hover {
+  -moz-image-region: rect(0px 48px 24px 24px);
+}
+
+toolbar[iconsize="small"][platform="Darwin"] #button-direction-rtl-main-bar:hover:active {
+  -moz-image-region: rect(0px 72px 16px 48px);
+}
+
+toolbar[iconsize="small"][platform="Darwin"] #button-direction-rtl-main-bar[disabled="true"] {
+  -moz-image-region: rect(0px 96px 16px 72px) !important;
 }
 
 
@@ -179,6 +307,40 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
   -moz-image-region: rect(0px 96px 24px 72px) !important;
 }
 
+#button-direction-ltr-main-bar[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/skin/winstripe-ltr-main-bar-24x24.png");
+  -moz-image-region: rect(0px 32px 32px 0px);
+}
+
+#button-direction-ltr-main-bar[platform="Darwin"]:hover {
+  -moz-image-region: rect(0px 64px 32px 32px);
+}
+
+#button-direction-ltr-main-bar[platform="Darwin"]:hover:active {
+  -moz-image-region: rect(0px 96px 32px 64px);
+}
+
+#button-direction-ltr-main-bar[disabled="true"][platform="Darwin"] {
+  -moz-image-region: rect(0px 128px 24px 96px) !important;
+}
+
+#button-direction-rtl-main-bar[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/skin/winstripe-rtl-main-bar-24x24.png");
+  -moz-image-region: rect(0px 32px 32px 0px);
+}
+
+#button-direction-rtl-main-bar[platform="Darwin"]:hover {
+  -moz-image-region: rect(0px 64px 32px 32px);
+}
+
+#button-direction-rtl-main-bar[platform="Darwin"]:hover:active {
+  -moz-image-region: rect(0px 96px 32px 64px);
+}
+
+#button-direction-rtl-main-bar[disabled="true"][platform="Darwin"] {
+  -moz-image-region: rect(0px 128px 24px 96px) !important;
+}
+
 /* Composer/Editor Formatting Bar Buttons */
 
 #button-direction-ltr-formatting-bar {
@@ -197,4 +359,30 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
 
 #button-direction-rtl-formatting-bar[disabled="true"] {
   -moz-image-region: rect(0px 38px 18px 19px) !important;
+}
+
+#FormatToolbar[platform="Darwin"] > toolbarbutton[rtlmode="true"] {
+  list-style-image: url("chrome://bidimailui/skin/format-buttons-rtl.png")  !important;
+}
+
+#button-direction-ltr-formatting-bar[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/skin/ltr-formatting-bar.png");
+  -moz-image-region: rect(0px 19px 18px 0px);
+}
+
+#button-direction-ltr-formatting-bar[disabled="true"][platform="Darwin"] {
+  -moz-image-region: rect(0px 38px 18px 19px) !important;
+}
+
+#button-direction-rtl-formatting-bar[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/skin/rtl-formatting-bar.png");
+  -moz-image-region: rect(0px 19px 18px 0px);
+}
+
+#button-direction-rtl-formatting-bar[disabled="true"][platform="Darwin"] {
+  -moz-image-region: rect(0px 38px 18px 19px) !important;
+}
+
+#FormatToolbar[platform="Darwin"] > toolbarbutton[rtlmode="true"] {
+  list-style-image: url("chrome://bidimailui/skin/format-buttons-rtl.png")  !important;
 }
