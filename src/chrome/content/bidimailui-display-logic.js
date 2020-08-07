@@ -23,7 +23,7 @@ BiDiMailUI.Display = {
       }
 
 #ifdef DEBUG_browserOnLoadHandler
-      BiDiMailUI.JSConsoleService.logStringMessage("completed charset correction phase");
+      console.log("completed charset correction phase");
 #endif
 
     },
@@ -48,7 +48,7 @@ BiDiMailUI.Display = {
       BiDiMailUI.Display.appendStyleSheet(domDocument, 'direction-autodetection.css');
       var detectedOverallDirection = BiDiMailUI.directionCheck(document, NodeFilter, body);
 #ifdef DEBUG_directionAutodetection
-      BiDiMailUI.JSConsoleService.logStringMessage("detected overall direction: " + detectedOverallDirection);
+      console.log("detected overall direction: " + detectedOverallDirection);
 #endif
       body.setAttribute('bidimailui-direction-uniformity',detectedOverallDirection);
       if (detectedOverallDirection == "mixed") {
@@ -68,7 +68,7 @@ BiDiMailUI.Display = {
   setMessageDirectionForcing : function(body,forcedDirection) {
     // we assume forcedDirection is 'rtl', 'ltr' or null
 #ifdef DEBUG_setMessageDirectionForcing
-    BiDiMailUI.JSConsoleService.logStringMessage('SetMessageDirection(' + forcedDirection + ')');
+    console.log('SetMessageDirection(' + forcedDirection + ')');
 #endif
     BiDiMailUI.Display.setDirections(body,forcedDirection);
     if (!forcedDirection) {
@@ -112,7 +112,7 @@ BiDiMailUI.Display = {
       Components.interfaces.nsIPrefLocalizedString).data;
 
 #ifdef DEBUG_charsetMisdetectionCorrectionPhase
-    BiDiMailUI.JSConsoleService.logStringMessage("charsetPrefValue = " + charsetPrefValue);
+    console.log("charsetPrefValue = " + charsetPrefValue);
 #endif
         
     // if the charset pref is not one we can use for detecting mis-decoded
@@ -160,7 +160,7 @@ BiDiMailUI.Display = {
 
   splitTextElementsInPlainMessageDOMTree : function(subBody) {
 #ifdef DEBUG_splitTextElementsInPlainMessageDOMTree
-    BiDiMailUI.JSConsoleService.logStringMessage("in BiDiMailUI.Display.splitTextElementsInPlainMessageDOMTree()");
+    console.log("in BiDiMailUI.Display.splitTextElementsInPlainMessageDOMTree()");
 #endif
     var treeWalker = document.createTreeWalker(
       subBody,
@@ -171,7 +171,7 @@ BiDiMailUI.Display = {
     var node = treeWalker.nextNode();
     while (node) {
 #ifdef DEBUG_splitTextElementsInPlainMessageDOMTree
-      BiDiMailUI.JSConsoleService.logStringMessage("-----\ntext node\n-----\n" + node.nodeValue);
+      console.log("-----\ntext node\n-----\n" + node.nodeValue);
 #endif
       // TODO: ensure the parent's a PRE or BLOCKQUOTE or something else that's nice
       let textSplit = new RegExp (BiDiMailUI.RegExpStrings.TEXT_SPLIT_SEQUENCE, "m");
@@ -181,7 +181,7 @@ BiDiMailUI.Display = {
          continue;
       }
 #ifdef DEBUG_splitTextElementsInPlainMessageDOMTree
-      BiDiMailUI.JSConsoleService.logStringMessage(RegExp.leftContext + "\n-----\n"+RegExp.lastMatch+"\n-----\n"+RegExp.rightContext);
+      console.log(RegExp.leftContext + "\n-----\n"+RegExp.lastMatch+"\n-----\n"+RegExp.rightContext);
 #endif
 
       var restOfText = node.cloneNode(false);
@@ -197,7 +197,7 @@ BiDiMailUI.Display = {
       // everything before it remains
       while (node.nextSibling) {
 #ifdef DEBUG_splitTextElementsInPlainMessageDOMTree
-//    BiDiMailUI.JSConsoleService.logStringMessage("nextsibling =\n" + node.nextSibling + "\nvalue:\n"+(node.nextSibling ? node.nextSibling.nodeValue : null));
+//    console.log("nextsibling =\n" + node.nextSibling + "\nvalue:\n"+(node.nextSibling ? node.nextSibling.nodeValue : null));
 #endif
         var tempNode = node.nextSibling;
         firstPartOfParent.removeChild(node.nextSibling);
@@ -233,7 +233,7 @@ BiDiMailUI.Display = {
           (node.parentNode.nodeName != 'BLOCKQUOTE')) {
         // and other such elements within moz-text-flowed messages
 #ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
-        BiDiMailUI.JSConsoleService.logStringMessage("not handling node\n" + node.nodeValue + "\nwith parent node name " + node.parentNode.nodeName);
+        console.log("not handling node\n" + node.nodeValue + "\nwith parent node name " + node.parentNode.nodeName);
 #endif
         continue;
       }
@@ -241,12 +241,12 @@ BiDiMailUI.Display = {
           ((node.parentNode.nodeName == 'A') &&
           (node.parentNode.parentNode.hasAttribute('bidimailui-generated')))) {
 #ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
-        BiDiMailUI.JSConsoleService.logStringMessage("already handled node\n"+ node.nodeValue);
+        console.log("already handled node\n"+ node.nodeValue);
 #endif
         continue;
       }
 #ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
-      BiDiMailUI.JSConsoleService.logStringMessage("wrapping with DIV, node\n" + node.nodeValue);
+      console.log("wrapping with DIV, node\n" + node.nodeValue);
 #endif
       var wrapperDiv = clonedDiv.cloneNode(false);
 
@@ -271,7 +271,7 @@ BiDiMailUI.Display = {
         sibling = wrapperDiv.nextSibling
         if (sibling.nodeName == 'BLOCKQUOTE') {
 #ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
-          BiDiMailUI.JSConsoleService.logStringMessage("hit blockquote, finishing walk");
+          console.log("hit blockquote, finishing walk");
 #endif
           break;
         }
@@ -283,12 +283,12 @@ BiDiMailUI.Display = {
             wrapperDiv.parentNode.removeChild(sibling);
           }
 #ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
-            BiDiMailUI.JSConsoleService.logStringMessage("hit BR with emptyLine = " + emptyLine + "\nfinishing walk");
+            console.log("hit BR with emptyLine = " + emptyLine + "\nfinishing walk");
 #endif
           break;
         }
 #ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
-        BiDiMailUI.JSConsoleService.logStringMessage("adding node " + sibling + " to DIV\nnode name:" + node.nodeName + "\nnode value\n" + node.nodeValue);
+        console.log("adding node " + sibling + " to DIV\nnode name:" + node.nodeName + "\nnode value\n" + node.nodeValue);
 #endif
         wrapperDiv.parentNode.removeChild(sibling);
         wrapperDiv.appendChild(sibling);
@@ -300,25 +300,25 @@ BiDiMailUI.Display = {
       }
 #ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
       if (!sibling)
-        BiDiMailUI.JSConsoleService.logStringMessage("walk ends after last sibling!");
+        console.log("walk ends after last sibling!");
 #endif
     }
   },
 
   preprocessMessageDOM : function(body) {
 #ifdef DEBUG_preprocessMessageDOM
-    BiDiMailUI.JSConsoleService.logStringMessage("BiDiMailUI.Display.preprocessMessageDOM");
+    console.log("BiDiMailUI.Display.preprocessMessageDOM");
     if (body.childNodes.item(1))
-      BiDiMailUI.JSConsoleService.logStringMessage("body.childNodes.item(1).className = " + body.childNodes.item(1).className);
+      console.log("body.childNodes.item(1).className = " + body.childNodes.item(1).className);
     else
-      BiDiMailUI.JSConsoleService.logStringMessage("body has no children");
+      console.log("body has no children");
 #endif
 
     for (let i=0; i < body.childNodes.length; i++) {
       var subBody = body.childNodes.item(i);
 
 #ifdef DEBUG_preprocessMessageDOM
-      BiDiMailUI.JSConsoleService.logStringMessage('subbody ' + i + ' is ' + subBody.className);
+      console.log('subbody ' + i + ' is ' + subBody.className);
 #endif
 
       if (subBody.className == "moz-text-plain") {
@@ -346,7 +346,7 @@ BiDiMailUI.Display = {
       elementsRequiringExplicitDirection.push(subBody);
 
 #ifdef DEBUG_gatherElementsRequiringDirectionSetting
-      BiDiMailUI.JSConsoleService.logStringMessage('subbody ' + i + ' is ' + subBody.className);
+      console.log('subbody ' + i + ' is ' + subBody.className);
 #endif
 
       var tagNames = {
@@ -368,7 +368,7 @@ BiDiMailUI.Display = {
 
   detectDirections : function(body) {
 #ifdef DEBUG_detectAndSetDirections
-    BiDiMailUI.JSConsoleService.logStringMessage(
+    console.log(
       "in detectAndSetDirections for message\n" + gFolderDisplay.selectedMessageUris[0]);
 #endif
     
@@ -377,7 +377,7 @@ BiDiMailUI.Display = {
       body, elementsRequiringExplicitDirection);
 
 #ifdef DEBUG_detectAndSetDirections
-    BiDiMailUI.JSConsoleService.logStringMessage("elementsRequiringExplicitDirection.length = " + elementsRequiringExplicitDirection.length);
+    console.log("elementsRequiringExplicitDirection.length = " + elementsRequiringExplicitDirection.length);
 #endif
 
     // direction-check all of the elements whose direction should be set explicitly
@@ -387,17 +387,17 @@ BiDiMailUI.Display = {
       try {
      
 #ifdef DEBUG_detectAndSetDirections
-        BiDiMailUI.JSConsoleService.logStringMessage('elementsRequiringExplicitDirection[ ' + i + ']: ' + node + "\ntype: " + node.nodeType + "\nclassName: " + node.className + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+        console.log('elementsRequiringExplicitDirection[ ' + i + ']: ' + node + "\ntype: " + node.nodeType + "\nclassName: " + node.className + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
 #endif
           
         var detectedDirection = BiDiMailUI.directionCheck(document, NodeFilter, node);
 #ifdef DEBUG_detectAndSetDirections
-        BiDiMailUI.JSConsoleService.logStringMessage("detected direction: " + detectedDirection);
+        console.log("detected direction: " + detectedDirection);
 #endif
         node.setAttribute('bidimailui-direction-uniformity',detectedDirection);
       } catch(ex) {
 #ifdef DEBUG_detectAndSetDirections
-        BiDiMailUI.JSConsoleService.logStringMessage(ex);
+        console.log(ex);
 #endif
       }
     }
@@ -422,7 +422,7 @@ BiDiMailUI.Display = {
 
 
 #ifdef DEBUG_setDirections
-    BiDiMailUI.JSConsoleService.logStringMessage(
+    console.log(
       'settings directions to ' + 
       (forcedDirection ? forcedDirection :
        'detected/original directions'));
@@ -496,7 +496,7 @@ BiDiMailUI.Display = {
     }
 
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-    BiDiMailUI.JSConsoleService.logStringMessage('in BiDiMailUI.Display.fixLoadedMessageCharsetIssues()');
+    console.log('in BiDiMailUI.Display.fixLoadedMessageCharsetIssues()');
 #endif
 
     /*
@@ -556,7 +556,7 @@ BiDiMailUI.Display = {
 
     // This sets parameter no. 2
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-    BiDiMailUI.JSConsoleService.logStringMessage('current charset used for decoding:\n' + cMCParams.currentCharset);
+    console.log('current charset used for decoding:\n' + cMCParams.currentCharset);
 #endif
     if ((cMCParams.preferredCharset != null) &&
         (cMCParams.currentCharset == cMCParams.preferredCharset))
@@ -584,7 +584,7 @@ BiDiMailUI.Display = {
         cMCParams.mailnewsDecodingType = "UTF-8"; break;
       default: 
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-    BiDiMailUI.JSConsoleService.logStringMessage(
+    console.log(
       'returning since cMCParams.currentCharset = ' 
       + cMCParams.currentCharset);
 #endif
@@ -663,7 +663,7 @@ BiDiMailUI.Display = {
       contentToMatch.test(cMCParams.messageSubject);
 
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-    BiDiMailUI.JSConsoleService.logStringMessage("--------\n " +
+    console.log("--------\n " +
       (mustKeepCharset ? "Y" : "N") +
       ((cMCParams.mailnewsDecodingType == "latin-charset") ? "N" :
        ((cMCParams.mailnewsDecodingType == "preferred-charset") ? "C" : "U")) +
@@ -684,7 +684,7 @@ BiDiMailUI.Display = {
             else {
               // NNNY
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-              BiDiMailUI.JSConsoleService.logStringMessage("Forcing charset UTF-8");
+              console.log("Forcing charset UTF-8");
 #endif
               cMCParams.needCharsetForcing = true;
               cMCParams.charsetToForce = "utf-8";
@@ -695,7 +695,7 @@ BiDiMailUI.Display = {
             if (!haveUTF8Text) {
               //NNYN 
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-              BiDiMailUI.JSConsoleService.logStringMessage("Forcing charset " + cMCParams.preferredCharset);
+              console.log("Forcing charset " + cMCParams.preferredCharset);
 #endif
               cMCParams.needCharsetForcing = true;
               cMCParams.charsetToForce = cMCParams.preferredCharset;
@@ -717,7 +717,7 @@ BiDiMailUI.Display = {
             else {
               // NCNY
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-              BiDiMailUI.JSConsoleService.logStringMessage("Forcing charset UTF-8");
+              console.log("Forcing charset UTF-8");
 #endif
               cMCParams.needCharsetForcing = true;
               cMCParams.charsetToForce = "utf-8";
@@ -731,7 +731,7 @@ BiDiMailUI.Display = {
             else {
               // NCYY
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-              BiDiMailUI.JSConsoleService.logStringMessage("Forcing charset windows-1252");
+              console.log("Forcing charset windows-1252");
 #endif
               cMCParams.needCharsetForcing = true;
               cMCParams.charsetToForce = "windows-1252";
@@ -752,7 +752,7 @@ BiDiMailUI.Display = {
             if (!haveUTF8Text) {
               // NUYN
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-              BiDiMailUI.JSConsoleService.logStringMessage("Forcing charset " + cMCParams.preferredCharset);
+              console.log("Forcing charset " + cMCParams.preferredCharset);
 #endif
               cMCParams.needCharsetForcing = true;
               cMCParams.charsetToForce = cMCParams.preferredCharset;
@@ -761,7 +761,7 @@ BiDiMailUI.Display = {
             else {
               // NUYY
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-              BiDiMailUI.JSConsoleService.logStringMessage("Forcing charset windows-1252");
+              console.log("Forcing charset windows-1252");
 #endif
               cMCParams.needCharsetForcing = true;
               cMCParams.charsetToForce = "windows-1252";
@@ -797,12 +797,12 @@ BiDiMailUI.Display = {
       if (BiDiMailUI.matchInText(document, NodeFilter, cMCParams.body, contentToMatch) ||
           contentToMatch.test(cMCParams.messageSubject)) {
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-          BiDiMailUI.JSConsoleService.logStringMessage(
+          console.log(
             "found a long FFFD sequence (see bug 23322)");
 #endif
         if (mustKeepCharset) {
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-          BiDiMailUI.JSConsoleService.logStringMessage(
+          console.log(
             "...but we're not allowed to reload!");
 #endif
         }
@@ -827,7 +827,7 @@ BiDiMailUI.Display = {
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
         // need to re-apply the same charset, as a workaround for a weird mailnews bug;
         // see https://www.mozdev.org/bugs/show_bug.cgi?id=18707
-        BiDiMailUI.JSConsoleService.logStringMessage(
+        console.log(
           "re-applying charset - bug 18707 workaround");
 #endif
       }
