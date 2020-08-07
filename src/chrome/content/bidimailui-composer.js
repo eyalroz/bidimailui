@@ -1,5 +1,8 @@
 var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
 
+var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
+var { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm");
+
 BiDiMailUI.Composition = {
 
   lastWindowToHaveFocus : null,
@@ -515,10 +518,8 @@ BiDiMailUI.Composition = {
     // single message window
 
     var win, loadedMessageURI, displayedCopyBrowser;
-    var windowManager = Components.classes["@mozilla.org/appshell/window-mediator;1"]
-          .getService(Components.interfaces.nsIWindowMediator);
-    var messengerWindowList = windowManager.getEnumerator("mail:3pane");
-    var messageWindowList = windowManager.getEnumerator("mail:messageWindow");
+    var messengerWindowList = Services.wm.getEnumerator("mail:3pane");
+    var messageWindowList = Services.wm.getEnumerator("mail:messageWindow");
     var tabInfo,tabIndex;
 
     while (true) {

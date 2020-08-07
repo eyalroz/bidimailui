@@ -1,4 +1,5 @@
 var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
+var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
 // This file constains UI and glue code only, calling
 // display logic code elsewhere actually act on the displayed message
@@ -191,8 +192,6 @@ BiDiMailUI.MessageOverlay = {
   // this function is passed to the charset phase actions and run 
   // from there, but it's a UI function
   promptForDefaultCharsetChange : function() {
-    var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-                            .getService(Components.interfaces.nsIPromptService);
     var list = [
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.set_to_windows_1255"),
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.set_to_windows_1256"),
@@ -203,7 +202,7 @@ BiDiMailUI.MessageOverlay = {
     console.log("BiDiMailUI.Strings.GetStringFromName(\"bidimailui.charset_dialog.set_to_windows_1255\") =\n" + BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.set_to_windows_1255"));
 #endif
 
-    var ok = prompts.select(
+    var ok = Services.prompt.select(
       window,
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.window_title"),
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.dialog_message"),
