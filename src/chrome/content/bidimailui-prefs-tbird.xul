@@ -3,43 +3,22 @@
 <?xml-stylesheet type="text/css" href="chrome://global/skin/"?>
 <?xml-stylesheet type="text/css" href="chrome://messenger/skin/preferences/preferences.css"?>
 
-<!DOCTYPE prefwindow [
+<!DOCTYPE dialog [
   <!ENTITY % bdmDTD SYSTEM
              "chrome://bidimailui/locale/bidimailui-prefs.dtd">
   %bdmDTD;
 ]>
 
-<prefwindow id="bidimailui-prefwindow"
+<dialog id="bidimailui-dialog"
+            xmlns:html="http://www.w3.org/1999/xhtml"
             xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
             title="&bidimailui-settings;"
             dlgbuttons="accept,cancel">
-  <prefpane id="bidiMailUIPrefPane"
-            helpURI="&guide-url;"
-            onpaneload="BiDiMailUI.PrefPane.init();">
-    <preferences id="bidiMailUIPrefs">
-      <preference id="extensions.bidiui.mail.compose.default_direction"
-                  name="extensions.bidiui.mail.compose.default_direction"
-                  type="string"/>
-      <preference id="extensions.bidiui.mail.compose.reply_in_default_direction"
-                  name="extensions.bidiui.mail.compose.reply_in_default_direction"
-                  type="bool"/>
-      <preference id="extensions.bidiui.mail.compose.show_direction_buttons"
-                  name="extensions.bidiui.mail.compose.show_direction_buttons"
-                  type="bool"/>
-      <preference id="extensions.bidiui.mail.compose.start_composition_in_paragraph_mode"
-                  name="extensions.bidiui.mail.compose.start_composition_in_paragraph_mode"
-                  type="bool"/>
-      <preference id="extensions.bidiui.mail.compose.space_between_paragraphs.value"
-                  name="extensions.bidiui.mail.compose.space_between_paragraphs.value"
-                  type="string"/>
-      <preference id="extensions.bidiui.mail.compose.space_between_paragraphs.scale"
-                  name="extensions.bidiui.mail.compose.space_between_paragraphs.scale"
-                  type="string"
-                  onchange="BiDiMailUI.PrefPane.updateSpaceBetweenParagraphsValue();"/>
-    </preferences>
 
-    <script type="application/x-javascript"
-            src="chrome://bidimailui/content/bidimailui-common.js"/>
+  <vbox id="bidiMailUIPrefPane"
+            helpURI="&guide-url;"
+            onload="BiDiMailUI.PrefPane.init();">
+
     <script type="application/x-javascript"
             src="chrome://bidimailui/content/bidimailui-prefs.js"/>
 
@@ -78,7 +57,7 @@
       <label value="&spaceBetweenParagraphs.label;"
              accesskey="&spaceBetweenParagraphs.accesskey;"
              control="space_between_paragraphs_value_text"/>
-      <textbox id="space_between_paragraphs_value_text"
+      <html:input id="space_between_paragraphs_value_text"
                size="4"
                preference="extensions.bidiui.mail.compose.space_between_paragraphs.value"
                onsynctopreference="return 
@@ -97,5 +76,12 @@
         </menupopup>
       </menulist>
     </hbox>
-  </prefpane>
-</prefwindow>
+  </vbox>
+
+  <script 
+    src="chrome://global/content/preferencesBindings.js"
+    type="application/x-javascript"/>
+  <script 
+     src="chrome://bidimailui/content/bidimailui-set-preference-types.js" 
+     type="application/x-javascript"/>  
+</dialog>

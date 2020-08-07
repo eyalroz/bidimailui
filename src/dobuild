@@ -13,12 +13,7 @@ case "$TARGET" in
 		TARGET=tbird
 		PREPROCESSOR_PARAMS+=" -DMOZ_THUNDERBIRD"
 		;;
-	suiterunner | sr | srunner)
-		TARGET=suiterunner
-		PREPROCESSOR_PARAMS+=" -DMOZ_SUITE -DMOZ_SUITERUNNER"
-		;;
-	*)
-	echo "Please specify either thunderbird or suiterunner."
+		echo "Please specify thunderbird as the target (yes, that's a bit redundant)."
 	exit 1
 	;;
 esac
@@ -90,15 +85,6 @@ case "$TARGET" in
 		platform/Darwin/chrome \
 		install.rdf \
 		manifest.json \
-		chrome.manifest || exit
-		;;
-	suiterunner)
-		$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
-		cd $BUILDDIR
-	zip -r $XPINAME  \
-		chrome/${SHORTNAME} \
-		defaults/ \
-		install.rdf \
 		chrome.manifest || exit
 		;;
 esac

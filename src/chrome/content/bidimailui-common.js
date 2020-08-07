@@ -206,35 +206,14 @@ BiDiMailUI.Prefs = {
   },
 
   setAppStringPref: function(appPrefName, str) {
-#ifdef MOZ_THUNDERBIRD
-      if (BiDiMailUI.App.versionIsAtLeast("58.0b1")) {
-        BiDiMailUI.Prefs.prefService.setStringPref(appPrefName, str);
-      }
-      else
-#endif
-      {     
-        BiDiMailUI.Prefs.prefService.setComplexValue(
-          appPrefName, Components.interfaces.nsISupportsString, str);
-      }
+    BiDiMailUI.Prefs.prefService.setStringPref(appPrefName, str);
   },
 
   addObserver: function(domain, listener) {
     try {
-      if (BiDiMailUI.App.versionIsAtLeast("65.0")) {
-        console.log("version is at least" + BiDiMailUI.App.version());
-        BiDiMailUI.Prefs.prefService.addObserver(
-          BiDiMailUI.Composition.directionButtonsPrefListener.domain,
-          BiDiMailUI.Composition.directionButtonsPrefListener);
-      } 
-      else {
-        console.log("version is less than " + BiDiMailUI.App.version());
-        let pbi = BiDiMailUI.Prefs.prefService.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
-        let dontHoldWeakReference = false;
-        pbi.addObserver(
-          BiDiMailUI.Composition.directionButtonsPrefListener.domain,
-          BiDiMailUI.Composition.directionButtonsPrefListener, 
-          dontHoldWeakReference);
-      }
+      BiDiMailUI.Prefs.prefService.addObserver(
+        BiDiMailUI.Composition.directionButtonsPrefListener.domain,
+        BiDiMailUI.Composition.directionButtonsPrefListener);
     }
     catch(ex) {
       dump("Failed adding preference observer: " + ex + "\n");
@@ -243,17 +222,9 @@ BiDiMailUI.Prefs = {
 
   removeObserver: function(domain, listener) {
     try {
-      if (BiDiMailUI.App.versionIsAtLeast("65.0")) {
-        BiDiMailUI.Prefs.prefService.removeObserver(
-          BiDiMailUI.Composition.directionButtonsPrefListener.domain,
-          BiDiMailUI.Composition.directionButtonsPrefListener);
-      } 
-      else {
-        var pbi = BiDiMailUI.Prefs.prefService.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
-        pbi.removeObserver(
-          BiDiMailUI.Composition.directionButtonsPrefListener.domain,
-          BiDiMailUI.Composition.directionButtonsPrefListener);
-      }
+      BiDiMailUI.Prefs.prefService.removeObserver(
+        BiDiMailUI.Composition.directionButtonsPrefListener.domain,
+        BiDiMailUI.Composition.directionButtonsPrefListener);
     }
     catch(ex) {
       dump("Failed removing preference observer: " + ex + "\n");

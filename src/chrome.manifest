@@ -14,5 +14,4 @@ style chrome://messenger/content/messengercompose/messengercompose.xul chrome://
 style chrome://messenger/content/messageWindow.xul chrome://bidimailui/skin/bidimailui.css
 style chrome://messenger/content/messenger.xul chrome://bidimailui/skin/bidimailui.css
 skin bidimailui modern/1.0 chrome/skin/modern/bidimailui/ application={92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}
-style chrome://global/content/customizeToolbar.xul chrome://bidimailui/skin/bidimailui.css appversion<59.0a1
 style chrome://messenger/content/customizeToolbar.xul chrome://bidimailui/skin/bidimailui.css appversion>=59.0a1

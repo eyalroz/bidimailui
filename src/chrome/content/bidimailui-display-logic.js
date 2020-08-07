@@ -1,11 +1,4 @@
-var moduleURI = "chrome://bidimailui/content/bidimailui-common.js";
-if (typeof(ChromeUtils) != "undefined") {
-  if (ChromeUtils.import) {
-    var { BiDiMailUI } = ChromeUtils.import(moduleURI);
-  }
-  else { Components.utils.import(moduleURI);}
-}
-else { Components.utils.import(moduleURI); }
+var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
 
 // Code outside BiDi Mail UI should only use the 
 // BiDiMailUI.Display.ActionPhases and perhaps the
