@@ -5,14 +5,14 @@
 
 <!DOCTYPE dialog [
   <!ENTITY % bdmDTD SYSTEM
-             "chrome://bidimailpack/locale/bidimailpack-prefs.dtd">
+             "chrome://bidimailui/locale/bidimailui-prefs.dtd">
   %bdmDTD;
 ]>
 
 <dialog id="bidimailui-dialog"
             xmlns:html="http://www.w3.org/1999/xhtml"
             xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-            title="&bidimailpack-settings;"
+            title="&bidimailui-settings;"
             dlgbuttons="accept,cancel">
 
   <vbox id="bidiMailUIPrefPane"
@@ -20,7 +20,7 @@
             onload="BiDiMailUI.PrefPane.init();">
 
     <script type="application/x-javascript"
-            src="chrome://bidimailpack/content/bidimailpack-prefs.js"/>
+            src="chrome://bidimailui/content/bidimailui-prefs.js"/>
 
     <groupbox>
       <caption label="&default-dir;"/>
@@ -82,6 +82,6 @@
     src="chrome://global/content/preferencesBindings.js"
     type="application/x-javascript"/>
   <script 
-     src="chrome://bidimailpack/content/bidimailpack-set-preference-types.js" 
+     src="chrome://bidimailui/content/bidimailui-set-preference-types.js" 
      type="application/x-javascript"/>  
 </dialog>

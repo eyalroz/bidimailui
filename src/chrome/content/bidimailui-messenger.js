@@ -1,4 +1,4 @@
-var moduleURI = "chrome://bidimailpack/content/bidimailpack-common.js";
+var moduleURI = "chrome://bidimailui/content/bidimailui-common.js";
 if (typeof(ChromeUtils) != "undefined") {
   if (ChromeUtils.import) {
     var { BiDiMailUI } = ChromeUtils.import(moduleURI);

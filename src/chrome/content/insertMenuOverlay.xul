@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE overlay [
-<!ENTITY % bidimailpackDTD SYSTEM "chrome://bidimailpack/locale/bidimailpack.dtd">
-%bidimailpackDTD;
+<!ENTITY % bidimailuiDTD SYSTEM "chrome://bidimailui/locale/bidimailui.dtd">
+%bidimailuiDTD;
 ]>
 
 <overlay

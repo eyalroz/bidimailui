@@ -18,7 +18,7 @@ BiDiMailUI.__defineGetter__("Strings", function() {
   return BiDiMailUI.Strings =
     Components.classes["@mozilla.org/intl/stringbundle;1"]
       .getService(Components.interfaces.nsIStringBundleService)
-      .createBundle("chrome://bidimailpack/locale/bidimailpack.properties");
+      .createBundle("chrome://bidimailui/locale/bidimailui.properties");
   });
 
 BiDiMailUI.__defineGetter__("UnicodeConverter", function() {

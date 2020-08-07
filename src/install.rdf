@@ -43,10 +43,10 @@
     <em:contributor>Reuven Gonen</em:contributor>
     <em:homepageURL>http://github.com/eyalroz/bidimailui/</em:homepageURL>
     <em:type>2</em:type> <!-- type=extension -->
-    <em:iconURL>chrome://bidimailpack/content/bidimailpack.png</em:iconURL>
+    <em:iconURL>chrome://bidimailui/content/bidimailui.png</em:iconURL>
 
 #ifndef MOZ_SUITE_LEGACY
-    <em:optionsURL>chrome://bidimailpack/content/bidimailpack-prefs.xul</em:optionsURL>
+    <em:optionsURL>chrome://bidimailui/content/bidimailui-prefs.xul</em:optionsURL>
 #endif
 
   </Description>

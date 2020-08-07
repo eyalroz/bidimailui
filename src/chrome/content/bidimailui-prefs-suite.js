@@ -1,4 +1,4 @@
-var moduleURI = "chrome://bidimailpack/content/bidimailpack-common.js";
+var moduleURI = "chrome://bidimailui/content/bidimailui-common.js";
 if (typeof(ChromeUtils) != "undefined") {
   if (ChromeUtils.import) {
     var { BiDiMailUI } = ChromeUtils.import(moduleURI);
@@ -17,23 +17,23 @@ BiDiMailUI.PrefPane = {
 
   get spaceBetweenParagraphsValue()
   {
-    return document.getElementById("bidimailpack-space-between-paragraphs-value").value;
+    return document.getElementById("bidimailui-space-between-paragraphs-value").value;
   },
 
   set spaceBetweenParagraphsValue(val)
   {
-    document.getElementById("bidimailpack-space-between-paragraphs-value").value = val;
+    document.getElementById("bidimailui-space-between-paragraphs-value").value = val;
     return val;
   },
 
   get spaceBetweenParagraphsScale()
   {
-    return document.getElementById("bidimailpack-space-between-paragraphs-scale").value;
+    return document.getElementById("bidimailui-space-between-paragraphs-scale").value;
   },
 
   set spaceBetweenParagraphsScale(val)
   {
-    document.getElementById("bidimailpack-space-between-paragraphs-scale").value = val;
+    document.getElementById("bidimailui-space-between-paragraphs-scale").value = val;
     return val;
   },
 

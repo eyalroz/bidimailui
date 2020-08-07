@@ -2,63 +2,63 @@
 
 <?xml-stylesheet type="text/css" href="chrome://communicator/skin/"?>
 
-<!DOCTYPE page SYSTEM "chrome://bidimailpack/locale/bidimailpack-prefs.dtd">
+<!DOCTYPE page SYSTEM "chrome://bidimailui/locale/bidimailui-prefs.dtd">
 
 <page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
       xmlns:html="http://www.w3.org/1999/xhtml"
       onload="parent.initPanel(panel);"
       onunload="gBDMPrefPane.onunload();"
-      headertitle="&bidimailpack-preftree-label;">
+      headertitle="&bidimailui-preftree-label;">
 
   <script type="application/x-javascript"
-          src="chrome://bidimailpack/content/bidimailpack-common.js"/>
+          src="chrome://bidimailui/content/bidimailui-common.js"/>
   <script type="application/x-javascript"
-          src="chrome://bidimailpack/content/bidimailpack-prefs.js"/>
+          src="chrome://bidimailui/content/bidimailui-prefs.js"/>
   <script type="application/x-javascript">
-    var panel = "chrome://bidimailpack/content/bidimailpack-prefs.xul";
-    var _elementIDs = ["bidimailpack-default-dir",
-                       "bidimailpack-reply-in-default-dir",
-                       "bidimailpack-display-buttons",
-                       "bidimailpack-default-to-paragraph-mode"];
+    var panel = "chrome://bidimailui/content/bidimailui-prefs.xul";
+    var _elementIDs = ["bidimailui-default-dir",
+                       "bidimailui-reply-in-default-dir",
+                       "bidimailui-display-buttons",
+                       "bidimailui-default-to-paragraph-mode"];
   </script>
 
   <groupbox>
     <caption label="&message-composition-groupbox-caption;"/>
     <groupbox>
       <caption>&default-dir;</caption>
-      <radiogroup id="bidimailpack-default-dir"
+      <radiogroup id="bidimailui-default-dir"
                   prefstring="extensions.bidiui.mail.compose.default_direction"
                   preftype="string">
-        <radio id="bidimailpack-default-dir-ltr"
+        <radio id="bidimailui-default-dir-ltr"
                value="ltr"
                label="&ltr.label;"
                accesskey="&ltr.accesskey;"/>
-        <radio id="bidimailpack-default-dir-rtl"
+        <radio id="bidimailui-default-dir-rtl"
                value="rtl"
                label="&rtl.label;"
                accesskey="&rtl.accesskey;"/>
-        <radio id="bidimailpack-default-dir-last-used"
+        <radio id="bidimailui-default-dir-last-used"
                value="last_used"
                label="&last_used.label;"
                accesskey="&last_used.accesskey;"/>
       </radiogroup>
     </groupbox>
     <spacer/>
-    <checkbox id="bidimailpack-reply-in-default-dir"
+    <checkbox id="bidimailui-reply-in-default-dir"
               prefstring="extensions.bidiui.mail.compose.reply_in_default_direction"
               label="&always-reply-in-default-dir.label;"
               accesskey="&always-reply-in-default-dir.accesskey;"
               autostretch="never"/>
-    <checkbox id="bidimailpack-display-buttons"
+    <checkbox id="bidimailui-display-buttons"
               prefstring="extensions.bidiui.mail.compose.show_direction_buttons"
               label="&display-buttons.label;"
               accesskey="&display-buttons.accesskey;"
               autostretch="never"/>
-    <checkbox id="bidimailpack-default-to-paragraph-mode"
+    <checkbox id="bidimailui-default-to-paragraph-mode"
               prefstring="extensions.bidiui.mail.compose.start_composition_in_paragraph_mode"
-              label="&bidimailpack-default-to-paragraph-mode.label;"
-              tooltiptext="&bidimailpack-default-to-paragraph-mode.tooltiptext;"
-              accesskey="&bidimailpack-default-to-paragraph-mode.accesskey;"
+              label="&bidimailui-default-to-paragraph-mode.label;"
+              tooltiptext="&bidimailui-default-to-paragraph-mode.tooltiptext;"
+              accesskey="&bidimailui-default-to-paragraph-mode.accesskey;"
               autostretch="never"/>
 
     <spacer style="height: 1em"/>
@@ -66,9 +66,9 @@
     <hbox align="center">
       <label value="&spaceBetweenParagraphs.label;"
              accesskey="&spaceBetweenParagraphs.accesskey;"
-             control="bidimailpack-space-between-paragraphs-value"/>
-      <textbox id="bidimailpack-space-between-paragraphs-value" size="4"/>
-      <menulist id="bidimailpack-space-between-paragraphs-scale">
+             control="bidimailui-space-between-paragraphs-value"/>
+      <textbox id="bidimailui-space-between-paragraphs-value" size="4"/>
+      <menulist id="bidimailui-space-between-paragraphs-scale">
         <menupopup>
           <menuitem value="cm"
                     label="&cmScale.label;"

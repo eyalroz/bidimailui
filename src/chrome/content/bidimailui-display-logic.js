@@ -1,4 +1,4 @@
-var moduleURI = "chrome://bidimailpack/content/bidimailpack-common.js";
+var moduleURI = "chrome://bidimailui/content/bidimailui-common.js";
 if (typeof(ChromeUtils) != "undefined") {
   if (ChromeUtils.import) {
     var { BiDiMailUI } = ChromeUtils.import(moduleURI);
@@ -93,7 +93,7 @@ BiDiMailUI.Display = {
       var styleSheetLink = domDocument.createElement("link");
       styleSheetLink.rel  = "stylesheet";
       styleSheetLink.type = "text/css";
-      styleSheetLink.href = 'chrome://bidimailpack-for-message-html/content/' + sheetFileName;
+      styleSheetLink.href = 'chrome://bidimailui-for-message-html/content/' + sheetFileName;
       head.appendChild(styleSheetLink);
     }
   },
