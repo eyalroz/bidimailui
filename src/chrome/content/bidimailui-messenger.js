@@ -36,7 +36,7 @@ BiDiMailUI.MessageOverlay = {
 
   updateDirectionMenuButton : function(forcedDirection) {
 #ifdef DEBUG_updateDirectionMenuButton
-    BiDiMailUI.JSConsoleService.logStringMessage(
+    console.log(
       'updateDirectionMenuButton(forcedDirection = ' + forcedDirection + ')');
 #endif
     var menubutton = document.getElementById('bidimailui-forcing-menubutton');
@@ -62,13 +62,13 @@ BiDiMailUI.MessageOverlay = {
   onLoad : function() {
 #ifdef DEBUG_onLoad
 
-    BiDiMailUI.JSConsoleService.logStringMessage("--- onLoad() ---");
+    console.log("--- onLoad() ---");
     try {
-      BiDiMailUI.JSConsoleService.logStringMessage(
+      console.log(
         "message URI: " + gFolderDisplay.selectedMessageUris[0] +
         "\nnumber of selected messages: " + gFolderDisplay.selectedMessageUris.length);
     } catch(ex) {
-      BiDiMailUI.JSConsoleService.logStringMessage("can't get message URI");
+      console.log("can't get message URI");
     }
 #endif
 
@@ -79,7 +79,7 @@ BiDiMailUI.MessageOverlay = {
 
     if (!msgWindow) {
 #ifdef DEBUG_onLoad
-      BiDiMailUI.JSConsoleService.logStringMessage("couldn't get msgWindow");
+      console.log("couldn't get msgWindow");
 #endif
       BiDiMailUI.MessageOverlay.updateDirectionMenuButton(null,true);
       return;
@@ -90,7 +90,7 @@ BiDiMailUI.MessageOverlay = {
     }
     catch (ex) {
 #ifdef DEBUG_onLoad
-      BiDiMailUI.JSConsoleService.logStringMessage("couldn't get DOMDocument");
+      console.log("couldn't get DOMDocument");
 #endif
       dump(ex);
       return;
@@ -106,7 +106,7 @@ BiDiMailUI.MessageOverlay = {
     var body = domDocument.body;
     if (!body) {
 #ifdef DEBUG_onLoad
-      BiDiMailUI.JSConsoleService.logStringMessage("couldn't get DOMDocument body");
+      console.log("couldn't get DOMDocument body");
 #endif
       BiDiMailUI.MessageOverlay.updateDirectionMenuButton(null,true);
       return;
@@ -144,7 +144,7 @@ BiDiMailUI.MessageOverlay = {
     }
     catch(ex) {
 #ifdef DEBUG_onLoad
-      BiDiMailUI.JSConsoleService.logStringMessage("couldn't get subject:\n" + ex);
+      console.log("couldn't get subject:\n" + ex);
 #endif
     }
 
@@ -200,7 +200,7 @@ BiDiMailUI.MessageOverlay = {
     var selected = {};
 
 #ifdef DEBUG_promptForDefaultCharsetChange
-    BiDiMailUI.JSConsoleService.logStringMessage("BiDiMailUI.Strings.GetStringFromName(\"bidimailui.charset_dialog.set_to_windows_1255\") =\n" + BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.set_to_windows_1255"));
+    console.log("BiDiMailUI.Strings.GetStringFromName(\"bidimailui.charset_dialog.set_to_windows_1255\") =\n" + BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.set_to_windows_1255"));
 #endif
 
     var ok = prompts.select(
@@ -212,7 +212,7 @@ BiDiMailUI.MessageOverlay = {
     if (ok) {
 
 #ifdef DEBUG_promptForDefaultCharsetChange
-    BiDiMailUI.JSConsoleService.logStringMessage("ok!");
+    console.log("ok!");
 #endif
 
       var str = 
@@ -233,7 +233,7 @@ BiDiMailUI.MessageOverlay = {
       }
     }
 #ifdef DEBUG_promptForDefaultCharsetChange
-    else BiDiMailUI.JSConsoleService.logStringMessage("user cancelled the dialog box!");
+    else console.log("user cancelled the dialog box!");
 #endif
     return null;
   }

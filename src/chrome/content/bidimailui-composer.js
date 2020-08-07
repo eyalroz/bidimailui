@@ -42,7 +42,7 @@ BiDiMailUI.Composition = {
     NotifyComposeBodyReady : function() {
 
 #ifdef DEBUG_bodyReadyListener
-      BiDiMailUI.JSConsoleService.logStringMessage('in BiDiMailUI.Composition.bodyReadyListener.NotifyComposeBodyReady');
+      console.log('in BiDiMailUI.Composition.bodyReadyListener.NotifyComposeBodyReady');
 #endif
 
       var cMCParams = {
@@ -82,7 +82,7 @@ BiDiMailUI.Composition = {
       }
 #ifdef DEBUG_GetCurrentSelectionDirection
       else {
-        BiDiMailUI.JSConsoleService.logStringMessage(
+        console.log(
           'original message is known to have had no charset issues;' +
           'avoiding charsetMisdetectionCorrection');
       }
@@ -121,7 +121,7 @@ BiDiMailUI.Composition = {
 
   getCurrentSelectionDirection : function() {
 #ifdef DEBUG_GetCurrentSelectionDirection
-     BiDiMailUI.JSConsoleService.logStringMessage(
+     console.log(
        '----- in GetCurrentSelectionDirection() -----');
 #endif
 
@@ -173,15 +173,15 @@ BiDiMailUI.Composition = {
       }
 
 #ifdef DEBUG_GetCurrentSelectionDirection
-      BiDiMailUI.JSConsoleService.logStringMessage('commonAncestorContainer:' + cac + "\ntype:" + cac.nodeType + "\nHTML:\n" + cac.innerHTML);
-      BiDiMailUI.JSConsoleService.logStringMessage('commonAncestorContainer:' + cac + "\ntype:" + cac.nodeType + "\nvalue:\n" + cac.nodeValue + "\nis LTR = " + cacIsLTR + "; is RTL = " + cacIsRTL);
+      console.log('commonAncestorContainer:' + cac + "\ntype:" + cac.nodeType + "\nHTML:\n" + cac.innerHTML);
+      console.log('commonAncestorContainer:' + cac + "\ntype:" + cac.nodeType + "\nvalue:\n" + cac.nodeValue + "\nis LTR = " + cacIsLTR + "; is RTL = " + cacIsRTL);
 #endif
 
       if (cac.nodeType == Node.TEXT_NODE) {
         // the range is some text within a single DOM leaf node
         // so there's no need for any traversal
 #ifdef DEBUG_GetCurrentSelectionDirection
-        BiDiMailUI.JSConsoleService.logStringMessage('just a text node, continuing');
+        console.log('just a text node, continuing');
 #endif
         hasLTR = hasLTR || cacIsLTR;
         hasRTL = hasRTL || cacIsRTL;
@@ -220,7 +220,7 @@ BiDiMailUI.Composition = {
 
         while ( (typeof(node) !== "undefined") && (node != cac) ) {
 #ifdef DEBUG_GetCurrentSelectionDirection
-          BiDiMailUI.JSConsoleService.logStringMessage('visiting start slope node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
+          console.log('visiting start slope node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
 #endif
           if ( (typeof(node) !== "undefined") && node.nodeType == Node.ELEMENT_NODE) {
             var nodeStyle = view.getComputedStyle(node, "");
@@ -232,7 +232,7 @@ BiDiMailUI.Composition = {
                 case "ltr":
                   hasLTR = true;
 #ifdef DEBUG_GetCurrentSelectionDirection
-                  BiDiMailUI.JSConsoleService.logStringMessage('found LTR');
+                  console.log('found LTR');
 #endif
                   if (hasRTL)
                     return "complex";
@@ -240,7 +240,7 @@ BiDiMailUI.Composition = {
               case "rtl":
                 hasRTL = true;
 #ifdef DEBUG_GetCurrentSelectionDirection
-                BiDiMailUI.JSConsoleService.logStringMessage('found RTL');
+                console.log('found RTL');
 #endif
                 if (hasLTR)
                   return "complex";
@@ -260,7 +260,7 @@ BiDiMailUI.Composition = {
 
       do {
 #ifdef DEBUG_GetCurrentSelectionDirection
-        BiDiMailUI.JSConsoleService.logStringMessage('visiting node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
+        console.log('visiting node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
 #endif
 
         // check the current node's direction
@@ -278,7 +278,7 @@ BiDiMailUI.Composition = {
               case "ltr":
                 hasLTR = true;
 #ifdef DEBUG_GetCurrentSelectionDirection
-                BiDiMailUI.JSConsoleService.logStringMessage('found LTR');
+                console.log('found LTR');
 #endif
                 if (hasRTL)
                   return "complex";
@@ -286,7 +286,7 @@ BiDiMailUI.Composition = {
               case "rtl":
                 hasRTL = true;
 #ifdef DEBUG_GetCurrentSelectionDirection
-                BiDiMailUI.JSConsoleService.logStringMessage('found RTL');
+                console.log('found RTL');
 #endif
                 if (hasLTR)
                   return "complex";
@@ -296,7 +296,7 @@ BiDiMailUI.Composition = {
           else if (node.parentNode == cac) {
       // there is a non-block child of cac, so we use cac's data
 #ifdef DEBUG_GetCurrentSelectionDirection
-            BiDiMailUI.JSConsoleService.logStringMessage('non-block child of cac, using cac direction');
+            console.log('non-block child of cac, using cac direction');
 #endif
             hasLTR = hasLTR || cacIsLTR;
             hasRTL = hasRTL || cacIsRTL;
@@ -307,7 +307,7 @@ BiDiMailUI.Composition = {
 
         if (node == range.endContainer) {
 #ifdef DEBUG_GetCurrentSelectionDirection
-          BiDiMailUI.JSConsoleService.logStringMessage('at end container, stopping traversal');
+          console.log('at end container, stopping traversal');
 #endif
           break; // proceed to the next selection range
         }
@@ -316,7 +316,7 @@ BiDiMailUI.Composition = {
 
         if (node.firstChild) {
 #ifdef DEBUG_GetCurrentSelectionDirection
-          BiDiMailUI.JSConsoleService.logStringMessage('descending to first child');
+          console.log('descending to first child');
 #endif
           node = node.firstChild;
         // fallthrough to sibling search in case first child is a text node
@@ -324,7 +324,7 @@ BiDiMailUI.Composition = {
             continue; // we've found the next node to visit
           else if (node == range.endContainer) {
 #ifdef DEBUG_GetCurrentSelectionDirection
-            BiDiMailUI.JSConsoleService.logStringMessage('at TEXT_NODE endContainer, stopping traversal');        
+            console.log('at TEXT_NODE endContainer, stopping traversal');        
 #endif
             break; // if the next node is the end container as well as a
              // text node, we don't need to to check its direction,
@@ -340,7 +340,7 @@ BiDiMailUI.Composition = {
           if (node.nextSibling) {
             node = node.nextSibling;
 #ifdef DEBUG_GetCurrentSelectionDirection
-            BiDiMailUI.JSConsoleService.logStringMessage('moving to next sibling');
+            console.log('moving to next sibling');
 #endif
             if  (node.nodeType != Node.TEXT_NODE)
               break; // we've found the next node to visit
@@ -348,7 +348,7 @@ BiDiMailUI.Composition = {
           }
           else node = node.parentNode;
 #ifdef DEBUG_GetCurrentSelectionDirection
-          BiDiMailUI.JSConsoleService.logStringMessage('moving back up');
+          console.log('moving back up');
 #endif
         } while (node != cac);
 
@@ -369,7 +369,7 @@ BiDiMailUI.Composition = {
 
   setDocumentDirection : function(direction) {
 #ifdef DEBUG_SetDocumentDirection
-    BiDiMailUI.JSConsoleService.logStringMessage('--- SetDocumentDirection( \'' + direction + '\' ) ---');
+    console.log('--- SetDocumentDirection( \'' + direction + '\' ) ---');
 #endif
 
     let contentFrame = document.getElementById("content-frame");
@@ -379,7 +379,7 @@ BiDiMailUI.Composition = {
     }
 #ifdef DEBUG_SetDocumentDirection
     else {
-      BiDiMailUI.JSConsoleService.logStringMessage(
+      console.log(
          'could not get the "content-frame" by ID - that shouldn\'t be possible');
     }
 #endif
@@ -416,7 +416,7 @@ BiDiMailUI.Composition = {
       var editor = GetCurrentEditor();
       if (!editor) {
 #ifdef DEBUG_handleComposeReplyCSS
-        BiDiMailUI.JSConsoleService.logStringMessage('handleComposeReplyCSS failed to acquire editor object.');
+        console.log('handleComposeReplyCSS failed to acquire editor object.');
 #endif
         dump('handleComposeReplyCSS failed to acquire editor object.');
         return;
@@ -436,7 +436,7 @@ BiDiMailUI.Composition = {
     var editor = GetCurrentEditor();
     if (!editor) {
 #ifdef DEBUG_addMessageStyleRules
-      BiDiMailUI.JSConsoleService.logStringMessage('addMessageStyleRules failed to acquire editor object.');
+      console.log('addMessageStyleRules failed to acquire editor object.');
 #endif
       dump('addMessageStyleRules failed to acquire editor object.');
       return;
@@ -490,7 +490,7 @@ BiDiMailUI.Composition = {
     var editor = GetCurrentEditor();
     if (!editor) {
 #ifdef DEBUG_handleComposeReplyCSS
-      BiDiMailUI.JSConsoleService.logStringMessage('setParagraphMode  failed to acquire editor object.');
+      console.log('setParagraphMode  failed to acquire editor object.');
 #endif
       dump('setParagraphMode failed to acquire editor object.');
       return;
@@ -503,7 +503,7 @@ BiDiMailUI.Composition = {
 
   getDisplayedCopyParams : function(messageURI,messageParams) {
 #ifdef DEBUG_getDisplayedCopyParams
-      BiDiMailUI.JSConsoleService.logStringMessage('getDisplayedCopyParams for message\n' + messageURI);
+      console.log('getDisplayedCopyParams for message\n' + messageURI);
 #endif
     // Note: there may be more than one window
     // which displays the message we are replying to;
@@ -523,7 +523,7 @@ BiDiMailUI.Composition = {
 
     while (true) {
 #ifdef DEBUG_getDisplayedCopyParams
-      BiDiMailUI.JSConsoleService.logStringMessage('loop iteration');
+      console.log('loop iteration');
 #endif
 
       // get the next browser for a loaded message
@@ -534,32 +534,32 @@ BiDiMailUI.Composition = {
         if (tabIndex == tabInfo.length) {
           tabInfo = null;
 #ifdef DEBUG_getDisplayedCopyParams
-           BiDiMailUI.JSConsoleService.logStringMessage('no more tabs in this window');
+           console.log('no more tabs in this window');
 #endif
           continue;
         }
 #ifdef DEBUG_getDisplayedCopyParams
-        BiDiMailUI.JSConsoleService.logStringMessage('trying tab ' + tabIndex);
+        console.log('trying tab ' + tabIndex);
 #endif
         if (tabInfo[tabIndex].messageDisplay) {
           if (tabInfo[tabIndex].messageDisplay._singleMessage == false) {
 #ifdef DEBUG_getDisplayedCopyParams
-            BiDiMailUI.JSConsoleService.logStringMessage('multi-message mode in this tab');
+            console.log('multi-message mode in this tab');
 #endif
             tabIndex++;
             continue;
           }
 #ifdef DEBUG_getDisplayedCopyParams
           if (tabInfo[tabIndex].messageDisplay.displayedMessage)
-            BiDiMailUI.JSConsoleService.logStringMessage('displayed message ID is ' +
+            console.log('displayed message ID is ' +
               tabInfo[tabIndex].messageDisplay.displayedMessage.messageId);
           else 
-            BiDiMailUI.JSConsoleService.logStringMessage('no displayed message');
+            console.log('no displayed message');
 #endif
         //displayedCopyBrowser = tabInfo[tabIndex].browser;
         }
 #ifdef DEBUG_getDisplayedCopyParams
-          BiDiMailUI.JSConsoleService.logStringMessage('no tabInfo.messageDisplay');
+          console.log('no tabInfo.messageDisplay');
 #endif
         tabIndex++;
       }
@@ -571,7 +571,7 @@ BiDiMailUI.Composition = {
         else
           break;
 #ifdef DEBUG_getDisplayedCopyParams
-        BiDiMailUI.JSConsoleService.logStringMessage('new window');
+        console.log('new window');
 #endif
         try {
           // is this a tabbed window?
@@ -580,12 +580,12 @@ BiDiMailUI.Composition = {
           tabInfo =  win.document.getElementById("tabmail").tabInfo;
           tabIndex = 0;
 #ifdef DEBUG_getDisplayedCopyParams
-          BiDiMailUI.JSConsoleService.logStringMessage('it\'s a tabbed window, got tab list');
+          console.log('it\'s a tabbed window, got tab list');
 #endif
           continue;
         } catch(ex) { 
 #ifdef DEBUG_getDisplayedCopyParams
-          BiDiMailUI.JSConsoleService.logStringMessage("can't get tabs: " + ex);
+          console.log("can't get tabs: " + ex);
 #endif
         }
 
@@ -593,14 +593,14 @@ BiDiMailUI.Composition = {
           // trying this is a single-message window
           // or a 3-pane displaying a single message
 #ifdef DEBUG_getDisplayedCopyParams
-          //BiDiMailUI.JSConsoleService.logStringMessage('win: ' + win);
-          //BiDiMailUI.JSConsoleService.logStringMessage('win.opener: ' + win.opener);
-          //BiDiMailUI.JSConsoleService.logStringMessage('win.opener.gFolderDisplay: ' + win.opener.gFolderDisplay);
+          //console.log('win: ' + win);
+          //console.log('win.opener: ' + win.opener);
+          //console.log('win.opener.gFolderDisplay: ' + win.opener.gFolderDisplay);
 #endif
           //if (win.opener.gFolderDisplay.selectedMessageUris.length > 1) {
             // multiple-message-display mode, we don't support that
 #ifdef DEBUG_getDisplayedCopyParams
-          //BiDiMailUI.JSConsoleService.logStringMessage('treating window as non-tabbed, but have multiple-message display mode, we don\'t support that');
+          //console.log('treating window as non-tabbed, but have multiple-message display mode, we don\'t support that');
 #endif
           //  continue;
           //}
@@ -608,10 +608,10 @@ BiDiMailUI.Composition = {
           //loadedMessageURI = win.opener.gFolderDisplay.selectedMessageUris[0];
           displayedCopyBrowser = win.getMessageBrowser();
 #ifdef DEBUG_getDisplayedCopyParams
-          BiDiMailUI.JSConsoleService.logStringMessage('treating window as non-tabbed and got the (main) message displayed');
+          console.log('treating window as non-tabbed and got the (main) message displayed');
 #endif
         } catch(ex) {
-           BiDiMailUI.JSConsoleService.logStringMessage("problem getting browser for a message displayed in window:\n" + ex);
+           console.log("problem getting browser for a message displayed in window:\n" + ex);
         }
       }
 
@@ -622,26 +622,26 @@ BiDiMailUI.Composition = {
       // from some window or some tab
 
 #ifdef DEBUG_getDisplayedCopyParams
-      BiDiMailUI.JSConsoleService.logStringMessage('got some message browser...');
+      console.log('got some message browser...');
 #endif
 
       loadedMessageURI = displayedCopyBrowser.contentDocument.documentURI;
 
       if (loadedMessageURI != messageURI) {
 #ifdef DEBUG_getDisplayedCopyParams
-        BiDiMailUI.JSConsoleService.logStringMessage('not our message');
+        console.log('not our message');
 #endif
         continue;
       }
 
 #ifdef DEBUG_getDisplayedCopyParams
-      BiDiMailUI.JSConsoleService.logStringMessage('found a window/tab displaying our message');
+      console.log('found a window/tab displaying our message');
 #endif
 
       var displayedCopyBody = displayedCopyBrowser.contentDocument.body;
 
 #ifdef DEBUG_getDisplayedCopyParams
-      BiDiMailUI.JSConsoleService.logStringMessage('body is ' + displayedCopyBody);
+      console.log('body is ' + displayedCopyBody);
 #endif
 
       for (let i=0; i < displayedCopyBody.childNodes.length; i++) {
@@ -678,7 +678,7 @@ BiDiMailUI.Composition = {
 
   setInitialDirection : function(messageParams) {
 #ifdef DEBUG_setInitialDirection
-      BiDiMailUI.JSConsoleService.logStringMessage('in BiDiMailUI.Composition.setInitialDirection');
+      console.log('in BiDiMailUI.Composition.setInitialDirection');
 #endif
     // determine whether we need to use the default direction;
     // this happens for new documents (e.g. new e-mail message,
@@ -707,7 +707,7 @@ BiDiMailUI.Composition = {
     }
     else {
 #ifdef DEBUG_setInitialDirection
-      BiDiMailUI.JSConsoleService.logStringMessage(
+      console.log(
         "We have a reply, but we don't have its original direction. We'll have to check...");
 #endif
       // We get here for drafts, for messages without URIs, and due to problems
@@ -715,7 +715,7 @@ BiDiMailUI.Composition = {
       var detectionDirection = BiDiMailUI.directionCheck(
         document, document.getElementById("content-frame").contentDocument.body);
 #ifdef DEBUG_setInitialDirection
-      BiDiMailUI.JSConsoleService.logStringMessage('detectionDirection is ' + detectionDirection );
+      console.log('detectionDirection is ' + detectionDirection );
 #endif
       if ((detectionDirection  == "rtl") || (detectionDirection == "mixed"))
         BiDiMailUI.Composition.setDocumentDirection("rtl");
@@ -729,7 +729,7 @@ BiDiMailUI.Composition = {
       document.getElementById("content-frame").contentDocument.body;
 
 #ifdef DEBUG_composeWindowOnActualLoad
-    BiDiMailUI.JSConsoleService.logStringMessage(
+    console.log(
       '--- BiDiMailUI.Composition.composeWindowOnActualLoad() --- ');
 #endif
     BiDiMailUI.Composition.handleDirectionButtons();
@@ -779,7 +779,7 @@ BiDiMailUI.Composition = {
         }, 400);
 
 #ifdef DEBUG_composeWindowOnActualLoad
-    BiDiMailUI.JSConsoleService.logStringMessage('isReply = ' + messageParams.isReply + 
+    console.log('isReply = ' + messageParams.isReply + 
       '\ngMsgCompose.originalMsgURI = ' +
       (gMsgCompose? gMsgCompose.originalMsgURI : 'no gMsgCompose') +
       '\noriginalDisplayDirection = ' + messageParams.originalDisplayDirection + 
@@ -813,7 +813,7 @@ BiDiMailUI.Composition = {
 
   composeWindowOnUnload : function() {
 #ifdef DEBUG_composeWindowOnUnload
-    BiDiMailUI.JSConsoleService.logStringMessage('in BiDiMailUI.Composition.composeWindowOnUnload()');
+    console.log('in BiDiMailUI.Composition.composeWindowOnUnload()');
 #endif
     // Stop tracking "Show Direction Buttons" pref.
     BiDiMailUI.Prefs.removeObserver(
@@ -853,7 +853,7 @@ BiDiMailUI.Composition = {
     else {
       dump("gMsgCompose not ready for this message in BiDiMailUI.Composition.composeWindowOnReopen()");
 #ifdef DEBUG_ComposeEvents
-      BiDiMailUI.JSConsoleService.logStringMessage(
+      console.log(
         "gMsgCompose not ready for this message in BiDiMailUI.Composition.composeWindowOnReopen()");
 #endif
     }
@@ -865,20 +865,20 @@ BiDiMailUI.Composition = {
 
   debugLoadHandler : function(ev) {
     BiDiMailUI.Composition.loadCount++;
-    BiDiMailUI.JSConsoleService.logStringMessage(
+    console.log(
       'load event #' + BiDiMailUI.Composition.loadCount + ' :\ncurrentTarget = ' +
       ev.currentTarget + ' ; originalTarget = ' + ev.originalTarget + 
       ' ; explicitOriginalTarget = ' + ev.explicitOriginalTarget);
   },
 
   debugLoadHandlerNonCapturing : function() {
-    BiDiMailUI.JSConsoleService.logStringMessage(
+    console.log(
       'this is a non-capturing load event');
   },
 
   debugReopenHandler : function(ev) {
     BiDiMailUI.Composition.reopenCount++;
-    BiDiMailUI.JSConsoleService.logStringMessage(
+    console.log(
       'compose-window-reopen event #' + BiDiMailUI.Composition.reopenCount +
       ' :\ncurrentTarget = ' + ev.currentTarget + ' ; originalTarget = ' +
       ev.originalTarget + ' ; explicitOriginalTarget = ' + 
@@ -886,7 +886,7 @@ BiDiMailUI.Composition = {
   },
   
   debugReopenHandlerNonCapturing : function() {
-    BiDiMailUI.JSConsoleService.logStringMessage(
+    console.log(
       'this is a non-capturing compose-window-reopen event');
   },
 #endif
@@ -934,7 +934,7 @@ BiDiMailUI.Composition = {
 
   applyDirectionSetterToSelectionBlockElements : function(newDirectionSetter) {
 #ifdef DEBUG_applyDirectionSetterToSelectionBlockElements
-    BiDiMailUI.JSConsoleService.logStringMessage(
+    console.log(
       '----- BiDiMailUI.Composition.applyDirectionSetterToSelectionBlockElements() -----');
 #endif
     var editor = GetCurrentEditor();
@@ -961,7 +961,7 @@ BiDiMailUI.Composition = {
           }
 
 #ifdef DEBUG_applyDirectionSetterToSelectionBlockElements
-          BiDiMailUI.JSConsoleService.logStringMessage(
+          console.log(
             'endContainer:' + endContainer + "\ntype: " +
             endContainer.nodeType + "\nHTML:\n" + endContainer.innerHTML +
             "\nvalue:\n" + endContainer.nodeValue);
@@ -972,7 +972,7 @@ BiDiMailUI.Composition = {
           // giving our directionality style to everything on our way
           do {
 #ifdef DEBUG_applyDirectionSetterToSelectionBlockElements
-            BiDiMailUI.JSConsoleService.logStringMessage(
+            console.log(
               'visiting node:' + node + "\ntype: " + node.nodeType +
               "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
 #endif
@@ -980,7 +980,7 @@ BiDiMailUI.Composition = {
             var closestBlockElement = BiDiMailUI.Composition.findClosestBlockElement(node);
             if (closestBlockElement) {
 #ifdef DEBUG_applyDirectionSetterToSelectionBlockElements
-              BiDiMailUI.JSConsoleService.logStringMessage(
+              console.log(
                 'found closestBlockElement:' + closestBlockElement +
                 "\ntype: " + closestBlockElement.nodeType + "\nHTML:\n" + 
                 closestBlockElement.innerHTML + "\nvalue:\n" +
@@ -991,7 +991,7 @@ BiDiMailUI.Composition = {
             }
             else {
 #ifdef DEBUG_applyDirectionSetterToSelectionBlockElements
-              BiDiMailUI.JSConsoleService.logStringMessage('could not find cbe');
+              console.log('could not find cbe');
 #endif
               break;
             }
@@ -1000,7 +1000,7 @@ BiDiMailUI.Composition = {
             // condition, to handle cases where begin == end
             if (node == endContainer) {
 #ifdef DEBUG_applyDirectionSetterToSelectionBlockElements
-              BiDiMailUI.JSConsoleService.logStringMessage('at end container, stopping traversal');
+              console.log('at end container, stopping traversal');
 #endif
               break;
             }
@@ -1008,13 +1008,13 @@ BiDiMailUI.Composition = {
             // Traverse the tree in order
             if (node.firstChild) {
 #ifdef DEBUG_applyDirectionSetterToSelectionBlockElements
-              BiDiMailUI.JSConsoleService.logStringMessage('descending to first child');
+              console.log('descending to first child');
 #endif
               node = node.firstChild;
             }
             else if (node.nextSibling) {
 #ifdef DEBUG_applyDirectionSetterToSelectionBlockElements
-              BiDiMailUI.JSConsoleService.logStringMessage('moving to next sibling');
+              console.log('moving to next sibling');
 #endif
               node = node.nextSibling;
             }
@@ -1023,12 +1023,12 @@ BiDiMailUI.Composition = {
               while (node.parentNode != null) {
                 node = node.parentNode;
 #ifdef DEBUG_applyDirectionSetterToSelectionBlockElements
-                BiDiMailUI.JSConsoleService.logStringMessage('moved up to parent node');
+                console.log('moved up to parent node');
 #endif
                 if (node.nextSibling) {
                   node = node.nextSibling;
 #ifdef DEBUG_applyDirectionSetterToSelectionBlockElements
-                  BiDiMailUI.JSConsoleService.logStringMessage('moved to next sibling');
+                  console.log('moved to next sibling');
 #endif
                   break;
                 }
@@ -1085,10 +1085,10 @@ BiDiMailUI.Composition = {
 
 #ifdef DEBUG_keypress
     if (ev.keyCode == BiDiMailUI.Composition.CtrlShiftMachine.ShiftKeyCode)
-      BiDiMailUI.JSConsoleService.logStringMessage('key down    : Shift');
+      console.log('key down    : Shift');
     else if (ev.keyCode == BiDiMailUI.Composition.CtrlShiftMachine.CtrlKeyCode)
-      BiDiMailUI.JSConsoleService.logStringMessage('key down    : Ctrl');
-    else BiDiMailUI.JSConsoleService.logStringMessage('key up      : Other');
+      console.log('key down    : Ctrl');
+    else console.log('key up      : Other');
 #endif
 
     if ((ev.keyCode == BiDiMailUI.Composition.CtrlShiftMachine.ShiftKeyCode) ||
@@ -1116,8 +1116,7 @@ BiDiMailUI.Composition = {
     }
 
 #ifdef DEBUG_keypress
-    BiDiMailUI.JSConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
-    BiDiMailUI.JSConsoleService.logStringMessage('sequence vars: ' + (BiDiMailUI.Composition.CtrlShiftMachine.ctrlShiftSequence1 ? 'T ' : 'F ') + (BiDiMailUI.Composition.CtrlShiftMachine.ctrlShiftSequence2 ? 'T ' : 'F '));
+    console.log('sequence vars: ' + (BiDiMailUI.Composition.CtrlShiftMachine.ctrlShiftSequence1 ? 'T ' : 'F ') + (BiDiMailUI.Composition.CtrlShiftMachine.ctrlShiftSequence2 ? 'T ' : 'F '));
 #endif
   },
 
@@ -1135,10 +1134,10 @@ BiDiMailUI.Composition = {
 
 #ifdef DEBUG_keypress
     if (ev.keyCode == BiDiMailUI.Composition.CtrlShiftMachine.ShiftKeyCode)
-      BiDiMailUI.JSConsoleService.logStringMessage('key up      : Shift');
+      console.log('key up      : Shift');
     else if (ev.keyCode == BiDiMailUI.Composition.CtrlShiftMachine.CtrlKeyCode)
-      BiDiMailUI.JSConsoleService.logStringMessage('key up      : Ctrl');
-    else BiDiMailUI.JSConsoleService.logStringMessage('key up      : Other');
+      console.log('key up      : Ctrl');
+    else console.log('key up      : Other');
 #endif
 
     if ((ev.keyCode == BiDiMailUI.Composition.CtrlShiftMachine.ShiftKeyCode) ||
@@ -1147,13 +1146,13 @@ BiDiMailUI.Composition = {
           BiDiMailUI.Composition.CtrlShiftMachine.ctrlShiftSequence2) {
         if (IsHTMLEditor()) {
 #ifdef DEBUG_keypress
-    BiDiMailUI.JSConsoleService.logStringMessage('SWITCHING paragraph');
+    console.log('SWITCHING paragraph');
 #endif
     BiDiMailUI.Composition.SwitchParagraphDirection();
         }
         else {
 #ifdef DEBUG_keypress
-          BiDiMailUI.JSConsoleService.logStringMessage('SWITCHING document');
+          console.log('SWITCHING document');
 #endif
           BiDiMailUI.Composition.switchDocumentDirection();
         }
@@ -1170,8 +1169,7 @@ BiDiMailUI.Composition = {
     }
 
 #ifdef DEBUG_keypress
-  BiDiMailUI.JSConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
-    BiDiMailUI.JSConsoleService.logStringMessage('sequence vars: ' +
+    console.log('sequence vars: ' +
     (BiDiMailUI.Composition.CtrlShiftMachine.ctrlShiftSequence1 ? 'T ' : 'F ') +
     (BiDiMailUI.Composition.CtrlShiftMachine.ctrlShiftSequence2 ? 'T ' : 'F '));
 #endif
@@ -1191,10 +1189,10 @@ BiDiMailUI.Composition = {
 
 #ifdef DEBUG_keypress
     if (ev.keyCode == BiDiMailUI.Composition.CtrlShiftMachine.ShiftKeyCode)
-      BiDiMailUI.JSConsoleService.logStringMessage('key pressed : Shift');
+      console.log('key pressed : Shift');
     else if (ev.keyCode == BiDiMailUI.Composition.CtrlShiftMachine.CtrlKeyCode)
-      BiDiMailUI.JSConsoleService.logStringMessage('key pressed : Ctrl');
-    else BiDiMailUI.JSConsoleService.logStringMessage('key up      : Other');
+      console.log('key pressed : Ctrl');
+    else console.log('key up      : Other');
 #endif
 
     if ((ev.keyCode != BiDiMailUI.Composition.CtrlShiftMachine.ShiftKeyCode) &&
@@ -1204,7 +1202,7 @@ BiDiMailUI.Composition = {
     }
 
 #ifdef DEBUG_keypress
-    BiDiMailUI.JSConsoleService.logStringMessage(
+    console.log(
       'sequence vars: ' + (BiDiMailUI.Composition.CtrlShiftMachine.ctrlShiftSequence1 ? 'T ' : 'F ') +
       (BiDiMailUI.Composition.CtrlShiftMachine.ctrlShiftSequence2 ? 'T ' : 'F '));
 #endif
@@ -1263,9 +1261,9 @@ BiDiMailUI.Composition = {
 
           // combine the two paragraphs into a single paragraph
 #ifdef DEBUG_keypress
-          BiDiMailUI.JSConsoleService.logStringMessage('unifying paragraphs\n------------------------');
-          BiDiMailUI.JSConsoleService.logStringMessage('prevPar is:' + prevPar + "\ntype: " + prevPar.nodeType + "\nname: " + prevPar.nodeName + "\nHTML:\n" + prevPar.innerHTML + "\nOuter HTML:\n" + prevPar.innerHTML + "\nvalue:\n" + prevPar.nodeValue);
-          BiDiMailUI.JSConsoleService.logStringMessage('par is:' + par + "\ntype: " + par.nodeType + "\nname: " + par.nodeName + "\nHTML:\n" + par.innerHTML + "\nOuter HTML:\n" + par.innerHTML + "\nvalue:\n" + par.nodeValue);
+          console.log('unifying paragraphs\n------------------------');
+          console.log('prevPar is:' + prevPar + "\ntype: " + prevPar.nodeType + "\nname: " + prevPar.nodeName + "\nHTML:\n" + prevPar.innerHTML + "\nOuter HTML:\n" + prevPar.innerHTML + "\nvalue:\n" + prevPar.nodeValue);
+          console.log('par is:' + par + "\ntype: " + par.nodeType + "\nname: " + par.nodeName + "\nHTML:\n" + par.innerHTML + "\nOuter HTML:\n" + par.innerHTML + "\nvalue:\n" + par.nodeValue);
 #endif
           editor.beginTransaction();
 
@@ -1276,7 +1274,7 @@ BiDiMailUI.Composition = {
           // we won't add the extra <br>
           if (par.childNodes.length == 1 && pChild.nodeName == "BR") {
 #ifdef DEBUG_keypress
-            BiDiMailUI.JSConsoleService.logStringMessage('just removing an empty paragraph');
+            console.log('just removing an empty paragraph');
 #endif
             prevPar.parentNode.removeChild(par);
           }
@@ -1287,7 +1285,7 @@ BiDiMailUI.Composition = {
           //if (npChild && par.lastChild) {
           //  if ((npChild.nodeType == Node.TEXT_NODE) && (par.lastChild.nodeType == Node.TEXT_NODE)) {
           //    par.lastChild.nodeValue = par.lastChild.nodeValue + npChild.nodeValue;
-          //    //BiDiMailUI.JSConsoleService.logStringMessage('par.lastChild.nodeValue = \"' + par.lastChild.nodeValue + '\"');
+          //    //console.log('par.lastChild.nodeValue = \"' + par.lastChild.nodeValue + '\"');
           //    npChild = npChild.nextSibling;
           //  }
           //}
@@ -1297,7 +1295,7 @@ BiDiMailUI.Composition = {
              var pc2 = pChild;
               pChild = pChild.nextSibling;
 #ifdef DEBUG_keypress
-              BiDiMailUI.JSConsoleService.logStringMessage(
+              console.log(
                 'copying pcClone:' + pcClone + "\ntype: " + pcClone.nodeType +
                 "\nname: " + pcClone.nodeName + "\nHTML:\n" + pcClone.innerHTML +
                 "\nOuter HTML:\n" + pcClone.innerHTML + "\nvalue:\n" + pcClone.nodeValue);
@@ -1310,7 +1308,7 @@ BiDiMailUI.Composition = {
           }
           editor.endTransaction();
 #ifdef DEBUG_keypress
-          BiDiMailUI.JSConsoleService.logStringMessage('done');
+          console.log('done');
 #endif
           ev.preventDefault();
           ev.stopPropagation();
@@ -1378,7 +1376,7 @@ BiDiMailUI.Composition = {
     var editor = GetCurrentEditor();
     if (!editor) {
 #ifdef DEBUG_insertParagraph
-      BiDiMailUI.JSConsoleService.logStringMessage('Could not acquire editor object.');
+      console.log('Could not acquire editor object.');
 #endif
       dump("Could not acquire editor object.");
       return;
@@ -1416,7 +1414,7 @@ BiDiMailUI.Composition = {
       var styleFontColor = editor.getFontColorState(allHas);
     } catch(ex) {
 #ifdef DEBUG_insertParagraph
-      BiDiMailUI.JSConsoleService.logStringMessage('Failed obtaining the font color using editor.getFontColorState():\n' + ex);
+      console.log('Failed obtaining the font color using editor.getFontColorState():\n' + ex);
 #endif
       try {
         styleFontColor = document.defaultView
@@ -1429,7 +1427,7 @@ BiDiMailUI.Composition = {
       }
       catch(ex) { 
 #ifdef DEBUG_insertParagraph
-        BiDiMailUI.JSConsoleService.logStringMessage('Failed obtaining the font color using document.defaultView.getComputedStyle():\n' + ex);
+        console.log('Failed obtaining the font color using document.defaultView.getComputedStyle():\n' + ex);
 #endif
       }
     }   
@@ -1598,7 +1596,7 @@ BiDiMailUI.Composition.directionSwitchController = {
     }
 
 #ifdef DEBUG_isCommandEnabled
-    BiDiMailUI.JSConsoleService.logStringMessage('isCommandEnabled for command "' + command + '". inMessage: ' + inMessage + ' , inSubjectBox = ' + inSubjectBox + ' , retVal = ' + retVal);
+    console.log('isCommandEnabled for command "' + command + '". inMessage: ' + inMessage + ' , inSubjectBox = ' + inSubjectBox + ' , retVal = ' + retVal);
 #endif
 
 
@@ -1607,7 +1605,7 @@ BiDiMailUI.Composition.directionSwitchController = {
 
   setCasterGroup: function(casterPair,inMessage,inSubjectBox) {
 #ifdef DEBUG_setCasterGroup
-    BiDiMailUI.JSConsoleService.logStringMessage('setting caster group ' + casterPair);
+    console.log('setting caster group ' + casterPair);
 #endif
     var casterID, oppositeCasterID, command, direction, commandsAreEnabled;
 
@@ -1662,7 +1660,7 @@ BiDiMailUI.Composition.directionSwitchController = {
 
   setAllCasters: function() {
 #ifdef DEBUG_setAllCasters
-      BiDiMailUI.JSConsoleService.logStringMessage('setting casters.');
+      console.log('setting casters.');
 #endif
     var inMessage = (content == top.document.commandDispatcher.focusedWindow);
     var inSubjectBox = 
