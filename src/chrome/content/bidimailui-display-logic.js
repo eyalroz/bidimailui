@@ -83,7 +83,7 @@ BiDiMailUI.Display = {
   appendStyleSheet : function(domDocument, sheetFileName) {
     var head = domDocument.getElementsByTagName("head")[0];
     if (head) {
-      var styleSheetLink = domDocument.createElement("link");
+      var styleSheetLink = domDocument.createXULElement("link");
       styleSheetLink.rel  = "stylesheet";
       styleSheetLink.type = "text/css";
       styleSheetLink.href = 'chrome://bidimailui-for-message-html/content/' + sheetFileName;
@@ -215,7 +215,7 @@ BiDiMailUI.Display = {
   // moz-text-flowed message's DOM tree within a DIV
   // (whose direction we can later set)
   wrapTextNodesInFlowedMessageDOMTree : function(subBody) {
-    var clonedDiv = subBody.ownerDocument.createElement("DIV");
+    var clonedDiv = subBody.ownerDocument.createXULElement("DIV");
     clonedDiv.setAttribute('bidimailui-generated', true);
     var treeWalker = document.createTreeWalker(
       subBody,
