@@ -1,21 +1,23 @@
 var EXPORTED_SYMBOLS = [ "BiDiMailUI" ];
+var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
+
+const Cc = Components.classes;
+const Ci = Components.interfaces;
 
 var BiDiMailUI = { };
 
 // localized strings
 BiDiMailUI.__defineGetter__("Strings", function() {
   delete BiDiMailUI.Strings;
-  return BiDiMailUI.Strings =
-    Components.classes["@mozilla.org/intl/stringbundle;1"]
-      .getService(Components.interfaces.nsIStringBundleService)
-      .createBundle("chrome://bidimailui/locale/bidimailui.properties");
+  return BiDiMailUI.Strings = 
+    Services.strings.createBundle("chrome://bidimailui/locale/bidimailui.properties");
   });
 
 BiDiMailUI.__defineGetter__("UnicodeConverter", function() {
   delete BiDiMailUI.UnicodeConverter;
   return BiDiMailUI.UnicodeConverter =
-    Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]
-      .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
+    Cc["@mozilla.org/intl/scriptableunicodeconverter"]
+      .createInstance(Ci.nsIScriptableUnicodeConverter);
 });
 
 BiDiMailUI.encode = function(str, charsetEncoding) {
@@ -86,41 +88,19 @@ BiDiMailUI.App = {
 
   _version: null,
 
-  get version() {
-    if (_version == null) {
-    // Dropping support for super-old versions here.
-    // if ("@mozilla.org/xre/app-info;1" in Components.classes) {
-      version = Components.classes["@mozilla.org/xre/app-info;1"]
-                          .getService(Components.interfaces.nsIXULAppInfo)
-                          .version; 
-    }
-    //}
-    // else {
-    //   version =
-    //      Components.classes["@mozilla.org/preferences-service;1"]
-    //                .getService(Components.interfaces.nsIPrefBranch)
-    //                .getCharPref("extensions.lastAppVersion");  
-    // }
-    return _version;
-  },
-
   // returns true if the app version is equal-or-higher to minVersion, false otherwise;
   ensureVersion : function(versionThreshold, checkMinimum) {
-    var versionChecker =
-      Components.classes["@mozilla.org/xpcom/version-comparator;1"]
-                .getService(Components.interfaces.nsIVersionComparator);  
-    
-    var versionCheckResult = versionChecker.compare( this.version, versionThreshold );
+    var versionCheckResult = Services.vc.compare(Services.appinfo.version, versionThreshold);
     return (   (checkMinimum  && (versionCheckResult >= 0))
             || (!checkMinimum && (versionCheckResult <= 0)));
   },
 
   versionIsAtLeast : function(minVersion) {
-  	return this.ensureVersion(minVersion, true);
+    return this.ensureVersion(minVersion, true);
   },
 
   versionIsAtMost : function(maxVersion) {
-  	return this.ensureVersion(maxVersion, false);
+    return this.ensureVersion(maxVersion, false);
   }
 }
 
@@ -133,20 +113,9 @@ BiDiMailUI.Prefs = {
   // const
   preferencePrefix : "extensions.bidiui.mail.",
 
-  _prefService: null,
-
-  get prefService()
-  {
-    if (!this._prefService) 
-      this._prefService =
-        Components.classes["@mozilla.org/preferences-service;1"]
-                  .getService(Components.interfaces.nsIPrefBranch);
-    return this._prefService;
-  },
-
   getBoolPref: function(prefName, defaultValue) {
     try {
-      return this.prefService.getBoolPref(
+      return Services.prefs.getBoolPref(
         BiDiMailUI.Prefs.preferencePrefix + prefName);
     } catch(ex) {
       if (defaultValue != undefined)
@@ -158,7 +127,7 @@ BiDiMailUI.Prefs = {
 
   getCharPref: function(prefName, defaultValue) {
     try {
-      return this.prefService.getCharPref(
+      return Services.prefs.getCharPref(
         BiDiMailUI.Prefs.preferencePrefix + prefName);
     } catch(ex) {
       if (defaultValue != undefined)
@@ -170,7 +139,7 @@ BiDiMailUI.Prefs = {
 
   getIntPref: function(prefName, defaultValue) {
     try {
-      return this.prefService.getIntPref(
+      return Services.prefs.getIntPref(
         BiDiMailUI.Prefs.preferencePrefix + prefName);
     } catch(ex) {
       if (defaultValue != undefined)
@@ -180,28 +149,45 @@ BiDiMailUI.Prefs = {
     }
   },
 
+  getAppStringPref: function(prefName, defaultValue) {
+    try {
+      return Services.prefs.getComplexValue(
+        prefName, Ci.nsIPrefLocalizedString).data;
+    } catch(ex) {
+      if (defaultValue) {
+        return defaultValue;
+      }
+      throw(ex);
+    }
+  },
+
+  getStringPref: function(prefName, defaultValue) {
+    return BiDiMailUI.Prefs.getAppStringPref(
+      BiDiMailUI.Prefs.preferencePrefix + prefName, defaultValue);
+  },
+
   setBoolPref: function(prefName, val) {
-    this.prefService.setBoolPref(
+    Services.prefs.setBoolPref(
       BiDiMailUI.Prefs.preferencePrefix + prefName, val);
   },
 
   setCharPref: function(prefName, val) {
-    this.prefService.setCharPref(
+    Services.prefs.setCharPref(
       BiDiMailUI.Prefs.preferencePrefix + prefName, val);
   },
 
   setIntPref: function(prefName, val) {
-    this.prefService.setIntPref(
+    Services.prefs.setIntPref(
       BiDiMailUI.Prefs.preferencePrefix + prefName, val);
   },
 
   setAppStringPref: function(appPrefName, str) {
-    BiDiMailUI.Prefs.prefService.setStringPref(appPrefName, str);
+    Services.prefs.setStringPref(appPrefName, str);
   },
 
   addObserver: function(domain, listener) {
     try {
-      BiDiMailUI.Prefs.prefService.addObserver(
+      Services.prefs.addObserver(
         BiDiMailUI.Composition.directionButtonsPrefListener.domain,
         BiDiMailUI.Composition.directionButtonsPrefListener);
     }
@@ -212,7 +198,7 @@ BiDiMailUI.Prefs = {
 
   removeObserver: function(domain, listener) {
     try {
-      BiDiMailUI.Prefs.prefService.removeObserver(
+      Services.prefs.removeObserver(
         BiDiMailUI.Composition.directionButtonsPrefListener.domain,
         BiDiMailUI.Composition.directionButtonsPrefListener);
     }

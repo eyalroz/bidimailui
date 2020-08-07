@@ -106,10 +106,7 @@ BiDiMailUI.Display = {
         "display.autodetect_bidi_misdecoding", true)) {
       return;
     }
-    var charsetPrefValue = null;
-    charsetPrefValue = BiDiMailUI.Prefs.prefService.getComplexValue(
-      "mailnews.view_default_charset",
-      Components.interfaces.nsIPrefLocalizedString).data;
+    var charsetPrefValue = BiDiMailUI.Prefs.getAppStringPref("mailnews.view_default_charset", null);
 
 #ifdef DEBUG_charsetMisdetectionCorrectionPhase
     console.log("charsetPrefValue = " + charsetPrefValue);
