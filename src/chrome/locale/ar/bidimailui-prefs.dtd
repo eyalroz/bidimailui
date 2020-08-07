@@ -1,4 +1,4 @@
-﻿<!ENTITY bidimailpack-settings "خيارات واجهة البريد ثنائية الاتجاه">
+﻿<!ENTITY bidimailui-settings "خيارات واجهة البريد ثنائية الاتجاه">
 <!ENTITY message-composition-groupbox-caption "كتابة الرّسائل">
 <!ENTITY default-dir "الاتّجاه المبدئي:">
 <!ENTITY ltr.label "يسار إلى يمين">
@@ -12,7 +12,7 @@
 <!ENTITY more-info "لمزيد من المعلومات:">
 <!ENTITY guide-link-text "دليل مستخدم واجهة البريد ثنائية الاتجاه">
 <!ENTITY guide-url "http://bidiui.mozdev.org/mail/guide.html">
-<!ENTITY bidimailpack-preftree-label "واجهة البريد ثنائية الاتجاه">
+<!ENTITY bidimailui-preftree-label "واجهة البريد ثنائية الاتجاه">
 <!ENTITY display-buttons.label "أظهر أزرار تحديد الاتّجاه">
 <!ENTITY display-buttons.accesskey "ع">
 

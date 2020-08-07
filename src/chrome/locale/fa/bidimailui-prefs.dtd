@@ -1,4 +1,4 @@
-﻿<!ENTITY bidimailpack-settings                   "گزینه‌های رابط کاربری دو جهته">
+﻿<!ENTITY bidimailui-settings                   "گزینه‌های رابط کاربری دو جهته">
 <!ENTITY message-composition-groupbox-caption    "ساخت پیام">
 <!ENTITY default-dir                             "جهت پیش‌گزیده:">
 <!ENTITY ltr.label                               "چپ به راست">
@@ -12,7 +12,7 @@
 <!ENTITY more-info                               "برای اطلاعات بیشتر:">
 <!ENTITY guide-link-text                         "راهنمای کاربری رابط کاربری دو جهته">
 <!ENTITY guide-url                               "http://bidiui.mozdev.org/mail/guide.html">
-<!ENTITY bidimailpack-preftree-label             "رابط کاربری دو جهته">
+<!ENTITY bidimailui-preftree-label             "رابط کاربری دو جهته">
 <!ENTITY display-buttons.label                   "دکمه‌های تنظیم جهت نمایش داده شوند">
 <!ENTITY display-buttons.accesskey               "ت">
 

@@ -73,17 +73,17 @@ $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS manifest.json > $BUILDDIR/ma
 rm -f installed-chrome.txt
 
 mkdir -p $BUILDDIR/defaults/preferences
-cp defaults/preferences/bidimailui.js $BUILDDIR/defaults/preferences
-mv bidimailpack $BUILDDIR/chrome
+cp defaults/preferences/${SHORTNAME}.js $BUILDDIR/defaults/preferences
+mv ${SHORTNAME} $BUILDDIR/chrome
 
 case "$TARGET" in
 	tbird)
 		mkdir -p $BUILDDIR/platform/Darwin
-		mv bidimailpack-mac-skin $BUILDDIR/platform/Darwin/chrome
+		mv ${SHORTNAME}-mac-skin $BUILDDIR/platform/Darwin/chrome
 		$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
 		cp platform/Darwin/chrome.manifest $BUILDDIR/platform/Darwin/chrome.manifest
 		cd $BUILDDIR
-	zip -q -r $XPINAME  \
+	zip -r $XPINAME  \
 		chrome \
 		defaults/ \
 		platform/Darwin/chrome.manifest \
@@ -95,8 +95,8 @@ case "$TARGET" in
 	suiterunner)
 		$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
 		cd $BUILDDIR
-	zip -q -r $XPINAME  \
-		chrome/bidimailpack \
+	zip -r $XPINAME  \
+		chrome/${SHORTNAME} \
 		defaults/ \
 		install.rdf \
 		chrome.manifest || exit

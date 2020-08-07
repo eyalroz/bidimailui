@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE overlay [
-<!ENTITY % bidimailpackDTD SYSTEM "chrome://bidimailpack/locale/bidimailpack.dtd">
-%bidimailpackDTD;
+<!ENTITY % bidimailuiDTD SYSTEM "chrome://bidimailui/locale/bidimailui.dtd">
+%bidimailuiDTD;
 ]>
 
-<?xml-stylesheet href="chrome://bidimailpack/skin/bidimailpack.css" type="text/css"?>
+<?xml-stylesheet href="chrome://bidimailui/skin/bidimailui.css" type="text/css"?>
 
 <overlay
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-<script type="application/x-javascript" src="bidimailpack-composer.js"/>
-<script type="application/x-javascript" src="bidimailpack-editor.js"/>
+<script type="application/x-javascript" src="bidimailui-composer.js"/>
+<script type="application/x-javascript" src="bidimailui-editor.js"/>
 <script type="application/x-javascript">
   BiDiMailUI.Editor.installEditorWindowEventHandlers ();
 </script>

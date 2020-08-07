@@ -1,4 +1,4 @@
-﻿<!ENTITY bidimailpack-settings                   "BiDi Mail UI Options">
+﻿<!ENTITY bidimailui-settings                   "BiDi Mail UI Options">
 <!ENTITY message-composition-groupbox-caption    "Message Composition">
 <!ENTITY default-dir                             "Default Direction:">
 <!ENTITY ltr.label                               "Left to Right">
@@ -12,7 +12,7 @@
 <!ENTITY more-info                               "For more information:">
 <!ENTITY guide-link-text                         "The BiDi Mail UI User's Guide">
 <!ENTITY guide-url                               "http://bidiui.mozdev.org/mail/guide.html">
-<!ENTITY bidimailpack-preftree-label             "BiDi Mail UI">
+<!ENTITY bidimailui-preftree-label             "BiDi Mail UI">
 <!ENTITY display-buttons.label                   "Display direction setting buttons">
 <!ENTITY display-buttons.accesskey               "D">
 <!ENTITY default-to-paragraph-mode.label         "Start composing new HTML messages in paragraph mode">

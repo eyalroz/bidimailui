@@ -18,7 +18,7 @@
         "legacy" : {
                 "type" : "xul",
                 "options" : {
-                        "page" : "chrome://bidimailpack/content/bidimailpack-prefs-68.xul",
+                        "page" : "chrome://bidimailui/content/bidimailui-prefs-68.xul",
                         "open_in_tab": false
                 }
         }

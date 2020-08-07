@@ -1,4 +1,4 @@
-var moduleURI = "chrome://bidimailpack/content/bidimailpack-common.js";
+var moduleURI = "chrome://bidimailui/content/bidimailui-common.js";
 if (typeof(ChromeUtils) != "undefined") {
   if (ChromeUtils.import) {
     var { BiDiMailUI } = ChromeUtils.import(moduleURI);
@@ -429,7 +429,7 @@ BiDiMailUI.Composition = {
         return;
       }
       editor.QueryInterface(nsIEditorStyleSheets);
-      editor.addOverrideStyleSheet("chrome://bidimailpack/content/quotebar.css");
+      editor.addOverrideStyleSheet("chrome://bidimailui/content/quotebar.css");
     }
   },
 

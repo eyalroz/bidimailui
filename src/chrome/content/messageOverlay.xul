@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE overlay [
-<!ENTITY % bidimailpackDTD SYSTEM "chrome://bidimailpack/locale/bidimailpack.dtd">
-%bidimailpackDTD;
+<!ENTITY % bidimailuiDTD SYSTEM "chrome://bidimailui/locale/bidimailui.dtd">
+%bidimailuiDTD;
 ]>
 
 <overlay
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-  <script type="application/x-javascript" src="bidimailpack-display-logic.js"/>
-  <script type="application/x-javascript" src="bidimailpack-messenger.js"/>
+  <script type="application/x-javascript" src="bidimailui-display-logic.js"/>
+  <script type="application/x-javascript" src="bidimailui-messenger.js"/>
   <script type="application/x-javascript">
     window.addEventListener(
       'load',

@@ -1,18 +1,18 @@
-content bidimailpack-for-message-html chrome/content/ contentaccessible=yes
-content bidimailpack chrome/content/
-locale bidimailpack en-US chrome/locale/en-US/
-locale bidimailpack he chrome/locale/he/
-locale bidimailpack ar chrome/locale/ar/
-locale bidimailpack fa chrome/locale/fa/
-locale bidimailpack ur chrome/locale/ur/
-skin bidimailpack classic/1.0 chrome/skin/classic/
-overlay chrome://messenger/content/messenger.xul chrome://bidimailpack/content/messageOverlay.xul
-overlay chrome://messenger/content/messageWindow.xul  chrome://bidimailpack/content/messageOverlay.xul
-overlay chrome://messenger/content/messengercompose/messengercompose.xul chrome://bidimailpack/content/composeOverlay.xul
-overlay chrome://editor/content/editorOverlay.xul chrome://bidimailpack/content/insertMenuOverlay.xul
-style chrome://messenger/content/messengercompose/messengercompose.xul chrome://bidimailpack/skin/bidimailpack.css
-style chrome://messenger/content/messageWindow.xul chrome://bidimailpack/skin/bidimailpack.css
-style chrome://messenger/content/messenger.xul chrome://bidimailpack/skin/bidimailpack.css
-skin bidimailpack modern/1.0 chrome/skin/modern/bidimailpack/ application={92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}
-style chrome://global/content/customizeToolbar.xul chrome://bidimailpack/skin/bidimailpack.css appversion<59.0a1
-style chrome://messenger/content/customizeToolbar.xul chrome://bidimailpack/skin/bidimailpack.css appversion>=59.0a1
+content bidimailui-for-message-html chrome/content/ contentaccessible=yes
+content bidimailui chrome/content/
+locale bidimailui en-US chrome/locale/en-US/
+locale bidimailui he chrome/locale/he/
+locale bidimailui ar chrome/locale/ar/
+locale bidimailui fa chrome/locale/fa/
+locale bidimailui ur chrome/locale/ur/
+skin bidimailui classic/1.0 chrome/skin/classic/
+overlay chrome://messenger/content/messenger.xul chrome://bidimailui/content/messageOverlay.xul
+overlay chrome://messenger/content/messageWindow.xul  chrome://bidimailui/content/messageOverlay.xul
+overlay chrome://messenger/content/messengercompose/messengercompose.xul chrome://bidimailui/content/composeOverlay.xul
+overlay chrome://editor/content/editorOverlay.xul chrome://bidimailui/content/insertMenuOverlay.xul
+style chrome://messenger/content/messengercompose/messengercompose.xul chrome://bidimailui/skin/bidimailui.css
+style chrome://messenger/content/messageWindow.xul chrome://bidimailui/skin/bidimailui.css
+style chrome://messenger/content/messenger.xul chrome://bidimailui/skin/bidimailui.css
+skin bidimailui modern/1.0 chrome/skin/modern/bidimailui/ application={92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}
+style chrome://global/content/customizeToolbar.xul chrome://bidimailui/skin/bidimailui.css appversion<59.0a1
+style chrome://messenger/content/customizeToolbar.xul chrome://bidimailui/skin/bidimailui.css appversion>=59.0a1

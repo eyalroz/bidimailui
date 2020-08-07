@@ -5,13 +5,13 @@
 
 <!DOCTYPE prefwindow [
   <!ENTITY % bdmDTD SYSTEM
-             "chrome://bidimailpack/locale/bidimailpack-prefs.dtd">
+             "chrome://bidimailui/locale/bidimailui-prefs.dtd">
   %bdmDTD;
 ]>
 
 <prefwindow id="bidimailui-prefwindow"
             xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-            title="&bidimailpack-settings;"
+            title="&bidimailui-settings;"
             dlgbuttons="accept,cancel">
   <prefpane id="bidiMailUIPrefPane"
             helpURI="&guide-url;"
@@ -39,9 +39,9 @@
     </preferences>
 
     <script type="application/x-javascript"
-            src="chrome://bidimailpack/content/bidimailpack-common.js"/>
+            src="chrome://bidimailui/content/bidimailui-common.js"/>
     <script type="application/x-javascript"
-            src="chrome://bidimailpack/content/bidimailpack-prefs.js"/>
+            src="chrome://bidimailui/content/bidimailui-prefs.js"/>
 
     <groupbox>
       <caption label="&default-dir;"/>

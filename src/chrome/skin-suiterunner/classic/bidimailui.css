@@ -3,7 +3,7 @@
 /* Messenger Main Bar Buttons */
 
 #bidimailui-forcing-menubutton {
-  list-style-image: url("chrome://bidimailpack/skin/main-bar-autodetect.png");
+  list-style-image: url("chrome://bidimailui/skin/main-bar-autodetect.png");
   -moz-image-region: rect(0px 30px 29px 0px);
 }
 
@@ -16,7 +16,7 @@
 }
 
 #bidimailui-forcing-menubutton[selectedItem="ltr"] {
-  list-style-image: url("chrome://bidimailpack/skin/main-bar-ltr.png");
+  list-style-image: url("chrome://bidimailui/skin/main-bar-ltr.png");
   -moz-image-region: rect(0px 30px 29px 0px);
 }
 
@@ -29,7 +29,7 @@
 }
 
 #bidimailui-forcing-menubutton[selectedItem="rtl"] {
-  list-style-image: url("chrome://bidimailpack/skin/main-bar-rtl.png");
+  list-style-image: url("chrome://bidimailui/skin/main-bar-rtl.png");
   -moz-image-region: rect(0px 30px 29px 0px);
 }
 
@@ -42,7 +42,7 @@
 }
 
 #bidimailui-forcing-menubutton[disabled="true"] {
-  list-style-image: url("chrome://bidimailpack/skin/main-bar-autodetect.png");
+  list-style-image: url("chrome://bidimailui/skin/main-bar-autodetect.png");
   -moz-image-region: rect(0px 120px 29px 90px) !important;
 }
 
@@ -50,7 +50,7 @@
 /* Composer/Editor Main Bar Buttons */
 
 #button-direction-ltr-main-bar {
-  list-style-image: url("chrome://bidimailpack/skin/main-bar-ltr.png");
+  list-style-image: url("chrome://bidimailui/skin/main-bar-ltr.png");
   -moz-image-region: rect(0px 30px 29px 0px);
 }
 
@@ -67,7 +67,7 @@
 }
 
 #button-direction-rtl-main-bar {
-  list-style-image: url("chrome://bidimailpack/skin/main-bar-rtl.png");
+  list-style-image: url("chrome://bidimailui/skin/main-bar-rtl.png");
   -moz-image-region: rect(0px 30px 29px 0px);
 }
 
@@ -87,7 +87,7 @@
 /* Composer/Editor Formatting Bar Buttons */
 
 #button-direction-ltr-formatting-bar {
-  list-style-image: url("chrome://bidimailpack/skin/ltr-formatting-bar.png");
+  list-style-image: url("chrome://bidimailui/skin/ltr-formatting-bar.png");
   -moz-image-region: rect(0px 19px 18px 0px);
 }
 
@@ -106,7 +106,7 @@
 
 
 #button-direction-rtl-formatting-bar {
-  list-style-image: url("chrome://bidimailpack/skin/rtl-formatting-bar.png");
+  list-style-image: url("chrome://bidimailui/skin/rtl-formatting-bar.png");
   -moz-image-region: rect(0px 19px 18px 0px);
 }
 
@@ -123,5 +123,5 @@
 }
 
 #FormatToolbar > toolbarbutton[rtlmode="true"] {
-  list-style-image: url("chrome://bidimailpack/skin/format-buttons-rtl.gif")  !important;
+  list-style-image: url("chrome://bidimailui/skin/format-buttons-rtl.gif")  !important;
 }
