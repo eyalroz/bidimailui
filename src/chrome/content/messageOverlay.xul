@@ -46,6 +46,7 @@
                    label="&bidimailui-forcing-menubutton.label;"
                    tooltiptext="&bidimailui-forcing-menubutton.tip;"
                    type="menu-button"
+                   is="toolbarbutton-menu-button"
                    selectedItem="autodetect"
                    class="toolbarbutton-1 chromeclass-toolbar-additional custombutton">
       <menupopup onpopupshowing="">
