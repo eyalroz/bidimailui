@@ -223,7 +223,8 @@ BiDiMailUI.Display = {
   // moz-text-flowed message's DOM tree within a DIV
   // (whose direction we can later set)
   wrapTextNodesInFlowedMessageDOMTree : function(subBody) {
-    var clonedDiv = subBody.ownerDocument.createXULElement("DIV");
+    let ns = subBody.ownerDocument.documentElement.lookupNamespaceURI("html");
+    let clonedDiv = subBody.ownerDocument.createElementNS(ns, "div");
     clonedDiv.setAttribute('bidimailui-generated', true);
     var treeWalker = document.createTreeWalker(
       subBody,
@@ -233,9 +234,9 @@ BiDiMailUI.Display = {
     );
     var node;
     while ((node = treeWalker.nextNode())) {
-      if ((node.parentNode.nodeName != 'A') &&
-          (node.parentNode.nodeName != 'DIV') &&
-          (node.parentNode.nodeName != 'BLOCKQUOTE')) {
+      if ((node.parentNode.nodeName.toLowerCase() != 'a') &&
+          (node.parentNode.nodeName.toLowerCase() != 'div') &&
+          (node.parentNode.nodeName.toLowerCase() != 'blockquote')) {
         // and other such elements within moz-text-flowed messages
 #ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
         console.log("not handling node\n" + node.nodeValue + "\nwith parent node name " + node.parentNode.nodeName);
@@ -243,7 +244,7 @@ BiDiMailUI.Display = {
         continue;
       }
       if (node.parentNode.hasAttribute('bidimailui-generated') ||
-          ((node.parentNode.nodeName == 'A') &&
+          ((node.parentNode.nodeName.toLowerCase() == 'A') &&
           (node.parentNode.parentNode.hasAttribute('bidimailui-generated')))) {
 #ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
         console.log("already handled node\n"+ node.nodeValue);
@@ -256,7 +257,7 @@ BiDiMailUI.Display = {
       var wrapperDiv = clonedDiv.cloneNode(false);
 
       var emptyLine;
-      if (node.parentNode.nodeName == 'A') {
+      if (node.parentNode.nodeName.toLowerCase() == 'a') {
         node.parentNode.parentNode.replaceChild(wrapperDiv,node.parentNode);
         wrapperDiv.appendChild(node.parentNode);
         emptyLine = false;
@@ -274,13 +275,13 @@ BiDiMailUI.Display = {
       // add everything within the current 'paragraph' to the new DIV
       while (wrapperDiv.nextSibling) {
         sibling = wrapperDiv.nextSibling
-        if (sibling.nodeName == 'BLOCKQUOTE') {
+        if (sibling.nodeName.toLowerCase() == 'blockquote') {
 #ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
           console.log("hit blockquote, finishing walk");
 #endif
           break;
         }
-        if (sibling.nodeName == 'BR') {
+        if (sibling.nodeName.toLowerCase() == 'br') {
           if (!emptyLine) {
             // if the DIV has any text content, it will
             // have a one-line height; otherwise it will 
