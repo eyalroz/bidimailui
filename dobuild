@@ -13,8 +13,9 @@ case "$TARGET" in
 		TARGET=tbird
 		PREPROCESSOR_PARAMS+=" -DMOZ_THUNDERBIRD"
 		;;
+	*)
 		echo "Please specify thunderbird as the target (yes, that's a bit redundant)."
-	exit 1
+		exit 1
 	;;
 esac
 
@@ -53,7 +54,7 @@ fi
 BUILDDIR="build/$TARGET"
 XPINAME="${SHORTNAME}_${VERSION}_${TARGET}.xpi"
 LINKNAME="${SHORTNAME}_${TARGET}.xpi"
-BUILDTOOLSDIR="../buildtools"
+BUILDTOOLSDIR="buildtools"
 export PERL5LIB="`pwd`/$BUILDTOOLSDIR"
 
 # TODO: split builddir by /'s and try to create everything along the path
@@ -63,24 +64,30 @@ if [ ! -d $BUILDDIR ] ; then mkdir $BUILDDIR; else rm -rf $BUILDDIR/*; fi
 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILDDIR/jar.mn
 # Our invocation of make-jars.pl doesn't literally make JAR files, it only preprocesses and copies.
 $BUILDTOOLSDIR/make-jars.pl -q -f flat -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILDDIR/jar.mn || exit
-$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.rdf > $BUILDDIR/install.rdf # For pre-68 Thunderbird versions
-$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS manifest.json > $BUILDDIR/manifest.json # For Thunderbird 68 and later
+$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS src/manifest.json > $BUILDDIR/manifest.json 
 rm -f installed-chrome.txt
 
 mkdir -p $BUILDDIR/defaults/preferences
-cp defaults/preferences/${SHORTNAME}.js $BUILDDIR/defaults/preferences
+cp src/defaults/preferences/${SHORTNAME}.js $BUILDDIR/defaults/preferences
 mv ${SHORTNAME} $BUILDDIR/chrome
+
+cp src/background.js $BUILDDIR/background.js
+mkdir -p $BUILDDIR/api/WindowListener
+cp src/api/WindowListener/schema.json $BUILDDIR/api/WindowListener
+cp src/api/WindowListener/implementation.js $BUILDDIR/api/WindowListener
+
+cp LICENSE $BUILDDIR
 
 case "$TARGET" in
 	tbird)
-		$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
 		cd $BUILDDIR
-	zip -r $XPINAME  \
+	zip -q -r $XPINAME  \
 		chrome \
 		defaults/ \
-		install.rdf \
-		manifest.json \
-		chrome.manifest || exit
+		api \
+		background.js \
+		LICENSE \
+		manifest.json || exit
 		;;
 esac
 

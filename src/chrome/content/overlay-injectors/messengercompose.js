@@ -1,19 +1,14 @@
-<?xml version="1.0"?>
+var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
+var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
 
-<!DOCTYPE overlay [
-<!ENTITY % bidimailuiDTD SYSTEM "chrome://bidimailui/locale/bidimailui.dtd">
-%bidimailuiDTD;
-]>
+var debugInjection = false;
 
-<overlay
-  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+Services.scriptloader.loadSubScript("chrome://bidimailui/content/bidimailui-display-logic.js", window, "UTF-8");
+Services.scriptloader.loadSubScript("chrome://bidimailui/content/bidimailui-composer.js", window, "UTF-8");
 
-  <script type="application/x-javascript" src="bidimailui-display-logic.js"/>
-  <script type="application/x-javascript" src="bidimailui-composer.js"/>
-  <script type="application/x-javascript">
-    BiDiMailUI.Composition.installComposeWindowEventHandlers();
-  </script>
 
+function injectOtherElements() {
+  WL.injectElements(`
 <broadcasterset>
   <broadcaster id="ltr-document-direction-broadcaster" checked="false"/>
   <broadcaster id="rtl-document-direction-broadcaster" checked="false"/>
@@ -67,9 +62,9 @@ the main toolbar buttons are whole-document direction controls. -->
                  class="toolbarbutton-1"
                  command="cmd_ltr_document"
                  observes="ltr-document-direction-broadcaster"
+                 label="&bidimail-ltr-button.label;"
                  insertafter="directionality-separator-main-bar"
                  removable="true"
-                 label="&bidimail-ltr-button.label;"
                  tooltiptext="&bidimail-ltr-button.tip;"/>
   <toolbarbutton id="button-direction-rtl-main-bar"
                  class="toolbarbutton-1"
@@ -169,5 +164,60 @@ the main toolbar buttons are whole-document direction controls. -->
               accesskey="&menu-bidimail-clear-paragraph-direction.accesskey;"/>
   </menupopup>
 </menu>
+    `,
+    [
+      "chrome://bidimailui/locale/bidimailui.dtd"
+    ],
+    debugInjection
+  );
+}
 
-</overlay>
+// called on window load or on add-on activation while window is already open
+function onLoad(activatedWhileWindowOpen) {
+  injectOtherElements();
+  // We currently use a single CSS file for all of our style (not including the dynamically-injecte quotebar CSS for message documents)
+  WL.injectCSS("chrome://bidimailui/content/skin/classic/bidimailui.css");
+
+  window.top.controllers.appendController(
+      BiDiMailUI.Composition.directionSwitchController);
+    const capture = true;
+#ifdef DEBUG_ComposeEvents
+    window.addEventListener("load",                  BiDiMailUI.Composition.debugLoadHandler,               capture);
+    window.addEventListener("compose-window-reopen", BiDiMailUI.Composition.debugReopenHandler,             capture);
+    window.addEventListener("load",                  BiDiMailUI.Composition.debugLoadHandlerNonCapturing,   ! capture);
+    window.addEventListener("compose-window-reopen", BiDiMailUI.Composition.debugReopenHandlerNonCapturing, ! capture);
+#endif
+    window.addEventListener("load",                  BiDiMailUI.Composition.composeWindowOnLoad,   ! capture);
+    window.addEventListener("compose-window-reopen", BiDiMailUI.Composition.composeWindowOnReopen, capture);
+    window.addEventListener("unload",                BiDiMailUI.Composition.composeWindowOnUnload, capture);
+    window.addEventListener("keypress",              BiDiMailUI.Composition.onKeyPress,            capture);
+    if (BiDiMailUI.Prefs.getBoolPref(
+      "compose.ctrl_shift_switches_direction", true)) {
+      document.addEventListener("keydown", BiDiMailUI.Composition.onKeyDown, capture);
+      document.addEventListener("keyup",   BiDiMailUI.Composition.onKeyUp,   capture);
+    }
+
+}
+
+// called on window unload or on add-on deactivation while window is still open
+function onUnload(deactivatedWhileWindowOpen) {
+  // no need to clean up UI on global shutdown
+  if (!deactivatedWhileWindowOpen)
+    return;
+  // If we've added any elements not through WL.inject functions - we need to remove
+  // them manually here. The WL-injected elements get auto-removed
+#ifdef DEBUG_ComposeEvents
+    window.removeEventListener("load", BiDiMailUI.Composition.debugLoadHandler)
+    window.removeEventListener("compose-window-reopen", BiDiMailUI.Composition.debugReopenHandler);
+    window.removeEventListener("load", BiDiMailUI.Composition.debugLoadHandlerNonCapturing)
+    window.removeEventListener("compose-window-reopen", BiDiMailUI.Composition.debugReopenHandlerNonCapturing);
+#endif
+    window.removeEventListener("load", BiDiMailUI.Composition.composeWindowOnLoad);
+    window.removeEventListener("compose-window-reopen", BiDiMailUI.Composition.composeWindowOnReopen);
+    window.removeEventListener("unload", BiDiMailUI.Composition.composeWindowOnUnload);
+    window.removeEventListener("keypress", BiDiMailUI.Composition.onKeyPress);
+    try {
+      document.removeEventListener("keydown", BiDiMailUI.Composition.onKeyDown);
+      document.removeEventListener("keyup", BiDiMailUI.Composition.onKeyUp);
+    } catch(ex) { }
+}

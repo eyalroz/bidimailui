@@ -182,11 +182,6 @@ BiDiMailUI.MessageOverlay = {
     BiDiMailUI.MessageOverlay.updateDirectionMenuButton(null);
   },
   
-  installComposeWindowEventHandlers : function() {
-    document.getElementById("messagepane").addEventListener("load",
-      BiDiMailUI.MessageOverlay.onLoad, true);
-  },
-  
 // Functions from here on should not be used by code outside this file
 
   // this function is passed to the charset phase actions and run 
