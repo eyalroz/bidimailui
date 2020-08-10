@@ -18,7 +18,7 @@
   </script>
 
   <keyset id="mailKeys">
-    <key id="key-bidimailui-cycle"
+    <key id="key-bidimail-switch"
          modifiers="&key-bidimail-cycle-document-direction.modifiers;"
          key="&key-bidimail-cycle-document-direction.keycode;"
          oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
@@ -27,18 +27,19 @@
   <menupopup id="menu_View_Popup">
     <menuitem insertafter="mailviewCharsetMenu"
               label="&menu-bidimail-cycle-message-direction.label;"
-              accesskey="&menu-bidimail-cycle-document-direction.accesskey;"
-              key="key-bidimailui-cycle"
+              accesskey="&menu-bidimail-cycle-document-direction.accesskey;" 
+              key="key-bidimail-switch" 
               oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
   </menupopup>
   
-  <popup id="messagePaneContext">
-    <menuseparator/>
-    <menuitem label="&menu-bidimail-cycle-message-direction.label;"
+  <menupopup id="mailContext">
+    <menuseparator insertafter="mailContext-sep-clipboard"/>
+    <menuitem id="context-bidiui-cycle-message-direction"
+              label="&menu-bidimail-cycle-message-direction.label;"
               key="key-bidimailui-cycle"
               accesskey="&menu-bidimail-cycle-document-direction.accesskey;"
               oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
-  </popup>
+  </menupopup>
 
   <toolbarpalette id="MailToolbarPalette">
     <toolbarbutton id="bidimailui-forcing-menubutton"
