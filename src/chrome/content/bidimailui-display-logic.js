@@ -81,6 +81,13 @@ BiDiMailUI.Display = {
 
 
   appendStyleSheet : function(domDocument, sheetFileName) {
+    let ns = domDocument.documentElement.lookupNamespaceURI("html");
+    let element = window.document.createElementNS(ns, "link");
+    element.setAttribute("rel", "stylesheet");
+    element.setAttribute("href", 'chrome://bidimailui/content/' + sheetFileName);
+    return domDocument.documentElement.appendChild(element);
+
+/*    
     var head = domDocument.getElementsByTagName("head")[0];
     if (head) {
       var styleSheetLink = domDocument.createXULElement("link");
@@ -89,6 +96,7 @@ BiDiMailUI.Display = {
       styleSheetLink.href = 'chrome://bidimailui-for-message-html/content/' + sheetFileName;
       head.appendChild(styleSheetLink);
     }
+*/
   },
 
 

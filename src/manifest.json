@@ -4,26 +4,34 @@
        "gecko": {
 #expand            "id": "__UUID__",
                    "strict_min_version": "65.0a1",
-                   "strict_max_version": "68.*"
+                   "strict_max_version": "78.*"
        }
     },
     "author": "The BiDi UI team",
     "homepage_url": "http://bidiui.mozdev.org/",
     "name": "BiDi Mail UI",
     "icons": {
-        "32": "content/bidimailui.png"
+        "32": "chrome/content/bidimailui.png"
     },
     "description": "The BiDi Mail UI extension provides access to the inherent Bi-Directional capabilities in Mozilla Thunderbird - for message display and composition. It also detects and fixes cases of character encodung ",
 #expand    "version": "__VERSION__",
 #ifdef VERSION_NAME
-#expand		"version_name": "__VERSION_NAME__",
+#expand    "version_name": "__VERSION_NAME__",
 #endif
-        "legacy" : {
-                "type" : "xul",
-                "options" : {
-                        "page" : "chrome://bidimailui/content/bidimailui-prefs-68.xul",
-                        "open_in_tab": false
-                }
+    "experiment_apis": {
+        "WindowListener": {
+            "schema": "api/WindowListener/schema.json",
+            "parent": {
+                "scopes": ["addon_parent"],
+                "paths": [["WindowListener"]],
+                "script": "api/WindowListener/implementation.js"
+            }
         }
+    },
+    "background": {
+        "scripts": [
+            "background.js"
+        ]
+    }
 }
 
