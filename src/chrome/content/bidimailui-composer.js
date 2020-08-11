@@ -385,11 +385,16 @@ BiDiMailUI.Composition = {
          'could not get the "content-frame" by ID - that shouldn\'t be possible');
     }
 #endif
-    // We can't use the dir attribute of the subject textbox / html:input, like we 
-    // do for the message body, since XUL elements' dir attribute means something 
-    // else than this attribute for HTML elements. But we can set it for its input 
-    // field...
-    document.getElementById("msgSubject").inputField.style.direction = direction;
+    if (BiDiMailUI.App.versionIsAtLeast("71")) {
+      document.getElementById("msgSubject").style.direction = direction;
+    }
+    else {
+      // We can't use the dir attribute of the subject textbox / html:input, like we
+      // do for the message body, since XUL elements' dir attribute means something
+      // else than this attribute for HTML elements. But we can set it for its input
+      // field...
+      document.getElementById("msgSubject").inputField.style.direction = direction;
+    }
     BiDiMailUI.Prefs.setCharPref("compose.last_used_direction", direction);
   },
 
@@ -1552,11 +1557,16 @@ BiDiMailUI.Composition.directionSwitchController = {
     }
   },
 
+  inSubjectBox_ : function()   {
+    var subjectInputField = BiDiMailUI.App.versionIsAtLeast("71") ?
+       document.getElementById("msgSubject") :
+       document.getElementById("msgSubject").inputField;
+    return (document.commandDispatcher.focusedElement == subjectInputField);
+  },
+
   isCommandEnabled: function(command) {
     var inMessage = (content == top.document.commandDispatcher.focusedWindow);
-    var inSubjectBox = 
-      (document.commandDispatcher.focusedElement ==
-       document.getElementById("msgSubject").inputField);
+    var inSubjectBox = this.inSubjectBox_();
     var retVal = false;
 
     // and now for what this function is actually supposed to do...
@@ -1663,9 +1673,7 @@ BiDiMailUI.Composition.directionSwitchController = {
       console.log('setting casters.');
 #endif
     var inMessage = (content == top.document.commandDispatcher.focusedWindow);
-    var inSubjectBox = 
-      (document.commandDispatcher.focusedElement ==
-       document.getElementById("msgSubject").inputField);
+    var inSubjectBox = this.inSubjectBox_();
     var retVal = false;
 
     this.setCasterGroup("document",inMessage,inSubjectBox);
