@@ -1,13 +1,13 @@
 
-.bidimailui-use-detected-directions [bidimailui-direction-uniformity="rtl"] {
+[bidimailui-use-detected-directions="true"] [bidimailui-direction-uniformity="rtl"] {
   direction: rtl;
 }
 
-.bidimailui-use-detected-directions [bidimailui-direction-uniformity="ltr"] {
+[bidimailui-use-detected-directions="true"] [bidimailui-direction-uniformity="ltr"] {
   direction: ltr;
 }
 
-.bidimailui-use-detected-directions [bidimailui-direction-uniformity="mixed"] {
+[bidimailui-use-detected-directions="true"] [bidimailui-direction-uniformity="mixed"] {
   /* We choose to direct mixed content as RTL - usually the safe choice. */
   direction: rtl;
 }
@@ -16,7 +16,7 @@
 There is no rule for neutral elements, as we do not wish to specify their 
 behavior - they should inherit their direction or obey document-specific
 style rules.
-.bidimailui-use-detected-directions [bidimailui-direction-uniformity="neutral"] {
+[bidimailui-use-detected-directions="true"] [bidimailui-direction-uniformity="neutral"] {
 }
 */
 

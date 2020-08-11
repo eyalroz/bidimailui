@@ -81,11 +81,11 @@ BiDiMailUI.Display = {
 
 
   appendStyleSheet : function(domDocument, sheetFileName) {
-    let ns = domDocument.documentElement.lookupNamespaceURI("html");
-    let element = window.document.createElementNS(ns, "link");
+    let ns = domDocument.lookupNamespaceURI("html");
+    let element = domDocument.createElementNS(ns, "link");
     element.setAttribute("rel", "stylesheet");
     element.setAttribute("href", 'chrome://bidimailui/content/' + sheetFileName);
-    return domDocument.documentElement.appendChild(element);
+    return domDocument.head.appendChild(element);
 
 /*    
     var head = domDocument.getElementsByTagName("head")[0];
@@ -429,52 +429,30 @@ BiDiMailUI.Display = {
 
 #ifdef DEBUG_setDirections
     console.log(
-      'settings directions to ' + 
-      (forcedDirection ? forcedDirection :
-       'detected/original directions'));
+      'settings directions to ' + (forcedDirection ? forcedDirection : 'detected/original directions'));
 #endif
 
+    let htmlNode = body.parentNode;
     switch(forcedDirection) {
-      case 'ltr': 
-      case 'rtl': 
-        try {
-          body.parentNode.classList.remove('bidimailui-use-detected-directions');
-        } catch(ex) {
-          // this is an old build, no classList... bummer;
-          // let's remove manually from the list of class names
-          var re = / *bidimailui-use-detected-directions */;
-          if (re.test(body.parentNode.className)) {
-            body.parentNode.className = RegExp.leftContext + 
-              ((re.rightContext == '') ? ' ' : '') +  RegExp.rightContext;
-          }
-        }
-        if (!body.hasAttribute('bidimailui-original-direction')) {
-          body.setAttribute('bidimailui-original-direction',
-            body.style.direction);
-        }
-        body.style.direction = forcedDirection;
-        break;
-      default:
-        var originalBodyCSSDirectionProperty =
-          body.getAttribute('bidimailui-original-direction');
-        if (originalBodyCSSDirectionProperty &&
-            (originalBodyCSSDirectionProperty != "") ) {
-          body.style.direction = originalBodyCSSDirectionProperty;
-        }
-        else {
-          body.style.removeProperty('direction');
-        }
-        try {
-          body.parentNode.classList.add('bidimailui-use-detected-directions');
-        } catch(ex) {
-          // this is an old build, no classList... bummer;
-          // let's add manually to the list of class names
-          if (body.parentNode.className.indexOf('bidimailui-use-detected-directions') == -1) {
-            body.parentNode.className += 
-              ((body.parentNode.className != "") ? ' ' : '') +
-              'bidimailui-use-detected-directions';
-          }
-        }
+    case 'ltr': 
+    case 'rtl': 
+      htmlNode.removeAttribute('bidimailui-use-detected-directions');
+      if (!body.hasAttribute('bidimailui-original-direction')) {
+        body.setAttribute('bidimailui-original-direction', body.style.direction);
+      }
+      body.style.direction = forcedDirection;
+      break;
+    default:
+      var originalBodyCSSDirectionProperty =
+        body.getAttribute('bidimailui-original-direction');
+      if (originalBodyCSSDirectionProperty &&
+          (originalBodyCSSDirectionProperty != "") ) {
+        body.style.direction = originalBodyCSSDirectionProperty;
+      }
+      else {
+        body.style.removeProperty('direction');
+      }
+      htmlNode.setAttribute('bidimailui-use-detected-directions', true);
     }
   },
 
