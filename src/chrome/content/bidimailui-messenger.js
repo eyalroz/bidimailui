@@ -201,7 +201,7 @@ BiDiMailUI.MessageOverlay = {
       window,
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.window_title"),
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.dialog_message"),
-        list.length, list, selected);
+      list, selected);
 
     if (ok) {
 
