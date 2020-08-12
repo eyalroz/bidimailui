@@ -37,7 +37,30 @@ BiDiMailUI.Display = {
     },
 
     quoteBarsCSSFix : function(domDocument) {
-      BiDiMailUI.Display.appendStyleSheet(domDocument, 'quotebar.css');
+// Workaround for no context-access issue, see:
+// https://github.com/eyalroz/bidimailui/issues/20
+//   BiDiMailUI.Display.appendStyleSheet(domDocument, 'quotebar.css');
+      BiDiMailUI.Display.ensureStyleElementAdded(domDocument, 'bidimailui-quotebar-css', `
+        blockquote[type="cite"][bidimailui-direction-uniformity="rtl"] {
+          padding-right: 1em !important;
+          border-right-style: solid !important;
+          border-right-width: thin !important;
+          padding-left: 0 !important;
+          border-left: 0 !important; }
+        blockquote[type="cite"][bidimailui-direction-uniformity="ltr"] {
+          padding-right: 0 !important;
+          border-right: 0 !important;
+          padding-left: 1em !important;
+          border-left-style: solid !important;
+          border-left-width: thin !important; }
+        blockquote[type="cite"] {
+          padding-right: 1em !important;
+          padding-left: 1em !important;
+          border-right-style: solid !important;
+          border-left-style: solid !important;
+          border-right-width: 1px !important;
+          border-left-width: 1px !important; }`
+      );
     },
 
     directionAutodetection : function(domDocument) {
@@ -45,7 +68,16 @@ BiDiMailUI.Display = {
         return;
 
       var body = domDocument.body;
-      BiDiMailUI.Display.appendStyleSheet(domDocument, 'direction-autodetection.css');
+// Workaround for no context-access issue, see:
+// https://github.com/eyalroz/bidimailui/issues/20
+//      BiDiMailUI.Display.appendStyleSheet(domDocument, 'direction-autodetection.css');
+      BiDiMailUI.Display.ensureStyleElementAdded(
+        domDocument,'bidimailui-direction-autodetection-css', `
+          [bidimailui-use-detected-directions="true"] [bidimailui-direction-uniformity="rtl"]   { direction: rtl; }
+          [bidimailui-use-detected-directions="true"] [bidimailui-direction-uniformity="ltr"]   { direction: ltr; }
+          [bidimailui-use-detected-directions="true"] [bidimailui-direction-uniformity="mixed"] { direction: rtl; }`
+      );
+
       var detectedOverallDirection = BiDiMailUI.directionCheck(document, NodeFilter, body);
 #ifdef DEBUG_directionAutodetection
       console.log("detected overall direction: " + detectedOverallDirection);
@@ -79,26 +111,56 @@ BiDiMailUI.Display = {
     }
   },
 
-
-  appendStyleSheet : function(domDocument, sheetFileName) {
-    let ns = domDocument.lookupNamespaceURI("html");
-    let element = domDocument.createElementNS(ns, "link");
-    element.setAttribute("rel", "stylesheet");
-    element.setAttribute("href", 'chrome://bidimailui/content/' + sheetFileName);
-    return domDocument.head.appendChild(element);
-
-/*    
-    var head = domDocument.getElementsByTagName("head")[0];
-    if (head) {
-      var styleSheetLink = domDocument.createXULElement("link");
-      styleSheetLink.rel  = "stylesheet";
-      styleSheetLink.type = "text/css";
-      styleSheetLink.href = 'chrome://bidimailui-for-message-html/content/' + sheetFileName;
-      head.appendChild(styleSheetLink);
+  isStyleSheetLoaded : function(domDocument, uri) {
+    for (var i = 0; i < domDocument.styleSheets.length; i++) {
+      if (domDocument.styleSheets[i].href && domDocument.styleSheets[i].href == uri) {
+        if (document.styleSheets[i].cssRules.length == 0) {
+          // In a browser, and with a remote sheet, this would mean a request 
+          // was made for the css file, but it failed. In our case this just shouldn't
+          // happen
+#ifdef DEBUG_setMessageDirectionForcing
+          console.log("found stylesheet \n" + uri + "at position " + i + ", but with no rules.");
+#endif
+          continue;
+        }
+        return true;
+      }
     }
-*/
+    return false;
   },
 
+  appendStyleSheet : function(domDocument, id, sheetFileName) {
+    if (domDocument.getElementById(id) != null) {
+#ifdef DEBUG_appendStyleSheet
+      console.warn("Repeated call to appendStyleSheet() for sheet id " + id);
+#endif
+      return;
+    }
+    let sheetURI = 'chrome://bidimailui/content/' + sheetFileName;
+    let element = domDocument.createElement("link");
+//    let ns = domDocument.lookupNamespaceURI("html");
+//    let element = domDocument.createElementNS(ns, "link");
+    element.setAttribute("rel", "stylesheet");
+    element.setAttribute("type", "text/css");
+    element.setAttribute("href", sheetURI);
+    return domDocument.head.appendChild(element);
+//    let element = domDocument.createElement("style");
+//    element.textContent = "body  { background-color: Green; border: 5px solid red;}";
+//    return domDocument.head.appendChild(element);
+  },
+
+  ensureStyleElementAdded : function(domDocument, id, cssText) {
+    if (domDocument.getElementById(id) != null) {
+#ifdef DEBUG_ensureStyleElementAdded
+      console.warn("Repeated call to ensureStyleElementAdded() for sheet id " + id);
+#endif
+      return;
+    }
+    let element = domDocument.createElement("style");
+    element.setAttribute("type", "text/css");
+    element.textContent = cssText;
+    return domDocument.head.appendChild(element);
+  },
 
   // Functions from here on should not be used by code outside this file
   // --------------------------------------------------------------------
