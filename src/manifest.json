@@ -3,7 +3,7 @@
         "applications": {
                 "gecko": {
 #expand                 "id": "__UUID__",
-                        "strict_min_version": "65.0a1"
+                        "strict_min_version": "65.0a1",
                         "strict_max_version": "68.*"
                 }
         },
