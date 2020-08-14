@@ -5,12 +5,13 @@
 (async function() {
   messenger.WindowListener.registerDefaultPrefs("defaults/preferences/bidimailui.js");
   messenger.WindowListener.registerChromeUrl([
-    ["content", "bidimailui",             "chrome/content/"      ],
-    ["locale",  "bidimailui", "en-US",    "chrome/locale/en-US/" ],
-    ["locale",  "bidimailui", "he",       "chrome/locale/he/"    ],
-    ["locale",  "bidimailui", "ar",       "chrome/locale/ar/"    ],
-    ["locale",  "bidimailui", "fa",       "chrome/locale/fa/"    ],
-    ["locale",  "bidimailui", "ur",       "chrome/locale/ur/"    ]
+    ["content",  "bidimailui",           "chrome/content/"      ],
+    ["resource", "bidimailui",           "chrome/"              ],
+    ["locale",   "bidimailui", "en-US",  "chrome/locale/en-US/" ],
+    ["locale",   "bidimailui", "he",     "chrome/locale/he/"    ],
+    ["locale",   "bidimailui", "ar",     "chrome/locale/ar/"    ],
+    ["locale",   "bidimailui", "fa",     "chrome/locale/fa/"    ],
+    ["locale",   "bidimailui", "ur",     "chrome/locale/ur/"    ]
   ]);
 
   let browserInfo = await browser.runtime.getBrowserInfo();
