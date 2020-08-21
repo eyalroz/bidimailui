@@ -197,6 +197,15 @@ function onLoad(activatedWhileWindowOpen) {
       document.addEventListener("keyup",   BiDiMailUI.Composition.onKeyUp,   capture);
     }
 
+  // Since we no longer have per-platform-skin support, we set this attribute
+  // on our root element, so that, in our stylesheet, we can contextualize using
+  // this attribute, e.g.
+  //
+  // [platform="Darwin"] someElement {
+  //     background-color: red;
+  // }
+  //
+  document.documentElement.setAttribute("platform", Services.appinfo.os);
 }
 
 // called on window unload or on add-on deactivation while window is still open
