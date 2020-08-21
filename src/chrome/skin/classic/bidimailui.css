@@ -65,46 +65,46 @@ toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
   -moz-image-region: rect(0px 64px 16px 48px) !important;
 }
 
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton[platform="Darwin"] {
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton {
   list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-autodetect-main-bar-16x16.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton[platform="Darwin"]:hover {
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton:hover {
   -moz-image-region: rect(0px 48px 24px 24px);
 }
 
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton[platform="Darwin"]:hover:active {
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton:hover:active {
   -moz-image-region: rect(0px 72px 16px 48px);
 }
 
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"] {
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"] {
   list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-ltr-main-bar-16x16.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"]:hover {
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"]:hover {
   -moz-image-region: rect(0px 48px 24px 24px);
 }
 
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"]:hover:active {
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"]:hover:active {
   -moz-image-region: rect(0px 72px 16px 48px);
 }
 
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"][platform="Darwin"] {
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"] {
   list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-rtl-main-bar-16x16.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"][platform="Darwin"]:hover {
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover {
   -moz-image-region: rect(0px 48px 24px 24px);
 }
 
-toolbar[iconsize="small"][platform="Darwin"] #bidimailui-forcing-menubutton[selectedItem="rtl"][platform="Darwin"]:hover:active {
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover:active {
   -moz-image-region: rect(0px 72px 16px 48px);
 }
 
-toolbar[iconsize="small"][platform="Darwin"] #bidimailui-forcing-menubutton[disabled="true"][platform="Darwin"] {
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
   list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-autodetect-main-bar-16x16.png");
   -moz-image-region: rect(0px 96px 16px 72px) !important;
 }
@@ -181,20 +181,20 @@ toolbar[iconsize="small"][platform="Darwin"] #bidimailui-forcing-menubutton[disa
   -moz-image-region: rect(0px 96px 32px 64px);
 }
 
-#bidimailui-forcing-menubutton[selectedItem="rtl"][platform="Darwin"] {
+[platform="Darwin"] #bidimailui-forcing-menubutton[selectedItem="rtl"] {
   list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-rtl-main-bar-24x24.png");
   -moz-image-region: rect(0px 32px 32px 0px);
 }
 
-#bidimailui-forcing-menubutton[selectedItem="rtl"][platform="Darwin"]:hover {
+[platform="Darwin"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover {
   -moz-image-region: rect(0px 64px 32px 32px);
 }
 
-#bidimailui-forcing-menubutton[selectedItem="rtl"][platform="Darwin"]:hover:active {
+[platform="Darwin"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover:active {
   -moz-image-region: rect(0px 96px 32px 64px);
 }
 
-#bidimailui-forcing-menubutton[disabled="true"][platform="Darwin"] {
+[platform="Darwin"] #bidimailui-forcing-menubutton[disabled="true"] {
   list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-autodetect-main-bar-24x24.png");
   -moz-image-region: rect(0px 128px 24px 96px) !important;
 }
@@ -236,37 +236,37 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
   -moz-image-region: rect(0px 64px 16px 48px) !important;
 }
 
-toolbar[iconsize="small"][platform="Darwin"] #button-direction-ltr-main-bar {
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-ltr-main-bar {
   list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-ltr-main-bar-16x16.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
-toolbar[iconsize="small"][platform="Darwin"] #button-direction-ltr-main-bar:hover {
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover {
   -moz-image-region: rect(0px 48px 24px 24px);
 }
 
-toolbar[iconsize="small"][platform="Darwin"] #button-direction-ltr-main-bar:hover:active {
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover:active {
   -moz-image-region: rect(0px 72px 16px 48px);
 }
 
-toolbar[iconsize="small"][platform="Darwin"] #button-direction-ltr-main-bar[disabled="true"] {
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-ltr-main-bar[disabled="true"] {
   -moz-image-region: rect(0px 96px 16px 72px) !important;
 }
 
-toolbar[iconsize="small"][platform="Darwin"] #button-direction-rtl-main-bar {
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-rtl-main-bar {
   list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-rtl-main-bar-16x16.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
-toolbar[iconsize="small"][platform="Darwin"] #button-direction-rtl-main-bar:hover {
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover {
   -moz-image-region: rect(0px 48px 24px 24px);
 }
 
-toolbar[iconsize="small"][platform="Darwin"] #button-direction-rtl-main-bar:hover:active {
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover:active {
   -moz-image-region: rect(0px 72px 16px 48px);
 }
 
-toolbar[iconsize="small"][platform="Darwin"] #button-direction-rtl-main-bar[disabled="true"] {
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
   -moz-image-region: rect(0px 96px 16px 72px) !important;
 }
 
@@ -361,7 +361,7 @@ toolbar[iconsize="small"][platform="Darwin"] #button-direction-rtl-main-bar[disa
   -moz-image-region: rect(0px 38px 18px 19px) !important;
 }
 
-#FormatToolbar[platform="Darwin"] > toolbarbutton[rtlmode="true"] {
+[platform="Darwin"] #FormatToolbar > toolbarbutton[rtlmode="true"] {
   list-style-image: url("chrome://bidimailui/content/skin/classic/format-buttons-rtl.png")  !important;
 }
 
@@ -383,6 +383,6 @@ toolbar[iconsize="small"][platform="Darwin"] #button-direction-rtl-main-bar[disa
   -moz-image-region: rect(0px 38px 18px 19px) !important;
 }
 
-#FormatToolbar[platform="Darwin"] > toolbarbutton[rtlmode="true"] {
+[platform="Darwin"] #FormatToolbar > toolbarbutton[rtlmode="true"] {
   list-style-image: url("chrome://bidimailui/content/skin/classic/format-buttons-rtl.png")  !important;
 }

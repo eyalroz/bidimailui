@@ -85,6 +85,16 @@ function onLoad(activatedWhileWindowOpen) {
   // We currently use a single CSS file for all of our style (not including the dynamically-injecte quotebar CSS for message documents)
   WL.injectCSS("chrome://bidimailui/content/skin/classic/bidimailui.css");
   document.getElementById("messagepane").addEventListener("load", BiDiMailUI.MessageOverlay.onLoad, true);
+
+  // Since we no longer have per-platform-skin support, we set this attribute
+  // on our root element, so that, in our stylesheet, we can contextualize using
+  // this attribute, e.g.
+  //
+  // [platform="Darwin"] someElement {
+  //     background-color: red;
+  // }
+  //
+  document.documentElement.setAttribute("platform", Services.appinfo.os);
 }
 
 // called on window unload or on add-on deactivation while window is still open
