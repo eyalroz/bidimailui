@@ -84,7 +84,7 @@ BiDiMailUI.Display = {
   linkStylesheet : function(domDocument, linkId, sheetFileName) {
     if (domDocument.getElementById(linkId) != null) {
 #ifdef DEBUG_linkStylesheet
-      console.warn("Repeated call to linkStylesheet() for sheet id " + id);
+      console.warn("Repeated call to linkStylesheet() for sheet id " + linkId);
 #endif
       return;
     }
@@ -375,7 +375,7 @@ BiDiMailUI.Display = {
   detectDirections : function(body) {
 #ifdef DEBUG_detectAndSetDirections
     console.log(
-      "in detectAndSetDirections for message\n" + gFolderDisplay.selectedMessageUris[0]);
+      "in detectAndSetDirections for message (don't know how to get the currently loaded message's URI)\n");
 #endif
     
     var elementsRequiringExplicitDirection = new Array;

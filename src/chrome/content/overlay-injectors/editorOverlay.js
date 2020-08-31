@@ -114,17 +114,15 @@ function onLoad(activatedWhileWindowOpen) {
   // We currently use a single CSS file for all of our style (not including the dynamically-injecte quotebar CSS for message documents)
   WL.injectCSS("chrome://bidimailui/content/skin/classic/bidimailui.css");
 
-  top.controllers.appendController(
-      BiDiMailUI.Composition.directionSwitchController);
-    const capture = true;
-    document.addEventListener("load", BiDiMailUI.Editor.windowOnLoad, capture);
-    document.addEventListener("unload", BiDiMailUI.Editor.windowOnUnload, capture);
-    document.addEventListener("keypress", BiDiMailUI.Composition.onKeyPress, capture);
-    if (BiDiMailUI.Prefs.getBoolPref(
-      "compose.ctrl_shift_switches_direction", true)) {
-      document.addEventListener("keydown", BiDiMailUI.Composition.onKeyDown, capture);
-      document.addEventListener("keyup", BiDiMailUI.Composition.onKeyUp, capture);
-    }
+  window.top.controllers.appendController(BiDiMailUI.Composition.directionSwitchController);
+
+  const capture = true;
+  window.addEventListener("compose-window-init",   BiDiMailUI.Composition.onInit, capture);
+  window.addEventListener("keypress",              BiDiMailUI.Composition.onKeyPress,             capture);
+  if (BiDiMailUI.Prefs.getBoolPref("compose.ctrl_shift_switches_direction", true)) {
+    document.addEventListener("keydown",           BiDiMailUI.Composition.onKeyDown,              capture);
+    document.addEventListener("keyup",             BiDiMailUI.Composition.onKeyUp,                capture);
+  }
 
   // Since we no longer have per-platform-skin support, we set this attribute
   // on our root element, so that, in our stylesheet, we can contextualize using
@@ -142,15 +140,15 @@ function onUnload(deactivatedWhileWindowOpen) {
   // no need to clean up UI on global shutdown
   if (!deactivatedWhileWindowOpen)
     return;
+
   // If we've added any elements not through WL.inject functions - we need to remove
   // them manually here. The WL-injected elements get auto-removed
-#ifdef DEBUG_ComposeEvents
-    window.removeEventListener("load")
-    document.removeEventListener("load", BiDiMailUI.Editor.windowOnLoad);
-    document.removeEventListener("unload", BiDiMailUI.Editor.windowOnUnload);
-    document.removeEventListener("keypress", BiDiMailUI.Composition.onKeyPress);
-    try {
-      document.removeEventListener("keydown", BiDiMailUI.Composition.onKeyDown);
-      document.removeEventListener("keyup", BiDiMailUI.Composition.onKeyUp);
-    } catch(ex) { }
+
+  const capture = true;
+  window.removeEventListener("compose-window-init",   BiDiMailUI.Composition.onInit, capture);
+  window.removeEventListener("keypress",              BiDiMailUI.Composition.onKeyPress,             capture);
+  try {
+    document.removeEventListener("keydown",           BiDiMailUI.Composition.onKeyDown,              capture);
+    document.removeEventListener("keyup",             BiDiMailUI.Composition.onKeyUp,                capture);
+  } catch(ex) { }
 }

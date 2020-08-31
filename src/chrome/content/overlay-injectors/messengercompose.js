@@ -178,24 +178,15 @@ function onLoad(activatedWhileWindowOpen) {
   // We currently use a single CSS file for all of our style (not including the dynamically-injecte quotebar CSS for message documents)
   WL.injectCSS("chrome://bidimailui/content/skin/classic/bidimailui.css");
 
-  window.top.controllers.appendController(
-      BiDiMailUI.Composition.directionSwitchController);
-    const capture = true;
-#ifdef DEBUG_ComposeEvents
-    window.addEventListener("load",                  BiDiMailUI.Composition.debugLoadHandler,               capture);
-    window.addEventListener("compose-window-reopen", BiDiMailUI.Composition.debugReopenHandler,             capture);
-    window.addEventListener("load",                  BiDiMailUI.Composition.debugLoadHandlerNonCapturing,   ! capture);
-    window.addEventListener("compose-window-reopen", BiDiMailUI.Composition.debugReopenHandlerNonCapturing, ! capture);
-#endif
-    window.addEventListener("load",                  BiDiMailUI.Composition.composeWindowOnLoad,   ! capture);
-    window.addEventListener("compose-window-reopen", BiDiMailUI.Composition.composeWindowOnReopen, capture);
-    window.addEventListener("unload",                BiDiMailUI.Composition.composeWindowOnUnload, capture);
-    window.addEventListener("keypress",              BiDiMailUI.Composition.onKeyPress,            capture);
-    if (BiDiMailUI.Prefs.getBoolPref(
-      "compose.ctrl_shift_switches_direction", true)) {
-      document.addEventListener("keydown", BiDiMailUI.Composition.onKeyDown, capture);
-      document.addEventListener("keyup",   BiDiMailUI.Composition.onKeyUp,   capture);
-    }
+  window.top.controllers.appendController(BiDiMailUI.Composition.directionSwitchController);
+
+  const capture = true;
+  window.addEventListener("compose-window-init",   BiDiMailUI.Composition.onInit, capture);
+  window.addEventListener("keypress",              BiDiMailUI.Composition.onKeyPress,             capture);
+  if (BiDiMailUI.Prefs.getBoolPref("compose.ctrl_shift_switches_direction", true)) {
+    document.addEventListener("keydown",           BiDiMailUI.Composition.onKeyDown,              capture);
+    document.addEventListener("keyup",             BiDiMailUI.Composition.onKeyUp,                capture);
+  }
 
   // Since we no longer have per-platform-skin support, we set this attribute
   // on our root element, so that, in our stylesheet, we can contextualize using
@@ -215,18 +206,12 @@ function onUnload(deactivatedWhileWindowOpen) {
     return;
   // If we've added any elements not through WL.inject functions - we need to remove
   // them manually here. The WL-injected elements get auto-removed
-#ifdef DEBUG_ComposeEvents
-    window.removeEventListener("load", BiDiMailUI.Composition.debugLoadHandler)
-    window.removeEventListener("compose-window-reopen", BiDiMailUI.Composition.debugReopenHandler);
-    window.removeEventListener("load", BiDiMailUI.Composition.debugLoadHandlerNonCapturing)
-    window.removeEventListener("compose-window-reopen", BiDiMailUI.Composition.debugReopenHandlerNonCapturing);
-#endif
-    window.removeEventListener("load", BiDiMailUI.Composition.composeWindowOnLoad);
-    window.removeEventListener("compose-window-reopen", BiDiMailUI.Composition.composeWindowOnReopen);
-    window.removeEventListener("unload", BiDiMailUI.Composition.composeWindowOnUnload);
-    window.removeEventListener("keypress", BiDiMailUI.Composition.onKeyPress);
-    try {
-      document.removeEventListener("keydown", BiDiMailUI.Composition.onKeyDown);
-      document.removeEventListener("keyup", BiDiMailUI.Composition.onKeyUp);
-    } catch(ex) { }
+
+  const capture = true;
+  window.removeEventListener("compose-window-init",   BiDiMailUI.Composition.onInit, capture);
+  window.removeEventListener("keypress",              BiDiMailUI.Composition.onKeyPress,             capture);
+  try {
+    document.removeEventListener("keydown",           BiDiMailUI.Composition.onKeyDown,              capture);
+    document.removeEventListener("keyup",             BiDiMailUI.Composition.onKeyUp,                capture);
+  } catch(ex) { }
 }

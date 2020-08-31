@@ -34,97 +34,9 @@ BiDiMailUI.Composition = {
     ShiftKeyCode : 16,
   },
 
-  bodyReadyListener : {
-    messageParams: null,
-    workaroundForcingTimeoutId : null,
-
-    NotifyComposeFieldsReady : function() { },
-    ComposeProcessDone : function(result) { },
-    SaveInFolderDone : function(folderName) { },
-    NotifyComposeBodyReady : function() {
-
-#ifdef DEBUG_bodyReadyListener
-      console.log('in BiDiMailUI.Composition.bodyReadyListener.NotifyComposeBodyReady');
-#endif
-
-      var cMCParams = {
-        body: document.getElementById("content-frame").contentDocument.body,
-        charsetOverrideInEffect: true,
-          // it seems we can't trigger a reload by changing the charset
-          // during composition, the change only affects how the message
-          // is encoded eventually based on what we already have in the 
-          // window
-        currentCharset: gMsgCompose.compFields.characterSet,
-        messageHeader:
-          (this.messageParams.isReply ? 
-          gMsgCompose.originalMsgURI : null),
-        messageSubject: 
-          document.getElementById("msgSubject").value,
-        subjectSetter: function(str) {
-            document.getElementById("msgSubject").value = str;
-          },
-        unusableCharsetHandler : function() { return null; },
-          //
-        needCharsetForcing: false,
-          // this is an out parameter, irrelevant in our case
-        charsetToForce: null,
-          // this is an out parameter, irrelevant in our case
-      }
-      
-      // Note: we can't base ourselves on the way the charset
-      // was handled in the original message, since the option
-      // of reloading with a different charset is unavailable.
-      
-      if (!this.messageParams.isReply ||
-          !this.messageParams.gotDisplayedCopyParams ||
-          this.messageParams.charsetWasForced ||
-          this.messageParams.correctiveRecodedUTF8 ||
-          this.messageParams.correctiveRecodedCharset) {
-        BiDiMailUI.Display.ActionPhases.charsetMisdetectionCorrection(cMCParams);
-      }
-#ifdef DEBUG_GetCurrentSelectionDirection
-      else {
-        console.log(
-          'original message is known to have had no charset issues;' +
-          'avoiding charsetMisdetectionCorrection');
-      }
-#endif
-
-      if (IsHTMLEditor()) {
-        var defaultToSendBothTextAndHTML =
-          BiDiMailUI.Prefs.getBoolPref("compose.default_to_send_text_with_html", false);
-        
-        var defaultOptionElementId = 
-          (defaultToSendBothTextAndHTML ? "format_both" : "format_html");
-        document.getElementById(defaultOptionElementId)
-                .setAttribute("checked", "true");
-        OutputFormatMenuSelect(
-          {getAttribute: function () {
-            return defaultOptionElementId;
-          }} );
-
-        BiDiMailUI.Composition.setParagraphMarginsRule();
-        // note that the "alternative Enter key behavior" is only
-        // relevant to paragraph mode; we used to always try to set
-        // paragraph mode to express that behavior, but several users
-        // have been complaining...
-        var startCompositionInParagraphMode =
-          BiDiMailUI.Prefs.getBoolPref("compose.start_composition_in_paragraph_mode", false);
-        if (startCompositionInParagraphMode)
-          BiDiMailUI.Composition.setParagraphMode("p");
-        else 
-          BiDiMailUI.Composition.setParagraphMode("");
-      }
-
-      BiDiMailUI.Composition.setInitialDirection(this.messageParams);
-      clearTimeout(this.workaroundForcingTimeoutId);
-    }
-  },
-
   getCurrentSelectionDirection : function() {
 #ifdef DEBUG_GetCurrentSelectionDirection
-     console.log(
-       '----- in GetCurrentSelectionDirection() -----');
+     console.log('----- in GetCurrentSelectionDirection() -----');
 #endif
 
     // The current selection is a forest of DOM nodes,
@@ -381,8 +293,7 @@ BiDiMailUI.Composition = {
     }
 #ifdef DEBUG_SetDocumentDirection
     else {
-      console.log(
-         'could not get the "content-frame" by ID - that shouldn\'t be possible');
+      console.log('could not get the "content-frame" by ID - that shouldn\'t be possible');
     }
 #endif
     if (BiDiMailUI.App.versionIsAtLeast("71")) {
@@ -433,36 +344,34 @@ BiDiMailUI.Composition = {
     return document.getElementById("content-frame")
       .contentDocument.documentElement.firstChild;
   },
-  
-  addMessageStyleRules : function(styleRulesText) {
-    var editor = GetCurrentEditor();
+
+  ensureMessageStyleRulesAdded : function(styleElementId, styleRulesText) {
+    let headElement = BiDiMailUI.Composition.getMessageHead();
+    let contentDoc = headElement.ownerDocument;
+    if (contentDoc.getElementById(styleElementId) != null) {
+      return;
+    }
+
+    let editor = GetCurrentEditor();
     if (!editor) {
-#ifdef DEBUG_addMessageStyleRules
-      console.log('addMessageStyleRules failed to acquire editor object.');
-#endif
-      dump('addMessageStyleRules failed to acquire editor object.');
+      console.error('Failed to obtain editor in ensureMessageStyleRulesAdded()');
       return;
     }
 
     editor.beginTransaction();
-
-    var css = 
-      document.getElementById("content-frame").contentDocument.createXULElement('style');
-    css.type = 'text/css';
-    if (css.styleSheet) {
-      css.styleSheet.cssText = styleRulesText;
-    }
-    else {
-      css.appendChild(document.createTextNode(styleRulesText));
-    }
-    BiDiMailUI.Composition.getMessageHead().appendChild(css);  
+    let styleElement = contentDoc.createElement('style');
+    styleElement.id = styleElementId;
+    styleElement.type = "text/css";
+    styleElement.textContent = styleRulesText;
+    // TODO: Is it more "proper" to wrap the text in a textnode?
+    // styleElement.appendChild(contentDoc.createTextNode(styleRulesText));
+    headElement.appendChild(styleElement);
     editor.endTransaction();
   },
 
   handleDirectionButtons : function() {
     var hiddenButtonsPref =
       !BiDiMailUI.Prefs.getBoolPref("compose.show_direction_buttons", true);
-    var isHTMLEditor = IsHTMLEditor();
 
     // Note: In Thunderbird and Seamonkey 2.x, the main toolbar buttons are
     // never hidden, since that toolbar is customizable
@@ -479,7 +388,8 @@ BiDiMailUI.Composition = {
     
     var margin =
       BiDiMailUI.Composition.getParagraphMarginFromPrefs();
-    BiDiMailUI.Composition.addMessageStyleRules(
+    BiDiMailUI.Composition.ensureMessageStyleRulesAdded(
+      "bidiui-paragraph-margins",
       "body p { margin-bottom: " + margin + "; margin-top: 0pt; } ");
   },
 
@@ -590,22 +500,6 @@ BiDiMailUI.Composition = {
         }
 
         try {
-          // trying this is a single-message window
-          // or a 3-pane displaying a single message
-#ifdef DEBUG_getDisplayedCopyParams
-          //console.log('win: ' + win);
-          //console.log('win.opener: ' + win.opener);
-          //console.log('win.opener.gFolderDisplay: ' + win.opener.gFolderDisplay);
-#endif
-          //if (win.opener.gFolderDisplay.selectedMessageUris.length > 1) {
-            // multiple-message-display mode, we don't support that
-#ifdef DEBUG_getDisplayedCopyParams
-          //console.log('treating window as non-tabbed, but have multiple-message display mode, we don\'t support that');
-#endif
-          //  continue;
-          //}
-          //loadedMessageURI = win.GetLoadedMessage();
-          //loadedMessageURI = win.opener.gFolderDisplay.selectedMessageUris[0];
           displayedCopyBrowser = win.getMessageBrowser();
 #ifdef DEBUG_getDisplayedCopyParams
           console.log('treating window as non-tabbed and got the (main) message displayed');
@@ -662,17 +556,19 @@ BiDiMailUI.Composition = {
   },
 
   determineNewMessageParams : function(messageBody,messageParams) {
-    try {
-      messageParams.isReply = (gMsgCompose.originalMsgURI.length > 0);
+    if (!gMsgCompose) {
+      console.error("Expected the global gMsgCompose to be ready by now.");
+      messageParams.isReply = false;
     }
-    catch(ex) {
-      dump(ex);
-    };
+    else {
+      messageParams.isReply = gMsgCompose.originalMsgURI ?
+          (gMsgCompose.originalMsgURI.length > 0) : false;
+    }
 
     if (messageParams.isReply) {
       // XXX TODO - this doesn't work for drafts;
       // they have no gMsgCompose.originalMsgURI
-        BiDiMailUI.Composition.getDisplayedCopyParams(gMsgCompose.originalMsgURI,messageParams);
+        BiDiMailUI.Composition.getDisplayedCopyParams(gMsgCompose.originalMsgURI, messageParams);
     }
   },
 
@@ -685,21 +581,22 @@ BiDiMailUI.Composition = {
     // or new composer page), and also for mail/news replies if the
     // prefs say we force the direction/ of replies to the default
     // direction for new messages
-    if ( !messageParams.isReply ||
+    if ( !messageParams || !messageParams.isReply ||
          BiDiMailUI.Prefs.getBoolPref("compose.reply_in_default_direction", false)) {
-      var defaultDirection =
-        BiDiMailUI.Prefs.getCharPref(
+      let defaultDirection = BiDiMailUI.Prefs.getCharPref(
           "compose.default_direction","ltr").toLowerCase();
+      let initialDirection;
       switch(defaultDirection) {
         case "last_used": 
-          BiDiMailUI.Composition.setDocumentDirection(
-          BiDiMailUI.Prefs.getCharPref("compose.last_used_direction","ltr"));
+          initialDirection = BiDiMailUI.Prefs.getCharPref("compose.last_used_direction","ltr");
           break;
-        case "rtl": 
-        case "ltr": 
-          BiDiMailUI.Composition.setDocumentDirection(defaultDirection);
-          break;
+        default:
+          initialDirection = defaultDirection;
       }
+#ifdef DEBUG_setInitialDirection
+      console.log("Setting initial direction by preference \"" + defaultDirection + "\" to " + initialDirection);
+#endif
+      BiDiMailUI.Composition.setDocumentDirection(initialDirection);
       return;
     }
     else if (messageParams.isReply && messageParams.originalDisplayDirection) {
@@ -707,13 +604,12 @@ BiDiMailUI.Composition = {
     }
     else {
 #ifdef DEBUG_setInitialDirection
-      console.log(
-        "We have a reply, but we don't have its original direction. We'll have to check...");
+      console.log("We have a reply, but we don't have its original direction. We'll have to check...");
 #endif
       // We get here for drafts, for messages without URIs, and due to problems
       // in locating the original message window/tab
-      var detectionDirection = BiDiMailUI.directionCheck(
-        document, document.getElementById("content-frame").contentDocument.body);
+      let detectionDirection = BiDiMailUI.directionCheck(
+        document, NodeFilter, document.getElementById("content-frame").contentDocument.body);
 #ifdef DEBUG_setInitialDirection
       console.log('detectionDirection is ' + detectionDirection );
 #endif
@@ -724,14 +620,20 @@ BiDiMailUI.Composition = {
     }
   },
 
-  composeWindowOnActualLoad : function() {
-    var messageBody =
-      document.getElementById("content-frame").contentDocument.body;
-
-#ifdef DEBUG_composeWindowOnActualLoad
-    console.log(
-      '--- BiDiMailUI.Composition.composeWindowOnActualLoad() --- ');
+  onEverythingLoadedAndReady : function() {
+#ifdef DEBUG_onEverythingLoadedAndReady
+    console.log('--- BiDiMailUI.Composition.onEverythingLoadedAndReady() --- ');
 #endif
+
+    var messageBody = null;
+    try {
+      var messageBody = document.getElementById("content-frame").contentDocument.body;
+    } catch(ex) { }
+    if (messageBody === null) {
+      console.error("message body is unavailable in onEverythingLoadedAndReady()");
+      return; // Hopefully we should get called again
+    }
+
     BiDiMailUI.Composition.handleDirectionButtons();
     // Track "Show Direction Buttons" pref.
     BiDiMailUI.Prefs.addObserver(
@@ -749,7 +651,7 @@ BiDiMailUI.Composition = {
     // for drafts and for replies; for new (empty) messages, we use a default
     // direction
 
-    var messageParams = {
+    let messageParams = {
       gotDisplayedCopyParams : false,
       isReply: false,
       // the following will only be set if we can locate the message browser
@@ -760,25 +662,75 @@ BiDiMailUI.Composition = {
       mailnewsDecodingType : null,
     };
 
-    BiDiMailUI.Composition.determineNewMessageParams(messageBody,messageParams);
+    BiDiMailUI.Composition.determineNewMessageParams(messageBody, messageParams);
 
-    BiDiMailUI.Composition.bodyReadyListener.messageParams = messageParams;
-    // It seems that, in some cases, the listener does
-    // not actually get notified when the body is ready,
-    // so let's bet the body is ready within a short while... see 
-    // https://bugzilla.mozilla.org/show_bug.cgi?id=429008
-    // 
-    // the value of 100ms is based on some trial and error with SM and TB
-    // on a couple of computers... it may be that a different value is
-    // necessary on some systems to get past the point when the direction
-    // is set to LTR (not by us)
-    BiDiMailUI.Composition.bodyReadyListener.workaroundForcingTimeoutId = 
-      setTimeout(
-        function() {
-          BiDiMailUI.Composition.bodyReadyListener.NotifyComposeBodyReady();
-        }, 400);
+    var clearMisdetectionCorrectionParams = {
+      body: document.getElementById("content-frame").contentDocument.body,
+      charsetOverrideInEffect: true,
+        // it seems we can't trigger a reload by changing the charset
+        // during composition, the change only affects how the message
+        // is encoded eventually based on what we already have in the
+        // window
+      currentCharset: gMsgCompose.compFields.characterSet,
+      messageHeader:
+        (messageParams.isReply ?
+        gMsgCompose.originalMsgURI : null),
+      messageSubject:
+        document.getElementById("msgSubject").value,
+      subjectSetter: function(str) {
+          document.getElementById("msgSubject").value = str;
+        },
+      unusableCharsetHandler : function() { return null; },
+        //
+      needCharsetForcing: false,
+        // this is an out parameter, irrelevant in our case
+      charsetToForce: null,
+        // this is an out parameter, irrelevant in our case
+    }
 
-#ifdef DEBUG_composeWindowOnActualLoad
+    // Note: we can't base ourselves on the way the charset
+    // was handled in the original message, since the option
+    // of reloading with a different charset is unavailable.
+
+    if (!messageParams.isReply ||
+        !messageParams.gotDisplayedCopyParams ||
+        messageParams.charsetWasForced ||
+        messageParams.correctiveRecodedUTF8 ||
+        messageParams.correctiveRecodedCharset) {
+      BiDiMailUI.Display.ActionPhases.charsetMisdetectionCorrection(clearMisdetectionCorrectionParams);
+    }
+#ifdef DEBUG_onEverythingLoadedAndReady
+    else {
+      console.log('original message is known to have had no charset issues; avoiding charsetMisdetectionCorrection');
+    }
+#endif
+
+    let isHTMLEditor = IsHTMLEditor();
+    if (IsHTMLEditor) {
+      BiDiMailUI.Composition.alternativeEnterBehavior = BiDiMailUI.Prefs.getBoolPref("compose.alternative_enter_behavior", true);
+      let  defaultToSendBothTextAndHTML = BiDiMailUI.Prefs.getBoolPref("compose.default_to_send_text_with_html", false);
+
+      var defaultOptionElementId = (defaultToSendBothTextAndHTML ? "format_both" : "format_html");
+      document.getElementById(defaultOptionElementId).setAttribute("checked", "true");
+      OutputFormatMenuSelect(
+        {getAttribute: function () {
+          return defaultOptionElementId;
+        }} );
+      BiDiMailUI.Composition.setParagraphMarginsRule();
+
+      // Note that the "alternative Enter key behavior" is only
+      // relevant to paragraph mode; we used to always try to set
+      // paragraph mode to express that behavior, but several users
+      // have been complaining...
+      var startCompositionInParagraphMode = BiDiMailUI.Prefs.getBoolPref("compose.start_composition_in_paragraph_mode", false);
+      if (startCompositionInParagraphMode)
+        BiDiMailUI.Composition.setParagraphMode("p");
+      else
+        BiDiMailUI.Composition.setParagraphMode("");
+    }
+    BiDiMailUI.Composition.setInitialDirection(messageParams);
+
+#ifdef DEBUG_onEverythingLoadedAndReady
     console.log('isReply = ' + messageParams.isReply + 
       '\ngMsgCompose.originalMsgURI = ' +
       (gMsgCompose? gMsgCompose.originalMsgURI : 'no gMsgCompose') +
@@ -789,8 +741,6 @@ BiDiMailUI.Composition = {
       '\ncharset was forced = ' + messageParams.charsetWasForced      
       );
 #endif
-
-    var isHTMLEditor = IsHTMLEditor();
 
     // Decide which direction switch item should appear in the context menu -
     // the switch for the whole document or for the current paragraph
@@ -811,110 +761,33 @@ BiDiMailUI.Composition = {
     BiDiMailUI.Composition.directionSwitchController.setAllCasters();
   },
 
-  composeWindowOnUnload : function() {
-#ifdef DEBUG_composeWindowOnUnload
-    console.log('in BiDiMailUI.Composition.composeWindowOnUnload()');
+  msgComposeStateListener : {
+    NotifyComposeBodyReady: function() {
+#ifdef DEBUG_msgComposeStateListener
+      console.log("In msgComposeStateListener.NotifyComposeBodyReady()");
+#endif
+      BiDiMailUI.Composition.lastWindowToHaveFocus = null;
+      BiDiMailUI.Composition.onEverythingLoadedAndReady();
+    }
+  },
+
+  onUnload : function() {
+#ifdef DEBUG_onUnload
+    console.log('in BiDiMailUI.Composition.onUnload()');
 #endif
     // Stop tracking "Show Direction Buttons" pref.
     BiDiMailUI.Prefs.removeObserver(
       BiDiMailUI.Composition.directionButtonsPrefListener.domain,
       BiDiMailUI.Composition.directionButtonsPrefListener
     );
-    try {
-      gMsgCompose.UnregisterStateListener(BiDiMailUI.Composition.bodyReadyListener);
-    } catch(ex) {};
   },
 
-  composeWindowOnLoad : function() {
-    BiDiMailUI.Composition.lastWindowToHaveFocus = null;
-
-    if (gMsgCompose) {
-      BiDiMailUI.Composition.composeWindowOnActualLoad();
-      document.removeEventListener("load", BiDiMailUI.Composition.composeWindowOnLoad, true);
-    }
-    else {
-      dump("gMsgCompose not ready for this message in BiDiMailUI.Composition.composeWindowOnLoad");
-    }
-  },
-
-  composeWindowOnReopen : function() {
-    BiDiMailUI.Composition.lastWindowToHaveFocus = null;
-
-    if (gMsgCompose) {
-      // technically this could be a second call to BiDiMailUI.Composition.composeWindowOnActualLoad(),
-      // which should only be run once, but what's happening is that the message
-      // window created initially and never visible, with BiDiMailUI.Composition.composeWindowOnActualLoad()
-      // having already run once, is being replicated for use with a (possibly)
-      // different message 
-      BiDiMailUI.Composition.composeWindowOnActualLoad();
-      document.removeEventListener("compose-window-reopen", BiDiMailUI.Composition.composeWindowOnReopen, true);
-      document.removeEventListener("load", BiDiMailUI.Composition.composeWindowOnLoad, true);
-    }
-    else {
-      dump("gMsgCompose not ready for this message in BiDiMailUI.Composition.composeWindowOnReopen()");
-#ifdef DEBUG_ComposeEvents
-      console.log(
-        "gMsgCompose not ready for this message in BiDiMailUI.Composition.composeWindowOnReopen()");
+  onInit : function() {
+#ifdef DEBUG_onInit
+    console.log('in onInit');
 #endif
-    }
-  },
-
-#ifdef DEBUG_ComposeEvents
-  loadCount : 0,
-  reopenCount : 0,
-
-  debugLoadHandler : function(ev) {
-    BiDiMailUI.Composition.loadCount++;
-    console.log(
-      'load event #' + BiDiMailUI.Composition.loadCount + ' :\ncurrentTarget = ' +
-      ev.currentTarget + ' ; originalTarget = ' + ev.originalTarget + 
-      ' ; explicitOriginalTarget = ' + ev.explicitOriginalTarget);
-  },
-
-  debugLoadHandlerNonCapturing : function() {
-    console.log(
-      'this is a non-capturing load event');
-  },
-
-  debugReopenHandler : function(ev) {
-    BiDiMailUI.Composition.reopenCount++;
-    console.log(
-      'compose-window-reopen event #' + BiDiMailUI.Composition.reopenCount +
-      ' :\ncurrentTarget = ' + ev.currentTarget + ' ; originalTarget = ' +
-      ev.originalTarget + ' ; explicitOriginalTarget = ' + 
-      ev.explicitOriginalTarget);
-  },
-  
-  debugReopenHandlerNonCapturing : function() {
-    console.log(
-      'this is a non-capturing compose-window-reopen event');
-  },
-#endif
-
-  installComposeWindowEventHandlers : function() {
-    top.controllers.appendController(
-      BiDiMailUI.Composition.directionSwitchController);
-#ifdef DEBUG_ComposeEvents
-    window.addEventListener("load", 
-      BiDiMailUI.Composition.debugLoadHandler, true);
-    window.addEventListener("compose-window-reopen",
-      BiDiMailUI.Composition.debugReopenHandler, true);
-    window.addEventListener("load",
-      BiDiMailUI.Composition.debugLoadHandlerNonCapturing, false);
-    window.addEventListener("compose-window-reopen",
-      BiDiMailUI.Composition.debugReopenHandlerNonCapturing, false);
-#endif
-    window.addEventListener("load", 
-      BiDiMailUI.Composition.composeWindowOnLoad, false);
-    window.addEventListener("compose-window-reopen",
-      BiDiMailUI.Composition.composeWindowOnReopen, true);
-    window.addEventListener("unload", BiDiMailUI.Composition.composeWindowOnUnload, true);
-    window.addEventListener("keypress", BiDiMailUI.Composition.onKeyPress, true);
-    if (BiDiMailUI.Prefs.getBoolPref(
-      "compose.ctrl_shift_switches_direction", true)) {
-      document.addEventListener("keydown", BiDiMailUI.Composition.onKeyDown, true);
-      document.addEventListener("keyup", BiDiMailUI.Composition.onKeyUp, true);
-    }
+    document.getElementById("msgcomposeWindow").removeEventListener("compose-window-init", BiDiMailUI.Composition.onInit);
+    gMsgCompose.RegisterStateListener(BiDiMailUI.Composition.msgComposeStateListener);
   },
 
   findClosestBlockElement : function(node) {
@@ -934,8 +807,7 @@ BiDiMailUI.Composition = {
 
   applyDirectionSetterToSelectionBlockElements : function(newDirectionSetter) {
 #ifdef DEBUG_applyDirectionSetterToSelectionBlockElements
-    console.log(
-      '----- BiDiMailUI.Composition.applyDirectionSetterToSelectionBlockElements() -----');
+    console.log('----- BiDiMailUI.Composition.applyDirectionSetterToSelectionBlockElements() -----');
 #endif
     var editor = GetCurrentEditor();
     if (!editor) {
@@ -1531,7 +1403,6 @@ BiDiMailUI.Composition = {
     BiDiMailUI.Composition.lastWindowToHaveFocus = focusedWindow;
     BiDiMailUI.Composition.directionSwitchController.setAllCasters();
   }
-  
 }
 
 BiDiMailUI.Composition.directionSwitchController = {
