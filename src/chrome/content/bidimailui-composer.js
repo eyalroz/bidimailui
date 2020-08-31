@@ -123,8 +123,7 @@ BiDiMailUI.Composition = {
 
   getCurrentSelectionDirection : function() {
 #ifdef DEBUG_GetCurrentSelectionDirection
-     console.log(
-       '----- in GetCurrentSelectionDirection() -----');
+     console.log('----- in GetCurrentSelectionDirection() -----');
 #endif
 
     // The current selection is a forest of DOM nodes,
@@ -381,8 +380,7 @@ BiDiMailUI.Composition = {
     }
 #ifdef DEBUG_SetDocumentDirection
     else {
-      console.log(
-         'could not get the "content-frame" by ID - that shouldn\'t be possible');
+      console.log('could not get the "content-frame" by ID - that shouldn\'t be possible');
     }
 #endif
     if (BiDiMailUI.App.versionIsAtLeast("71")) {
@@ -428,8 +426,9 @@ BiDiMailUI.Composition = {
         dump('handleComposeReplyCSS failed to acquire editor object.');
         return;
       }
-      editor.QueryInterface(nsIEditorStyleSheets);
-      editor.addOverrideStyleSheet("chrome://bidimailui/content/quotebar.css");
+      let editorStyle = editor.QueryInterface(Components.interfaces.nsIEditorStyleSheets);
+      // editor.QueryInterface(Components.interfaces.nsIEditorStyleSheets);
+      editorStyle.addOverrideStyleSheet("chrome://bidimailui/content/quotebar.css");
     }
   },
 
@@ -595,22 +594,6 @@ BiDiMailUI.Composition = {
         }
 
         try {
-          // trying this is a single-message window
-          // or a 3-pane displaying a single message
-#ifdef DEBUG_getDisplayedCopyParams
-          //console.log('win: ' + win);
-          //console.log('win.opener: ' + win.opener);
-          //console.log('win.opener.gFolderDisplay: ' + win.opener.gFolderDisplay);
-#endif
-          //if (win.opener.gFolderDisplay.selectedMessageUris.length > 1) {
-            // multiple-message-display mode, we don't support that
-#ifdef DEBUG_getDisplayedCopyParams
-          //console.log('treating window as non-tabbed, but have multiple-message display mode, we don\'t support that');
-#endif
-          //  continue;
-          //}
-          //loadedMessageURI = win.GetLoadedMessage();
-          //loadedMessageURI = win.opener.gFolderDisplay.selectedMessageUris[0];
           displayedCopyBrowser = win.getMessageBrowser();
 #ifdef DEBUG_getDisplayedCopyParams
           console.log('treating window as non-tabbed and got the (main) message displayed');
@@ -692,19 +675,20 @@ BiDiMailUI.Composition = {
     // direction for new messages
     if ( !messageParams.isReply ||
          BiDiMailUI.Prefs.getBoolPref("compose.reply_in_default_direction", false)) {
-      var defaultDirection =
-        BiDiMailUI.Prefs.getCharPref(
+      let defaultDirection = BiDiMailUI.Prefs.getCharPref(
           "compose.default_direction","ltr").toLowerCase();
+      let initialDirection;
       switch(defaultDirection) {
         case "last_used": 
-          BiDiMailUI.Composition.setDocumentDirection(
-          BiDiMailUI.Prefs.getCharPref("compose.last_used_direction","ltr"));
+          initialDirection = BiDiMailUI.Prefs.getCharPref("compose.last_used_direction","ltr");
           break;
-        case "rtl": 
-        case "ltr": 
-          BiDiMailUI.Composition.setDocumentDirection(defaultDirection);
-          break;
+        default:
+          initialDirection = defaultDirection;
       }
+#ifdef DEBUG_setInitialDirection
+      console.log("Setting initial direction by preference \"" + defaultDirection + "\" to " + initialDirection);
+#endif
+      BiDiMailUI.Composition.setDocumentDirection(initialDirection);
       return;
     }
     else if (messageParams.isReply && messageParams.originalDisplayDirection) {
@@ -712,13 +696,12 @@ BiDiMailUI.Composition = {
     }
     else {
 #ifdef DEBUG_setInitialDirection
-      console.log(
-        "We have a reply, but we don't have its original direction. We'll have to check...");
+      console.log("We have a reply, but we don't have its original direction. We'll have to check...");
 #endif
       // We get here for drafts, for messages without URIs, and due to problems
       // in locating the original message window/tab
-      var detectionDirection = BiDiMailUI.directionCheck(
-        document, document.getElementById("content-frame").contentDocument.body);
+      let detectionDirection = BiDiMailUI.directionCheck(
+        document, NodeFilter, document.getElementById("content-frame").contentDocument.body);
 #ifdef DEBUG_setInitialDirection
       console.log('detectionDirection is ' + detectionDirection );
 #endif
@@ -734,8 +717,7 @@ BiDiMailUI.Composition = {
       document.getElementById("content-frame").contentDocument.body;
 
 #ifdef DEBUG_composeWindowOnActualLoad
-    console.log(
-      '--- BiDiMailUI.Composition.composeWindowOnActualLoad() --- ');
+    console.log('--- BiDiMailUI.Composition.composeWindowOnActualLoad() --- ');
 #endif
     BiDiMailUI.Composition.handleDirectionButtons();
     // Track "Show Direction Buttons" pref.
@@ -816,6 +798,16 @@ BiDiMailUI.Composition = {
     BiDiMailUI.Composition.directionSwitchController.setAllCasters();
   },
 
+  msgComposeStateListener : {
+    NotifyComposeBodyReady: function() {
+#ifdef DEBUG_msgComposeStateListener
+      console.log("In msgComposeStateListener.NotifyComposeBodyReady()");
+#endif
+      BiDiMailUI.Composition.lastWindowToHaveFocus = null;
+      BiDiMailUI.Composition.composeWindowOnActualLoad();
+    }
+  },
+
   composeWindowOnUnload : function() {
 #ifdef DEBUG_composeWindowOnUnload
     console.log('in BiDiMailUI.Composition.composeWindowOnUnload()');
@@ -826,75 +818,17 @@ BiDiMailUI.Composition = {
       BiDiMailUI.Composition.directionButtonsPrefListener
     );
     try {
-      gMsgCompose.UnregisterStateListener(BiDiMailUI.Composition.bodyReadyListener);
+      gMsgCompose.UnregisterStateListener(BiDiMailUI.Composition.msgComposeStateListener);
     } catch(ex) {};
   },
 
-  composeWindowOnLoad : function() {
-    BiDiMailUI.Composition.lastWindowToHaveFocus = null;
-
-    if (gMsgCompose) {
-      BiDiMailUI.Composition.composeWindowOnActualLoad();
-      document.removeEventListener("load", BiDiMailUI.Composition.composeWindowOnLoad, true);
-    }
-    else {
-      dump("gMsgCompose not ready for this message in BiDiMailUI.Composition.composeWindowOnLoad");
-    }
-  },
-
-  composeWindowOnReopen : function() {
-    BiDiMailUI.Composition.lastWindowToHaveFocus = null;
-
-    if (gMsgCompose) {
-      // technically this could be a second call to BiDiMailUI.Composition.composeWindowOnActualLoad(),
-      // which should only be run once, but what's happening is that the message
-      // window created initially and never visible, with BiDiMailUI.Composition.composeWindowOnActualLoad()
-      // having already run once, is being replicated for use with a (possibly)
-      // different message 
-      BiDiMailUI.Composition.composeWindowOnActualLoad();
-      document.removeEventListener("compose-window-reopen", BiDiMailUI.Composition.composeWindowOnReopen, true);
-      document.removeEventListener("load", BiDiMailUI.Composition.composeWindowOnLoad, true);
-    }
-    else {
-      dump("gMsgCompose not ready for this message in BiDiMailUI.Composition.composeWindowOnReopen()");
-#ifdef DEBUG_ComposeEvents
-      console.log(
-        "gMsgCompose not ready for this message in BiDiMailUI.Composition.composeWindowOnReopen()");
+  composeWindowOnWindowInit : function() {
+#ifdef DEBUG_composeWindowOnWindowInit
+    console.log('in composeWindowOnWindowInit');
 #endif
-    }
+    document.getElementById("msgcomposeWindow").removeEventListener("compose-window-init", BiDiMailUI.Composition.composeWindowOnWindowInit);
+    gMsgCompose.RegisterStateListener(BiDiMailUI.Composition.msgComposeStateListener);
   },
-
-#ifdef DEBUG_ComposeEvents
-  loadCount : 0,
-  reopenCount : 0,
-
-  debugLoadHandler : function(ev) {
-    BiDiMailUI.Composition.loadCount++;
-    console.log(
-      'load event #' + BiDiMailUI.Composition.loadCount + ' :\ncurrentTarget = ' +
-      ev.currentTarget + ' ; originalTarget = ' + ev.originalTarget + 
-      ' ; explicitOriginalTarget = ' + ev.explicitOriginalTarget);
-  },
-
-  debugLoadHandlerNonCapturing : function() {
-    console.log(
-      'this is a non-capturing load event');
-  },
-
-  debugReopenHandler : function(ev) {
-    BiDiMailUI.Composition.reopenCount++;
-    console.log(
-      'compose-window-reopen event #' + BiDiMailUI.Composition.reopenCount +
-      ' :\ncurrentTarget = ' + ev.currentTarget + ' ; originalTarget = ' +
-      ev.originalTarget + ' ; explicitOriginalTarget = ' + 
-      ev.explicitOriginalTarget);
-  },
-  
-  debugReopenHandlerNonCapturing : function() {
-    console.log(
-      'this is a non-capturing compose-window-reopen event');
-  },
-#endif
 
   installComposeWindowEventHandlers : function() {
     top.controllers.appendController(
@@ -939,8 +873,7 @@ BiDiMailUI.Composition = {
 
   applyDirectionSetterToSelectionBlockElements : function(newDirectionSetter) {
 #ifdef DEBUG_applyDirectionSetterToSelectionBlockElements
-    console.log(
-      '----- BiDiMailUI.Composition.applyDirectionSetterToSelectionBlockElements() -----');
+    console.log('----- BiDiMailUI.Composition.applyDirectionSetterToSelectionBlockElements() -----');
 #endif
     var editor = GetCurrentEditor();
     if (!editor) {
@@ -1536,7 +1469,6 @@ BiDiMailUI.Composition = {
     BiDiMailUI.Composition.lastWindowToHaveFocus = focusedWindow;
     BiDiMailUI.Composition.directionSwitchController.setAllCasters();
   }
-  
 }
 
 BiDiMailUI.Composition.directionSwitchController = {
