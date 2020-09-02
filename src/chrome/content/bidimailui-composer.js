@@ -489,7 +489,7 @@ BiDiMailUI.Composition = {
       dump('setParagraphMode failed to acquire editor object.');
       return;
     }
-    editor.setParagraphFormat(modeStr);
+    editor.document.execCommand("defaultparagraphseparator", true, modeStr);
     // as we don't use doStatefulCommand, we need to update the command
     // state attribute...
     document.getElementById("cmd_paragraphState").setAttribute("state", modeStr);
@@ -1375,7 +1375,8 @@ BiDiMailUI.Composition = {
     catch(ex) { }
     // -- "Remember old style"
 
-    editor.setParagraphFormat("p");
+    editor.document.execCommand("defaultparagraphseparator", true, "p");
+
     var par = BiDiMailUI.Composition.findClosestBlockElement(editor.selection.focusNode);
     var prevPar = par.previousSibling;
 
