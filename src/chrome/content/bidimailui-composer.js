@@ -418,17 +418,11 @@ BiDiMailUI.Composition = {
 
   handleComposeReplyCSS : function() {
     if (IsHTMLEditor()) {
-      var editor = GetCurrentEditor();
-      if (!editor) {
+      let domWindowUtils = GetCurrentEditorElement().contentWindow.windowUtils;
+      domWindowUtils.loadSheetUsingURIString("chrome://bidimailui/content/quotebar.css", domWindowUtils.AGENT_SHEET);
 #ifdef DEBUG_handleComposeReplyCSS
-        console.log('handleComposeReplyCSS failed to acquire editor object.');
+      console.log('Added the quotebar fix stylesheet to the HTML editor document');
 #endif
-        dump('handleComposeReplyCSS failed to acquire editor object.');
-        return;
-      }
-      let editorStyle = editor.QueryInterface(Components.interfaces.nsIEditorStyleSheets);
-      // editor.QueryInterface(Components.interfaces.nsIEditorStyleSheets);
-      editorStyle.addOverrideStyleSheet("chrome://bidimailui/content/quotebar.css");
     }
   },
 
