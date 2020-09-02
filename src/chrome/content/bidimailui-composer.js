@@ -437,29 +437,22 @@ BiDiMailUI.Composition = {
     return document.getElementById("content-frame")
       .contentDocument.documentElement.firstChild;
   },
-  
-  addMessageStyleRules : function(styleRulesText) {
-    var editor = GetCurrentEditor();
-    if (!editor) {
-#ifdef DEBUG_addMessageStyleRules
-      console.log('addMessageStyleRules failed to acquire editor object.');
-#endif
-      dump('addMessageStyleRules failed to acquire editor object.');
+
+  ensureMessageStyleRulesAdded : function(styleElementId, styleRulesText) {
+    let headElement = BiDiMailUI.Composition.getMessageHead();
+    let contentDoc = headElement.ownerDocument;
+    if (contentDoc.getElementById(styleElementId) != null) {
       return;
     }
-
+    let editor = GetCurrentEditor();
     editor.beginTransaction();
-
-    var css = 
-      document.getElementById("content-frame").contentDocument.createXULElement('style');
-    css.type = 'text/css';
-    if (css.styleSheet) {
-      css.styleSheet.cssText = styleRulesText;
-    }
-    else {
-      css.appendChild(document.createTextNode(styleRulesText));
-    }
-    BiDiMailUI.Composition.getMessageHead().appendChild(css);  
+    let styleElement = contentDoc.createElement('style');
+    styleElement.id = styleElementId;
+    styleElement.type = "text/css";
+    styleElement.textContent = styleRulesText;
+    // TODO: Is it more "proper" to wrap the text in a textnode?
+    // styleElement.appendChild(contentDoc.createTextNode(styleRulesText));
+    headElement.appendChild(styleElement);
     editor.endTransaction();
   },
 
@@ -483,7 +476,8 @@ BiDiMailUI.Composition = {
     
     var margin =
       BiDiMailUI.Composition.getParagraphMarginFromPrefs();
-    BiDiMailUI.Composition.addMessageStyleRules(
+    BiDiMailUI.Composition.ensureMessageStyleRulesAdded(
+      "bidiui-paragraph-margins",
       "body p { margin-bottom: " + margin + "; margin-top: 0pt; } ");
   },
 
