@@ -126,22 +126,12 @@ BiDiMailUI.MessageOverlay = {
       }
     }
 
-    var displayedMessageSubject;
+    let displayedMessageSubject;
     try {
-      // This is a very volatile piece of code; it may very well differ
-      // between TB and SM and between versions, with extensions such as
-      // Mnenhy etc.
-      var expandedSubjectBox = document.getElementById('expandedsubjectBox');
-      if (expandedSubjectBox.hasAttribute("headervalue")) {
-        displayedMessageSubject = expandedSubjectBox.getAttribute("headervalue");
-      } 
-      else {
-        var valueNode = document.getAnonymousElementByAttribute(expandedSubjectBox,"anonid","headerValue");
-        if (valueNode.firstChild) {
-          displayedMessageSubject = valueNode.firstChild.data;
-        }
-        else displayedMessageSubject = valueNode.value;
-      }
+        displayedMessageSubject = document.getElementById('expandedsubjectBox').textContent;
+#ifdef DEBUG_onLoad
+        console.log('Message subject: "' + displayedMessageSubject + '"');
+#endif
     }
     catch(ex) {
 #ifdef DEBUG_onLoad
@@ -159,7 +149,10 @@ BiDiMailUI.MessageOverlay = {
         function(str) {
           // using the appropriate setter rather than directly
           // setting the valueNode's data
-          document.getElementById('expandedsubjectBox').headerValue = str;
+#ifdef DEBUG_onLoad
+          console.log('Changing message subject from: "' + document.getElementById('expandedsubjectBox').textContent + '"\nto: "' + str + '"');
+#endif
+          document.getElementById('expandedsubjectBox').textContent = str;
         },
       unusableCharsetHandler : BiDiMailUI.MessageOverlay.promptForDefaultCharsetChange,
       needCharsetForcing: false, // this is an out parameter
