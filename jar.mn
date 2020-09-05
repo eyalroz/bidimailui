@@ -13,8 +13,6 @@ bidimailui.jar:
 *   content/quotebar.css                             (src/chrome/content/quotebar.css)
 *   content/direction-autodetection.css              (src/chrome/content/direction-autodetection.css)
 *   content/insertMenuOverlay.xul                    (src/chrome/content/insertMenuOverlay.xul)
-*   content/messageOverlay.xul                       (src/chrome/content/messageOverlay.xul)
-*   content/composeOverlay.xul                       (src/chrome/content/composeOverlay.xul)
 *   locale/he/bidimailui.properties                (src/chrome/locale/he/bidimailui.properties)
 *   locale/he/bidimailui.dtd                       (src/chrome/locale/he/bidimailui.dtd)
 *   locale/he/bidimailui-prefs.dtd                 (src/chrome/locale/he/bidimailui-prefs.dtd)
