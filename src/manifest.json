@@ -11,7 +11,7 @@
     "homepage_url": "http://bidiui.mozdev.org/",
     "name": "BiDi Mail UI",
     "icons": {
-        "32": "chrome/content/bidimailui.png"
+        "64": "chrome/content/bidimailui.png"
     },
     "description": "The BiDi Mail UI extension provides access to the inherent Bi-Directional capabilities in Mozilla Thunderbird - for message display and composition. It also detects and fixes cases of character encodung ",
 #expand    "version": "__VERSION__",
