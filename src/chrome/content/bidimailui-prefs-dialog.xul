@@ -5,7 +5,7 @@
 
 <!DOCTYPE dialog [
   <!ENTITY % bdmDTD SYSTEM
-             "chrome://bidimailui/locale/bidimailui-prefs.dtd">
+             "chrome://bidimailui/locale/bidimailui-prefs-dialog.dtd">
   %bdmDTD;
 ]>
 
@@ -20,7 +20,7 @@
             onload="BiDiMailUI.PrefPane.init();">
 
     <script type="application/x-javascript"
-            src="chrome://bidimailui/content/bidimailui-prefs.js"/>
+            src="chrome://bidimailui/content/bidimailui-prefs-dialog.js"/>
 
     <groupbox>
       <caption label="&default-dir;"/>

@@ -23,6 +23,6 @@
   messenger.WindowListener.registerWindow("chrome://messenger/content/editorOverlay." + xulSuffix,                     "chrome://bidimailui/content/overlay-injectors/editorOverlay.js");
   messenger.WindowListener.registerWindow("chrome://messenger/content/cutomizeToolbar." + xulSuffix,                   "chrome://bidimailui/content/overlay-injectors/customizeToolbar.js");
 
-  messenger.WindowListener.registerOptionsPage("chrome://bidimailui/content/bidimailui-prefs." + xulSuffix)
+  messenger.WindowListener.registerOptionsPage("chrome://bidimailui/content/bidimailui-prefs-dialog." + xulSuffix)
   messenger.WindowListener.startListening();
 })()
