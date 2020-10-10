@@ -1,51 +1,114 @@
 #!/bin/bash
 
 SHORTNAME="bidimailui"
-VERSION="0.11"
-TARGET="$1"
-BETA_SUBVERSION="3"
+TARGET="tbird" # We used to support multiple targets, but no longer
 UUID="{54e72d7b-ed31-4736-854f-f517358f21ee}"
+PREPROCESSOR_PARAMS=" -DUUID=$UUID -DSHORTNAME=$SHORTNAME"
+PREPROCESSOR_PARAMS+=" -DMOZ_THUNDERBIRD"
 
-PREPROCESSOR_PARAMS+=" -DUUID=$UUID -DSHORTNAME=$SHORTNAME"
+function die {
+	local error_message="$1"
+	echo -e >&2 "$error_message"
+	exit 1
+}
 
-case "$TARGET" in
-	tbird | tb | thunderbird)
-		TARGET=tbird
-		PREPROCESSOR_PARAMS+=" -DMOZ_THUNDERBIRD"
+function usage {
+	echo "Usage: $(basename) [OPTIONS...] [PREPROCESSOR DEFINITIONS...]"
+	echo "Build script for the $SHORTNAME extension."
+	echo ""
+	echo "Options:"
+	echo "    -v | --version [VERSION]     The version to build"
+	echo "    -b | --build-type [TYPE]     Specify the build type: beta, release-candidate, or release"
+	echo "    -s | --subversion [VERSION]  Specify the subversion number for beta or rc builds (default: 1)"
+	echo "    -h | --help                  This message"
+	echo ""
+	exit
+}
+
+declare -a POSITIONAL
+while (( $# > 0 )); do
+	option="$1"
+	shift
+	case $option in
+		-h | --help)
+			usage
+			;;
+		-v | --ver | --version)
+			VERSION="$1"
+			shift
+			;;
+		-b | --build-type)
+			BUILD_TYPE="$1"
+			shift
+			;;
+		--beta)
+			BUILD_TYPE=beta
+			;;
+		--release)
+			BUILD_TYPE=release
+			;;
+		--release-candidate|--rc)
+			BUILD_TYPE=rc
+			;;
+		--sub-version-number|--sub-version|--sver|--sub|--sv|-s)
+			SUB_VERSION="$1"
+			shift
+			;;
+		-*)
+			die "Unsupported option \"$option\""
+			;;
+		*)
+			POSITIONAL+=("$option")
+    		;;
+	esac
+done
+
+if [[ -z "$VERSION" ]]; then
+	if [[ -n "${BIDIMAILUI_VERSION}" ]]; then
+		VERSION="${BIDIMAILUI_VERSION}"
+	elif [[ -r ".version" ]]; then
+		VERSION="$(cat .version)"
+	fi
+	[[ -n "$VERSION" ]] || die "No version specified"
+fi
+
+SUB_VERSION="${SUB_VERSION:-1}"
+
+case "$(echo $BUILD_TYPE | tr [A-Z] [a-z])" in
+	release )
+		;;
+	beta | b | "" )
+		VERSION="${VERSION}b${SUB_VERSION}"
+		PREPROCESSOR_PARAMS+=" -DIS_BETA_BUILD"
+		;;
+	rc | release-candidate | release_candidate)
+		VERSION="${VERSION}rc${SUB_VERSION}"
 		;;
 	*)
-		echo "Please specify thunderbird as the target (yes, that's a bit redundant)."
-		exit 1
-	;;
+		die "Invalid build type $BUILD_TYPE"
+		;;
 esac
 
-if [ -z "$EXTENSION_RELEASE" ]; then
-	VERSION="${VERSION}b${BETA_SUBVERSION}"
-	PREPROCESSOR_PARAMS+=" -DIS_BETA_BUILD"
-fi
 PREPROCESSOR_PARAMS+=" -DVERSION=$VERSION"
 
-shift 1
-
-# all arguments after the target app are #define 'd in the XUL preprocessor,
+# all positional arguments after the target app are #define 'd in the XUL preprocessor,
 # with a DEBUG_ prefix; so if you want to, say, have debugging code specific
 # to the function myFancyFunc(), write it like so:
 #
-#   #ifdef DEBUG_myFancyFunc 
+#   #ifdef DEBUG_myFancyFunc
 #     debugging code etc. etc.
 #   #endif
 #
 # then invoke
 #
-#   dobuild tbird myFancyFunc
+#   dobuild myFancyFunc
 #
 # to have your debugging code enabled
 
-if [ -n "$1" ]; then
+if [ ${#POSITIONAL[@]} -ne 0 ]; then
 	PREPROCESSOR_PARAMS+=" -DDEBUG"
-	while [ -n "$1" ]; do
-		PREPROCESSOR_PARAMS="$PREPROCESSOR_PARAMS -DDEBUG_$1"
-		shift 1
+	for def in "${POSITIONAL[@]}"; do
+		PREPROCESSOR_PARAMS="$PREPROCESSOR_PARAMS -DDEBUG_$def"
 	done
 else
 	PREPROCESSOR_PARAMS+=" --no-line-comments"
@@ -58,13 +121,17 @@ BUILDTOOLSDIR="buildtools"
 export PERL5LIB="`pwd`/$BUILDTOOLSDIR"
 
 # TODO: split builddir by /'s and try to create everything along the path
-if [ ! -d build ] ; then mkdir build; fi
-if [ ! -d $BUILDDIR ] ; then mkdir $BUILDDIR; else rm -rf $BUILDDIR/*; fi
+[[ -d build ]] || mkdir build
+if [[ ! -d "$BUILDDIR" ]]; then
+	mkdir -p "$BUILDDIR"
+else
+	rm -rf "$BUILDDIR"/*
+fi
 
 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILDDIR/jar.mn
 # Our invocation of make-jars.pl doesn't literally make JAR files, it only preprocesses and copies.
 $BUILDTOOLSDIR/make-jars.pl -q -f flat -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILDDIR/jar.mn || exit
-$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS src/manifest.json > $BUILDDIR/manifest.json 
+$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS src/manifest.json > $BUILDDIR/manifest.json
 rm -f installed-chrome.txt
 
 mkdir -p $BUILDDIR/defaults/preferences
@@ -78,17 +145,13 @@ cp src/api/WindowListener/implementation.js $BUILDDIR/api/WindowListener
 
 cp LICENSE $BUILDDIR
 
-case "$TARGET" in
-	tbird)
-		cd $BUILDDIR
-	zip -q -r $XPINAME  \
-		chrome \
-		defaults/ \
-		api \
-		background.js \
-		LICENSE \
-		manifest.json || exit
-		;;
-esac
+cd $BUILDDIR
+zip -q -r $XPINAME  \
+	chrome \
+	defaults/ \
+	api \
+	background.js \
+	LICENSE \
+	manifest.json || exit
 
 ln $XPINAME $LINKNAME
