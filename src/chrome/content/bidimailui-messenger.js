@@ -60,62 +60,24 @@ BiDiMailUI.MessageOverlay = {
     msgWindow.charsetOverride = true;
   },
 
-  onLoad : function() {
-#ifdef DEBUG_onLoad
+  isFillerStaticPage : function(domDocument) {
+    return /^http:\/\/.*www\.mozilla.*\/start\/$/.test(domDocument.baseURI);
+  },
 
-    console.log("--- onLoad() ---");
-    try {
-      console.log(
-        "message URI: " + gFolderDisplay.selectedMessageUris[0] +
-        "\nnumber of selected messages: " + gFolderDisplay.selectedMessageUris.length);
-    } catch(ex) {
-      console.log("can't get message URI");
-    }
-#endif
-
-    // First, let's make sure we can poke the:
-    // - message window
-    // - message body
-    // - URI of the loaded message
-
-    if (!msgWindow) {
-#ifdef DEBUG_onLoad
-      console.log("couldn't get msgWindow");
-#endif
-      BiDiMailUI.MessageOverlay.updateDirectionMenuButton(null,true);
-      return;
-    }
-    var domDocument;
-    try {
-      domDocument = this.docShell.contentViewer.DOMDocument;
-    }
-    catch (ex) {
-#ifdef DEBUG_onLoad
-      console.log("couldn't get DOMDocument");
-#endif
-      dump(ex);
-      return;
-    }
-
-    if ((!domDocument.baseURI) ||
-        (domDocument.baseURI == "about:blank") ||
-        (/^http:\/\/.*www\.mozilla.*\/start\/$/.test(domDocument.baseURI))) {
-      BiDiMailUI.MessageOverlay.updateDirectionMenuButton(null,true);
-      return;
-    }
-      
-    var body = domDocument.body;
-    if (!body) {
-#ifdef DEBUG_onLoad
-      console.log("couldn't get DOMDocument body");
-#endif
-      BiDiMailUI.MessageOverlay.updateDirectionMenuButton(null,true);
-      return;
+  gatherParameters : function() {
+    if (!msgWindow) { return [null, null, null]; }
+    let domDocument =  msgWindow.messageWindowDocShell.contentViewer.DOMDocument;
+      // The following used to work, but now doesn't:
+      // this.docShell.contentViewer.DOMDocument;
+    let canActOnDocument =
+      (domDocument && domDocument.baseURI && domDocument.body
+       && (domDocument.baseURI != "about:blank")
+       && !BiDiMailUI.MessageOverlay.isFillerStaticPage(domDocument) );
+    if (!canActOnDocument) {
+      return [null, null, null];
     }
     
-    // We're assuming only one message is selected
-
-    var msgHdr;
+    var msgHdr; // We're assuming only one message is selected
     try {
       msgHdr = gMessageDisplay.displayedMessage;
     } catch(ex) {
@@ -126,18 +88,7 @@ BiDiMailUI.MessageOverlay = {
       }
     }
 
-    let displayedMessageSubject;
-    try {
-        displayedMessageSubject = document.getElementById('expandedsubjectBox').textContent;
-#ifdef DEBUG_onLoad
-        console.log('Message subject: "' + displayedMessageSubject + '"');
-#endif
-    }
-    catch(ex) {
-#ifdef DEBUG_onLoad
-      console.log("couldn't get subject:\n" + ex);
-#endif
-    }
+    let displayedMessageSubject = document.getElementById('expandedsubjectBox').textContent;
 
     var charsetPhaseParams = {
       body: domDocument.body,
@@ -158,6 +109,23 @@ BiDiMailUI.MessageOverlay = {
       needCharsetForcing: false, // this is an out parameter
       charsetToForce: null       // this is an out parameter
     };
+
+    return [domDocument, domDocument.body, charsetPhaseParams];
+  },
+
+  onLoad : function() {
+#ifdef DEBUG_onLoad
+    console.log("--- onLoad() ---");
+#endif
+
+    let [domDocument, body, charsetPhaseParams] = BiDiMailUI.MessageOverlay.gatherParameters();
+    if (!domDocument || !body || !charsetPhaseParams) {
+      // If there wasd a serious error, an exception would have been thrown already;
+      // so we're just silently failing
+      BiDiMailUI.MessageOverlay.updateDirectionMenuButton(null,true);
+      return;
+    }
+
     BiDiMailUI.Display.ActionPhases.charsetMisdetectionCorrection(charsetPhaseParams);
     if (charsetPhaseParams.needCharsetForcing) {
       BiDiMailUI.MessageOverlay.setForcedCharacterSet(charsetPhaseParams.charsetToForce);
@@ -186,43 +154,29 @@ BiDiMailUI.MessageOverlay = {
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.leave_as_is")];
     var selected = {};
 
-#ifdef DEBUG_promptForDefaultCharsetChange
-    console.log("BiDiMailUI.Strings.GetStringFromName(\"bidimailui.charset_dialog.set_to_windows_1255\") =\n" + BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.set_to_windows_1255"));
-#endif
-
     var ok = Services.prompt.select(
       window,
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.window_title"),
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.dialog_message"),
       list, selected);
 
-    if (ok) {
-
-#ifdef DEBUG_promptForDefaultCharsetChange
-    console.log("ok!");
-#endif
-
-      var str = 
-        Components.classes["@mozilla.org/supports-string;1"]
-                  .createInstance(Components.interfaces.nsISupportsString);
-      switch (selected.value) {
-        case 0:
-          str.data = "windows-1255";
-          BiDiMailUI.Prefs.setAppStringPref("mailnews.view_default_charset", str);
-          return str.data;
-        case 1:
-          str.data = "windows-1256";
-          BiDiMailUI.Prefs.setAppStringPref("mailnews.view_default_charset", str);
-          return str.data;
-        case 2:
-          BiDiMailUI.Prefs.setBoolPref("display.user_accepts_unusable_charset_pref", true);
-          break;
-      }
+    if (!ok) { return null; }
+    var str = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
+    switch (selected.value) {
+      case 0:
+        str.data = "windows-1255";
+        BiDiMailUI.Prefs.setAppStringPref("mailnews.view_default_charset", str);
+        return str.data;
+      case 1:
+        str.data = "windows-1256";
+        BiDiMailUI.Prefs.setAppStringPref("mailnews.view_default_charset", str);
+        return str.data;
+      case 2:
+        BiDiMailUI.Prefs.setBoolPref("display.user_accepts_unusable_charset_pref", true);
+        break;
     }
-#ifdef DEBUG_promptForDefaultCharsetChange
-    else console.log("user cancelled the dialog box!");
-#endif
-    return null;
+	// shouldn't get here
+	return null;
   }
   
 }
