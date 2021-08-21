@@ -17,10 +17,10 @@ function usage {
 	echo "Build script for the $SHORTNAME extension."
 	echo ""
 	echo "Options:"
-	echo "    -v | --version [VERSION]     The version to build"
-	echo "    -b | --build-type [TYPE]     Specify the build type: beta, release-candidate, or release"
-	echo "    -s | --subversion [VERSION]  Specify the subversion number for beta or rc builds (default: 1)"
-	echo "    -h | --help                  This message"
+	echo "    -v | --version VERSION    The version to build"
+	echo "    -b | --build-type TYPE    Specify the build type: beta, release-candidate, or release"
+	echo "    -s | --subversion SUBVER  Specify the subversion number for beta or rc builds (default: 1)"
+	echo "    -h | --help               This message"
 	echo ""
 	exit
 }
@@ -62,6 +62,8 @@ while (( $# > 0 )); do
     		;;
 	esac
 done
+
+set -- "${POSITIONAL[@]}" # restore positional parameters
 
 if [[ -z "$VERSION" ]]; then
 	if [[ -n "${BIDIMAILUI_VERSION}" ]]; then
@@ -105,9 +107,9 @@ PREPROCESSOR_PARAMS+=" -DVERSION=$VERSION"
 #
 # to have your debugging code enabled
 
-if [ ${#POSITIONAL[@]} -ne 0 ]; then
+if [ $# -ne 0 ]; then
 	PREPROCESSOR_PARAMS+=" -DDEBUG"
-	for def in "${POSITIONAL[@]}"; do
+	for def in "$@"; do
 		PREPROCESSOR_PARAMS="$PREPROCESSOR_PARAMS -DDEBUG_$def"
 	done
 else
@@ -146,7 +148,7 @@ cp src/api/WindowListener/implementation.js $BUILDDIR/api/WindowListener
 cp LICENSE $BUILDDIR
 
 cd $BUILDDIR
-zip -q -r $XPINAME  \
+zip --quiet -r $XPINAME  \
 	chrome \
 	defaults/ \
 	api \
