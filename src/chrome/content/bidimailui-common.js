@@ -120,7 +120,9 @@ BiDiMailUI.Prefs = {
     } catch(ex) {
       if (defaultValue != undefined)
         return defaultValue;
-
+#ifdef DEBUG
+      console.log("Failed obtaining boolean preference " + prefName);
+#endif
       throw(ex);
     }
   },
@@ -132,7 +134,9 @@ BiDiMailUI.Prefs = {
     } catch(ex) {
       if (defaultValue != undefined)
         return defaultValue;
-
+#ifdef DEBUG
+      console.log("Failed obtaining string preference " + prefName);
+#endif
       throw(ex);
     }
   },
@@ -144,7 +148,9 @@ BiDiMailUI.Prefs = {
     } catch(ex) {
       if (defaultValue != undefined)
         return defaultValue;
-
+#ifdef DEBUG
+      console.log("Failed obtaining integer preference " + prefName);
+#endif
       throw(ex);
     }
   },
@@ -154,9 +160,12 @@ BiDiMailUI.Prefs = {
       return Services.prefs.getComplexValue(
         prefName, Ci.nsIPrefLocalizedString).data;
     } catch(ex) {
-      if (defaultValue) {
+      if (defaultValue != undefined) {
         return defaultValue;
       }
+#ifdef DEBUG
+      console.log("Failed obtaining app string preference " + prefName);
+#endif
       throw(ex);
     }
   },
