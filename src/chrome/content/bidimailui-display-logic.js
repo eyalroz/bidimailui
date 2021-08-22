@@ -1,23 +1,28 @@
 var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
 
-// Code outside BiDi Mail UI should only use the 
+// Code outside BiDi Mail UI should only use the
 // BiDiMailUI.Display.ActionPhases and perhaps the
 // BiDiMailUI.Display.setMessageDirectionForcing function
-// (ActionPhase functions are the four phases of action 
+// (ActionPhase functions are the four phases of action
 // performed when loading a message)
 
 BiDiMailUI.Display = {
   ActionPhases : {
 
     charsetMisdetectionCorrection : function(cMCParams) {
-      if (!cMCParams.preferredCharset)
-        BiDiMailUI.Display.populatePreferredCharset(cMCParams);
-    
+      if (!cMCParams.preferredCharset) {
+        if (! 'havePopulatedPreferredCharset' in this) {
+          BiDiMailUI.Display.populatePreferredCharset(cMCParams);
+          this[havePopulatedPreferredCharset] = true;
+          // This setting is required since the population routine may populate with null :-(
+        }
+      }
+
       if (!BiDiMailUI.Display.fixLoadedMessageCharsetIssues(cMCParams)) {
-        // the message will be reloaded, let's not do anything else 
+        // the message will be reloaded, let's not do anything else
         return;
       }
-       
+
       if (cMCParams.charsetOverrideInEffect) {
         cMCParams.body.setAttribute('bidimailui-charset-is-forced',true);
       }
