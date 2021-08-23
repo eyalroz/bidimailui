@@ -45,18 +45,6 @@ BiDiMailUI.decode = function(str, charsetEncoding) {
 
 BiDiMailUI.JS = {
 
-  // number to hexadecimal representation
-  hexDigits : "0123456789ABCDEF",
-
-  num2hex : function(num) {
-    var hexString = BiDiMailUI.JS.hexDigits.substr(num & 15, 1);
-    while(num > 15) {
-      num >>= 4;
-      hexString = BiDiMailUI.JS.hexDigits.substr(num & 15, 1) + hexString;
-    }
-    return hexString;
-  },
-
 #ifdef DEBUG
   stringToScanCodes : function(str) 
   {
@@ -66,7 +54,7 @@ BiDiMailUI.JS = {
     for(let i = 0; i < str.length; i++) {
       let charcode = "??";
       try {
-        charcode = BiDiMailUI.JS.num2hex(str.charCodeAt(i));    	  
+        charcode = str.charCodeAt(i).toString(16);
       }
       catch(ex) { }
       scanCodesString += charcode + " ";  
