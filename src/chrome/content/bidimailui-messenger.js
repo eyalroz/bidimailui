@@ -163,16 +163,16 @@ BiDiMailUI.MessageOverlay = {
     if (!ok) { return null; }
     var str = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
     switch (selected.value) {
-      case 0:
+        case 0:
         str.data = "windows-1255";
-        BiDiMailUI.Prefs.setAppStringPref("mailnews.view_default_charset", str);
+        Services.prefs.setStringPref("mailnews.view_default_charset", str);
         return str.data;
       case 1:
         str.data = "windows-1256";
-        BiDiMailUI.Prefs.setAppStringPref("mailnews.view_default_charset", str);
+        Services.prefs.setStringPref("mailnews.view_default_charset", str);
         return str.data;
       case 2:
-        BiDiMailUI.Prefs.setBoolPref("display.user_accepts_unusable_charset_pref", true);
+        BiDiMailUI.Prefs.set("display.user_accepts_unusable_charset_pref", true);
         break;
     }
 	// shouldn't get here

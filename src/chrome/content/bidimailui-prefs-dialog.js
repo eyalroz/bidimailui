@@ -28,7 +28,7 @@ BiDiMailUI.PrefPane = {
   },
 
   _getPrefElement: function(prefName) {
-    return document.getElementById(BiDiMailUI.Prefs.preferencePrefix + prefName);
+    return document.getElementById(BiDiMailUI.Prefs._branchStr + prefName);
   },
 
   getSpaceBetweenParagraphsValue: function() {

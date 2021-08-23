@@ -1,5 +1,6 @@
 var EXPORTED_SYMBOLS = [ "BiDiMailUI" ];
 var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
+var { Preferences } = ChromeUtils.import("resource://gre/modules/Preferences.jsm");
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
@@ -108,115 +109,15 @@ BiDiMailUI.App = {
 
 // Preferences
 
-BiDiMailUI.Prefs = {
+BiDiMailUI.__defineGetter__("Prefs", function() {
+    delete BiDiMailUI.Prefs;
+    return BiDiMailUI.Prefs = new Preferences("extensions.bidiui.mail.");
+});
 
-  // const
-  preferencePrefix : "extensions.bidiui.mail.",
-
-  getBoolPref: function(prefName, defaultValue) {
-    try {
-      return Services.prefs.getBoolPref(
-        BiDiMailUI.Prefs.preferencePrefix + prefName);
-    } catch(ex) {
-      if (defaultValue != undefined)
-        return defaultValue;
-#ifdef DEBUG
-      console.log("Failed obtaining boolean preference " + prefName);
-#endif
-      throw(ex);
-    }
-  },
-
-  getCharPref: function(prefName, defaultValue) {
-    try {
-      return Services.prefs.getCharPref(
-        BiDiMailUI.Prefs.preferencePrefix + prefName);
-    } catch(ex) {
-      if (defaultValue != undefined)
-        return defaultValue;
-#ifdef DEBUG
-      console.log("Failed obtaining string preference " + prefName);
-#endif
-      throw(ex);
-    }
-  },
-
-  getIntPref: function(prefName, defaultValue) {
-    try {
-      return Services.prefs.getIntPref(
-        BiDiMailUI.Prefs.preferencePrefix + prefName);
-    } catch(ex) {
-      if (defaultValue != undefined)
-        return defaultValue;
-#ifdef DEBUG
-      console.log("Failed obtaining integer preference " + prefName);
-#endif
-      throw(ex);
-    }
-  },
-
-  getAppStringPref: function(prefName, defaultValue) {
-    try {
-      return Services.prefs.getComplexValue(
-        prefName, Ci.nsIPrefLocalizedString).data;
-    } catch(ex) {
-      if (defaultValue != undefined) {
-        return defaultValue;
-      }
-#ifdef DEBUG
-      console.log("Failed obtaining app string preference " + prefName);
-#endif
-      throw(ex);
-    }
-  },
-
-  getStringPref: function(prefName, defaultValue) {
-    return BiDiMailUI.Prefs.getAppStringPref(
-      BiDiMailUI.Prefs.preferencePrefix + prefName, defaultValue);
-  },
-
-  setBoolPref: function(prefName, val) {
-    Services.prefs.setBoolPref(
-      BiDiMailUI.Prefs.preferencePrefix + prefName, val);
-  },
-
-  setCharPref: function(prefName, val) {
-    Services.prefs.setCharPref(
-      BiDiMailUI.Prefs.preferencePrefix + prefName, val);
-  },
-
-  setIntPref: function(prefName, val) {
-    Services.prefs.setIntPref(
-      BiDiMailUI.Prefs.preferencePrefix + prefName, val);
-  },
-
-  setAppStringPref: function(appPrefName, str) {
-    Services.prefs.setStringPref(appPrefName, str);
-  },
-
-  addObserver: function(domain, listener) {
-    try {
-      Services.prefs.addObserver(
-        BiDiMailUI.Composition.directionButtonsPrefListener.domain,
-        BiDiMailUI.Composition.directionButtonsPrefListener);
-    }
-    catch(ex) {
-      dump("Failed adding preference observer: " + ex + "\n");
-    }
-  },
-
-  removeObserver: function(domain, listener) {
-    try {
-      Services.prefs.removeObserver(
-        BiDiMailUI.Composition.directionButtonsPrefListener.domain,
-        BiDiMailUI.Composition.directionButtonsPrefListener);
-    }
-    catch(ex) {
-      dump("Failed removing preference observer: " + ex + "\n");
-    }
-  }
-
-}
+BiDiMailUI.__defineGetter__("AppPrefs", function() {
+    delete BiDiMailUI.AppPrefs;
+    return BiDiMailUI.AppPrefs = new Preferences();
+});
 
 //---------------------------------------------------------
 

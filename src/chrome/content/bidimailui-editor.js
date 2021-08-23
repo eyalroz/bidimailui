@@ -13,7 +13,7 @@ BiDiMailUI.Editor = {
     top.controllers.insertControllerAt(1, BiDiMailUI.Composition.directionSwitchController);
 
     HandleComposerDirectionButtons();
-    BiDiMailUI.Prefs.addObserver(
+    Services.prefs.addObserver(
       BiDiMailUI.Editor.directionButtonsPrefListener.domain,
       BiDiMailUI.Editor.directionButtonsPrefListener
     );
@@ -26,7 +26,7 @@ BiDiMailUI.Editor = {
     BiDiMailUI.Composition.setInitialDocumentDirection(documentParams);
      
     BiDiMailUI.Composition.alternativeEnterBehavior =
-      BiDiMailUI.Prefs.getBoolPref("compose.alternative_enter_behavior", true);
+      BiDiMailUI.Prefs.get("compose.alternative_enter_behavior", true);
     if (BiDiMailUI.Composition.alternativeEnterBehavior)
       BiDiMailUI.Composition.loadParagraphMode();
 
@@ -35,7 +35,7 @@ BiDiMailUI.Editor = {
 
   windowOnUnload : function () {
     // Stop tracking "Show Direction Buttons" pref.
-    BiDiMailUI.Prefs.removeObserver(
+    Service.prefs.removeObserver(
       BiDiMailUI.Editor.directionButtonsPrefListener.domain,
       BiDiMailUI.Editor.directionButtonsPrefListener
     );  
@@ -43,7 +43,7 @@ BiDiMailUI.Editor = {
 
   handleComposerDirectionButtons : function () {
     var hiddenButtonsPref =
-      !BiDiMailUI.Prefs.getBoolPref("compose.show_direction_buttons", true);
+      !BiDiMailUI.Prefs.get("compose.show_direction_buttons", true);
 
     document.getElementById("directionality-formatting-toolbar-section")
             .setAttribute("hidden", hiddenButtonsPref);
@@ -56,7 +56,7 @@ BiDiMailUI.Editor = {
     document.addEventListener("load", BiDiMailUI.Editor.windowOnLoad, true);
     document.addEventListener("unload", BiDiMailUI.Editor.windowOnUnload, true);
     document.addEventListener("keypress", BiDiMailUI.Composition.onKeyPress, true);
-    if (BiDiMailUI.Prefs.getBoolPref(
+    if (BiDiMailUI.Prefs.get(
       "compose.ctrl_shift_switches_direction", true)) {
       document.addEventListener("keydown", BiDiMailUI.Composition.onKeyDown, true);
       document.addEventListener("keyup", BiDiMailUI.Composition.onKeyUp, true);
