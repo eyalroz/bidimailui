@@ -306,7 +306,7 @@ BiDiMailUI.Composition = {
       // field...
       document.getElementById("msgSubject").inputField.style.direction = direction;
     }
-    BiDiMailUI.Prefs.setCharPref("compose.last_used_direction", direction);
+    BiDiMailUI.Prefs.set("compose.last_used_direction", direction);
   },
 
   // This inserts any character, actually
@@ -371,7 +371,7 @@ BiDiMailUI.Composition = {
 
   handleDirectionButtons : function() {
     var hiddenButtonsPref =
-      !BiDiMailUI.Prefs.getBoolPref("compose.show_direction_buttons", true);
+      !BiDiMailUI.Prefs.get("compose.show_direction_buttons", true);
 
     // Note: In Thunderbird and Seamonkey 2.x, the main toolbar buttons are
     // never hidden, since that toolbar is customizable
@@ -581,13 +581,13 @@ BiDiMailUI.Composition = {
     // prefs say we force the direction/ of replies to the default
     // direction for new messages
     if ( !messageParams || !messageParams.isReply ||
-         BiDiMailUI.Prefs.getBoolPref("compose.reply_in_default_direction", false)) {
-      let defaultDirection = BiDiMailUI.Prefs.getCharPref(
+         BiDiMailUI.Prefs.get("compose.reply_in_default_direction", false)) {
+      let defaultDirection = BiDiMailUI.Prefs.get(
           "compose.default_direction","ltr").toLowerCase();
       let initialDirection;
       switch(defaultDirection) {
         case "last_used": 
-          initialDirection = BiDiMailUI.Prefs.getCharPref("compose.last_used_direction","ltr");
+          initialDirection = BiDiMailUI.Prefs.get("compose.last_used_direction","ltr");
           break;
         default:
           initialDirection = defaultDirection;
@@ -635,7 +635,7 @@ BiDiMailUI.Composition = {
 
     BiDiMailUI.Composition.handleDirectionButtons();
     // Track "Show Direction Buttons" pref.
-    BiDiMailUI.Prefs.addObserver(
+    Services.prefs.addObserver(
       BiDiMailUI.Composition.directionButtonsPrefListener.domain,
       BiDiMailUI.Composition.directionButtonsPrefListener
     );
@@ -706,8 +706,8 @@ BiDiMailUI.Composition = {
 
     let isHTMLEditor = IsHTMLEditor();
     if (IsHTMLEditor) {
-      BiDiMailUI.Composition.alternativeEnterBehavior = BiDiMailUI.Prefs.getBoolPref("compose.alternative_enter_behavior", true);
-      let  defaultToSendBothTextAndHTML = BiDiMailUI.Prefs.getBoolPref("compose.default_to_send_text_with_html", false);
+      BiDiMailUI.Composition.alternativeEnterBehavior = BiDiMailUI.Prefs.get("compose.alternative_enter_behavior", true);
+      let  defaultToSendBothTextAndHTML = BiDiMailUI.Prefs.get("compose.default_to_send_text_with_html", false);
 
       var defaultOptionElementId = (defaultToSendBothTextAndHTML ? "format_both" : "format_html");
       document.getElementById(defaultOptionElementId).setAttribute("checked", "true");
@@ -721,7 +721,7 @@ BiDiMailUI.Composition = {
       // relevant to paragraph mode; we used to always try to set
       // paragraph mode to express that behavior, but several users
       // have been complaining...
-      var startCompositionInParagraphMode = BiDiMailUI.Prefs.getBoolPref("compose.start_composition_in_paragraph_mode", false);
+      var startCompositionInParagraphMode = BiDiMailUI.Prefs.get("compose.start_composition_in_paragraph_mode", false);
       if (startCompositionInParagraphMode)
         BiDiMailUI.Composition.setParagraphMode("p");
       else
@@ -751,7 +751,7 @@ BiDiMailUI.Composition = {
     if (isHTMLEditor) {
       // Determine Enter key behavior
       BiDiMailUI.Composition.alternativeEnterBehavior =
-        BiDiMailUI.Prefs.getBoolPref("compose.alternative_enter_behavior", true);
+        BiDiMailUI.Prefs.get("compose.alternative_enter_behavior", true);
       // Applying the alternative Enter behavior requires the editor to be
       // in paragraph mode; but we won't consider doing that until the body is
       // ready.
@@ -775,7 +775,7 @@ BiDiMailUI.Composition = {
     console.log('in BiDiMailUI.Composition.onUnload()');
 #endif
     // Stop tracking "Show Direction Buttons" pref.
-    BiDiMailUI.Prefs.removeObserver(
+    Services.prefs.removeObserver(
       BiDiMailUI.Composition.directionButtonsPrefListener.domain,
       BiDiMailUI.Composition.directionButtonsPrefListener
     );
@@ -1080,15 +1080,15 @@ BiDiMailUI.Composition = {
 
   getParagraphMarginFromPrefs : function() {
     var basePrefName = "compose.space_between_paragraphs";
-    var marginScale = BiDiMailUI.Prefs.getCharPref(basePrefName + ".scale", "cm");
+    var marginScale = BiDiMailUI.Prefs.get(basePrefName + ".scale", "cm");
     var marginVal;
     if (marginScale != "px") {
       marginVal =
-        parseFloat(BiDiMailUI.Prefs.getCharPref(basePrefName + ".value", "0"), 10);
+        parseFloat(BiDiMailUI.Prefs.get(basePrefName + ".value", "0"), 10);
     }
     else {
       marginVal =
-        parseInt(BiDiMailUI.Prefs.getCharPref(basePrefName + ".value", "0"), 10);
+        parseInt(BiDiMailUI.Prefs.get(basePrefName + ".value", "0"), 10);
     }
     if (isNaN(marginVal))
       marginVal = "0";

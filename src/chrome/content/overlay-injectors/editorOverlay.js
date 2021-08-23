@@ -119,7 +119,7 @@ function onLoad(activatedWhileWindowOpen) {
   const capture = true;
   window.addEventListener("compose-window-init",   BiDiMailUI.Composition.onInit, capture);
   window.addEventListener("keypress",              BiDiMailUI.Composition.onKeyPress,             capture);
-  if (BiDiMailUI.Prefs.getBoolPref("compose.ctrl_shift_switches_direction", true)) {
+  if (BiDiMailUI.Prefs.get("compose.ctrl_shift_switches_direction", true)) {
     document.addEventListener("keydown",           BiDiMailUI.Composition.onKeyDown,              capture);
     document.addEventListener("keyup",             BiDiMailUI.Composition.onKeyUp,                capture);
   }

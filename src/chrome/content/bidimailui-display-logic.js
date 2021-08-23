@@ -1,4 +1,5 @@
 var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
+var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
 // Code outside BiDi Mail UI should only use the
 // BiDiMailUI.Display.ActionPhases and perhaps the
@@ -10,8 +11,12 @@ BiDiMailUI.Display = {
   ActionPhases : {
 
     charsetMisdetectionCorrection : function(cMCParams) {
+
       if (!cMCParams.preferredCharset) {
         if (! 'havePopulatedPreferredCharset' in this) {
+#ifdef DEBUG_browserOnLoadHandler
+          console.log("Calling populatePreferredCharset");
+#endif
           BiDiMailUI.Display.populatePreferredCharset(cMCParams);
           this[havePopulatedPreferredCharset] = true;
           // This setting is required since the population routine may populate with null :-(
@@ -34,7 +39,7 @@ BiDiMailUI.Display = {
     },
 
     htmlNumericEntitiesDecoding : function(body) {
-      if (BiDiMailUI.Prefs.getBoolPref("display.decode_numeric_html_entities", false)) {
+      if (BiDiMailUI.Prefs.get("display.decode_numeric_html_entities", false)) {
         if (BiDiMailUI.Display.decodeNumericHTMLEntitiesInText(body)) {
           body.setAttribute('bidimailui-found-numeric-entities',true);
         }
@@ -46,7 +51,7 @@ BiDiMailUI.Display = {
     },
 
     directionAutodetection : function(domDocument) {
-      if (!BiDiMailUI.Prefs.getBoolPref("display.autodetect_direction", true))
+      if (!BiDiMailUI.Prefs.get("display.autodetect_direction", true))
         return;
 
       var body = domDocument.body;
@@ -115,11 +120,10 @@ BiDiMailUI.Display = {
   // them, e.g. hello\n---\ngoodbye )
 
   populatePreferredCharset : function(cMCParams) {
-    if (!BiDiMailUI.Prefs.getBoolPref(
-        "display.autodetect_bidi_misdecoding", true)) {
+    if (!BiDiMailUI.Prefs.get("display.autodetect_bidi_misdecoding", true)) {
       return;
     }
-    var charsetPrefValue = BiDiMailUI.Prefs.getAppStringPref("mailnews.view_default_charset", null);
+    var charsetPrefValue = BiDiMailUI.AppPrefs.get("mailnews.view_default_charset", null, Ci.nsIPrefLocalizedString);
 
 #ifdef DEBUG_charsetMisdetectionCorrectionPhase
     console.log("charsetPrefValue = " + charsetPrefValue);
@@ -133,13 +137,11 @@ BiDiMailUI.Display = {
         (charsetPrefValue != "ISO-8859-6") &&
         (charsetPrefValue != "windows-1255") &&
         (charsetPrefValue != "windows-1256")) {
-       if (BiDiMailUI.Prefs.getBoolPref(
-           "display.user_accepts_unusable_charset_pref", false)) {
+       if (BiDiMailUI.Prefs.get("display.user_accepts_unusable_charset_pref", false)) {
          cMCParams.preferredCharset = null;
          return;
        }
-       else cMCParams.preferredCharset =
-         cMCParams.unusableCharsetHandler();
+       else cMCParams.preferredCharset = cMCParams.unusableCharsetHandler();
     }
     else cMCParams.preferredCharset = charsetPrefValue;
 
