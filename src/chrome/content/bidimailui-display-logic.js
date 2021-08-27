@@ -12,15 +12,13 @@ BiDiMailUI.Display = {
 
     charsetMisdetectionCorrection : function(cMCParams) {
 
-      if (!cMCParams.preferredCharset) {
-        if (! 'havePopulatedPreferredCharset' in this) {
-#ifdef DEBUG_browserOnLoadHandler
-          console.log("Calling populatePreferredCharset");
-#endif
+      if (typeof cMCParams.preferredCharset == "undefined") {
           BiDiMailUI.Display.populatePreferredCharset(cMCParams);
-          this[havePopulatedPreferredCharset] = true;
-          // This setting is required since the population routine may populate with null :-(
-        }
+          if (cMCParams.preferredCharset == null) {
+            if (! BiDiMailUI.Prefs.get("display.user_accepts_unusable_charset_pref")) {
+              BiDiMailUI.MessageOverlay.promptAndSetPreferredCharset();
+            }
+          }
       }
 
       if (!BiDiMailUI.Display.fixLoadedMessageCharsetIssues(cMCParams)) {
@@ -113,61 +111,32 @@ BiDiMailUI.Display = {
   // Functions from here on should not be used by code outside this file
   // --------------------------------------------------------------------
 
+
+  canonicalizePreferredCharset : function(charset) {
+      switch(charset) {
+          case "windows-1255":
+          case "ISO-8859-8-I":
+          case "ISO-8859-8":
+              return "windows-1255";
+          case "windows-1256":
+          case "ISO-8859-6":
+              return "windows-1256";
+      }
+      return null; // Should we support no preference again?
+  },
+
+  populatePreferredCharset : function(cMCParams) {
+    // TODO: Should I cache these pref values somehow?
+    let charsetPrefValue = BiDiMailUI.Prefs.get("display.preferred_single_byte_charset", null);
+    cMCParams.preferredCharset = BiDiMailUI.Display.canonicalizePreferredCharset(charsetPrefValue);
+  },
+
+
   // split elements in the current message (we assume it's moz-text-plain)
   // so that \n\n in the message text means moving to another block element
   // this allows setting per-paragraph direction, assuming paragraphs are
-  // separated by double \n's (with possibly some neutral characters between 
+  // separated by double \n's (with possibly some neutral characters between
   // them, e.g. hello\n---\ngoodbye )
-
-  populatePreferredCharset : function(cMCParams) {
-    if (!BiDiMailUI.Prefs.get("display.autodetect_bidi_misdecoding", true)) {
-      return;
-    }
-    var charsetPrefValue = BiDiMailUI.AppPrefs.get("mailnews.view_default_charset", null, Ci.nsIPrefLocalizedString);
-
-#ifdef DEBUG_charsetMisdetectionCorrectionPhase
-    console.log("charsetPrefValue = " + charsetPrefValue);
-#endif
-        
-    // if the charset pref is not one we can use for detecting mis-decoded
-    // codepage charsets, maybe we should tell the user about it
-      
-    if ((charsetPrefValue != "ISO-8859-8-I") &&
-        (charsetPrefValue != "ISO-8859-8") &&
-        (charsetPrefValue != "ISO-8859-6") &&
-        (charsetPrefValue != "windows-1255") &&
-        (charsetPrefValue != "windows-1256")) {
-       if (BiDiMailUI.Prefs.get("display.user_accepts_unusable_charset_pref", false)) {
-         cMCParams.preferredCharset = null;
-         return;
-       }
-       else cMCParams.preferredCharset = cMCParams.unusableCharsetHandler();
-    }
-    else cMCParams.preferredCharset = charsetPrefValue;
-
-    // for our purposes at the moment, we 'prefer' windows-1255/6 over
-    // the ISO single-byte charsets
-
-    if ((cMCParams.preferredCharset == "windows-1255") ||
-        (cMCParams.preferredCharset == "ISO-8859-8-I") ||
-        (cMCParams.preferredCharset == "ISO-8859-8")) {
-        cMCParams.preferredCharset = "windows-1255";
-    }
-    if ((cMCParams.preferredCharset == "windows-1256") ||
-        (cMCParams.preferredCharset == "ISO-8859-6")) {
-        cMCParams.preferredCharset = "windows-1256";
-    }
-   
-    // If the user's preferred charset is not set to one of windows-1255/6 or
-    // equivalents, we will completely ignore what may me misdecoded text
-    // in those codepages - we won't try to recover it in any way (but we 
-    // will try to recover UTF-8 text)
-
-    if ((cMCParams.preferredCharset != "windows-1255") &&
-        (cMCParams.preferredCharset != "windows-1256")) {
-      cMCParams.preferredCharset = null;
-    }
-  },
 
 
   splitTextElementsInPlainMessageDOMTree : function(subBody) {
@@ -540,7 +509,7 @@ BiDiMailUI.Display = {
 
     // This sets parameter no. 2
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-    console.log('current charset used for decoding:\n' + cMCParams.currentCharset);
+    console.log('current charset used for decoding:\n' + cMCParams.currentCharset + '\npreferred charset: ' + cMCParams.preferredCharset);
 #endif
     if ((cMCParams.preferredCharset != null) &&
         (cMCParams.currentCharset == cMCParams.preferredCharset))
@@ -753,7 +722,7 @@ BiDiMailUI.Display = {
       }
     }
 
-    // workaround for bug 23322:
+    // workaround for mozdev bug 23322 / bugzilla bug 486816:
     // Mozilla may be 'cheating' w.r.t. decoding charset
     if (!cMCParams.needCharsetForcing) {
       contentToMatch = new RegExp (BiDiMailUI.RegExpStrings.BOTCHED_UTF8_DECODING_SEQUENCE);

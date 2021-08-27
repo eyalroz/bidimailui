@@ -70,6 +70,10 @@ function injectOtherElements() {
                 accesskey="&menu-bidimail-cycle-document-direction.accesskey;" 
                 key="key-bidimailui-cycle" 
                 oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
+
+      <menuitem insertafter="mailviewCharsetMenumenu_View_Popup"
+                label="Populate preferred charset"
+                oncommand="BiDiMailUI.Display.populatePreferredCharset()" />
     </menupopup>`,
     [
       "chrome://bidimailui/locale/bidimailui.dtd"
