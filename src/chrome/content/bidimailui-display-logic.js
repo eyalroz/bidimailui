@@ -482,13 +482,8 @@ BiDiMailUI.Display = {
     // the decoded one - and decode it ourselves with the charset
     // to our liking?
     if (!cMCParams.messageSubject && cMCParams.messageHeader) {
-      cMCParams.messageSubject =
-        cMCParams.messageHeader.mime2DecodedSubject;
+      cMCParams.messageSubject = cMCParams.messageHeader.mime2DecodedSubject;
     }
-
-#ifdef DEBUG_fixLoadedMessageCharsetIssues
-    console.log('in BiDiMailUI.Display.fixLoadedMessageCharsetIssues()');
-#endif
 
     /*
     There are 4 parameters affecting what we need to do with the loaded message
@@ -541,9 +536,7 @@ BiDiMailUI.Display = {
     */
     
     // This sets parameter no. 1
-    var mustKeepCharset = 
-      cMCParams.dontReload ||
-      cMCParams.charsetOverrideInEffect;
+    var mustKeepCharset = cMCParams.dontReload || cMCParams.charsetOverrideInEffect;
 
     // This sets parameter no. 2
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
@@ -575,9 +568,7 @@ BiDiMailUI.Display = {
         cMCParams.mailnewsDecodingType = "UTF-8"; break;
       default: 
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-    console.log(
-      'returning since cMCParams.currentCharset = ' 
-      + cMCParams.currentCharset);
+    console.log('fixLoadedMessageCharsetIssues will do nothing, as the current charset used is: ' + cMCParams.currentCharset);
 #endif
         return true;
     }
@@ -674,9 +665,6 @@ BiDiMailUI.Display = {
             }
             else {
               // NNNY
-#ifdef DEBUG_fixLoadedMessageCharsetIssues
-              console.log("Forcing charset UTF-8");
-#endif
               cMCParams.needCharsetForcing = true;
               cMCParams.charsetToForce = "utf-8";
               return;
@@ -685,9 +673,6 @@ BiDiMailUI.Display = {
           else {
             if (!haveUTF8Text) {
               //NNYN 
-#ifdef DEBUG_fixLoadedMessageCharsetIssues
-              console.log("Forcing charset " + cMCParams.preferredCharset);
-#endif
               cMCParams.needCharsetForcing = true;
               cMCParams.charsetToForce = cMCParams.preferredCharset;
               return false;
@@ -707,9 +692,6 @@ BiDiMailUI.Display = {
             }
             else {
               // NCNY
-#ifdef DEBUG_fixLoadedMessageCharsetIssues
-              console.log("Forcing charset UTF-8");
-#endif
               cMCParams.needCharsetForcing = true;
               cMCParams.charsetToForce = "utf-8";
               return;
@@ -721,9 +703,6 @@ BiDiMailUI.Display = {
             }
             else {
               // NCYY
-#ifdef DEBUG_fixLoadedMessageCharsetIssues
-              console.log("Forcing charset windows-1252");
-#endif
               cMCParams.needCharsetForcing = true;
               cMCParams.charsetToForce = "windows-1252";
               return;
@@ -742,18 +721,12 @@ BiDiMailUI.Display = {
           else {
             if (!haveUTF8Text) {
               // NUYN
-#ifdef DEBUG_fixLoadedMessageCharsetIssues
-              console.log("Forcing charset " + cMCParams.preferredCharset);
-#endif
               cMCParams.needCharsetForcing = true;
               cMCParams.charsetToForce = cMCParams.preferredCharset;
               return;
             }
             else {
               // NUYY
-#ifdef DEBUG_fixLoadedMessageCharsetIssues
-              console.log("Forcing charset windows-1252");
-#endif
               cMCParams.needCharsetForcing = true;
               cMCParams.charsetToForce = "windows-1252";
               return;
@@ -783,13 +756,12 @@ BiDiMailUI.Display = {
     // workaround for bug 23322:
     // Mozilla may be 'cheating' w.r.t. decoding charset
     if (!cMCParams.needCharsetForcing) {
-      contentToMatch = new RegExp (
-        BiDiMailUI.RegExpStrings.BOTCHED_UTF8_DECODING_SEQUENCE);
+      contentToMatch = new RegExp (BiDiMailUI.RegExpStrings.BOTCHED_UTF8_DECODING_SEQUENCE);
       if (BiDiMailUI.matchInText(document, NodeFilter, cMCParams.body, contentToMatch) ||
           contentToMatch.test(cMCParams.messageSubject)) {
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
           console.log(
-            "found a long FFFD sequence (see bug 23322)");
+            "found a long FFFD sequence (see bug 23322), so we want to force UTF-8");
 #endif
         if (mustKeepCharset) {
 #ifdef DEBUG_fixLoadedMessageCharsetIssues

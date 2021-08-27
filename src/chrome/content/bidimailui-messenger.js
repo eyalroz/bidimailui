@@ -128,6 +128,9 @@ BiDiMailUI.MessageOverlay = {
 
     BiDiMailUI.Display.ActionPhases.charsetMisdetectionCorrection(charsetPhaseParams);
     if (charsetPhaseParams.needCharsetForcing) {
+#ifdef DEBUG_fixLoadedMessageCharsetIssues
+        console.log("Forcing charset " + cMCParams.preferredCharset);
+#endif
       BiDiMailUI.MessageOverlay.setForcedCharacterSet(charsetPhaseParams.charsetToForce);
       BiDiMailUI.MessageOverlay.dontReload = true;
       // we're reloading with a different charset, don't do anything else
