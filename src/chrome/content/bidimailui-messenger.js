@@ -73,9 +73,7 @@ BiDiMailUI.MessageOverlay = {
       (domDocument && domDocument.baseURI && domDocument.body
        && (domDocument.baseURI != "about:blank")
        && !BiDiMailUI.MessageOverlay.isFillerStaticPage(domDocument) );
-    if (!canActOnDocument) {
-      return [null, null, null];
-    }
+    if (!canActOnDocument) { return [null, null, null]; }
     
     var msgHdr; // We're assuming only one message is selected
     try {
@@ -87,7 +85,6 @@ BiDiMailUI.MessageOverlay = {
         msgHdr = messenger.msgHdrFromURI(GetLoadedMessage());
       }
     }
-
     let displayedMessageSubject = document.getElementById('expandedsubjectBox').textContent;
 
     var charsetPhaseParams = {
@@ -129,7 +126,7 @@ BiDiMailUI.MessageOverlay = {
     BiDiMailUI.Display.ActionPhases.charsetMisdetectionCorrection(charsetPhaseParams);
     if (charsetPhaseParams.needCharsetForcing) {
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
-        console.log("Forcing charset " + cMCParams.preferredCharset);
+        console.log("Forcing charset " + charsetPhaseParams.preferredCharset);
 #endif
       BiDiMailUI.MessageOverlay.setForcedCharacterSet(charsetPhaseParams.charsetToForce);
       BiDiMailUI.MessageOverlay.dontReload = true;
@@ -154,8 +151,14 @@ BiDiMailUI.MessageOverlay = {
     var list = [
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.set_to_windows_1255"),
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.set_to_windows_1256"),
-      BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.leave_as_is")];
-    var selected = {};
+      BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.leave_as_is")
+    ];
+    // This disappears in version 91, probably
+    var appPrefValue = BiDiMailUI.AppPrefs.get("mailnews.view_default_charset", null, Ci.nsIPrefLocalizedString);
+    selected = (appPrefValue ) ? { value: appPrefValue } : {};
+#ifdef DEBUG_promptForDefaultCharsetChange
+    console.log("appPrefValue was " + appPrefValue);
+#endif
 
     var ok = Services.prompt.select(
       window,
@@ -163,23 +166,20 @@ BiDiMailUI.MessageOverlay = {
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.dialog_message"),
       list, selected);
 
-    if (!ok) { return null; }
-    var str = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
+    if (!ok) { return; }
     switch (selected.value) {
-        case 0:
-        str.data = "windows-1255";
-        Services.prefs.setStringPref("mailnews.view_default_charset", str);
-        return str.data;
+      case 0:
+#ifdef DEBUG_promptForDefaultCharsetChange
+        console.log("set pref to windows-1255");
+#endif
+        BiDiMailUI.Prefs.set("display.preferred_single_byte_charset", "windows-1255"); break;
       case 1:
-        str.data = "windows-1256";
-        Services.prefs.setStringPref("mailnews.view_default_charset", str);
-        return str.data;
+#ifdef DEBUG_promptForDefaultCharsetChange
+        console.log("set pref to windows-1256");
+#endif
+        BiDiMailUI.Prefs.set("display.preferred_single_byte_charset", "windows-1256"); break;
       case 2:
-        BiDiMailUI.Prefs.set("display.user_accepts_unusable_charset_pref", true);
-        break;
+        BiDiMailUI.Prefs.set("display.user_accepts_unusable_charset_pref", true); break;
     }
-	// shouldn't get here
-	return null;
   }
-  
 }
