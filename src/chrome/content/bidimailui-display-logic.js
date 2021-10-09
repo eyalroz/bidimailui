@@ -15,8 +15,8 @@ BiDiMailUI.Display = {
       if (typeof cMCParams.preferredCharset == "undefined") {
           BiDiMailUI.Display.populatePreferredCharset(cMCParams);
           if (cMCParams.preferredCharset == null) {
-            if (! BiDiMailUI.Prefs.get("display.user_accepts_unusable_charset_pref")) {
-              BiDiMailUI.MessageOverlay.promptAndSetPreferredCharset();
+            if (! BiDiMailUI.Prefs.get("display.user_forgoes_preferred_single_byte_charset")) {
+              BiDiMailUI.MessageOverlay.promptAndSetPreferredSingleByteCharset();
             }
           }
       }

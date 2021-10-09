@@ -102,7 +102,7 @@ BiDiMailUI.MessageOverlay = {
 #endif
           document.getElementById('expandedsubjectBox').textContent = str;
         },
-      unusableCharsetHandler : BiDiMailUI.MessageOverlay.promptForDefaultCharsetChange,
+      unusableCharsetHandler : BiDiMailUI.MessageOverlay.promptAndSetPreferredSingleByteCharset,
       needCharsetForcing: false, // this is an out parameter
       charsetToForce: null       // this is an out parameter
     };
@@ -147,16 +147,16 @@ BiDiMailUI.MessageOverlay = {
 
   // this function is passed to the charset phase actions and run 
   // from there, but it's a UI function
-  promptForDefaultCharsetChange : function() {
+  promptAndSetPreferredSingleByteCharset : function() {
     var list = [
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.set_to_windows_1255"),
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.set_to_windows_1256"),
-      BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.leave_as_is")
+      BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.do_not_set")
     ];
     // This disappears in version 91, probably
     var appPrefValue = BiDiMailUI.AppPrefs.get("mailnews.view_default_charset", null, Ci.nsIPrefLocalizedString);
-    selected = (appPrefValue ) ? { value: appPrefValue } : {};
-#ifdef DEBUG_promptForDefaultCharsetChange
+    selected = (appPrefValue) ? { value: appPrefValue } : {};
+#ifdef DEBUG_promptAndSetPreferredSingleByteCharset
     console.log("appPrefValue was " + appPrefValue);
 #endif
 
@@ -169,17 +169,21 @@ BiDiMailUI.MessageOverlay = {
     if (!ok) { return; }
     switch (selected.value) {
       case 0:
-#ifdef DEBUG_promptForDefaultCharsetChange
-        console.log("set pref to windows-1255");
+#ifdef DEBUG_promptAndSetPreferredSingleByteCharset
+        console.log("set charset pref to windows-1255");
 #endif
         BiDiMailUI.Prefs.set("display.preferred_single_byte_charset", "windows-1255"); break;
       case 1:
-#ifdef DEBUG_promptForDefaultCharsetChange
-        console.log("set pref to windows-1256");
+#ifdef DEBUG_promptAndSetPreferredSingleByteCharset
+        console.log("set charset pref to windows-1256");
 #endif
         BiDiMailUI.Prefs.set("display.preferred_single_byte_charset", "windows-1256"); break;
       case 2:
-        BiDiMailUI.Prefs.set("display.user_accepts_unusable_charset_pref", true); break;
+#ifdef DEBUG_promptAndSetPreferredSingleByteCharset
+        console.log("user chose no default charset");
+#endif
+        BiDiMailUI.Prefs.set("display.user_forgoes_preferred_single_byte_charset", true);
+        BiDiMailUI.Prefs.reset("display.preferred_single_byte_charset"); break;
     }
   }
 }
