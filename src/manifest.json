@@ -4,7 +4,7 @@
        "gecko": {
 #expand            "id": "__UUID__",
                    "strict_min_version": "65.0a1",
-                   "strict_max_version": "91.*"
+                   "strict_max_version": "102.*"
        }
     },
     "author": "The BiDi UI team",

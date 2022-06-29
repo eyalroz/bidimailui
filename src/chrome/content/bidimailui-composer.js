@@ -5,7 +5,7 @@ var { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm"
 BiDiMailUI.Composition = {
 
   lastWindowToHaveFocus : null,
-    // used to prevent doing unncessary work when a focus
+    // used to prevent doing unnecessary work when a focus
     // 'changes' to the same window which is already in focus
   alternativeEnterBehavior : null,
     // The default behavior of the Enter key in HTML mail messages
@@ -286,14 +286,14 @@ BiDiMailUI.Composition = {
     console.log('--- SetDocumentDirection( \'' + direction + '\' ) ---');
 #endif
 
-    let contentFrame = document.getElementById("content-frame");
+    let contentFrame = document.getElementById(BiDiMailUI.UI.MESSAGE_EDITOR);
     if (contentFrame) {
-      document.getElementById("content-frame").contentDocument.documentElement.style.direction = direction;
-      document.getElementById("content-frame").contentDocument.body.style.direction = direction;
+      document.getElementById(BiDiMailUI.UI.MESSAGE_EDITOR).contentDocument.documentElement.style.direction = direction;
+      document.getElementById(BiDiMailUI.UI.MESSAGE_EDITOR).contentDocument.body.style.direction = direction;
     }
 #ifdef DEBUG_SetDocumentDirection
     else {
-      console.log('could not get the "content-frame" by ID - that shouldn\'t be possible');
+      console.log('could not get the BiDiMailUI.UI.MESSAGE_EDITOR by ID - that shouldn\'t be possible');
     }
 #endif
     if (BiDiMailUI.App.versionIsAtLeast("71")) {
@@ -318,7 +318,7 @@ BiDiMailUI.Composition = {
   },
 
   switchDocumentDirection : function() {
-    var body = document.getElementById("content-frame").contentDocument.body;
+    var body = document.getElementById(BiDiMailUI.UI.MESSAGE_EDITOR).contentDocument.body;
     var currentDir = window.getComputedStyle(body, null).direction;
 
     // Note: Null/empty value means LTR, so we check for RTL only
@@ -341,7 +341,7 @@ BiDiMailUI.Composition = {
 
   getMessageHead : function() {
     // assuming the head is the edited document element's first child
-    return document.getElementById("content-frame")
+    return document.getElementById(BiDiMailUI.UI.MESSAGE_EDITOR)
       .contentDocument.documentElement.firstChild;
   },
 
@@ -608,7 +608,7 @@ BiDiMailUI.Composition = {
       // We get here for drafts, for messages without URIs, and due to problems
       // in locating the original message window/tab
       let detectionDirection = BiDiMailUI.directionCheck(
-        document, NodeFilter, document.getElementById("content-frame").contentDocument.body);
+        document, NodeFilter, document.getElementById(BiDiMailUI.UI.MESSAGE_EDITOR).contentDocument.body);
 #ifdef DEBUG_setInitialDirection
       console.log('detectionDirection is ' + detectionDirection );
 #endif
@@ -626,7 +626,7 @@ BiDiMailUI.Composition = {
 
     var messageBody = null;
     try {
-      var messageBody = document.getElementById("content-frame").contentDocument.body;
+      var messageBody = document.getElementById(BiDiMailUI.UI.MESSAGE_EDITOR).contentDocument.body;
     } catch(ex) { }
     if (messageBody === null) {
       console.error("message body is unavailable in onEverythingLoadedAndReady()");
@@ -664,7 +664,7 @@ BiDiMailUI.Composition = {
     BiDiMailUI.Composition.determineNewMessageParams(messageBody, messageParams);
 
     var clearMisdetectionCorrectionParams = {
-      body: document.getElementById("content-frame").contentDocument.body,
+      body: document.getElementById(BiDiMailUI.UI.MESSAGE_EDITOR).contentDocument.body,
       charsetOverrideInEffect: true,
         // it seems we can't trigger a reload by changing the charset
         // during composition, the change only affects how the message
@@ -711,10 +711,25 @@ BiDiMailUI.Composition = {
 
       var defaultOptionElementId = (defaultToSendBothTextAndHTML ? "format_both" : "format_html");
       document.getElementById(defaultOptionElementId).setAttribute("checked", "true");
-      OutputFormatMenuSelect(
-        {getAttribute: function () {
-          return defaultOptionElementId;
-        }} );
+      if (typeof OutputFormatMenuSelect == "function") {
+        OutputFormatMenuSelect(
+          {getAttribute: function () {
+            return defaultOptionElementId;
+          }} );
+      } else {
+        // OutputFormatMenuSelect function has been removed in 102.
+        let prevSendFormat = gMsgCompose.compFields.deliveryFormat;
+        switch (defaultOptionElementId) {
+          case "format_html":
+            newSendFormat = Ci.nsIMsgCompSendFormat.HTML;
+            break;
+          case "format_both":
+            newSendFormat = Ci.nsIMsgCompSendFormat.Both;
+            break;
+        }
+        gMsgCompose.compFields.deliveryFormat = newSendFormat;
+        gContentChanged = prevSendFormat != newSendFormat;
+      }
       BiDiMailUI.Composition.setParagraphMarginsRule();
 
       // Note that the "alternative Enter key behavior" is only
@@ -1201,7 +1216,7 @@ BiDiMailUI.Composition.directionSwitchController = {
 
         direction =
           document.defaultView
-            .getComputedStyle(document.getElementById("content-frame")
+            .getComputedStyle(document.getElementById(BiDiMailUI.UI.MESSAGE_EDITOR)
             .contentDocument.body, "").getPropertyValue("direction");
         commandsAreEnabled = inMessage || inSubjectBox;
         break;
