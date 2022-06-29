@@ -608,7 +608,7 @@ BiDiMailUI.directionCheck = function(document, NodeFilter, obj) {
   //  return rtlLineExpression.test(element.textContent);
 }
 
-// ------ Some UI const, which differ depending on the app vgersion
+// ------ Some UI const, which depend on the app version.
 BiDiMailUI.UI = {
   MESSAGE_EDITOR : BiDiMailUI.App.versionIsAtLeast("100") ? "messageEditor" : "content-frame",
 }
