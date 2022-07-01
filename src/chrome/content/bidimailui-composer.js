@@ -935,7 +935,7 @@ BiDiMailUI.Composition = {
       );
   },
 
-  SwitchParagraphDirection : function() {
+  switchParagraphDirection : function() {
     BiDiMailUI.Composition.applyDirectionSetterToSelectionBlockElements(
       function(oldDirection) { return (oldDirection == "rtl" ? "ltr" : "rtl"); }
       );
@@ -1031,7 +1031,7 @@ BiDiMailUI.Composition = {
 #ifdef DEBUG_keypress
     console.log('SWITCHING paragraph');
 #endif
-    BiDiMailUI.Composition.SwitchParagraphDirection();
+    BiDiMailUI.Composition.switchParagraphDirection();
         }
         else {
 #ifdef DEBUG_keypress
