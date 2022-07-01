@@ -609,6 +609,11 @@ BiDiMailUI.directionCheck = function(document, NodeFilter, obj) {
 }
 
 // ------ Some UI const, which depend on the app version.
-BiDiMailUI.UI = {
-  MESSAGE_EDITOR : BiDiMailUI.App.versionIsAtLeast("100") ? "messageEditor" : "content-frame",
-}
+BiDiMailUI.__defineGetter__("MessageEditorID", function() {
+  delete BiDiMailUI.MessageEditorID;
+  return BiDiMailUI.MessageEditorID = BiDiMailUI.App.versionIsAtLeast("100") ? "messageEditor" : "content-frame";
+});
+
+BiDiMailUI.getMessageEditor = function(document) {
+	return document.getElementById(BiDiMailUI.MessageEditorID);
+};

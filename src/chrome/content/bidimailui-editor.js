@@ -64,7 +64,7 @@ BiDiMailUI.Editor = {
   },
 
   determineNewDocumentParams : function (messageParams) {
-    var body = document.getElementById(BiDiMailUI.UI.MESSAGE_EDITOR).contentDocument.body;
+    var body = BiDiMailUI.getMessageEditor(document).contentDocument.body;
 
     try {
       if (!body.hasChildNodes()) 

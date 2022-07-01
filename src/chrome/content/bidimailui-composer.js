@@ -286,14 +286,14 @@ BiDiMailUI.Composition = {
     console.log('--- SetDocumentDirection( \'' + direction + '\' ) ---');
 #endif
 
-    let contentFrame = document.getElementById(BiDiMailUI.UI.MESSAGE_EDITOR);
-    if (contentFrame) {
-      document.getElementById(BiDiMailUI.UI.MESSAGE_EDITOR).contentDocument.documentElement.style.direction = direction;
-      document.getElementById(BiDiMailUI.UI.MESSAGE_EDITOR).contentDocument.body.style.direction = direction;
+    let messageEditor = BiDiMailUI.getMessageEditor(document);
+    if (messageEditor) {
+      messageEditor.contentDocument.documentElement.style.direction = direction;
+      messageEditor.contentDocument.body.style.direction = direction;
     }
 #ifdef DEBUG_SetDocumentDirection
     else {
-      console.log('could not get the BiDiMailUI.UI.MESSAGE_EDITOR by ID - that shouldn\'t be possible');
+      console.log('could not get the message editor / content frame by ID - that shouldn\'t be possible');
     }
 #endif
     if (BiDiMailUI.App.versionIsAtLeast("71")) {
@@ -318,7 +318,7 @@ BiDiMailUI.Composition = {
   },
 
   switchDocumentDirection : function() {
-    var body = document.getElementById(BiDiMailUI.UI.MESSAGE_EDITOR).contentDocument.body;
+    var body = BiDiMailUI.getMessageEditor(document).contentDocument.body;
     var currentDir = window.getComputedStyle(body, null).direction;
 
     // Note: Null/empty value means LTR, so we check for RTL only
@@ -341,8 +341,7 @@ BiDiMailUI.Composition = {
 
   getMessageHead : function() {
     // assuming the head is the edited document element's first child
-    return document.getElementById(BiDiMailUI.UI.MESSAGE_EDITOR)
-      .contentDocument.documentElement.firstChild;
+    return BiDiMailUI.getMessageEditor(document).contentDocument.documentElement.firstChild;
   },
 
   ensureMessageStyleRulesAdded : function(styleElementId, styleRulesText) {
@@ -608,9 +607,9 @@ BiDiMailUI.Composition = {
       // We get here for drafts, for messages without URIs, and due to problems
       // in locating the original message window/tab
       let detectionDirection = BiDiMailUI.directionCheck(
-        document, NodeFilter, document.getElementById(BiDiMailUI.UI.MESSAGE_EDITOR).contentDocument.body);
+        document, NodeFilter, BiDiMailUI.getMessageEditor(document).contentDocument.body);
 #ifdef DEBUG_setInitialDirection
-      console.log('detectionDirection is ' + detectionDirection );
+      console.log('detectionDirection is ' + detectionDirection);
 #endif
       if ((detectionDirection  == "rtl") || (detectionDirection == "mixed"))
         BiDiMailUI.Composition.setDocumentDirection("rtl");
@@ -624,10 +623,8 @@ BiDiMailUI.Composition = {
     console.log('--- BiDiMailUI.Composition.onEverythingLoadedAndReady() --- ');
 #endif
 
-    var messageBody = null;
-    try {
-      var messageBody = document.getElementById(BiDiMailUI.UI.MESSAGE_EDITOR).contentDocument.body;
-    } catch(ex) { }
+    let messageEditor = BiDiMailUI.getMessageEditor(document);
+    let messageBody = messageEditor.contentDocument.body;
     if (messageBody === null) {
       console.error("message body is unavailable in onEverythingLoadedAndReady()");
       return; // Hopefully we should get called again
@@ -664,7 +661,7 @@ BiDiMailUI.Composition = {
     BiDiMailUI.Composition.determineNewMessageParams(messageBody, messageParams);
 
     var clearMisdetectionCorrectionParams = {
-      body: document.getElementById(BiDiMailUI.UI.MESSAGE_EDITOR).contentDocument.body,
+      body: BiDiMailUI.getMessageEditor(document).contentDocument.body,
       charsetOverrideInEffect: true,
         // it seems we can't trigger a reload by changing the charset
         // during composition, the change only affects how the message
@@ -1216,8 +1213,7 @@ BiDiMailUI.Composition.directionSwitchController = {
 
         direction =
           document.defaultView
-            .getComputedStyle(document.getElementById(BiDiMailUI.UI.MESSAGE_EDITOR)
-            .contentDocument.body, "").getPropertyValue("direction");
+            .getComputedStyle(BiDiMailUI.getMessageEditor(document).contentDocument.body, "").getPropertyValue("direction");
         commandsAreEnabled = inMessage || inSubjectBox;
         break;
       case "paragraph":
