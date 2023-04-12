@@ -37,7 +37,7 @@ while (( $# > 0 )); do
 			VERSION="$1"
 			shift
 			;;
-		-b | --build-type)
+		-b | --build-type | --type)
 			BUILD_TYPE="$1"
 			shift
 			;;
@@ -50,7 +50,7 @@ while (( $# > 0 )); do
 		--release-candidate|--rc)
 			BUILD_TYPE=rc
 			;;
-		--sub-version-number|--sub-version|--sver|--sub|--sv|-s)
+		--sub-version-number|--sub-version|--subversion|--sver|--sub|--sv|-s)
 			SUB_VERSION="$1"
 			shift
 			;;
@@ -59,7 +59,7 @@ while (( $# > 0 )); do
 			;;
 		*)
 			POSITIONAL+=("$option")
-    		;;
+			;;
 	esac
 done
 
@@ -116,39 +116,37 @@ else
 	PREPROCESSOR_PARAMS+=" --no-line-comments"
 fi
 
-BUILDDIR="build/$TARGET"
-XPINAME="${SHORTNAME}_${VERSION}_${TARGET}.xpi"
-LINKNAME="${SHORTNAME}_${TARGET}.xpi"
-BUILDTOOLSDIR="buildtools"
-export PERL5LIB="`pwd`/$BUILDTOOLSDIR"
+BUILD_DIR="build/$TARGET"
+XPI_NAME="${SHORTNAME}_${VERSION}_${TARGET}.xpi"
+LINK_NAME="${SHORTNAME}_${TARGET}.xpi"
+BUILD_TOOLS_DIR="buildtools"
+export PERL5LIB="`pwd`/$BUILD_TOOLS_DIR"
 
-# TODO: split builddir by /'s and try to create everything along the path
-[[ -d build ]] || mkdir build
-if [[ ! -d "$BUILDDIR" ]]; then
-	mkdir -p "$BUILDDIR"
+if [[ ! -d "$BUILD_DIR" ]]; then
+	mkdir -p "$BUILD_DIR"
 else
-	rm -rf "$BUILDDIR"/*
+	rm -r "$BUILD_DIR"/*
 fi
 
-$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILDDIR/jar.mn
+$BUILD_TOOLS_DIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILD_DIR/jar.mn
 # Our invocation of make-jars.pl doesn't literally make JAR files, it only preprocesses and copies.
-$BUILDTOOLSDIR/make-jars.pl -q -f flat -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILDDIR/jar.mn || exit
-$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS src/manifest.json > $BUILDDIR/manifest.json
+$BUILD_TOOLS_DIR/make-jars.pl -q -f flat -z zip -p "$BUILD_TOOLS_DIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILD_DIR/jar.mn || exit
+$BUILD_TOOLS_DIR/preprocessor.pl $PREPROCESSOR_PARAMS src/manifest.json > $BUILD_DIR/manifest.json
 rm -f installed-chrome.txt
 
-mkdir -p $BUILDDIR/defaults/preferences
-cp src/defaults/preferences/${SHORTNAME}.js $BUILDDIR/defaults/preferences
-mv ${SHORTNAME} $BUILDDIR/chrome
+mkdir -p $BUILD_DIR/defaults/preferences
+cp src/defaults/preferences/${SHORTNAME}.js $BUILD_DIR/defaults/preferences
+mv ${SHORTNAME} $BUILD_DIR/chrome
 
-cp src/background.js $BUILDDIR/background.js
-mkdir -p $BUILDDIR/api/WindowListener
-cp src/api/WindowListener/schema.json $BUILDDIR/api/WindowListener
-cp src/api/WindowListener/implementation.js $BUILDDIR/api/WindowListener
+cp src/background.js $BUILD_DIR/background.js
+mkdir -p $BUILD_DIR/api/WindowListener
+cp src/api/WindowListener/schema.json $BUILD_DIR/api/WindowListener
+cp src/api/WindowListener/implementation.js $BUILD_DIR/api/WindowListener
 
-cp LICENSE $BUILDDIR
+cp LICENSE $BUILD_DIR
 
-cd $BUILDDIR
-zip --quiet -r $XPINAME  \
+cd $BUILD_DIR
+zip --quiet -r $XPI_NAME  \
 	chrome \
 	defaults/ \
 	api \
@@ -156,4 +154,4 @@ zip --quiet -r $XPINAME  \
 	LICENSE \
 	manifest.json || exit
 
-ln $XPINAME $LINKNAME
+ln $XPI_NAME $LINK_NAME
