@@ -1,9 +1,5 @@
-console.log("top level code of customizeToolbar overlay injector script!");
-
-
 // called on window load or on add-on activation while window is already open
 function onLoad(activatedWhileWindowOpen) {
-  console.log("in customizeToolbar overlay injector script - onLoad!");
   WL.injectCSS("chrome://bidimailui/content/skin/classic/bidimailui.css");
 
   // Since we no longer have per-platform-skin support, we set this attribute
