@@ -408,11 +408,10 @@ BiDiMailUI.Display = {
       'settings directions to ' + (forcedDirection ? forcedDirection : 'detected/original directions'));
 #endif
 
-    let htmlNode = body.parentNode;
     switch(forcedDirection) {
     case 'ltr': 
     case 'rtl': 
-      htmlNode.removeAttribute('bidimailui-use-detected-directions');
+      body.removeAttribute('bidimailui-use-detected-directions');
       if (!body.hasAttribute('bidimailui-original-direction')) {
         body.setAttribute('bidimailui-original-direction', body.style.direction);
       }
@@ -428,7 +427,7 @@ BiDiMailUI.Display = {
       else {
         body.style.removeProperty('direction');
       }
-      htmlNode.setAttribute('bidimailui-use-detected-directions', true);
+      body.setAttribute('bidimailui-use-detected-directions', true);
     }
   },
 

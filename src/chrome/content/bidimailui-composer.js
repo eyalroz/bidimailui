@@ -288,7 +288,6 @@ BiDiMailUI.Composition = {
 
     let messageEditor = BiDiMailUI.getMessageEditor(document);
     if (messageEditor) {
-      messageEditor.contentDocument.documentElement.style.direction = direction;
       messageEditor.contentDocument.body.style.direction = direction;
     }
 #ifdef DEBUG_SetDocumentDirection
