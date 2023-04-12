@@ -2,27 +2,24 @@
 
 /* Notes:
    1. The syntax for -moz-image-region is:
+
          rect(first row coordinate of the image,
               first column coordinate after the image,
               first row coordinate after the image,
               first column coordinate of the image);
-	
-	2. Currently, the sizes of the toolbar icons in Qute / Classic (Windows, Linux default theme) are:
-	      main toolbar                    24px width x 24px height
-	      main toolbar small mode         16px width x 16px height
 
-	
-	   and the sizes of the toolbar icons in Pinstripe (Darwin platform default theme) are:
-	      main toolbar on                 32px width x 32px height
-	      main toolbar small mode         24px width x 24px height
+  2. Currently, the sizes of the toolbar icons in Qute / Classic are:
+      main toolbar                    24px width x 24px height
+      main toolbar small mode         16px width x 16px height
 
-          what about the formatting/styling toolbar?
-*/				  
+  3. The format-toolbar-buttns graphic is still applied, but has no dark-mode equivalent;
+     we may need to remove it
+*/
 
 /* Messenger Main Toolbar - small icons */
 
 toolbar[iconsize="small"] #bidimailui-forcing-menubutton {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-autodetect-main-bar-16x16.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/autodetect-main-bar-16x16.png");
   -moz-image-region: rect(0px 16px 16px 0px);
 }
 
@@ -35,7 +32,7 @@ toolbar[iconsize="small"] #bidimailui-forcing-menubutton:hover:active {
 }
 
 toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"] {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-ltr-main-bar-16x16.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/ltr-main-bar-16x16.png");
   -moz-image-region: rect(0px 16px 16px 0px);
 }
 
@@ -48,7 +45,7 @@ toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"]:hov
 }
 
 toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"] {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-rtl-main-bar-16x16.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/rtl-main-bar-16x16.png");
   -moz-image-region: rect(0px 16px 16px 0px);
 }
 
@@ -61,12 +58,12 @@ toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hov
 }
 
 toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-autodetect-main-bar-16x16.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/autodetect-main-bar-16x16.png");
   -moz-image-region: rect(0px 64px 16px 48px) !important;
 }
 
 [platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-autodetect-main-bar-16x16.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/autodetect-main-bar-16x16.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
@@ -79,7 +76,7 @@ toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
 }
 
 [platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"] {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-ltr-main-bar-16x16.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/ltr-main-bar-16x16.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
@@ -92,7 +89,7 @@ toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
 }
 
 [platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"] {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-rtl-main-bar-16x16.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/rtl-main-bar-16x16.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
@@ -105,14 +102,14 @@ toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
 }
 
 [platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-autodetect-main-bar-16x16.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/autodetect-main-bar-16x16.png");
   -moz-image-region: rect(0px 96px 16px 72px) !important;
 }
 
 /* Messenger Main Toolbar Buttons - large icons */
 
 #bidimailui-forcing-menubutton {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-autodetect-main-bar-24x24.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/autodetect-main-bar-24x24.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
@@ -125,7 +122,7 @@ toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
 }
 
 #bidimailui-forcing-menubutton[selectedItem="ltr"] {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-ltr-main-bar-24x24.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/ltr-main-bar-24x24.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
@@ -138,7 +135,7 @@ toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
 }
 
 #bidimailui-forcing-menubutton[selectedItem="rtl"] {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-rtl-main-bar-24x24.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/rtl-main-bar-24x24.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
@@ -151,12 +148,12 @@ toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
 }
 
 #bidimailui-forcing-menubutton[disabled="true"] {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-autodetect-main-bar-24x24.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/autodetect-main-bar-24x24.png");
   -moz-image-region: rect(0px 96px 24px 72px) !important;
 }
 
 #bidimailui-forcing-menubutton[platform="Darwin"] {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-autodetect-main-bar-24x24.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/autodetect-main-bar-24x24.png");
   -moz-image-region: rect(0px 32px 32px 0px);
 }
 
@@ -169,7 +166,7 @@ toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
 }
 
 #bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"] {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-ltr-main-bar-24x24.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/ltr-main-bar-24x24.png");
   -moz-image-region: rect(0px 32px 32px 0px);
 }
 
@@ -182,7 +179,7 @@ toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
 }
 
 [platform="Darwin"] #bidimailui-forcing-menubutton[selectedItem="rtl"] {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-rtl-main-bar-24x24.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/rtl-main-bar-24x24.png");
   -moz-image-region: rect(0px 32px 32px 0px);
 }
 
@@ -195,7 +192,7 @@ toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
 }
 
 [platform="Darwin"] #bidimailui-forcing-menubutton[disabled="true"] {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-autodetect-main-bar-24x24.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/autodetect-main-bar-24x24.png");
   -moz-image-region: rect(0px 128px 24px 96px) !important;
 }
 
@@ -203,7 +200,7 @@ toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
 /* Composer/Editor Main Toolbar - small icons */
 
 toolbar[iconsize="small"] #button-direction-ltr-main-bar {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-ltr-main-bar-16x16.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/ltr-main-bar-16x16.png");
   -moz-image-region: rect(0px 16px 16px 0px);
 }
 
@@ -220,7 +217,7 @@ toolbar[iconsize="small"] #button-direction-ltr-main-bar[disabled="true"] {
 }
 
 toolbar[iconsize="small"] #button-direction-rtl-main-bar {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-rtl-main-bar-16x16.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/rtl-main-bar-16x16.png");
   -moz-image-region: rect(0px 16px 16px 0px);
 }
 
@@ -237,7 +234,7 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
 }
 
 [platform="Darwin"] toolbar[iconsize="small"] #button-direction-ltr-main-bar {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-ltr-main-bar-16x16.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/ltr-main-bar-16x16.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
@@ -254,7 +251,7 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
 }
 
 [platform="Darwin"] toolbar[iconsize="small"] #button-direction-rtl-main-bar {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-rtl-main-bar-16x16.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/rtl-main-bar-16x16.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
@@ -274,7 +271,7 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
 /* Composer/Editor Main Toolbar Buttons - large icons */
 
 #button-direction-ltr-main-bar {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-ltr-main-bar-24x24.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/ltr-main-bar-24x24.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
@@ -291,7 +288,7 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
 }
 
 #button-direction-rtl-main-bar {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-rtl-main-bar-24x24.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/rtl-main-bar-24x24.png");
   -moz-image-region: rect(0px 24px 24px 0px);
 }
 
@@ -308,7 +305,7 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
 }
 
 #button-direction-ltr-main-bar[platform="Darwin"] {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-ltr-main-bar-24x24.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/ltr-main-bar-24x24.png");
   -moz-image-region: rect(0px 32px 32px 0px);
 }
 
@@ -325,7 +322,7 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
 }
 
 #button-direction-rtl-main-bar[platform="Darwin"] {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/winstripe-rtl-main-bar-24x24.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/rtl-main-bar-24x24.png");
   -moz-image-region: rect(0px 32px 32px 0px);
 }
 
@@ -344,7 +341,7 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
 /* Composer/Editor Formatting Bar Buttons */
 
 #button-direction-ltr-formatting-bar {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/ltr-formatting-bar.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/ltr-formatting-bar.png");
   -moz-image-region: rect(0px 19px 18px 0px);
 }
 
@@ -353,7 +350,7 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
 }
 
 #button-direction-rtl-formatting-bar {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/rtl-formatting-bar.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/rtl-formatting-bar.png");
   -moz-image-region: rect(0px 19px 18px 0px);
 }
 
@@ -366,7 +363,7 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
 }
 
 #button-direction-ltr-formatting-bar[platform="Darwin"] {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/ltr-formatting-bar.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/ltr-formatting-bar.png");
   -moz-image-region: rect(0px 19px 18px 0px);
 }
 
@@ -375,7 +372,7 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
 }
 
 #button-direction-rtl-formatting-bar[platform="Darwin"] {
-  list-style-image: url("chrome://bidimailui/content/skin/classic/rtl-formatting-bar.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/rtl-formatting-bar.png");
   -moz-image-region: rect(0px 19px 18px 0px);
 }
 
@@ -386,3 +383,128 @@ toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
 [platform="Darwin"] #FormatToolbar > toolbarbutton[rtlmode="true"] {
   list-style-image: url("chrome://bidimailui/content/skin/classic/format-buttons-rtl.png")  !important;
 }
+
+@media (prefers-color-scheme: dark) {
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/autodetect-main-bar-16x16.png");
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/ltr-main-bar-16x16.png");
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/rtl-main-bar-16x16.png");
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/autodetect-main-bar-16x16.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/autodetect-main-bar-16x16.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/ltr-main-bar-16x16.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/rtl-main-bar-16x16.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/autodetect-main-bar-16x16.png");
+}
+
+/* Messenger Main Toolbar Buttons - large icons */
+
+#bidimailui-forcing-menubutton {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/autodetect-main-bar-24x24.png");
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/ltr-main-bar-24x24.png");
+}
+
+#bidimailui-forcing-menubutton[selectedItem="rtl"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/rtl-main-bar-24x24.png");
+}
+
+#bidimailui-forcing-menubutton[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/autodetect-main-bar-24x24.png");
+}
+
+#bidimailui-forcing-menubutton[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/autodetect-main-bar-24x24.png");
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/ltr-main-bar-24x24.png");
+}
+
+[platform="Darwin"] #bidimailui-forcing-menubutton[selectedItem="rtl"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/rtl-main-bar-24x24.png");
+}
+
+[platform="Darwin"] #bidimailui-forcing-menubutton[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/autodetect-main-bar-24x24.png");
+}
+
+/* Composer/Editor Main Toolbar - small icons */
+
+toolbar[iconsize="small"] #button-direction-ltr-main-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/ltr-main-bar-16x16.png");
+}
+
+toolbar[iconsize="small"] #button-direction-rtl-main-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/rtl-main-bar-16x16.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-ltr-main-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/ltr-main-bar-16x16.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-rtl-main-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/rtl-main-bar-16x16.png");
+}
+
+/* Composer/Editor Main Toolbar Buttons - large icons */
+
+#button-direction-ltr-main-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/ltr-main-bar-24x24.png");
+}
+
+#button-direction-rtl-main-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/rtl-main-bar-24x24.png");
+}
+
+#button-direction-ltr-main-bar[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/ltr-main-bar-24x24.png");
+}
+
+#button-direction-rtl-main-bar[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/rtl-main-bar-24x24.png");
+}
+
+/* Composer/Editor Formatting Bar Buttons */
+
+#button-direction-ltr-formatting-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/ltr-formatting-bar.png");
+}
+
+#button-direction-rtl-formatting-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/rtl-formatting-bar.png");
+}
+
+#button-direction-ltr-formatting-bar[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/ltr-formatting-bar.png");
+}
+
+#button-direction-rtl-formatting-bar[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/rtl-formatting-bar.png");
+}
+
+} /* @media (prefers-color-scheme: dark) */
+
