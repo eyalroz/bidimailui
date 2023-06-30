@@ -1,5 +1,7 @@
 var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
-var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
+var Services = globalThis.Services || ChromeUtils.import(
+  "resource://gre/modules/Services.jsm"
+).Services;
 
 // Code outside BiDi Mail UI should only use the
 // BiDiMailUI.Display.ActionPhases and perhaps the
