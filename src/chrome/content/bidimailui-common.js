@@ -1,5 +1,5 @@
 var EXPORTED_SYMBOLS = [ "BiDiMailUI" ];
-var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
+var Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 var { Preferences } = ChromeUtils.import("resource://gre/modules/Preferences.jsm");
 
 const Cc = Components.classes;
