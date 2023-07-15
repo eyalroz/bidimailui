@@ -3,8 +3,8 @@
    "applications": {
        "gecko": {
 #expand            "id": "__UUID__",
-                   "strict_min_version": "65.0a1",
-                   "strict_max_version": "102.*"
+                   "strict_min_version": "115",
+                   "strict_max_version": "115.*"
        }
     },
     "author": "The BiDi UI team",
