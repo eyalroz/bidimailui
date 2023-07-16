@@ -14,15 +14,12 @@
     ["locale",   "bidimailui", "ur",     "chrome/locale/ur/"    ]
   ]);
 
-  let browserInfo = await browser.runtime.getBrowserInfo();
-  let majorVersion = parseInt(browserInfo.version.split('.',1)[0]);
-  let xulSuffix = (majorVersion >= 69 ? "xhtml" : "xul");
-  messenger.WindowListener.registerWindow("chrome://messenger/content/messenger." + xulSuffix,                         "chrome://bidimailui/content/overlay-injectors/messenger.js");
-  messenger.WindowListener.registerWindow("chrome://messenger/content/messageWindow." + xulSuffix,                     "chrome://bidimailui/content/overlay-injectors/messenger.js");
-  messenger.WindowListener.registerWindow("chrome://messenger/content/messengercompose/messengercompose." + xulSuffix, "chrome://bidimailui/content/overlay-injectors/messengercompose.js");
-  messenger.WindowListener.registerWindow("chrome://messenger/content/editorOverlay." + xulSuffix,                     "chrome://bidimailui/content/overlay-injectors/editorOverlay.js");
-  messenger.WindowListener.registerWindow("chrome://messenger/content/cutomizeToolbar." + xulSuffix,                   "chrome://bidimailui/content/overlay-injectors/customizeToolbar.js");
+  messenger.WindowListener.registerWindow("chrome://messenger/content/messenger.xhtml", "chrome://bidimailui/content/overlay-injectors/messenger.js");
+  messenger.WindowListener.registerWindow("chrome://messenger/content/messageWindow.xhtml",                     "chrome://bidimailui/content/overlay-injectors/messenger.js");
+  messenger.WindowListener.registerWindow("chrome://messenger/content/messengercompose/messengercompose.xhtml", "chrome://bidimailui/content/overlay-injectors/messengercompose.js");
+  messenger.WindowListener.registerWindow("chrome://messenger/content/editorOverlay.xhtml",                     "chrome://bidimailui/content/overlay-injectors/editorOverlay.js");
+  messenger.WindowListener.registerWindow("chrome://messenger/content/cutomizeToolbar.xhtml",                   "chrome://bidimailui/content/overlay-injectors/customizeToolbar.js");
 
-  messenger.WindowListener.registerOptionsPage("chrome://bidimailui/content/bidimailui-prefs-dialog." + xulSuffix)
+  messenger.WindowListener.registerOptionsPage("chrome://bidimailui/content/bidimailui-prefs-dialog.xhtml")
   messenger.WindowListener.startListening();
 })()
