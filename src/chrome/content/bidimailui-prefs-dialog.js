@@ -10,12 +10,11 @@ BiDiMailUI.PrefPane = {
       // Open the user guide in the default browser.
       var helpLink = document.getElementById("bidiMailUIPrefPane")
                              .getAttribute("helpURI");
-      var uri = Components.classes["@mozilla.org/network/io-service;1"]
-                          .getService(Components.interfaces.nsIIOService)
-                          .newURI(helpLink, null, null);
-      var protocolSvc =
-        Components.classes["@mozilla.org/uriloader/external-protocol-service;1"]
-                  .getService(Components.interfaces.nsIExternalProtocolService);
+      var uri = Cc["@mozilla.org/network/io-service;1"]
+        .getService(Ci.nsIIOService)
+        .newURI(helpLink, null, null);
+      var protocolSvc = Cc["@mozilla.org/uriloader/external-protocol-service;1"]
+        .getService(Ci.nsIExternalProtocolService);
       protocolSvc.loadUrl(uri);
     }
     catch(ex) {
