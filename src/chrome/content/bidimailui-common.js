@@ -63,35 +63,6 @@ BiDiMailUI.JS = {
 
 //---------------------------------------------------------
 
-BiDiMailUI.App = {
-
-  getBuildID : function () {
-    var re = /rv:([0-9.]+).*Gecko\/([0-9]+)/;
-    var arr = re.exec(navigator.userAgent);
-    //var revision = arr[1];
-    return arr[2];
-  },
-
-  _version: null,
-
-  // returns true if the app version is equal-or-higher to minVersion, false otherwise;
-  ensureVersion : function(versionThreshold, checkMinimum) {
-    var versionCheckResult = Services.vc.compare(Services.appinfo.version, versionThreshold);
-    return (   (checkMinimum  && (versionCheckResult >= 0))
-            || (!checkMinimum && (versionCheckResult <= 0)));
-  },
-
-  versionIsAtLeast : function(minVersion) {
-    return this.ensureVersion(minVersion, true);
-  },
-
-  versionIsAtMost : function(maxVersion) {
-    return this.ensureVersion(maxVersion, false);
-  }
-}
-
-//---------------------------------------------------------
-
 // Preferences
 
 BiDiMailUI.__defineGetter__("Prefs", function() {
@@ -605,12 +576,7 @@ BiDiMailUI.directionCheck = function(document, NodeFilter, obj) {
   //  return rtlLineExpression.test(element.textContent);
 }
 
-// ------ Some UI const, which depend on the app version.
-BiDiMailUI.__defineGetter__("MessageEditorID", function() {
-  delete BiDiMailUI.MessageEditorID;
-  return BiDiMailUI.MessageEditorID = BiDiMailUI.App.versionIsAtLeast("100") ? "messageEditor" : "content-frame";
-});
-
 BiDiMailUI.getMessageEditor = function(document) {
-	return document.getElementById(BiDiMailUI.MessageEditorID);
+  return document.getElementById("messageEditor");
 };
+
