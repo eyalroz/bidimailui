@@ -20,4 +20,10 @@ downloads/*
 *.rej
 *.orig
 
-
+# node.js files and folders
+node_modules
+package-lock.json
+# Note that we'll be generating package.json, as it requires a version,
+# and version info is not committed into our repository; so we'll have
+# a version-independent template committed, but not the actual file
+package.json
