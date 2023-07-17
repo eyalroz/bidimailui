@@ -12,5 +12,5 @@ pref("extensions.bidiui.mail.compose.start_composition_in_paragraph_mode", false
 pref("extensions.bidiui.mail.display.user_forgoes_preferred_single_byte_charset", false);
 pref("extensions.bidiui.mail.display.decode_numeric_html_entities", true);
 pref("extensions.bidiui.mail.compose.last_used_direction", "ltr");
-pref("extensions.bidiui.mail.compose.ctrl_shift_switches_direction",true);
-pref("extensions.bidiui.mail.compose.default_to_send_text_with_html",false);
+pref("extensions.bidiui.mail.compose.ctrl_shift_switches_direction", true);
+pref("extensions.bidiui.mail.compose.default_to_send_text_with_html", false);
