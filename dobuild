@@ -116,6 +116,11 @@ else
 	PREPROCESSOR_PARAMS+=" --no-line-comments"
 fi
 
+# Difficult to use the XUL preprocessor with package.json, since npm and
+# IDEs rely on it being well-formed, and JSON doesn't have #-comments;
+# so, we'll "cheat" by generating it here
+sed -r "s/__VERSION__/${VERSION}/" package.json.in > package.json
+
 BUILD_DIR="build/$TARGET"
 XPI_NAME="${SHORTNAME}_${VERSION}_${TARGET}.xpi"
 LINK_NAME="${SHORTNAME}_${TARGET}.xpi"
@@ -128,6 +133,7 @@ else
 	rm -r "$BUILD_DIR"/*
 fi
 
+cp package.json $BUILD_DIR/package.json
 $BUILD_TOOLS_DIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILD_DIR/jar.mn
 # Our invocation of make-jars.pl doesn't literally make JAR files, it only preprocesses and copies.
 $BUILD_TOOLS_DIR/make-jars.pl -q -f flat -z zip -p "$BUILD_TOOLS_DIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILD_DIR/jar.mn || exit
