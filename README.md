@@ -52,5 +52,5 @@ See also the Credits page on the repository wiki.
 
 Read the [FAQ section of the wiki](https://github.com/eyalroz/removedupes/wiki/FAQ-(Frequently-Asked-Questions)); your answer is probably in there. If it isn't, please search the [issues page](https://github.com/eyalroz/removedupes/issues) of this repository, to check if it's already been reported. not, file a new issue. 
 
-If you'd like to give some personal feedback about the extension and/or the state of Thunderbird in general - you can [write the maintainer](mailto:eyalroz@technion.ac.il).
+If you'd like to give some personal feedback about the extension and/or the state of Thunderbird in general - you can [write the maintainer](mailto:eyalroz1@gmx.com).
 
