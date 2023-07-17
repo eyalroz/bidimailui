@@ -66,13 +66,13 @@ BiDiMailUI.Display = {
         BiDiMailUI.Display.preprocessMessageDOM(body);
         BiDiMailUI.Display.detectDirections(body);
       }
-      // If the body isn't mixed, the message is either neutral in 
-      // direction, all-LTR or all-RTL, in all which cases it's enough 
+      // If the body isn't mixed, the message is either neutral in
+      // direction, all-LTR or all-RTL, in all which cases it's enough
       // that we set the direction for the entire body
       BiDiMailUI.Display.setDirections(body, null);
-    }    
+    }
   },
-  
+
   setMessageDirectionForcing : function(body,forcedDirection) {
     // we assume forcedDirection is 'rtl', 'ltr' or null
 #ifdef DEBUG_setMessageDirectionForcing
@@ -167,12 +167,12 @@ BiDiMailUI.Display = {
       var restOfText = node.cloneNode(false);
       node.nodeValue = RegExp.leftContext + RegExp.lastMatch;
       restOfText.nodeValue = RegExp.rightContext;
-    
+
       var firstPartOfParent = node.parentNode;
       var secondPartOfParent = node.parentNode.cloneNode(false);
 
       secondPartOfParent.appendChild(restOfText);
-       
+
       // everything after our node with the \n\n goes to the splinter element,
       // everything before it remains
       while (node.nextSibling) {
@@ -183,7 +183,7 @@ BiDiMailUI.Display = {
         firstPartOfParent.removeChild(node.nextSibling);
         secondPartOfParent.appendChild(tempNode);
       }
-       
+
       // add the new part of the parent to the document
       if (firstPartOfParent.nextSibling)
         firstPartOfParent.parentNode.insertBefore(secondPartOfParent,firstPartOfParent.nextSibling);
@@ -259,7 +259,7 @@ BiDiMailUI.Display = {
         if (sibling.nodeName.toLowerCase() == 'br') {
           if (!emptyLine) {
             // if the DIV has any text content, it will
-            // have a one-line height; otherwise it will 
+            // have a one-line height; otherwise it will
             // have no height and we need the BR after it
             wrapperDiv.parentNode.removeChild(sibling);
           }
@@ -311,7 +311,7 @@ BiDiMailUI.Display = {
     }
   },
 
-// Gather all the elements whose contents' direction 
+// Gather all the elements whose contents' direction
 // we need to check and whose direction we set accordingly
 // (or force, as the case may be)
   gatherElementsRequiringDirectionSetting : function(
@@ -323,7 +323,7 @@ BiDiMailUI.Display = {
       // as we don't know what to do with them
       if (! /^moz-text/.test(subBody.className))
         continue;
-      
+
       elementsRequiringExplicitDirection.push(subBody);
 
 #ifdef DEBUG_gatherElementsRequiringDirectionSetting
@@ -352,7 +352,7 @@ BiDiMailUI.Display = {
     console.log(
       "in detectAndSetDirections for message (don't know how to get the currently loaded message's URI)\n");
 #endif
-    
+
     var elementsRequiringExplicitDirection = new Array;
     BiDiMailUI.Display.gatherElementsRequiringDirectionSetting(
       body, elementsRequiringExplicitDirection);
@@ -366,11 +366,11 @@ BiDiMailUI.Display = {
     for (let i=0; i < elementsRequiringExplicitDirection.length; i++) {
       var node = elementsRequiringExplicitDirection[i];
       try {
-     
+
 #ifdef DEBUG_detectAndSetDirections
         console.log('elementsRequiringExplicitDirection[ ' + i + ']: ' + node + "\ntype: " + node.nodeType + "\nclassName: " + node.className + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
 #endif
-          
+
         var detectedDirection = BiDiMailUI.directionCheck(document, NodeFilter, node);
 #ifdef DEBUG_detectAndSetDirections
         console.log("detected direction: " + detectedDirection);
@@ -408,8 +408,8 @@ BiDiMailUI.Display = {
 #endif
 
     switch(forcedDirection) {
-    case 'ltr': 
-    case 'rtl': 
+    case 'ltr':
+    case 'rtl':
       body.removeAttribute('bidimailui-use-detected-directions');
       if (!body.hasAttribute('bidimailui-original-direction')) {
         body.setAttribute('bidimailui-original-direction', body.style.direction);
@@ -431,10 +431,10 @@ BiDiMailUI.Display = {
   },
 
 
-  // Detect and attempt to reload/recode content of wholly or partially 
+  // Detect and attempt to reload/recode content of wholly or partially
   // mis-decoded messages
   //
-  // Notes: 
+  // Notes:
   //   When returning, cMCParams.needCharsetForcing indicates
   //   whether a reload is necessary
   //
@@ -444,7 +444,7 @@ BiDiMailUI.Display = {
   fixLoadedMessageCharsetIssues : function(cMCParams) {
 
     var contentToMatch;
-    
+
     // TODO: perhaps we should prefer the undecoded MIME subject over
     // the decoded one - and decode it ourselves with the charset
     // to our liking?
@@ -455,22 +455,22 @@ BiDiMailUI.Display = {
     /*
     There are 4 parameters affecting what we need to do with the loaded message
     with respect to reloading or recoding.
-    
+
     1. Message has been reloaded (by the previous run of this function) or has
        otherwise been forced into a specific charset (Y/N)
     2. Charset used by mozilla to decode the message (
          N = windows-1252/equivalents, including no/empty charset
          C = windows-1255/6
-         U = UTF-8, 
+         U = UTF-8,
        we won't handle any issues with other charsets
     3. Message contains windows-1255/6 text (Y/N)
-    4. Message contains UTF-8 text (that is, UTF-8 octet sequences 
+    4. Message contains UTF-8 text (that is, UTF-8 octet sequences
        which are not iso-8859-1 chars 0-127) (Y/N)
 
-    What should we do for each combination of values? 
+    What should we do for each combination of values?
     (* means all possible values)
 
-    *NNN - No problem, do nothing 
+    *NNN - No problem, do nothing
     NNNY - Reload with UTF-8 (and continue with YUNY)
     NNYN - Reload with windows-1255/6  (and continue with YCYN)
     *NYY - Recode both UTF-8 and windows-1255/6
@@ -491,7 +491,7 @@ BiDiMailUI.Display = {
            we'll try recoding UTF-8 text, but it probably won't work well
     *UY* - This is very bad, since we're not allowed to change charset;
            we'll try recoding windows-1255/6 text, but it probably won't work well
-           
+
     Extra Notes:
 
     - If we tell the app to change the charset, the message will be reloaded and
@@ -501,7 +501,7 @@ BiDiMailUI.Display = {
       convey this information to the next load event? Using a global variable may be
       unsafe
     */
-    
+
     // This sets parameter no. 1
     var mustKeepCharset = cMCParams.dontReload || cMCParams.charsetOverrideInEffect;
 
@@ -513,9 +513,9 @@ BiDiMailUI.Display = {
         (cMCParams.currentCharset == cMCParams.preferredCharset))
       cMCParams.mailnewsDecodingType = "preferred-charset";
     else if ((((cMCParams.currentCharset == "ISO-8859-8-I") ||
-               (cMCParams.currentCharset == "ISO-8859-8")) && 
+               (cMCParams.currentCharset == "ISO-8859-8")) &&
               (cMCParams.preferredCharset == "windows-1255") ) ||
-             ((cMCParams.currentCharset == "ISO-8859-6") && 
+             ((cMCParams.currentCharset == "ISO-8859-6") &&
               (cMCParams.preferredCharset == "windows-1255") ) ) {
       cMCParams.mailnewsDecodingType = "preferred-charset";
     }
@@ -533,7 +533,7 @@ BiDiMailUI.Display = {
         // message, which is expensive
       case "UTF-8":
         cMCParams.mailnewsDecodingType = "UTF-8"; break;
-      default: 
+      default:
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
     console.log('fixLoadedMessageCharsetIssues will do nothing, as the current charset used is: ' + cMCParams.currentCharset);
 #endif
@@ -542,7 +542,7 @@ BiDiMailUI.Display = {
     cMCParams.body.setAttribute('bidimailui-detected-decoding-type',cMCParams.mailnewsDecodingType);
 
 
-    // This sets parameter no. 3 
+    // This sets parameter no. 3
     // (note its value depends on parameter no. 2)
     var havePreferredCharsetText;
 
@@ -561,12 +561,12 @@ BiDiMailUI.Display = {
         // need to look for a character in the Hebrew or Arabic Unicode range
         contentToMatch = new RegExp(
           (cMCParams.mailnewsDecodingType == "latin-charset") ?
-          // Here we want a sequence of Unicode values of characters whose 
+          // Here we want a sequence of Unicode values of characters whose
           // windows-1252 octet is such that would be decoded as 'clearly'
           // Hebrew or Arabic text; we could be less or more picky depending
           // on what we feel about characters like power-of-2, paragraph-mark,
           // plus-minus etc. ; let's be conservative: the windows-1255
-          // and windows-1256 octet ranges corresponding to the letters 
+          // and windows-1256 octet ranges corresponding to the letters
           // themselves fall within the range C0-FF; this range is all accented
           // Latin letters in windows-1252, whose Unicode values are the
           // same as their octets
@@ -574,25 +574,25 @@ BiDiMailUI.Display = {
           // Here we know that cMCParams.mailnewsDecodingType == "UTF-8"; if
           // you decode windows-1255/6 content as UTF-8, you'll get failures
           // because you see multi-octet-starter octets (11xxxxxx) followed
-          // by other multi-octet-starter octets rather than 
+          // by other multi-octet-starter octets rather than
           // multi-octect-continuer octets (10xxxxxx); what mailnews does in
           // such cases is emit \uFFFD, which is the Unicode 'replacement
           // character'; let's be cautious, though, and look for repetitions
           // of this rather than the odd encoding error or what-not
           "\\uFFFD{3,}");
-      }    
-      havePreferredCharsetText = 
+      }
+      havePreferredCharsetText =
         BiDiMailUI.matchInText(document, NodeFilter, cMCParams.body, contentToMatch) ||
         contentToMatch.test(cMCParams.messageSubject);
     }
     else {
       havePreferredCharsetText = false;
     }
-    
+
     // This sets parameter no. 4
     // (note its value depends on parameter no. 2)
     var haveUTF8Text;
-    
+
     contentToMatch = new RegExp (
       (cMCParams.mailnewsDecodingType == "UTF-8") ?
       // The only characters we can be sure will be properly decoded in windows-1252
@@ -602,12 +602,12 @@ BiDiMailUI.Display = {
       "[^\\u0000-\\u007F\\u00A0-\\u00FF]" :
       // cMCParams.mailnewsDecodingType is latin-charset or preferred-charset
       //
-      // TODO: some of these are only relevant for UTF-8 misdecoded as windows-1252 
-      // (or iso-8859-1; mozilla cheats and uses windows-1252), 
+      // TODO: some of these are only relevant for UTF-8 misdecoded as windows-1252
+      // (or iso-8859-1; mozilla cheats and uses windows-1252),
       //
       BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE);
 
-    haveUTF8Text = 
+    haveUTF8Text =
       BiDiMailUI.matchInText(document, NodeFilter, cMCParams.body, contentToMatch) ||
       contentToMatch.test(cMCParams.messageSubject);
 
@@ -617,12 +617,12 @@ BiDiMailUI.Display = {
       ((cMCParams.mailnewsDecodingType == "latin-charset") ? "N" :
        ((cMCParams.mailnewsDecodingType == "preferred-charset") ? "C" : "U")) +
       (havePreferredCharsetText ? "Y" : "N") +
-      (haveUTF8Text ? "Y" : "N") + 
+      (haveUTF8Text ? "Y" : "N") +
       "\n--------");
 #endif
 
     // ... and now act based on the parameter values
-    
+
     if (!mustKeepCharset) {
       switch(cMCParams.mailnewsDecodingType) {
         case "latin-charset":
@@ -639,7 +639,7 @@ BiDiMailUI.Display = {
           }
           else {
             if (!haveUTF8Text) {
-              //NNYN 
+              //NNYN
               cMCParams.needCharsetForcing = true;
               cMCParams.charsetToForce = cMCParams.preferredCharset;
               return false;

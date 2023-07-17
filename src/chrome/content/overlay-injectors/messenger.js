@@ -22,17 +22,17 @@ function injectToolbarButton() {
       <menupopup onpopupshowing="">
         <label value="&bidimailui-forcing-menu.label;" style="font-weight: bold"/>
         <menuseparator />
-        <menuitem 
+        <menuitem
           type="radio"
           id="bidimailui-forcing-menu-autodetect"
           label="&bidimailui-forcing-menu-autodetect.label;"
           oncommand="BiDiMailUI.MessageOverlay.forceDirection(event,null);" />
-        <menuitem 
+        <menuitem
           type="radio"
           id="bidimailui-forcing-menu-ltr"
           label="&bidimailui-forcing-menu-ltr.label;"
           oncommand="BiDiMailUI.MessageOverlay.forceDirection(event,'ltr');" />
-        <menuitem 
+        <menuitem
           type="radio"
           id="bidimailui-forcing-menu-rtl"
           label="&bidimailui-forcing-menu-rtl.label;"
@@ -63,12 +63,12 @@ function injectOtherElements() {
                 accesskey="&menu-bidimail-cycle-document-direction.accesskey;"
                 oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
     </menupopup>
-      
+
     <menupopup id="menu_View_Popup">
       <menuitem insertafter="mailviewCharsetMenu"
                 label="&menu-bidimail-cycle-message-direction.label;"
-                accesskey="&menu-bidimail-cycle-document-direction.accesskey;" 
-                key="key-bidimailui-cycle" 
+                accesskey="&menu-bidimail-cycle-document-direction.accesskey;"
+                key="key-bidimailui-cycle"
                 oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
     </menupopup>`,
     [

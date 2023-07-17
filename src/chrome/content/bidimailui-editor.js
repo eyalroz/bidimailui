@@ -24,7 +24,7 @@ BiDiMailUI.Editor = {
 
     BiDiMailUI.Editor.determineNewDocumentParams(documentParams);
     BiDiMailUI.Composition.setInitialDocumentDirection(documentParams);
-     
+
     BiDiMailUI.Composition.alternativeEnterBehavior =
       BiDiMailUI.Prefs.get("compose.alternative_enter_behavior", true);
     if (BiDiMailUI.Composition.alternativeEnterBehavior)
@@ -38,7 +38,7 @@ BiDiMailUI.Editor = {
     Service.prefs.removeObserver(
       BiDiMailUI.Editor.directionButtonsPrefListener.domain,
       BiDiMailUI.Editor.directionButtonsPrefListener
-    );  
+    );
   },
 
   handleComposerDirectionButtons : function () {
@@ -67,7 +67,7 @@ BiDiMailUI.Editor = {
     var body = BiDiMailUI.getMessageEditor(document).contentDocument.body;
 
     try {
-      if (!body.hasChildNodes()) 
+      if (!body.hasChildNodes())
         messageParams.isEmpty = true;
       else if ( body.hasChildNodes() &&
                !body.firstChild.hasChildNodes() ) {

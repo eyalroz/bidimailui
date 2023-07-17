@@ -18,7 +18,7 @@ var { ExtensionCommon } = ChromeUtils.import(
 var { ExtensionSupport } = ChromeUtils.import(
   "resource:///modules/ExtensionSupport.jsm"
 );
-var Services = globalThis.Services || 
+var Services = globalThis.Services ||
   ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 
 function getThunderbirdVersion() {
@@ -220,7 +220,7 @@ var WindowListener_102 = class extends ExtensionCommon.ExtensionAPI {
 
   async getAddonManagerFromWindowWaitForLoad(window) {
     let { setTimeout } = Services.wm.getMostRecentWindow("mail:3pane");
-    
+
     let tabMail = this.getTabMail(window);
     for (let tab of tabMail.tabInfo) {
       if (tab.browser && tab.mode.name == "contentTab") {
@@ -2063,7 +2063,7 @@ var WindowListener_115 = class extends ExtensionCommon.ExtensionAPI {
           let managerWindow = this.getAddonManagerFromWindow(window);
           if (
             managerWindow &&
-            managerWindow[this.uniqueRandomID] && 
+            managerWindow[this.uniqueRandomID] &&
             managerWindow[this.uniqueRandomID].hasAddonManagerEventListeners
           ) {
             managerWindow.document.removeEventListener("ViewChanged", this);

@@ -60,7 +60,7 @@
       <html:input id="space_between_paragraphs_value_text"
                size="4"
                preference="extensions.bidiui.mail.compose.space_between_paragraphs.value"
-               onsynctopreference="return 
+               onsynctopreference="return
                                    BiDiMailUI.PrefPane.getSpaceBetweenParagraphsValue();"/>
       <menulist preference="extensions.bidiui.mail.compose.space_between_paragraphs.scale">
         <menupopup>
@@ -68,7 +68,7 @@
                     label="&cmScale.label;"
                     accesskey="&cmScale.accesskey;"/>
           <menuitem value="px"
-                    label="&pixelScale.label;" 
+                    label="&pixelScale.label;"
                     accesskey="&pixelScale.accesskey;"/>
           <menuitem value="pt"
                     label="&ptScale.label;"
@@ -78,10 +78,10 @@
     </hbox>
   </vbox>
 
-  <script 
+  <script
     src="chrome://global/content/preferencesBindings.js"
     type="application/x-javascript"/>
-  <script 
-     src="chrome://bidimailui/content/bidimailui-set-preference-types.js" 
-     type="application/x-javascript"/>  
+  <script
+     src="chrome://bidimailui/content/bidimailui-set-preference-types.js"
+     type="application/x-javascript"/>
 </dialog>

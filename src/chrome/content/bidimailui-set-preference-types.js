@@ -10,6 +10,6 @@ Preferences.addAll([
   { id: "extensions.bidiui.mail.compose.space_between_paragraphs.scale",      type: "string" },
 ]);
 
-// Note: the space between paragraph value preferences are linked, and 
+// Note: the space between paragraph value preferences are linked, and
 // we should try calling BiDiMailUI.PrefPane.updateSpaceBetweenParagraphsValue()
 // whenever one of the two prefs change.
