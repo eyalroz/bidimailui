@@ -1,0 +1,59 @@
+{
+  "name": "bidimailui",
+  "version": "__VERSION__",
+  "description": "Correct character set misdetection for RTL languages, autodtect message element direction & expose UI for setting directions when composing messages ",
+  "keywords": [
+    "rtl",
+    "bidi",
+    "bidirectional",
+    "hebrew",
+    "arabic",
+    "farsi",
+    "urdu",
+    "direction",
+    "direction-setting",
+    "direction-autodetection",
+    "charset",
+    "charset-correction",
+    "right-to-left",
+    "message-composition",
+    "mail-readong",
+    "mail",
+    "thunderbird",
+    "extension"
+  ],
+  "homepage": "https://github.com/eyalroz/bidimailui",
+  "main": "src/background.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:eyalroz/bidimailui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/eyalroz/bidimailui/issues",
+    "email": "eyalroz1@gmx.com"
+  },
+  "license": "MPL-1.1",
+  "author": {
+    "name": "Eyal Rozenberg",
+    "email": "eyalroz1@gmx.com",
+    "url": "http://eyalroz.github.io/"
+  },
+  "funding": [
+    {
+      "type": "individual",
+      "url": "https://www.patreon.com/einpoklum"
+    },
+    {
+      "type": "paypal",
+      "url": "https://paypal.me/eyalroz"
+    }
+  ],
+  "devDependencies": {
+    "eslint": "^8.45.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5"
+  },
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint src/chrome/content"
+  }
+}
