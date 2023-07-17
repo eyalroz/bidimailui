@@ -1,5 +1,5 @@
-var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
 var Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
 
 // This file constains UI and glue code only, calling
 // display logic code elsewhere actually act on the displayed message
@@ -10,9 +10,9 @@ BiDiMailUI.MessageOverlay = {
   dontReload : false,
 
   cycleDirectionSettings : function() {
-    var messagePane = document.getElementById("messagepane");
-    var body = messagePane.contentDocument.body;
-    var newForcedDirection;
+    const messagePane = document.getElementById("messagepane");
+    const body = messagePane.contentDocument.body;
+    let newForcedDirection;
     switch (body.getAttribute('bidimailui-forced-direction')) {
       case 'ltr':
         newForcedDirection = 'rtl';
@@ -28,8 +28,8 @@ BiDiMailUI.MessageOverlay = {
   },
 
   forceDirection : function(ev,forcedDirection) {
-    var messagePane = document.getElementById("messagepane");
-    var body = messagePane.contentDocument.body;
+    const messagePane = document.getElementById("messagepane");
+    const body = messagePane.contentDocument.body;
     BiDiMailUI.Display.setMessageDirectionForcing(body,forcedDirection);
     BiDiMailUI.MessageOverlay.updateDirectionMenuButton(forcedDirection);
     ev.stopPropagation();
@@ -40,7 +40,7 @@ BiDiMailUI.MessageOverlay = {
     console.log(
       'updateDirectionMenuButton(forcedDirection = ' + forcedDirection + ')');
 #endif
-    var menubutton = document.getElementById('bidimailui-forcing-menubutton');
+    const menubutton = document.getElementById('bidimailui-forcing-menubutton');
     if (menubutton) {
       menubutton.setAttribute('selectedItem', (forcedDirection ? forcedDirection : 'autodetect'));
       document.getElementById('bidimailui-forcing-menu-autodetect')
@@ -75,7 +75,7 @@ BiDiMailUI.MessageOverlay = {
        && !BiDiMailUI.MessageOverlay.isFillerStaticPage(domDocument) );
     if (!canActOnDocument) { return [null, null, null]; }
 
-    var msgHdr; // We're assuming only one message is selected
+    let msgHdr; // We're assuming only one message is selected
     try {
       msgHdr = gMessageDisplay.displayedMessage;
     } catch(ex) {
@@ -87,7 +87,7 @@ BiDiMailUI.MessageOverlay = {
     }
     let displayedMessageSubject = document.getElementById('expandedsubjectBox').textContent;
 
-    var charsetPhaseParams = {
+    const charsetPhaseParams = {
       body: domDocument.body,
       charsetOverrideInEffect: msgWindow.charsetOverride,
       currentCharset: msgWindow.mailCharacterSet,
@@ -148,19 +148,19 @@ BiDiMailUI.MessageOverlay = {
   // this function is passed to the charset phase actions and run
   // from there, but it's a UI function
   promptAndSetPreferredSingleByteCharset : function() {
-    var list = [
+    const list = [
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.set_to_windows_1255"),
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.set_to_windows_1256"),
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.do_not_set")
     ];
     // This disappears in version 91, probably
-    var appPrefValue = BiDiMailUI.AppPrefs.get("mailnews.view_default_charset", null, Ci.nsIPrefLocalizedString);
-    selected = (appPrefValue) ? { value: appPrefValue } : {};
+    const appPrefValue = BiDiMailUI.AppPrefs.get("mailnews.view_default_charset", null, Ci.nsIPrefLocalizedString);
+    let selected = (appPrefValue) ? { value: appPrefValue } : {};
 #ifdef DEBUG_promptAndSetPreferredSingleByteCharset
     console.log("appPrefValue was " + appPrefValue);
 #endif
 
-    var ok = Services.prompt.select(
+    const ok = Services.prompt.select(
       window,
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.window_title"),
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.dialog_message"),

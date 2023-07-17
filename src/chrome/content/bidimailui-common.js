@@ -1,6 +1,6 @@
-var EXPORTED_SYMBOLS = [ "BiDiMailUI" ];
+const EXPORTED_SYMBOLS = [ "BiDiMailUI" ];
 var Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-var { Preferences } = ChromeUtils.import("resource://gre/modules/Preferences.jsm");
+const { Preferences } = ChromeUtils.import("resource://gre/modules/Preferences.jsm");
 
 var BiDiMailUI = { };
 
@@ -47,7 +47,7 @@ BiDiMailUI.JS = {
   {
     if (str == null)
       return null;
-    var scanCodesString = "";
+    let scanCodesString = "";
     for(let i = 0; i < str.length; i++) {
       let charcode = "??";
       try {
@@ -203,13 +203,13 @@ BiDiMailUI.performCorrectiveRecoding = function (
     BiDiMailUI.UnicodeConverter.charset = correctiveRecodingParams.preferredCharset;
   } catch(ex) { }
 
-  var treeWalker = document.createTreeWalker(
+  let treeWalker = document.createTreeWalker(
     correctiveRecodingParams.body,
     NodeFilter.SHOW_TEXT,
     null, // additional filter function
     false
   );
-  var node;
+  let node;
   while((node = treeWalker.nextNode())) {
     if (node.data)
       node.data = BiDiMailUI.performCorrectiveRecodingOnText(
@@ -251,13 +251,13 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
     "Will actually recode " + (correctiveRecodingParams.recodeUTF8  ? "misdecoded UTF-8 " : "") +
     (correctiveRecodingParams.recodePreferredCharset  ? "preferred charset encoding" : "") );
 #endif
-  var lines = str.split('\n');
+  let lines = str.split('\n');
 #ifdef DEBUG_performCorrectiveRecodingOnText
   console.log(
     "The string we'll recode has " + lines.length + " lines overall; will now work on each of them independently.");
 #endif
   for(let i = 0; i < lines.length; i++) {
-    var workingStr;
+    let workingStr;
 
 #ifdef DEBUG_performCorrectiveRecodingOnText
     if (correctiveRecodingParams.recodeUTF8 &&
@@ -282,7 +282,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
       try {
         workingStr = lines[i];
 
-        var charset =
+        let charset =
             (correctiveRecodingParams.mailnewsDecodingType == "latin-charset") ?
                     'windows-1252' : correctiveRecodingParams.preferredCharset;
         // at this point, correctiveRecodingParams.mailnewsDecodingType can only be latin or preferred
@@ -318,7 +318,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
         workingStr = workingStr.replace(
           /[\xC2-\xDF]*&#(\d+);/g,
           function() {
-            var res = String.fromCharCode(RegExp.$1);
+            let res = String.fromCharCode(RegExp.$1);
             return ((res.charCodeAt(0) > 0xBF) ? "\xEF\xBF\xBD" : res);
           }
           );
@@ -373,7 +373,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
           "charset encoding, but having been decoded as something else");
 #endif
       try {
-    	var charset =
+    	let charset =
         // at this point, correctiveRecodingParams.mailnewsDecodingType can only be latin or UTF-8
             (correctiveRecodingParams.mailnewsDecodingType == "latin-charset") ? 'windows-1252' : "UTF-8";
 #ifdef DEBUG_scancodes
@@ -430,7 +430,7 @@ BiDiMailUI.matchInText = function(document, NodeFilter, element, expression, mat
     "---------------------------------------------\n" +
     "matching " + expression + "\nin element" + element);
 #endif
-  var treeWalker = document.createTreeWalker(
+  let treeWalker = document.createTreeWalker(
     element,
     NodeFilter.SHOW_TEXT,
     null, // additional filter function
@@ -440,7 +440,7 @@ BiDiMailUI.matchInText = function(document, NodeFilter, element, expression, mat
     matchResults.hasMatching = false;
     matchResults.hasNonMatching = false;
   }
-  var node;
+  let node;
   while ((node = treeWalker.nextNode())) {
 #ifdef DEBUG_matchInText
 #ifdef DEBUG_scancodes
@@ -486,7 +486,7 @@ BiDiMailUI.neutralsOnly = function(str) {
 #ifdef DEBUG_neutralsOnly
   console.log("in neutralsOnly for\n\n" + str);
 #endif
-  var neutrals =
+  const neutrals =
     new RegExp("^[ \\f\\r\\n\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\{-\xA0\u2013\\u2014\\uFFFD]*$");
   return neutrals.test(str);
 }
@@ -521,9 +521,9 @@ BiDiMailUI.directionCheck = function(document, NodeFilter, obj) {
   // numbering at the beginnings and ends of lines)
 
   // note we're allowing sequences of initials, e.g W"ERBEH
-  var allNeutralExpression = new RegExp (
+  const allNeutralExpression = new RegExp (
     "^" + NEUTRAL_CHARACTER_NEW_LINE + "*" + "$");
-  var rtlLineExpression = new RegExp (
+  const rtlLineExpression = new RegExp (
     // either the text has no non-RTL characters and some RTL characters
     "(?:" + "^" + IGNORABLE_CHARACTER_NEW_LINE + "*" + RTL_CHARACTER + IGNORABLE_CHARACTER_NEW_LINE + "*" + "$" + ")" +
     "|" +
@@ -564,7 +564,7 @@ BiDiMailUI.directionCheck = function(document, NodeFilter, obj) {
 #ifdef DEBUG_directionCheck
       console.log("object is NOT NEUTRAL");
 #endif
-    var matchResults = {};
+    let matchResults = {};
     BiDiMailUI.matchInText(document, NodeFilter, obj, rtlLineExpression, matchResults);
 #ifdef DEBUG_directionCheck
     console.log("directionCheck - object "+obj+"\nis " + (matchResults.hasMatching ?

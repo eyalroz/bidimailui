@@ -51,10 +51,10 @@ BiDiMailUI.Display = {
       if (!BiDiMailUI.Prefs.get("display.autodetect_direction", true))
         return;
 
-      var body = domDocument.body;
+      const body = domDocument.body;
       BiDiMailUI.Display.linkStylesheet(domDocument, 'bidimailui-direction-autodetection-css', 'direction-autodetection.css');
 
-      var detectedOverallDirection = BiDiMailUI.directionCheck(document, NodeFilter, body);
+      const detectedOverallDirection = BiDiMailUI.directionCheck(document, NodeFilter, body);
 #ifdef DEBUG_directionAutodetection
       console.log("detected overall direction: " + detectedOverallDirection);
 #endif
@@ -142,13 +142,13 @@ BiDiMailUI.Display = {
 #ifdef DEBUG_splitTextElementsInPlainMessageDOMTree
     console.log("in BiDiMailUI.Display.splitTextElementsInPlainMessageDOMTree()");
 #endif
-    var treeWalker = document.createTreeWalker(
+    const treeWalker = document.createTreeWalker(
       subBody,
       NodeFilter.SHOW_TEXT,
       null,
       false
     );
-    var node = treeWalker.nextNode();
+    let node = treeWalker.nextNode();
     while (node) {
 #ifdef DEBUG_splitTextElementsInPlainMessageDOMTree
       console.log("-----\ntext node\n-----\n" + node.nodeValue);
@@ -164,12 +164,12 @@ BiDiMailUI.Display = {
       console.log(RegExp.leftContext + "\n-----\n"+RegExp.lastMatch+"\n-----\n"+RegExp.rightContext);
 #endif
 
-      var restOfText = node.cloneNode(false);
+      const restOfText = node.cloneNode(false);
       node.nodeValue = RegExp.leftContext + RegExp.lastMatch;
       restOfText.nodeValue = RegExp.rightContext;
 
-      var firstPartOfParent = node.parentNode;
-      var secondPartOfParent = node.parentNode.cloneNode(false);
+      const firstPartOfParent = node.parentNode;
+      const secondPartOfParent = node.parentNode.cloneNode(false);
 
       secondPartOfParent.appendChild(restOfText);
 
@@ -179,7 +179,7 @@ BiDiMailUI.Display = {
 #ifdef DEBUG_splitTextElementsInPlainMessageDOMTree
 //    console.log("nextsibling =\n" + node.nextSibling + "\nvalue:\n"+(node.nextSibling ? node.nextSibling.nodeValue : null));
 #endif
-        var tempNode = node.nextSibling;
+        const tempNode = node.nextSibling;
         firstPartOfParent.removeChild(node.nextSibling);
         secondPartOfParent.appendChild(tempNode);
       }
@@ -189,7 +189,7 @@ BiDiMailUI.Display = {
         firstPartOfParent.parentNode.insertBefore(secondPartOfParent,firstPartOfParent.nextSibling);
       else firstPartOfParent.parentNode.appendChild(secondPartOfParent);
 
-      var newNode = treeWalker.nextNode();
+      const newNode = treeWalker.nextNode();
       node = ((newNode != node) ? newNode : treeWalker.nextNode());
     }
   },
@@ -201,13 +201,13 @@ BiDiMailUI.Display = {
     let ns = subBody.ownerDocument.documentElement.lookupNamespaceURI("html");
     let clonedDiv = subBody.ownerDocument.createElementNS(ns, "div");
     clonedDiv.setAttribute('bidimailui-generated', true);
-    var treeWalker = document.createTreeWalker(
+    const treeWalker = document.createTreeWalker(
       subBody,
       NodeFilter.SHOW_TEXT,
       null,
       false
     );
-    var node;
+    let node;
     while ((node = treeWalker.nextNode())) {
       if ((node.parentNode.nodeName.toLowerCase() != 'a') &&
           (node.parentNode.nodeName.toLowerCase() != 'div') &&
@@ -229,9 +229,9 @@ BiDiMailUI.Display = {
 #ifdef DEBUG_wrapTextNodesInFlowedMessageDOMTree
       console.log("wrapping with DIV, node\n" + node.nodeValue);
 #endif
-      var wrapperDiv = clonedDiv.cloneNode(false);
+      const wrapperDiv = clonedDiv.cloneNode(false);
 
-      var emptyLine;
+      let emptyLine;
       if (node.parentNode.nodeName.toLowerCase() == 'a') {
         node.parentNode.parentNode.replaceChild(wrapperDiv,node.parentNode);
         wrapperDiv.appendChild(node.parentNode);
@@ -246,7 +246,7 @@ BiDiMailUI.Display = {
           ((node.nodeValue == '\n') ||
            !node.nodeValue );
       }
-      var sibling;
+      let sibling;
       // add everything within the current 'paragraph' to the new DIV
       while (wrapperDiv.nextSibling) {
         sibling = wrapperDiv.nextSibling
@@ -296,7 +296,7 @@ BiDiMailUI.Display = {
 #endif
 
     for (let i=0; i < body.childNodes.length; i++) {
-      var subBody = body.childNodes.item(i);
+      const subBody = body.childNodes.item(i);
 
 #ifdef DEBUG_preprocessMessageDOM
       console.log('subbody ' + i + ' is ' + subBody.className);
@@ -317,7 +317,7 @@ BiDiMailUI.Display = {
   gatherElementsRequiringDirectionSetting : function(
     body, elementsRequiringExplicitDirection) {
     for (let i=0; i < body.childNodes.length; i++) {
-      var subBody = body.childNodes.item(i);
+      const subBody = body.childNodes.item(i);
 
       // Not touching elements which aren't moz-text-something,
       // as we don't know what to do with them
@@ -330,13 +330,13 @@ BiDiMailUI.Display = {
       console.log('subbody ' + i + ' is ' + subBody.className);
 #endif
 
-      var tagNames = {
+      const tagNames = {
       	"moz-text-plain"   :"pre, blockquote",
       	"moz-text-flowed"  :"div, blockquote",
       	"moz-text-html"    :"div, table, blockquote"};
 
         // On older JS engines you would need to use getElementsByTagName("TAG") for each tag
-      var nodes =  subBody.querySelectorAll(tagNames[subBody.className]);
+      const nodes =  subBody.querySelectorAll(tagNames[subBody.className]);
       for (let j = 0; j < nodes.length; j++ ) {
         // In flowed messages, not touching elements which aren't moz-text-something,
         // as we don't know what to do with them
@@ -353,7 +353,7 @@ BiDiMailUI.Display = {
       "in detectAndSetDirections for message (don't know how to get the currently loaded message's URI)\n");
 #endif
 
-    var elementsRequiringExplicitDirection = new Array;
+    const elementsRequiringExplicitDirection = new Array;
     BiDiMailUI.Display.gatherElementsRequiringDirectionSetting(
       body, elementsRequiringExplicitDirection);
 
@@ -364,14 +364,14 @@ BiDiMailUI.Display = {
     // direction-check all of the elements whose direction should be set explicitly
 
     for (let i=0; i < elementsRequiringExplicitDirection.length; i++) {
-      var node = elementsRequiringExplicitDirection[i];
+      let node = elementsRequiringExplicitDirection[i];
       try {
 
 #ifdef DEBUG_detectAndSetDirections
         console.log('elementsRequiringExplicitDirection[ ' + i + ']: ' + node + "\ntype: " + node.nodeType + "\nclassName: " + node.className + "\nname: " + node.nodeName + "\nHTML:\n" + node.innerHTML + "\nOuter HTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
 #endif
 
-        var detectedDirection = BiDiMailUI.directionCheck(document, NodeFilter, node);
+        const detectedDirection = BiDiMailUI.directionCheck(document, NodeFilter, node);
 #ifdef DEBUG_detectAndSetDirections
         console.log("detected direction: " + detectedDirection);
 #endif
@@ -417,7 +417,7 @@ BiDiMailUI.Display = {
       body.style.direction = forcedDirection;
       break;
     default:
-      var originalBodyCSSDirectionProperty =
+      const originalBodyCSSDirectionProperty =
         body.getAttribute('bidimailui-original-direction');
       if (originalBodyCSSDirectionProperty &&
           (originalBodyCSSDirectionProperty != "") ) {
@@ -443,7 +443,7 @@ BiDiMailUI.Display = {
   //
   fixLoadedMessageCharsetIssues : function(cMCParams) {
 
-    var contentToMatch;
+    let contentToMatch;
 
     // TODO: perhaps we should prefer the undecoded MIME subject over
     // the decoded one - and decode it ourselves with the charset
@@ -503,7 +503,7 @@ BiDiMailUI.Display = {
     */
 
     // This sets parameter no. 1
-    var mustKeepCharset = cMCParams.dontReload || cMCParams.charsetOverrideInEffect;
+    const mustKeepCharset = cMCParams.dontReload || cMCParams.charsetOverrideInEffect;
 
     // This sets parameter no. 2
 #ifdef DEBUG_fixLoadedMessageCharsetIssues
@@ -544,7 +544,7 @@ BiDiMailUI.Display = {
 
     // This sets parameter no. 3
     // (note its value depends on parameter no. 2)
-    var havePreferredCharsetText;
+    let havePreferredCharsetText;
 
     if (cMCParams.preferredCharset != null) {
       if (cMCParams.mailnewsDecodingType == "preferred-charset") {
@@ -591,7 +591,7 @@ BiDiMailUI.Display = {
 
     // This sets parameter no. 4
     // (note its value depends on parameter no. 2)
-    var haveUTF8Text;
+    let haveUTF8Text;
 
     contentToMatch = new RegExp (
       (cMCParams.mailnewsDecodingType == "UTF-8") ?
@@ -767,14 +767,14 @@ BiDiMailUI.Display = {
 
 // returns true if numeric entities were found
   decodeNumericHTMLEntitiesInText : function(element) {
-    var entitiesFound = false;
-    var treeWalker = document.createTreeWalker(
+    let entitiesFound = false;
+    const treeWalker = document.createTreeWalker(
       element,
       NodeFilter.SHOW_TEXT,
       null, // additional filter function
       false
     );
-    var node;
+    let node;
     while((node = treeWalker.nextNode()) != null) {
       node.data = node.data.replace(
         /&#(\d+);/g,
