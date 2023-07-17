@@ -5,7 +5,7 @@ var Services = globalThis.Services || ChromeUtils.import("resource://gre/modules
 // display logic code elsewhere actually act on the displayed message
 
 BiDiMailUI.MessageOverlay = {
-  // We set this flag before reloading a message due to 
+  // We set this flag before reloading a message due to
   // character set mis-detection, to prevent repeated reloading
   dontReload : false,
 
@@ -74,7 +74,7 @@ BiDiMailUI.MessageOverlay = {
        && (domDocument.baseURI != "about:blank")
        && !BiDiMailUI.MessageOverlay.isFillerStaticPage(domDocument) );
     if (!canActOnDocument) { return [null, null, null]; }
-    
+
     var msgHdr; // We're assuming only one message is selected
     try {
       msgHdr = gMessageDisplay.displayedMessage;
@@ -93,7 +93,7 @@ BiDiMailUI.MessageOverlay = {
       currentCharset: msgWindow.mailCharacterSet,
       messageHeader: msgHdr,
       messageSubject: displayedMessageSubject,
-      subjectSetter: 
+      subjectSetter:
         function(str) {
           // using the appropriate setter rather than directly
           // setting the valueNode's data
@@ -133,7 +133,7 @@ BiDiMailUI.MessageOverlay = {
       // we're reloading with a different charset, don't do anything else
       return;
     }
-    BiDiMailUI.MessageOverlay.dontReload = false; 
+    BiDiMailUI.MessageOverlay.dontReload = false;
       // clearing BiDiMailUI.MessageOverlay.dontReload for other messages
 
     BiDiMailUI.Display.ActionPhases.htmlNumericEntitiesDecoding(body);
@@ -142,10 +142,10 @@ BiDiMailUI.MessageOverlay = {
 
     BiDiMailUI.MessageOverlay.updateDirectionMenuButton(null);
   },
-  
+
 // Functions from here on should not be used by code outside this file
 
-  // this function is passed to the charset phase actions and run 
+  // this function is passed to the charset phase actions and run
   // from there, but it's a UI function
   promptAndSetPreferredSingleByteCharset : function() {
     var list = [

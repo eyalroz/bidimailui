@@ -51,7 +51,7 @@ BiDiMailUI.PrefPane = {
   },
 
   updateSpaceBetweenParagraphsValue: function() {
-    this._getPrefElement("compose.space_between_paragraphs.value").value = 
+    this._getPrefElement("compose.space_between_paragraphs.value").value =
       this.getSpaceBetweenParagraphsValue();
   }
 };

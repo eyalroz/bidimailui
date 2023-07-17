@@ -7,7 +7,7 @@ var BiDiMailUI = { };
 // localized strings
 BiDiMailUI.__defineGetter__("Strings", function() {
   delete BiDiMailUI.Strings;
-  return BiDiMailUI.Strings = 
+  return BiDiMailUI.Strings =
     Services.strings.createBundle("chrome://bidimailui/locale/bidimailui.properties");
   });
 
@@ -20,7 +20,7 @@ BiDiMailUI.__defineGetter__("UnicodeConverter", function() {
 
 BiDiMailUI.encode = function(str, charsetEncoding) {
   try {
-    return new TextEncoder(charsetEncoding).encode(str); 
+    return new TextEncoder(charsetEncoding).encode(str);
   } catch(ex) {
     BiDiMailUI.UnicodeConverter.charset = charsetEncoding;
     return BiDiMailUI.UnicodeConverter.ConvertFromUnicode(str);
@@ -29,7 +29,7 @@ BiDiMailUI.encode = function(str, charsetEncoding) {
 
 BiDiMailUI.decode = function(str, charsetEncoding) {
   try {
-    return new TextDecoder(charsetEncoding).decode(str); 
+    return new TextDecoder(charsetEncoding).decode(str);
   } catch(ex) {
     BiDiMailUI.UnicodeConverter.charset = charsetEncoding;
     return BiDiMailUI.UnicodeConverter.ConvertToUnicode(str);
@@ -43,7 +43,7 @@ BiDiMailUI.decode = function(str, charsetEncoding) {
 BiDiMailUI.JS = {
 
 #ifdef DEBUG
-  stringToScanCodes : function(str) 
+  stringToScanCodes : function(str)
   {
     if (str == null)
       return null;
@@ -54,7 +54,7 @@ BiDiMailUI.JS = {
         charcode = str.charCodeAt(i).toString(16);
       }
       catch(ex) { }
-      scanCodesString += charcode + " ";  
+      scanCodesString += charcode + " ";
     }
     return scanCodesString;
   },
@@ -80,15 +80,15 @@ BiDiMailUI.__defineGetter__("AppPrefs", function() {
 // Some regexp string constants
 
 BiDiMailUI.RegExpStrings = {};
-BiDiMailUI.RegExpStrings.TEXT_SPLIT_SEQUENCE = 
+BiDiMailUI.RegExpStrings.TEXT_SPLIT_SEQUENCE =
  "\\n[ \\f\\r\\t\\v\\n\\u00A0\\u2028\\u2029!-@\\[-`{-\\xA0\\u2013\\u2014\\uFFFD]*\\n";
- 
+
 BiDiMailUI.RegExpStrings.MISDETECTED_RTL_CHARACTER =
   "[\\xBF-\\xD6\\xD8-\\xFF]";
 BiDiMailUI.RegExpStrings.MISDETECTED_RTL_SEQUENCE =
   BiDiMailUI.RegExpStrings.MISDETECTED_RTL_CHARACTER + "{2,}";
-  
-// TODO: some of these are only relevant for UTF-8 misdecoded as windows-1252 
+
+// TODO: some of these are only relevant for UTF-8 misdecoded as windows-1252
 // (or iso-8859-1; mozilla cheats and uses windows-1252), while some of these
 // are only relevant for UTF-8 misdecoded as windows-1255
 
@@ -99,7 +99,7 @@ BiDiMailUI.RegExpStrings.MISDETECTED_RTL_SEQUENCE =
 //
 // TODO: I would like to use \b's instead of the weird combination here,
 // but for some reason if I use \b's, I don't match the strings EE E4 20 and
-// E7 E3 22 F9 
+// E7 E3 22 F9
 BiDiMailUI.RegExpStrings.CODEPAGE_MISDETECTION_SEQUENCE =
   BiDiMailUI.RegExpStrings.MISDETECTED_RTL_CHARACTER +
   "{3,}" + "|" +  "(" + "(?:\\s|\"|\W|^)" +
@@ -120,7 +120,7 @@ BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE =
   // or windows-1252-ified octet sequences
   "(?:\\xD7(?:[ \\u017E\\u0152\\u0153\\u02DC\\u2013-\\u2022\\u203A\\u2220\\u2122]|&#65533;))" +
   " ?\"?){3}" +
-  "|" + 
+  "|" +
 
   // Arabic:
   // ------
@@ -135,7 +135,7 @@ BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE =
   "(?:\\xD9(?:[ \\u20AC\\u0192\\u02C6\\u0160\\u0161\\u0152\\u0153\\u017D\\u017E\\u0178\\u02DC\\u2026\\u2013-\\u203A\\u2122]|&#65533;))" +
   // ... and at least three characters
   " ?\"?){3}" +
-  "|" + 
+  "|" +
 
   // Hebrew or Arabic:
   // ------------------
@@ -144,7 +144,7 @@ BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE =
   "(?:\\uFFFD[\x80-\xBF])" +
   // ... and at least four characters, to be on the safe side
   " ?\"?){3}" +
-  "|" + 
+  "|" +
 
   // while \uFFFD characters are possible when mis-decoding UTF-8 as windows-1252/5/6
   // (e.g. windows-1255 doesn't have \x81 as a character),
@@ -156,32 +156,32 @@ BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE =
   //  which charset text is misdecoded as UTF-8 with Mozilla 'cheating', see bug 23322)
   //
   //"\\uFFFD{3,}" +
-  //"|" + 
-  
+  //"|" +
+
   // UTF-8 BOM octets - undecoded
   // (perhaps we should allow these not just at the beginning of the line?)
-  "^\\u00EF\\u00BB\\u00BF" + 
-  "|" + 
-  // UTF-8 BOM octets - misdecoded as windows-1255 
+  "^\\u00EF\\u00BB\\u00BF" +
+  "|" +
+  // UTF-8 BOM octets - misdecoded as windows-1255
   // (for some reason Mozilla gives up on the \xBF -> \u00BF third character)
-  "^\\u05DF\\u00BB[\\u00BF\\uFFFD]" + 
-  "|" + 
+  "^\\u05DF\\u00BB[\\u00BF\\uFFFD]" +
+  "|" +
   // Non-breaking space
-  "(?:\\xC2\\xA0)" + 
-  "|" + 
+  "(?:\\xC2\\xA0)" +
+  "|" +
   // This is heuristic, i.e. you happen to see this sequence here and there
   "(?:\\u05F3[\\u2018-\\u2022\\xA9]){2}";
 
 // TODO: A botched sequence may differ for windows-1252/5/6; also
 // the FFFDs might be interspersed with single other characters.
 BiDiMailUI.RegExpStrings.BOTCHED_UTF8_DECODING_SEQUENCE =
-  "(?:^|\x0A)\\uFFFD{3}"; 
-   
+  "(?:^|\x0A)\\uFFFD{3}";
+
 BiDiMailUI.performCorrectiveRecoding = function (
   document, NodeFilter, correctiveRecodingParams) {
 #ifdef DEBUG_performCorrectiveRecoding
   console.log(
-    "---------------------------------\nin performCorrectiveRecoding()\n" + 
+    "---------------------------------\nin performCorrectiveRecoding()\n" +
     "mailnewsDecodingType: " + correctiveRecodingParams.mailnewsDecodingType + "\n" +
     "recodePreferredCharset? " + correctiveRecodingParams.recodePreferredCharset + "\n" +
     "recodeUTF8? " + correctiveRecodingParams.recodeUTF8);
@@ -194,12 +194,12 @@ BiDiMailUI.performCorrectiveRecoding = function (
 #endif
     return;
   }
-  
+
   try {
     // This redundant setting of the charset is necessary to overcome an
     // issue with TB 2.x in which the first time you set the charset and
     // attempted to recode, you'd get a NS_ERROR_FAILURE exception;
-    // see bug 23321  
+    // see bug 23321
     BiDiMailUI.UnicodeConverter.charset = correctiveRecodingParams.preferredCharset;
   } catch(ex) { }
 
@@ -249,7 +249,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
 #ifdef DEBUG_performCorrectiveRecodingOnText
   console.log(
     "Will actually recode " + (correctiveRecodingParams.recodeUTF8  ? "misdecoded UTF-8 " : "") +
-    (correctiveRecodingParams.recodePreferredCharset  ? "preferred charset encoding" : "") ); 
+    (correctiveRecodingParams.recodePreferredCharset  ? "preferred charset encoding" : "") );
 #endif
   var lines = str.split('\n');
 #ifdef DEBUG_performCorrectiveRecodingOnText
@@ -257,7 +257,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
     "The string we'll recode has " + lines.length + " lines overall; will now work on each of them independently.");
 #endif
   for(let i = 0; i < lines.length; i++) {
-    var workingStr; 
+    var workingStr;
 
 #ifdef DEBUG_performCorrectiveRecodingOnText
     if (correctiveRecodingParams.recodeUTF8 &&
@@ -272,7 +272,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
 #endif
     }
 #endif
-    // Note: It's _important_ to check for UTF-8 first, because that has the 
+    // Note: It's _important_ to check for UTF-8 first, because that has the
     // much more distinctive [D7-D9] blah [D7-D9] blah [D7-D9] blah pattern!
     if (correctiveRecodingParams.recodeUTF8 &&
       BiDiMailUI.utf8MisdetectionExpression.test(lines[i])) {
@@ -281,8 +281,8 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
 #endif
       try {
         workingStr = lines[i];
-        
-        var charset = 
+
+        var charset =
             (correctiveRecodingParams.mailnewsDecodingType == "latin-charset") ?
                     'windows-1252' : correctiveRecodingParams.preferredCharset;
         // at this point, correctiveRecodingParams.mailnewsDecodingType can only be latin or preferred
@@ -302,7 +302,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
           workingStr  + "\n----\n" + BiDiMailUI.JS.stringToScanCodes(workingStr));
 #endif
 
-        // We see a lot of D7 20's instead of D7 A0's which are the 2-byte sequence for 
+        // We see a lot of D7 20's instead of D7 A0's which are the 2-byte sequence for
         // the Hebrew letter Nun; I guess some clients or maybe even Mozilla replace A0
         // (a non-breaking space in windows-1252) with 20 (a normal space)
         workingStr = workingStr.replace(/([\xD7-\xD9])\x20/g, "$1\xA0");
@@ -312,8 +312,8 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
         // the possibility of their being part of a 3-to-6-byte sequence)
         workingStr = workingStr.replace(/(^|[\x00-\xBF])\xA0+/g, "$1 ");
 
-        // decode any numeric HTML entities ; 
-        // weird stuff we don't recognize will be replaced with the 
+        // decode any numeric HTML entities ;
+        // weird stuff we don't recognize will be replaced with the
         // UTF-8 encoding of a \uFFFD (unicode replacement char)
         workingStr = workingStr.replace(
           /[\xC2-\xDF]*&#(\d+);/g,
@@ -328,7 +328,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
 
 #ifdef DEBUG_scancodes
         console.log(
-          "Line " + i +" after preprocessing (decoding of HTML entities, removing NBSPs (A0's)," + 
+          "Line " + i +" after preprocessing (decoding of HTML entities, removing NBSPs (A0's)," +
           "removing unterminated 2-byte sequences):\n" + workingStr +
           "\n----\n" + BiDiMailUI.JS.stringToScanCodes(workingStr));
 #endif
@@ -337,7 +337,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
         console.log("Interpreting line " + i + " as UTF-8.");
 #endif
         workingStr = BiDiMailUI.decode(workingStr, "UTF-8");
-          
+
 #ifdef DEBUG_performCorrectiveRecodingOnText
 #ifdef DEBUG_scancodes
         console.log(
@@ -358,7 +358,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
 #endif
         // in some cases we seem to get manged UTF-8 text
         // which can be fixed by re-applying the current character set to the message,
-        // then recoding if necessary; see 
+        // then recoding if necessary; see
         // https://www.mozdev.org/bugs/show_bug.cgi?id=18707
         if (/(\x3F[20\x90-\xA8]){3,}/.test(workingStr)) {
           correctiveRecodingParams.needCharsetForcing = true;
@@ -373,7 +373,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
           "charset encoding, but having been decoded as something else");
 #endif
       try {
-    	var charset = 
+    	var charset =
         // at this point, correctiveRecodingParams.mailnewsDecodingType can only be latin or UTF-8
             (correctiveRecodingParams.mailnewsDecodingType == "latin-charset") ? 'windows-1252' : "UTF-8";
 #ifdef DEBUG_scancodes
@@ -381,21 +381,21 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
           "Line " + i + ", decoded as if it were in " + charset + " charset encoding (contents & scancodes):\n" + lines[i] +
           "\n----\n" + BiDiMailUI.JS.stringToScanCodes(lines[i]));
 #endif
-      
+
 #ifdef DEBUG_performCorrectiveRecodingOnText
        console.log("Undecoding line " + i + " back to charset encoding " + charset);
 #endif
-       workingStr = 
+       workingStr =
        // BiDiMailUI.encode(lines[i], charset);
     	   lines[i];
 #ifdef DEBUG_scancodes
        console.log(
-         "Line " + i + " undecoded:\n" + workingStr  + "\n----\n" + 
+         "Line " + i + " undecoded:\n" + workingStr  + "\n----\n" +
          BiDiMailUI.JS.stringToScanCodes(workingStr));
 #endif
 #ifdef DEBUG_performCorrectiveRecodingOnText
        console.log(
-         "Interpreting line i" + i + " using preferred charset " + correctiveRecodingParams.preferredCharset); 
+         "Interpreting line i" + i + " using preferred charset " + correctiveRecodingParams.preferredCharset);
 #endif
        lines[i] = BiDiMailUI.decode(workingStr, correctiveRecodingParams.preferredCharset);
 
@@ -406,7 +406,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
           lines[i] + "\n----\n" + BiDiMailUI.JS.stringToScanCodes(lines[i]));
 #else
         console.log(
-            "Line " + i + " after recoding as " + correctiveRecodingParams.preferredCharset + ":\n\n" + 
+            "Line " + i + " after recoding as " + correctiveRecodingParams.preferredCharset + ":\n\n" +
             lines[i]);
 #endif
 #endif
@@ -436,9 +436,9 @@ BiDiMailUI.matchInText = function(document, NodeFilter, element, expression, mat
     null, // additional filter function
     false
   );
-  if (matchResults) { 
-    matchResults.hasMatching = false; 
-    matchResults.hasNonMatching = false; 
+  if (matchResults) {
+    matchResults.hasMatching = false;
+    matchResults.hasNonMatching = false;
   }
   var node;
   while ((node = treeWalker.nextNode())) {
@@ -466,7 +466,7 @@ BiDiMailUI.matchInText = function(document, NodeFilter, element, expression, mat
     else if (matchResults) {
       matchResults.hasNonMatching = true;
     }
-    
+
 #ifdef DEBUG_matchInText
     if (!matchResults) {
       console.log(
@@ -475,7 +475,7 @@ BiDiMailUI.matchInText = function(document, NodeFilter, element, expression, mat
 #endif
   }
 #ifdef DEBUG_matchInText
-  console.log( 
+  console.log(
     ((matchResults ? matchResults.hasMatching : false) ? "found" : "no") +
     " match.\n---------------------------------------------");
 #endif
@@ -491,7 +491,7 @@ BiDiMailUI.neutralsOnly = function(str) {
   return neutrals.test(str);
 }
 
-  
+
 // returns "rtl", "ltr", "neutral" or "mixed"; but only an element
 // with more than one text node can be mixed
 BiDiMailUI.directionCheck = function(document, NodeFilter, obj) {

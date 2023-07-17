@@ -16,10 +16,10 @@
           accesskey="&menu-bidimail-contol-character.accesskey;">
       <menupopup id="insert-insert-control-char-popup">
         <menuitem id="insert-insert-control-char-lrm" label="&menu-bidimail-lrm.label;"
-                  accesskey="&menu-bidimail-lrm.accesskey;" 
+                  accesskey="&menu-bidimail-lrm.accesskey;"
                   command="cmd_insert_lrm" />
         <menuitem id="insert-insert-control-char-rlm" label="&menu-bidimail-rlm.label;"
-                  accesskey="&menu-bidimail-rlm.accesskey;" 
+                  accesskey="&menu-bidimail-rlm.accesskey;"
                   command="cmd_insert_rlm" />
       </menupopup>
     </menu>

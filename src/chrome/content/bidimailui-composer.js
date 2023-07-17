@@ -24,7 +24,7 @@ BiDiMailUI.Composition = {
     // DC DS (PC + PS + DC + DS )*  (UC + US)
     //
     // and switches the direction whenever it matches this sequence. The automaton
-    // implementation (appearing in the keyboard event handler functions) requires 
+    // implementation (appearing in the keyboard event handler functions) requires
     // two bits for state memory:
 
     ctrlShiftSequence1 : null,
@@ -58,7 +58,7 @@ BiDiMailUI.Composition = {
         return null;
     }
     catch(ex) {
-      // the editor is apparently unavailable... 
+      // the editor is apparently unavailable...
       // although it should be available!
       dump(ex);
       return null;
@@ -238,7 +238,7 @@ BiDiMailUI.Composition = {
             continue; // we've found the next node to visit
           else if (node == range.endContainer) {
 #ifdef DEBUG_GetCurrentSelectionDirection
-            console.log('at TEXT_NODE endContainer, stopping traversal');        
+            console.log('at TEXT_NODE endContainer, stopping traversal');
 #endif
             break; // if the next node is the end container as well as a
              // text node, we don't need to to check its direction,
@@ -374,7 +374,7 @@ BiDiMailUI.Composition = {
   setParagraphMarginsRule : function() {
     // add a style rule to the document with the paragraph
     // vertical margins dictated by the prefs
-    
+
     var margin = BiDiMailUI.Composition.getParagraphMarginFromPrefs();
     BiDiMailUI.Composition.ensureMessageStyleRulesAdded(
       "bidiui-paragraph-margins",
@@ -428,7 +428,7 @@ BiDiMailUI.Composition = {
 
       if (tabInfo) {
         // we've gotten that tab info for some window and are
-        // traversing all tabs      
+        // traversing all tabs
         if (tabIndex == tabInfo.length) {
           tabInfo = null;
 #ifdef DEBUG_getDisplayedCopyParams
@@ -451,7 +451,7 @@ BiDiMailUI.Composition = {
           if (tabInfo[tabIndex].messageDisplay.displayedMessage)
             console.log('displayed message ID is ' +
               tabInfo[tabIndex].messageDisplay.displayedMessage.messageId);
-          else 
+          else
             console.log('no displayed message');
 #endif
         //displayedCopyBrowser = tabInfo[tabIndex].browser;
@@ -481,7 +481,7 @@ BiDiMailUI.Composition = {
           console.log('it\'s a tabbed window, got tab list');
 #endif
           continue;
-        } catch(ex) { 
+        } catch(ex) {
 #ifdef DEBUG_getDisplayedCopyParams
           console.log("can't get tabs: " + ex);
 #endif
@@ -536,7 +536,7 @@ BiDiMailUI.Composition = {
       messageParams.correctiveRecodedUTF8 = displayedCopyBody.hasAttribute('bidimailui-recoded-utf8');
       messageParams.correctiveRecodedCharset = displayedCopyBody.getAttribute('bidimailui-recoded-charset');
       messageParams.mailnewsDecodingType = displayedCopyBody.getAttribute('bidimailui-detected-decoding-type');
-      messageParams.charsetWasForced = 
+      messageParams.charsetWasForced =
         (displayedCopyBody.hasAttribute('bidimailui-charset-is-forced') ?
          (displayedCopyBody.getAttribute('bidimailui-charset-is-forced')=="true") : false);
       messageParams.gotDisplayedCopyParams = true;
@@ -575,7 +575,7 @@ BiDiMailUI.Composition = {
           "compose.default_direction","ltr").toLowerCase();
       let initialDirection;
       switch(defaultDirection) {
-        case "last_used": 
+        case "last_used":
           initialDirection = BiDiMailUI.Prefs.get("compose.last_used_direction","ltr");
           break;
         default:
@@ -732,14 +732,14 @@ BiDiMailUI.Composition = {
     BiDiMailUI.Composition.setInitialDirection(messageParams);
 
 #ifdef DEBUG_onEverythingLoadedAndReady
-    console.log('isReply = ' + messageParams.isReply + 
+    console.log('isReply = ' + messageParams.isReply +
       '\ngMsgCompose.originalMsgURI = ' +
       (gMsgCompose? gMsgCompose.originalMsgURI : 'no gMsgCompose') +
-      '\noriginalDisplayDirection = ' + messageParams.originalDisplayDirection + 
+      '\noriginalDisplayDirection = ' + messageParams.originalDisplayDirection +
       '\nUTF-8 recoded = ' + messageParams.correctiveRecodedUTF8 +
       '\ncharset recoded = ' + messageParams.correctiveRecodedCharset +
       '\nmailnews decoding type = ' + messageParams.mailnewsDecodingType +
-      '\ncharset was forced = ' + messageParams.charsetWasForced      
+      '\ncharset was forced = ' + messageParams.charsetWasForced
       );
 #endif
 
@@ -797,7 +797,7 @@ BiDiMailUI.Composition = {
     while (node) {
       if (node.nodeType == node.ELEMENT_NODE) {
         var display = v.getComputedStyle(node, "").getPropertyValue("display");
-        if (display == "block" || display == "table-cell" || 
+        if (display == "block" || display == "table-cell" ||
       display == "table-caption" || display == "list-item")
     return node;
       }
@@ -855,7 +855,7 @@ BiDiMailUI.Composition = {
 #ifdef DEBUG_applyDirectionSetterToSelectionBlockElements
               console.log(
                 'found closestBlockElement:' + closestBlockElement +
-                "\ntype: " + closestBlockElement.nodeType + "\nHTML:\n" + 
+                "\ntype: " + closestBlockElement.nodeType + "\nHTML:\n" +
                 closestBlockElement.innerHTML + "\nvalue:\n" +
                 closestBlockElement.nodeValue);
 #endif
@@ -934,10 +934,10 @@ BiDiMailUI.Composition = {
   getDefaultPreventedWrapper : function(ev) {
 	try {
       // This should be valid for Thunderbird 13.0 and later, see:
-      // https://bugzilla.mozilla.org/show_bug.cgi?id=708702 
+      // https://bugzilla.mozilla.org/show_bug.cgi?id=708702
       return ev.defaultPrevented;
     }
-    catch(ex) { 
+    catch(ex) {
       return ev.getPreventDefault();
 	}
   },
@@ -948,7 +948,7 @@ BiDiMailUI.Composition = {
       top.document.commandDispatcher.focusedWindow != content ||
       // The defaultPrevented flag is set on the event
       // (see http://bugzilla.mozdev.org/show_bug.cgi?id=12748)
-      BiDiMailUI.Composition.getDefaultPreventedWrapper(ev) ) 
+      BiDiMailUI.Composition.getDefaultPreventedWrapper(ev) )
     {
       return;
     }
@@ -1032,7 +1032,7 @@ BiDiMailUI.Composition = {
         BiDiMailUI.Composition.directionSwitchController.setAllCasters();
         // if Shift has gone up, Ctrl is still down and the next
         // Ctrl+Shift does need releasing it
-        BiDiMailUI.Composition.CtrlShiftMachine.ctrlShiftSequence1 = 
+        BiDiMailUI.Composition.CtrlShiftMachine.ctrlShiftSequence1 =
           (ev.keyCode == BiDiMailUI.Composition.CtrlShiftMachine.ShiftKeyCode);
         BiDiMailUI.Composition.CtrlShiftMachine.ctrlShiftSequence2 = false;
       }
@@ -1054,7 +1054,7 @@ BiDiMailUI.Composition = {
 
     if (// The preventDefault flag is set on the event
         // (see http://bugzilla.mozdev.org/show_bug.cgi?id=12748)
-      BiDiMailUI.Composition.getDefaultPreventedWrapper(ev)) 
+      BiDiMailUI.Composition.getDefaultPreventedWrapper(ev))
       return;
 
     // detect Ctrl+Shift key combination, and switch direction if it
@@ -1208,9 +1208,9 @@ BiDiMailUI.Composition.directionSwitchController = {
         command = "cmd_ltr_paragraph";
         casterID = "ltr-paragraph-direction-broadcaster";
         oppositeCasterID = "rtl-paragraph-direction-broadcaster";
-      
+
         direction = BiDiMailUI.Composition.getCurrentSelectionDirection();
-      
+
         var isRTL = (direction == "rtl");
         document.getElementById("ulButton").setAttribute("rtlmode", isRTL);
         document.getElementById("olButton").setAttribute("rtlmode", isRTL);
