@@ -2,7 +2,7 @@
 // for the BiDi Mail UI Thunderbird extension
 // by Eyal Rozenberg
 
-(async function() {
+(async function () {
   messenger.WindowListener.registerDefaultPrefs("defaults/preferences/bidimailui.js");
   messenger.WindowListener.registerChromeUrl([
     ["content",  "bidimailui",           "chrome/content/"      ],
