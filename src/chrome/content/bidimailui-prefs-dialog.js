@@ -1,4 +1,4 @@
-var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
+const { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
 
 BiDiMailUI.PrefPane = {
   init: function() {
@@ -8,12 +8,12 @@ BiDiMailUI.PrefPane = {
   openGuide: function(aEvent) {
     try {
       // Open the user guide in the default browser.
-      var helpLink = document.getElementById("bidiMailUIPrefPane")
+      const helpLink = document.getElementById("bidiMailUIPrefPane")
                              .getAttribute("helpURI");
-      var uri = Cc["@mozilla.org/network/io-service;1"]
+      const uri = Cc["@mozilla.org/network/io-service;1"]
         .getService(Ci.nsIIOService)
         .newURI(helpLink, null, null);
-      var protocolSvc = Cc["@mozilla.org/uriloader/external-protocol-service;1"]
+      const protocolSvc = Cc["@mozilla.org/uriloader/external-protocol-service;1"]
         .getService(Ci.nsIExternalProtocolService);
       protocolSvc.loadUrl(uri);
     }
@@ -31,18 +31,18 @@ BiDiMailUI.PrefPane = {
   },
 
   getSpaceBetweenParagraphsValue: function() {
-    var txtBoxValue =
+    const txtBoxValue =
       document.getElementById("space_between_paragraphs_value_text").value;
-    var rv = 0;
+    let rv = 0;
 
     if (this._getPrefElement("compose.space_between_paragraphs.scale")
             .value != "px") {
-      var floatVal = parseFloat(txtBoxValue, 10);
+      const floatVal = parseFloat(txtBoxValue, 10);
       if (!isNaN(floatVal))
         rv = floatVal;
     }
     else {
-      var intVal = parseInt(txtBoxValue, 10);
+      const intVal = parseInt(txtBoxValue, 10);
       if (!isNaN(intVal))
         rv = intVal;
     }

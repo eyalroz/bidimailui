@@ -1,5 +1,5 @@
-var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
 var Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+const { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
 
 BiDiMailUI.Editor = {
 
@@ -18,7 +18,7 @@ BiDiMailUI.Editor = {
       BiDiMailUI.Editor.directionButtonsPrefListener
     );
 
-    var documentParams = {
+    const documentParams = {
       isEmpty: false
     };
 
@@ -42,7 +42,7 @@ BiDiMailUI.Editor = {
   },
 
   handleComposerDirectionButtons : function () {
-    var hiddenButtonsPref =
+    const hiddenButtonsPref =
       !BiDiMailUI.Prefs.get("compose.show_direction_buttons", true);
 
     document.getElementById("directionality-formatting-toolbar-section")
@@ -64,7 +64,7 @@ BiDiMailUI.Editor = {
   },
 
   determineNewDocumentParams : function (messageParams) {
-    var body = BiDiMailUI.getMessageEditor(document).contentDocument.body;
+    const body = BiDiMailUI.getMessageEditor(document).contentDocument.body;
 
     try {
       if (!body.hasChildNodes())

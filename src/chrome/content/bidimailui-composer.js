@@ -1,6 +1,6 @@
-var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
 var Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 var { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm");
+var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
 
 BiDiMailUI.Composition = {
 
@@ -51,8 +51,8 @@ BiDiMailUI.Composition = {
     // whenever a block element is reached (i.e. not
     // scan within it), but at the moment we do not do so.
 
-    var hasLTR = false, hasRTL = false;
-    var editor = GetCurrentEditor();
+    let hasLTR = false, hasRTL = false;
+    let editor = GetCurrentEditor();
     try {
       if (editor.selection.rangeCount == 0)
         return null;
@@ -64,19 +64,19 @@ BiDiMailUI.Composition = {
       return null;
     }
 
-    var view = document.defaultView;
+    let view = document.defaultView;
     for (let i=0; i < editor.selection.rangeCount; ++i ) {
-      var range = editor.selection.getRangeAt(i);
-      var node = range.startContainer;
-      var cacIsLTR = false;
-      var cacIsRTL = false;
+      let range = editor.selection.getRangeAt(i);
+      let node = range.startContainer;
+      let cacIsLTR = false;
+      let cacIsRTL = false;
 
       // first check the block level element which contains
       // the entire range (but don't use its direction just yet)
 
-      var cac = range.commonAncestorContainer;
+      let cac = range.commonAncestorContainer;
 
-      var cbe = BiDiMailUI.Composition.findClosestBlockElement(cac);
+      let cbe = BiDiMailUI.Composition.findClosestBlockElement(cac);
       switch (view.getComputedStyle(cbe, "").getPropertyValue("direction")) {
         case "ltr":
           cacIsLTR = true;
@@ -137,8 +137,8 @@ BiDiMailUI.Composition = {
           console.log('visiting start slope node:' + node + "\ntype: " + node.nodeType + "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
 #endif
           if ( (typeof(node) !== "undefined") && node.nodeType == Node.ELEMENT_NODE) {
-            var nodeStyle = view.getComputedStyle(node, "");
-            var display = nodeStyle.getPropertyValue("display");
+            let nodeStyle = view.getComputedStyle(node, "");
+            let display = nodeStyle.getPropertyValue("display");
             if (display == "block" || display == "table-cell" ||
                 display == "table-caption" || display == "list-item" ||
                 (node.nodeType == Node.DOCUMENT_NODE)) {
@@ -183,8 +183,8 @@ BiDiMailUI.Composition = {
         //       nor will it trigger the use of the cac's direction!
 
         if (node.nodeType == Node.ELEMENT_NODE) {
-          var nodeStyle = view.getComputedStyle(node, "");
-          var display = nodeStyle.getPropertyValue("display");
+          let nodeStyle = view.getComputedStyle(node, "");
+          let display = nodeStyle.getPropertyValue("display");
           if (display == "block" || display == "table-cell" ||
               display == "table-caption" || display == "list-item" ||
              (node.nodeType == Node.DOCUMENT_NODE)) {
@@ -301,15 +301,15 @@ BiDiMailUI.Composition = {
 
   // This inserts any character, actually
   insertControlCharacter : function(controlCharacter) {
-    editor = GetCurrentEditor();
+    const editor = GetCurrentEditor();
     editor.beginTransaction();
     editor.insertText(controlCharacter);
     editor.endTransaction();
   },
 
   switchDocumentDirection : function() {
-    var body = BiDiMailUI.getMessageEditor(document).contentDocument.body;
-    var currentDir = window.getComputedStyle(body, null).direction;
+    const body = BiDiMailUI.getMessageEditor(document).contentDocument.body;
+    const currentDir = window.getComputedStyle(body, null).direction;
 
     // Note: Null/empty value means LTR, so we check for RTL only
 
@@ -321,7 +321,7 @@ BiDiMailUI.Composition = {
 
   handleComposeReplyCSS : function() {
     if (IsHTMLEditor()) {
-      let domWindowUtils = GetCurrentEditorElement().contentWindow.windowUtils;
+      const domWindowUtils = GetCurrentEditorElement().contentWindow.windowUtils;
       domWindowUtils.loadSheetUsingURIString("chrome://bidimailui/content/quotebar.css", domWindowUtils.AGENT_SHEET);
 #ifdef DEBUG_handleComposeReplyCSS
       console.log('Added the quotebar fix stylesheet to the HTML editor document');
@@ -359,7 +359,7 @@ BiDiMailUI.Composition = {
   },
 
   handleDirectionButtons : function() {
-    var hiddenButtonsPref =
+    const hiddenButtonsPref =
       !BiDiMailUI.Prefs.get("compose.show_direction_buttons", true);
 
     // Note: In Thunderbird and Seamonkey 2.x, the main toolbar buttons are
@@ -375,7 +375,7 @@ BiDiMailUI.Composition = {
     // add a style rule to the document with the paragraph
     // vertical margins dictated by the prefs
 
-    var margin = BiDiMailUI.Composition.getParagraphMarginFromPrefs();
+    const margin = BiDiMailUI.Composition.getParagraphMarginFromPrefs();
     BiDiMailUI.Composition.ensureMessageStyleRulesAdded(
       "bidiui-paragraph-margins",
       "body p { margin-bottom: " + margin + "; margin-top: 0pt; } ");
@@ -387,7 +387,7 @@ BiDiMailUI.Composition = {
   // using "p" or "" (for paragraph and body respectively)
 
   setParagraphMode : function(modeStr) {
-    var editor = GetCurrentEditor();
+    const editor = GetCurrentEditor();
     if (!editor) {
 #ifdef DEBUG_handleComposeReplyCSS
       console.log('setParagraphMode  failed to acquire editor object.');
@@ -414,10 +414,10 @@ BiDiMailUI.Composition = {
     // in a messenger window with a direction set in a
     // single message window
 
-    var win, loadedMessageURI, displayedCopyBrowser;
-    var messengerWindowList = Services.wm.getEnumerator("mail:3pane");
-    var messageWindowList = Services.wm.getEnumerator("mail:messageWindow");
-    var tabInfo,tabIndex;
+    let win, loadedMessageURI, displayedCopyBrowser;
+    const messengerWindowList = Services.wm.getEnumerator("mail:3pane");
+    const messageWindowList = Services.wm.getEnumerator("mail:messageWindow");
+    let tabInfo,tabIndex;
 
     while (true) {
 #ifdef DEBUG_getDisplayedCopyParams
@@ -520,14 +520,15 @@ BiDiMailUI.Composition = {
       console.log('found a window/tab displaying our message');
 #endif
 
-      var displayedCopyBody = displayedCopyBrowser.contentDocument.body;
+
+      const displayedCopyBody = displayedCopyBrowser.contentDocument.body;
 
 #ifdef DEBUG_getDisplayedCopyParams
       console.log('body is ' + displayedCopyBody);
 #endif
 
       for (let i=0; i < displayedCopyBody.childNodes.length; i++) {
-        var subBody = displayedCopyBody.childNodes.item(i);
+        const subBody = displayedCopyBody.childNodes.item(i);
 
         if (! /^moz-text/.test(subBody.className))
           continue;
@@ -650,7 +651,7 @@ BiDiMailUI.Composition = {
 
     BiDiMailUI.Composition.determineNewMessageParams(messageBody, messageParams);
 
-    var clearMisdetectionCorrectionParams = {
+    const clearMisdetectionCorrectionParams = {
       body: BiDiMailUI.getMessageEditor(document).contentDocument.body,
       charsetOverrideInEffect: true,
         // it seems we can't trigger a reload by changing the charset
@@ -694,9 +695,9 @@ BiDiMailUI.Composition = {
     let isHTMLEditor = IsHTMLEditor();
     if (IsHTMLEditor) {
       BiDiMailUI.Composition.alternativeEnterBehavior = BiDiMailUI.Prefs.get("compose.alternative_enter_behavior", true);
-      let  defaultToSendBothTextAndHTML = BiDiMailUI.Prefs.get("compose.default_to_send_text_with_html", false);
+      const defaultToSendBothTextAndHTML = BiDiMailUI.Prefs.get("compose.default_to_send_text_with_html", false);
 
-      var defaultOptionElementId = (defaultToSendBothTextAndHTML ? "format_both" : "format_html");
+      const defaultOptionElementId = (defaultToSendBothTextAndHTML ? "format_both" : "format_html");
       document.getElementById(defaultOptionElementId).setAttribute("checked", "true");
       if (typeof OutputFormatMenuSelect == "function") {
         OutputFormatMenuSelect(
@@ -706,6 +707,7 @@ BiDiMailUI.Composition = {
       } else {
         // OutputFormatMenuSelect function has been removed in 102.
         let prevSendFormat = gMsgCompose.compFields.deliveryFormat;
+        let newSendFormat;
         switch (defaultOptionElementId) {
           case "format_html":
             newSendFormat = Ci.nsIMsgCompSendFormat.HTML;
@@ -723,7 +725,7 @@ BiDiMailUI.Composition = {
       // relevant to paragraph mode; we used to always try to set
       // paragraph mode to express that behavior, but several users
       // have been complaining...
-      var startCompositionInParagraphMode = BiDiMailUI.Prefs.get("compose.start_composition_in_paragraph_mode", false);
+      const startCompositionInParagraphMode = BiDiMailUI.Prefs.get("compose.start_composition_in_paragraph_mode", false);
       if (startCompositionInParagraphMode)
         BiDiMailUI.Composition.setParagraphMode("p");
       else
@@ -793,10 +795,10 @@ BiDiMailUI.Composition = {
 
   findClosestBlockElement : function(node) {
     // Try to locate the closest ancestor with display:block
-    var v = node.ownerDocument.defaultView;
+    const v = node.ownerDocument.defaultView;
     while (node) {
       if (node.nodeType == node.ELEMENT_NODE) {
-        var display = v.getComputedStyle(node, "").getPropertyValue("display");
+        const display = v.getComputedStyle(node, "").getPropertyValue("display");
         if (display == "block" || display == "table-cell" ||
       display == "table-caption" || display == "list-item")
     return node;
@@ -810,7 +812,7 @@ BiDiMailUI.Composition = {
 #ifdef DEBUG_applyDirectionSetterToSelectionBlockElements
     console.log('----- BiDiMailUI.Composition.applyDirectionSetterToSelectionBlockElements() -----');
 #endif
-    var editor = GetCurrentEditor();
+    const editor = GetCurrentEditor();
     if (!editor) {
       dump("Could not acquire editor object.");
       return;
@@ -820,9 +822,9 @@ BiDiMailUI.Composition = {
       editor.beginTransaction();
       try {
         for (let i=0; i < editor.selection.rangeCount; ++i) {
-          var range = editor.selection.getRangeAt(i);
-          var startContainer = range.startContainer;
-          var endContainer = range.endContainer;
+          const range = editor.selection.getRangeAt(i);
+          let startContainer = range.startContainer;
+          let endContainer = range.endContainer;
 
           // special case: if our range is the entire body, what we want to change
           // are its children's directions, not the body direction - we have a
@@ -840,7 +842,7 @@ BiDiMailUI.Composition = {
             "\nvalue:\n" + endContainer.nodeValue);
 #endif
 
-          var node = startContainer;
+          let node = startContainer;
           // walk the tree till we find the endContainer of the selection range,
           // giving our directionality style to everything on our way
           do {
@@ -850,7 +852,7 @@ BiDiMailUI.Composition = {
               "\nHTML:\n" + node.innerHTML + "\nvalue:\n" + node.nodeValue);
 #endif
 
-            var closestBlockElement = BiDiMailUI.Composition.findClosestBlockElement(node);
+            let closestBlockElement = BiDiMailUI.Composition.findClosestBlockElement(node);
             if (closestBlockElement) {
 #ifdef DEBUG_applyDirectionSetterToSelectionBlockElements
               console.log(
@@ -1081,9 +1083,9 @@ BiDiMailUI.Composition = {
   },
 
   getParagraphMarginFromPrefs : function() {
-    var basePrefName = "compose.space_between_paragraphs";
-    var marginScale = BiDiMailUI.Prefs.get(basePrefName + ".scale", "cm");
-    var marginVal;
+    const basePrefName = "compose.space_between_paragraphs";
+    const marginScale = BiDiMailUI.Prefs.get(basePrefName + ".scale", "cm");
+    let marginVal;
     if (marginScale != "px") {
       marginVal =
         parseFloat(BiDiMailUI.Prefs.get(basePrefName + ".value", "0"), 10);
@@ -1099,7 +1101,7 @@ BiDiMailUI.Composition = {
   },
 
   commandUpdate_MsgComposeDirection : function() {
-    var focusedWindow = top.document.commandDispatcher.focusedWindow;
+    const focusedWindow = top.document.commandDispatcher.focusedWindow;
 
     // we're just setting focus to where it was before
     if (focusedWindow == BiDiMailUI.Composition.lastWindowToHaveFocus)
@@ -1134,9 +1136,9 @@ BiDiMailUI.Composition.directionSwitchController = {
   },
 
   isCommandEnabled: function(command) {
-    var inMessage = (content == top.document.commandDispatcher.focusedWindow);
-    var inSubjectBox = this.inSubjectBox_();
-    var retVal = false;
+    const inMessage = (content == top.document.commandDispatcher.focusedWindow);
+    const inSubjectBox = this.inSubjectBox_();
+    let retVal = false;
 
     // and now for what this function is actually supposed to do...
 
@@ -1186,7 +1188,7 @@ BiDiMailUI.Composition.directionSwitchController = {
 #ifdef DEBUG_setCasterGroup
     console.log('setting caster group ' + casterPair);
 #endif
-    var casterID, oppositeCasterID, command, direction, commandsAreEnabled;
+    let casterID, oppositeCasterID, command, direction, commandsAreEnabled, isRTL;
 
     // window is not ready to run getComputedStyle before some point,
     // and it would cause a crash if we were to continue (see bug 11712)
@@ -1211,7 +1213,7 @@ BiDiMailUI.Composition.directionSwitchController = {
 
         direction = BiDiMailUI.Composition.getCurrentSelectionDirection();
 
-        var isRTL = (direction == "rtl");
+        isRTL = (direction == "rtl");
         document.getElementById("ulButton").setAttribute("rtlmode", isRTL);
         document.getElementById("olButton").setAttribute("rtlmode", isRTL);
         document.getElementById("outdentButton").setAttribute("rtlmode", isRTL);
@@ -1219,7 +1221,7 @@ BiDiMailUI.Composition.directionSwitchController = {
         commandsAreEnabled = inMessage;
         break;
       default:
-        var isRTL = document.getElementById("rtl-paragraph-direction-broadcaster").getAttribute("checked");
+        isRTL = document.getElementById("rtl-paragraph-direction-broadcaster").getAttribute("checked");
         document.getElementById("ulButton").setAttribute("rtlmode", isRTL);
         document.getElementById("olButton").setAttribute("rtlmode", isRTL);
         document.getElementById("outdentButton").setAttribute("rtlmode", isRTL);
@@ -1227,8 +1229,8 @@ BiDiMailUI.Composition.directionSwitchController = {
 
         return;
     }
-    var caster = document.getElementById(casterID);
-    var oppositeCaster = document.getElementById(oppositeCasterID);
+    const caster = document.getElementById(casterID);
+    const oppositeCaster = document.getElementById(oppositeCasterID);
 
     caster.setAttribute("checked", direction == "ltr");
     caster.setAttribute("disabled", !commandsAreEnabled);
@@ -1240,9 +1242,9 @@ BiDiMailUI.Composition.directionSwitchController = {
 #ifdef DEBUG_setAllCasters
       console.log('setting casters.');
 #endif
-    var inMessage = (content == top.document.commandDispatcher.focusedWindow);
-    var inSubjectBox = this.inSubjectBox_();
-    var retVal = false;
+    const inMessage = (content == top.document.commandDispatcher.focusedWindow);
+    const inSubjectBox = this.inSubjectBox_();
+    let retVal = false;
 
     this.setCasterGroup("document",inMessage,inSubjectBox);
     this.setCasterGroup("paragraph",inMessage,inSubjectBox);
