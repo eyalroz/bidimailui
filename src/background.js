@@ -13,13 +13,23 @@
     ["locale",   "bidimailui", "fa",     "chrome/locale/fa/"    ],
     ["locale",   "bidimailui", "ur",     "chrome/locale/ur/"    ]
   ]);
+  let registerChromeInjectors = function (registrationInfo) {
+    for (let [relativeWindowHref, relativeInjectorPath] of registrationInfo) {
+      messenger.WindowListener.registerWindow(
+        `chrome://messenger/content/${relativeWindowHref}`,
+        `chrome://bidimailui/content/overlay-injectors/${relativeInjectorPath}`
+      );
+    }
+  };
 
-  messenger.WindowListener.registerWindow("chrome://messenger/content/messenger.xhtml", "chrome://bidimailui/content/overlay-injectors/messenger.js");
-  messenger.WindowListener.registerWindow("chrome://messenger/content/messageWindow.xhtml",                     "chrome://bidimailui/content/overlay-injectors/messenger.js");
-  messenger.WindowListener.registerWindow("chrome://messenger/content/messengercompose/messengercompose.xhtml", "chrome://bidimailui/content/overlay-injectors/messengercompose.js");
-  messenger.WindowListener.registerWindow("chrome://messenger/content/editorOverlay.xhtml",                     "chrome://bidimailui/content/overlay-injectors/editorOverlay.js");
-  messenger.WindowListener.registerWindow("chrome://messenger/content/cutomizeToolbar.xhtml",                   "chrome://bidimailui/content/overlay-injectors/customizeToolbar.js");
+  registerChromeInjectors([
+    ["messenger.xhtml",                         "messenger.js"        ],
+    ["messageWindow.xhtml",                     "messenger.js"        ],
+    ["messengercompose/messengercompose.xhtml", "messengercompose.js" ],
+    ["editorOverlay.xhtml",                     "editorOverlay.js"    ],
+    ["customizeToolbar.xhtml",                  "customizeToolbar.js" ]
+  ]);
 
-  messenger.WindowListener.registerOptionsPage("chrome://bidimailui/content/bidimailui-prefs-dialog.xhtml")
+  messenger.WindowListener.registerOptionsPage("chrome://bidimailui/content/bidimailui-prefs-dialog.xhtml");
   messenger.WindowListener.startListening();
 })()
