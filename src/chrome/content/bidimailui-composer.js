@@ -295,16 +295,7 @@ BiDiMailUI.Composition = {
       console.log('could not get the message editor / content frame by ID - that shouldn\'t be possible');
     }
 #endif
-    if (BiDiMailUI.App.versionIsAtLeast("71")) {
-      document.getElementById("msgSubject").style.direction = direction;
-    }
-    else {
-      // We can't use the dir attribute of the subject textbox / html:input, like we
-      // do for the message body, since XUL elements' dir attribute means something
-      // else than this attribute for HTML elements. But we can set it for its input
-      // field...
-      document.getElementById("msgSubject").inputField.style.direction = direction;
-    }
+    document.getElementById("msgSubject").style.direction = direction;
     BiDiMailUI.Prefs.set("compose.last_used_direction", direction);
   },
 
@@ -1138,9 +1129,7 @@ BiDiMailUI.Composition.directionSwitchController = {
   },
 
   inSubjectBox_ : function()   {
-    var subjectInputField = BiDiMailUI.App.versionIsAtLeast("71") ?
-       document.getElementById("msgSubject") :
-       document.getElementById("msgSubject").inputField;
+    let subjectInputField = document.getElementById("msgSubject");
     return (document.commandDispatcher.focusedElement == subjectInputField);
   },
 
