@@ -52,12 +52,13 @@ BiDiMailUI.MessageOverlay = {
     }
   },
 
-  // the following function is a copy of MessengerSetForcedCharacterSet() from
-  // shareglue.js ; somehow, in TB 68, we've lost access to the code in shareglue.js
   setForcedCharacterSet : function(aCharset) {
-    messenger.setDocumentCharset(aCharset);
+    // This is no longer supported (!) in Thunderbird - you cannot change the charset
+    // messenger.setDocumentCharset(aCharset);
     msgWindow.mailCharacterSet = aCharset;
     msgWindow.charsetOverride = true;
+    // ... but maybe force-detecting might help some
+    messenger.forceDetectDocumentCharset();
   },
 
   isFillerStaticPage : function(domDocument) {
