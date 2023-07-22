@@ -136,17 +136,17 @@ BiDiMailUI.MessageOverlay = {
   // from there, but it's a UI function
   promptAndSetPreferredSingleByteCharset : function () {
     const list = [
-      BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.set_to_windows_1255"),
-      BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.set_to_windows_1256"),
-      BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.do_not_set")
+      BiDiMailUI.Strings.getByName("charset_dialog.set_to_windows_1255"),
+      BiDiMailUI.Strings.getByName("charset_dialog.set_to_windows_1256"),
+      BiDiMailUI.Strings.getByName("charset_dialog.do_not_set")
     ];
     // This disappears in version 91, probably
     const appPrefValue = BiDiMailUI.AppPrefs.get("mailnews.view_default_charset", null, Ci.nsIPrefLocalizedString);
     let selected = (appPrefValue) ? { value: appPrefValue } : {};
     const ok = Services.prompt.select(
       window,
-      BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.window_title"),
-      BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.dialog_message"),
+      BiDiMailUI.Strings.getByName("charset_dialog.window_title"),
+      BiDiMailUI.Strings.getByName("charset_dialog.dialog_message"),
       list, selected);
 
     if (!ok) { return; }

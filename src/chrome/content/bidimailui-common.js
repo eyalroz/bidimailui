@@ -1,15 +1,26 @@
 const EXPORTED_SYMBOLS = [ "BiDiMailUI" ];
-var Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const { Preferences } = ChromeUtils.import("resource://gre/modules/Preferences.jsm");
+var     Services       = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+const { Preferences }  = ChromeUtils.import("resource://gre/modules/Preferences.jsm");
+const { XPCOMUtils   } = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 var BiDiMailUI = { };
 
-// localized strings
-BiDiMailUI.__defineGetter__("Strings", function () {
-  delete BiDiMailUI.Strings;
-  return BiDiMailUI.Strings =
-    Services.strings.createBundle("chrome://bidimailui/locale/bidimailui.properties");
-});
+//---------------------------------------------------------
+
+BiDiMailUI.Strings = {};
+
+XPCOMUtils.defineLazyGetter(BiDiMailUI.Strings, "bundle",
+  () => Services.strings.createBundle("chrome://bidimailui/locale/bidimailui.properties")
+);
+
+BiDiMailUI.Strings.format = function (stringName, formatArguments) {
+  const args = formatArguments ? Array.from(formatArguments) : [];
+  return this.bundle.formatStringFromName(`bidimailui.${stringName}`, args);
+};
+
+BiDiMailUI.Strings.getByName = (stringName) => this.format(stringName, []);
+
+//---------------------------------------------------------
 
 BiDiMailUI.__defineGetter__("UnicodeConverter", function () {
   delete BiDiMailUI.UnicodeConverter;
