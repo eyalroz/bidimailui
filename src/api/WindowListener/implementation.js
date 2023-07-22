@@ -238,9 +238,7 @@ var WindowListener_102 = class extends ExtensionCommon.ExtensionAPI {
   }
 
   setupAddonManager(managerWindow, forceLoad = false) {
-    if (!managerWindow) {
-      return;
-    }
+    if (!managerWindow) return;
     if (!(
       managerWindow &&
       managerWindow[this.uniqueRandomID] &&
@@ -1273,19 +1271,13 @@ var WindowListener_115 = class extends ExtensionCommon.ExtensionAPI {
   }
 
   setupAddonManager(managerWindow, forceLoad = false) {
-    if (!managerWindow) {
-      return;
-    }
-    if (!this.pathToOptionsPage) {
-      return;
-    }
+    if (!managerWindow) return;
+    if (!this.pathToOptionsPage) return;
     if (
       managerWindow &&
       managerWindow[this.uniqueRandomID] &&
       managerWindow[this.uniqueRandomID].hasAddonManagerEventListeners
-    ) {
-      return;
-    }
+    ) return;
 
     managerWindow.document.addEventListener("ViewChanged", this);
     managerWindow.document.addEventListener("update", this);
@@ -1683,16 +1675,14 @@ var WindowListener_115 = class extends ExtensionCommon.ExtensionAPI {
           window &&
           window.location.href != "about:blank" &&
           window.document.readyState == "complete"
-        ) {
-          return;
-        }
+        ) return;
       }
       throw new Error("Window ignored");
     }
 
     try {
       await fullyLoaded(window);
-    } catch(ex) {
+    } catch (ex) {
       return;
     }
 
