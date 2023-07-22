@@ -40,11 +40,10 @@ function injectToolbarButton() {
       </menupopup>
     </toolbarbutton>
   </toolbarpalette>`,
-    [
-      "chrome://bidimailui/locale/bidimailui.dtd"
-    ],
-    debugInjection
-  );
+  [
+    "chrome://bidimailui/locale/bidimailui.dtd"
+  ],
+  debugInjection);
 }
 function injectOtherElements() {
   WL.injectElements(`
@@ -71,18 +70,18 @@ function injectOtherElements() {
                 key="key-bidimailui-cycle"
                 oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
     </menupopup>`,
-    [
-      "chrome://bidimailui/locale/bidimailui.dtd"
-    ],
-    debugInjection
-  );
+  [
+    "chrome://bidimailui/locale/bidimailui.dtd"
+  ],
+  debugInjection);
 }
 
 // called on window load or on add-on activation while window is already open
 function onLoad(activatedWhileWindowOpen) {
   injectToolbarButton();
   injectOtherElements();
-  // We currently use a single CSS file for all of our style (not including the dynamically-injecte quotebar CSS for message documents)
+  // We currently use a single CSS file for all of our style (not including the
+  // dynamically-injecte quotebar CSS for message documents)
   WL.injectCSS("chrome://bidimailui/content/skin/classic/bidimailui.css");
   document.getElementById("messagepane").addEventListener("load", BiDiMailUI.MessageOverlay.onLoad, true);
 
@@ -100,8 +99,7 @@ function onLoad(activatedWhileWindowOpen) {
 // called on window unload or on add-on deactivation while window is still open
 function onUnload(deactivatedWhileWindowOpen) {
   // no need to clean up UI on global shutdown
-  if (!deactivatedWhileWindowOpen)
-    return;
+  if (!deactivatedWhileWindowOpen) return;
   // If we've added any elements not through WL.inject functions - we need to remove
   // them manually here. The WL-injected elements get auto-removed
   document.getElementById("messagepane").removeEventListener("load", BiDiMailUI.MessageOverlay.onLoad);

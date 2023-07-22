@@ -9,33 +9,33 @@ BiDiMailUI.MessageOverlay = {
   // character set mis-detection, to prevent repeated reloading
   dontReload : false,
 
-  cycleDirectionSettings : function() {
+  cycleDirectionSettings : function () {
     const messagePane = document.getElementById("messagepane");
     const body = messagePane.contentDocument.body;
     let newForcedDirection;
     switch (body.getAttribute('bidimailui-forced-direction')) {
-      case 'ltr':
-        newForcedDirection = 'rtl';
-        break;
-      case 'rtl':
-        newForcedDirection = null;
-        break;
-      default: // should be null
-        newForcedDirection = 'ltr';
+    case 'ltr':
+      newForcedDirection = 'rtl';
+      break;
+    case 'rtl':
+      newForcedDirection = null;
+      break;
+    default: // should be null
+      newForcedDirection = 'ltr';
     }
-    BiDiMailUI.Display.setMessageDirectionForcing(body,newForcedDirection);
+    BiDiMailUI.Display.setMessageDirectionForcing(body, newForcedDirection);
     BiDiMailUI.MessageOverlay.updateDirectionMenuButton(newForcedDirection);
   },
 
-  forceDirection : function(ev,forcedDirection) {
+  forceDirection : function (ev, forcedDirection) {
     const messagePane = document.getElementById("messagepane");
     const body = messagePane.contentDocument.body;
-    BiDiMailUI.Display.setMessageDirectionForcing(body,forcedDirection);
+    BiDiMailUI.Display.setMessageDirectionForcing(body, forcedDirection);
     BiDiMailUI.MessageOverlay.updateDirectionMenuButton(forcedDirection);
     ev.stopPropagation();
   },
 
-  updateDirectionMenuButton : function(forcedDirection) {
+  updateDirectionMenuButton : function (forcedDirection) {
     const menubutton = document.getElementById('bidimailui-forcing-menubutton');
     if (menubutton) {
       menubutton.setAttribute('selectedItem', (forcedDirection ? forcedDirection : 'autodetect'));
@@ -48,7 +48,7 @@ BiDiMailUI.MessageOverlay = {
     }
   },
 
-  setForcedCharacterSet : function(aCharset) {
+  setForcedCharacterSet : function (aCharset) {
     // This is no longer supported (!) in Thunderbird - you cannot change the charset
     // messenger.setDocumentCharset(aCharset);
     msgWindow.mailCharacterSet = aCharset;
@@ -57,11 +57,11 @@ BiDiMailUI.MessageOverlay = {
     messenger.forceDetectDocumentCharset();
   },
 
-  isFillerStaticPage : function(domDocument) {
+  isFillerStaticPage : function (domDocument) {
     return /^http:\/\/.*www\.mozilla.*\/start\/$/.test(domDocument.baseURI);
   },
 
-  gatherParameters : function() {
+  gatherParameters : function () {
     if (!msgWindow) { return [null, null, null]; }
     let domDocument =  msgWindow.messageWindowDocShell.contentViewer.DOMDocument;
       // The following used to work, but now doesn't:
@@ -69,16 +69,16 @@ BiDiMailUI.MessageOverlay = {
     let canActOnDocument =
       (domDocument && domDocument.baseURI && domDocument.body
        && (domDocument.baseURI != "about:blank")
-       && !BiDiMailUI.MessageOverlay.isFillerStaticPage(domDocument) );
+       && !BiDiMailUI.MessageOverlay.isFillerStaticPage(domDocument));
     if (!canActOnDocument) { return [null, null, null]; }
 
     let msgHdr; // We're assuming only one message is selected
     try {
       msgHdr = gMessageDisplay.displayedMessage;
-    } catch(ex) {
+    } catch (ex) {
       try {
         msgHdr = messenger.msgHdrFromURI(gFolderDisplay.selectedMessageUris[0]);
-      } catch(ex) {
+      } catch (ex) {
         msgHdr = messenger.msgHdrFromURI(GetLoadedMessage());
       }
     }
@@ -91,7 +91,7 @@ BiDiMailUI.MessageOverlay = {
       messageHeader: msgHdr,
       messageSubject: displayedMessageSubject,
       subjectSetter:
-        function(str) {
+        function (str) {
           // using the appropriate setter rather than directly
           // setting the valueNode's data
           document.getElementById('expandedsubjectBox').textContent = str;
@@ -104,12 +104,12 @@ BiDiMailUI.MessageOverlay = {
     return [domDocument, domDocument.body, charsetPhaseParams];
   },
 
-  onLoad : function() {
+  onLoad : function () {
     let [domDocument, body, charsetPhaseParams] = BiDiMailUI.MessageOverlay.gatherParameters();
     if (!domDocument || !body || !charsetPhaseParams) {
       // If there wasd a serious error, an exception would have been thrown already;
       // so we're just silently failing
-      BiDiMailUI.MessageOverlay.updateDirectionMenuButton(null,true);
+      BiDiMailUI.MessageOverlay.updateDirectionMenuButton(null, true);
       return;
     }
 
@@ -134,7 +134,7 @@ BiDiMailUI.MessageOverlay = {
 
   // this function is passed to the charset phase actions and run
   // from there, but it's a UI function
-  promptAndSetPreferredSingleByteCharset : function() {
+  promptAndSetPreferredSingleByteCharset : function () {
     const list = [
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.set_to_windows_1255"),
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.set_to_windows_1256"),
@@ -151,13 +151,14 @@ BiDiMailUI.MessageOverlay = {
 
     if (!ok) { return; }
     switch (selected.value) {
-      case 0:
-        BiDiMailUI.Prefs.set("display.preferred_single_byte_charset", "windows-1255"); break;
-      case 1:
-        BiDiMailUI.Prefs.set("display.preferred_single_byte_charset", "windows-1256"); break;
-      case 2:
-        BiDiMailUI.Prefs.set("display.user_forgoes_preferred_single_byte_charset", true);
-        BiDiMailUI.Prefs.reset("display.preferred_single_byte_charset"); break;
+    case 0:
+      BiDiMailUI.Prefs.set("display.preferred_single_byte_charset", "windows-1255"); break;
+    case 1:
+      BiDiMailUI.Prefs.set("display.preferred_single_byte_charset", "windows-1256"); break;
+    case 2:
+      BiDiMailUI.Prefs.set("display.user_forgoes_preferred_single_byte_charset", true);
+      BiDiMailUI.Prefs.reset("display.preferred_single_byte_charset");
+      break;
     }
   }
 }

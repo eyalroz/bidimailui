@@ -9,15 +9,14 @@ var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-
 BiDiMailUI.Display = {
   ActionPhases : {
 
-    charsetMisdetectionCorrection : function(cMCParams) {
-
+    charsetMisdetectionCorrection(cMCParams) {
       if (typeof cMCParams.preferredCharset == "undefined") {
-          BiDiMailUI.Display.populatePreferredCharset(cMCParams);
-          if (cMCParams.preferredCharset == null) {
-            if (! BiDiMailUI.Prefs.get("display.user_forgoes_preferred_single_byte_charset")) {
-              BiDiMailUI.MessageOverlay.promptAndSetPreferredSingleByteCharset();
-            }
+        BiDiMailUI.Display.populatePreferredCharset(cMCParams);
+        if (cMCParams.preferredCharset == null) {
+          if (!BiDiMailUI.Prefs.get("display.user_forgoes_preferred_single_byte_charset")) {
+            BiDiMailUI.MessageOverlay.promptAndSetPreferredSingleByteCharset();
           }
+        }
       }
 
       if (!BiDiMailUI.Display.fixLoadedMessageCharsetIssues(cMCParams)) {
@@ -26,31 +25,30 @@ BiDiMailUI.Display = {
       }
 
       if (cMCParams.charsetOverrideInEffect) {
-        cMCParams.body.setAttribute('bidimailui-charset-is-forced',true);
+        cMCParams.body.setAttribute('bidimailui-charset-is-forced', true);
       }
     },
 
-    htmlNumericEntitiesDecoding : function(body) {
+    htmlNumericEntitiesDecoding(body) {
       if (BiDiMailUI.Prefs.get("display.decode_numeric_html_entities", false)) {
         if (BiDiMailUI.Display.decodeNumericHTMLEntitiesInText(body)) {
-          body.setAttribute('bidimailui-found-numeric-entities',true);
+          body.setAttribute('bidimailui-found-numeric-entities', true);
         }
       }
     },
 
-    quoteBarsCSSFix : function(domDocument) {
+    quoteBarsCSSFix(domDocument) {
       BiDiMailUI.Display.linkStylesheet(domDocument, 'bidimailui-quotebar-css', 'quotebar.css');
     },
 
-    directionAutodetection : function(domDocument) {
-      if (!BiDiMailUI.Prefs.get("display.autodetect_direction", true))
-        return;
+    directionAutodetection(domDocument) {
+      if (!BiDiMailUI.Prefs.get("display.autodetect_direction", true)) return;
 
       const body = domDocument.body;
       BiDiMailUI.Display.linkStylesheet(domDocument, 'bidimailui-direction-autodetection-css', 'direction-autodetection.css');
 
       const detectedOverallDirection = BiDiMailUI.directionCheck(document, NodeFilter, body);
-      body.setAttribute('bidimailui-direction-uniformity',detectedOverallDirection);
+      body.setAttribute('bidimailui-direction-uniformity', detectedOverallDirection);
       if (detectedOverallDirection == "mixed") {
         // The message has both LTR and RTL content in the message,
         // so we'll break it up into smaller block elements whose direction
@@ -65,23 +63,20 @@ BiDiMailUI.Display = {
     }
   },
 
-  setMessageDirectionForcing : function(body,forcedDirection) {
+  setMessageDirectionForcing(body, forcedDirection) {
     // we assume forcedDirection is 'rtl', 'ltr' or null
-    BiDiMailUI.Display.setDirections(body,forcedDirection);
+    BiDiMailUI.Display.setDirections(body, forcedDirection);
     if (!forcedDirection) {
       body.removeAttribute('bidimailui-forced-direction');
-    }
-    else {
-      body.setAttribute('bidimailui-forced-direction',forcedDirection);
+    } else {
+      body.setAttribute('bidimailui-forced-direction', forcedDirection);
     }
   },
 
 
-  linkStylesheet : function(domDocument, linkId, sheetFileName) {
-    if (domDocument.getElementById(linkId) != null) {
-      return;
-    }
-    let sheetURI = 'resource://bidimailui/content/' + sheetFileName;
+  linkStylesheet(domDocument, linkId, sheetFileName) {
+    if (domDocument.getElementById(linkId) != null) return;
+    let sheetURI = `resource://bidimailui/content/${sheetFileName}`;
     let element = domDocument.createElement("link");
 // If you use an HTML element - the link is ignored when computing style! :-(
 //    let ns = domDocument.lookupNamespaceURI("html");
@@ -97,20 +92,20 @@ BiDiMailUI.Display = {
   // --------------------------------------------------------------------
 
 
-  canonicalizePreferredCharset : function(charset) {
-      switch(charset) {
-          case "windows-1255":
-          case "ISO-8859-8-I":
-          case "ISO-8859-8":
-              return "windows-1255";
-          case "windows-1256":
-          case "ISO-8859-6":
-              return "windows-1256";
-      }
-      return null; // Should we support no preference again?
+  canonicalizePreferredCharset(charset) {
+    switch (charset) {
+    case "windows-1255":
+    case "ISO-8859-8-I":
+    case "ISO-8859-8":
+      return "windows-1255";
+    case "windows-1256":
+    case "ISO-8859-6":
+      return "windows-1256";
+    }
+    return null; // Should we support no preference again?
   },
 
-  populatePreferredCharset : function(cMCParams) {
+  populatePreferredCharset(cMCParams) {
     // TODO: Should I cache these pref values somehow?
     let charsetPrefValue = BiDiMailUI.Prefs.get("display.preferred_single_byte_charset", null);
     cMCParams.preferredCharset = BiDiMailUI.Display.canonicalizePreferredCharset(charsetPrefValue);
@@ -124,7 +119,7 @@ BiDiMailUI.Display = {
   // them, e.g. hello\n---\ngoodbye )
 
 
-  splitTextElementsInPlainMessageDOMTree : function(subBody) {
+  splitTextElementsInPlainMessageDOMTree(subBody) {
     const treeWalker = document.createTreeWalker(
       subBody,
       NodeFilter.SHOW_TEXT,
@@ -134,11 +129,11 @@ BiDiMailUI.Display = {
     let node = treeWalker.nextNode();
     while (node) {
       // TODO: ensure the parent's a PRE or BLOCKQUOTE or something else that's nice
-      let textSplit = new RegExp (BiDiMailUI.RegExpStrings.TEXT_SPLIT_SEQUENCE, "m");
+      let textSplit = new RegExp(BiDiMailUI.RegExpStrings.TEXT_SPLIT_SEQUENCE, "m");
 
-      if (! textSplit.test(node.nodeValue)) {
-         node = treeWalker.nextNode();
-         continue;
+      if (!textSplit.test(node.nodeValue)) {
+        node = treeWalker.nextNode();
+        continue;
       }
       const restOfText = node.cloneNode(false);
       node.nodeValue = RegExp.leftContext + RegExp.lastMatch;
@@ -158,8 +153,8 @@ BiDiMailUI.Display = {
       }
 
       // add the new part of the parent to the document
-      if (firstPartOfParent.nextSibling)
-        firstPartOfParent.parentNode.insertBefore(secondPartOfParent,firstPartOfParent.nextSibling);
+      if (firstPartOfParent.nextSibling) firstPartOfParent.parentNode
+        .insertBefore(secondPartOfParent, firstPartOfParent.nextSibling);
       else firstPartOfParent.parentNode.appendChild(secondPartOfParent);
 
       const newNode = treeWalker.nextNode();
@@ -170,7 +165,7 @@ BiDiMailUI.Display = {
   // wraps every sequence of text node, A's etc in a
   // moz-text-flowed message's DOM tree within a DIV
   // (whose direction we can later set)
-  wrapTextNodesInFlowedMessageDOMTree : function(subBody) {
+  wrapTextNodesInFlowedMessageDOMTree(subBody) {
     let ns = subBody.ownerDocument.documentElement.lookupNamespaceURI("html");
     let clonedDiv = subBody.ownerDocument.createElementNS(ns, "div");
     clonedDiv.setAttribute('bidimailui-generated', true);
@@ -197,23 +192,22 @@ BiDiMailUI.Display = {
 
       let emptyLine;
       if (node.parentNode.nodeName.toLowerCase() == 'a') {
-        node.parentNode.parentNode.replaceChild(wrapperDiv,node.parentNode);
+        node.parentNode.parentNode.replaceChild(wrapperDiv, node.parentNode);
         wrapperDiv.appendChild(node.parentNode);
         emptyLine = false;
-      }
-      else {
-        node.parentNode.replaceChild(wrapperDiv,node);
+      } else {
+        node.parentNode.replaceChild(wrapperDiv, node);
         wrapperDiv.appendChild(node);
         emptyLine =
           // actually we only see '\n' text nodes for empty lines, but let's add
           // some other options as a safety precaution
           ((node.nodeValue == '\n') ||
-           !node.nodeValue );
+           !node.nodeValue);
       }
       let sibling;
       // add everything within the current 'paragraph' to the new DIV
       while (wrapperDiv.nextSibling) {
-        sibling = wrapperDiv.nextSibling
+        sibling = wrapperDiv.nextSibling;
         if (sibling.nodeName.toLowerCase() == 'blockquote') {
           break;
         }
@@ -237,14 +231,13 @@ BiDiMailUI.Display = {
     }
   },
 
-  preprocessMessageDOM : function(body) {
-    for (let i=0; i < body.childNodes.length; i++) {
+  preprocessMessageDOM(body) {
+    for (let i = 0; i < body.childNodes.length; i++) {
       const subBody = body.childNodes.item(i);
 
       if (subBody.className == "moz-text-plain") {
         BiDiMailUI.Display.splitTextElementsInPlainMessageDOMTree(subBody);
-      }
-      else if (subBody.className == "moz-text-flowed") {
+      } else if (subBody.className == "moz-text-flowed") {
         BiDiMailUI.Display.wrapTextNodesInFlowedMessageDOMTree(subBody);
       }
     }
@@ -253,54 +246,52 @@ BiDiMailUI.Display = {
 // Gather all the elements whose contents' direction
 // we need to check and whose direction we set accordingly
 // (or force, as the case may be)
-  gatherElementsRequiringDirectionSetting : function(
+  gatherElementsRequiringDirectionSetting(
     body, elementsRequiringExplicitDirection) {
-    for (let i=0; i < body.childNodes.length; i++) {
+    for (let i = 0; i < body.childNodes.length; i++) {
       const subBody = body.childNodes.item(i);
 
       // Not touching elements which aren't moz-text-something,
       // as we don't know what to do with them
-      if (! /^moz-text/.test(subBody.className))
-        continue;
+      if (!/^moz-text/.test(subBody.className)) continue;
 
       elementsRequiringExplicitDirection.push(subBody);
 
       const tagNames = {
-      	"moz-text-plain"   :"pre, blockquote",
-      	"moz-text-flowed"  :"div, blockquote",
-      	"moz-text-html"    :"div, table, blockquote"};
+        "moz-text-plain"   : "pre, blockquote",
+        "moz-text-flowed"  : "div, blockquote",
+        "moz-text-html"    : "div, table, blockquote"
+      };
 
         // On older JS engines you would need to use getElementsByTagName("TAG") for each tag
       const nodes =  subBody.querySelectorAll(tagNames[subBody.className]);
-      for (let j = 0; j < nodes.length; j++ ) {
+      for (let j = 0; j < nodes.length; j++) {
         // In flowed messages, not touching elements which aren't moz-text-something,
         // as we don't know what to do with them
-        if (subBody.className == "moz-text-flowed" && /^moz-text/.test(nodes[j].className))
-          continue;
+        if (subBody.className == "moz-text-flowed" && /^moz-text/.test(nodes[j].className)) continue;
         elementsRequiringExplicitDirection.push(nodes[j]);
       }
     }
   },
 
-  detectDirections : function(body) {
-    const elementsRequiringExplicitDirection = new Array;
+  detectDirections(body) {
+    const elementsRequiringExplicitDirection = new Array();
     BiDiMailUI.Display.gatherElementsRequiringDirectionSetting(
       body, elementsRequiringExplicitDirection);
 
     // direction-check all of the elements whose direction should be set explicitly
 
-    for (let i=0; i < elementsRequiringExplicitDirection.length; i++) {
+    for (let i = 0; i < elementsRequiringExplicitDirection.length; i++) {
       let node = elementsRequiringExplicitDirection[i];
       try {
-
         const detectedDirection = BiDiMailUI.directionCheck(document, NodeFilter, node);
-        node.setAttribute('bidimailui-direction-uniformity',detectedDirection);
-      } catch(ex) {
+        node.setAttribute('bidimailui-direction-uniformity', detectedDirection);
+      } catch (ex) {
       }
     }
   },
 
-  setDirections : function(body, forcedDirection) {
+  setDirections(body, forcedDirection) {
     // Our logic is currently as follows:
     //
     // - Forcing LTR or RTL behaves the same way regardless of whether we have
@@ -318,7 +309,7 @@ BiDiMailUI.Display = {
     //   over anything we have set. We consider this to be appropriate.
 
 
-    switch(forcedDirection) {
+    switch (forcedDirection) {
     case 'ltr':
     case 'rtl':
       body.removeAttribute('bidimailui-use-detected-directions');
@@ -327,17 +318,17 @@ BiDiMailUI.Display = {
       }
       body.style.direction = forcedDirection;
       break;
-    default:
+    default: {
       const originalBodyCSSDirectionProperty =
         body.getAttribute('bidimailui-original-direction');
       if (originalBodyCSSDirectionProperty &&
-          (originalBodyCSSDirectionProperty != "") ) {
+        (originalBodyCSSDirectionProperty != "")) {
         body.style.direction = originalBodyCSSDirectionProperty;
-      }
-      else {
+      } else {
         body.style.removeProperty('direction');
       }
       body.setAttribute('bidimailui-use-detected-directions', true);
+    }
     }
   },
 
@@ -352,8 +343,7 @@ BiDiMailUI.Display = {
   //   This function assumes the preferred charset is either windows-1255,
   //   windows-1256 or null; see populatePreferredCharset().
   //
-  fixLoadedMessageCharsetIssues : function(cMCParams) {
-
+  fixLoadedMessageCharsetIssues(cMCParams) {
     let contentToMatch;
 
     // TODO: perhaps we should prefer the undecoded MIME subject over
@@ -418,16 +408,15 @@ BiDiMailUI.Display = {
 
     // This sets parameter no. 2
     if ((cMCParams.preferredCharset != null) &&
-        (cMCParams.currentCharset == cMCParams.preferredCharset))
-      cMCParams.mailnewsDecodingType = "preferred-charset";
+        (cMCParams.currentCharset == cMCParams.preferredCharset)) cMCParams.mailnewsDecodingType = "preferred-charset";
     else if ((((cMCParams.currentCharset == "ISO-8859-8-I") ||
                (cMCParams.currentCharset == "ISO-8859-8")) &&
-              (cMCParams.preferredCharset == "windows-1255") ) ||
+              (cMCParams.preferredCharset == "windows-1255")) ||
              ((cMCParams.currentCharset == "ISO-8859-6") &&
-              (cMCParams.preferredCharset == "windows-1255") ) ) {
+              (cMCParams.preferredCharset == "windows-1255"))) {
       cMCParams.mailnewsDecodingType = "preferred-charset";
-    }
-    else switch(cMCParams.currentCharset) {
+    } else {
+      switch (cMCParams.currentCharset) {
       case "US-ASCII":
       case "ISO-8859-1":
       case "windows-1252":
@@ -443,8 +432,9 @@ BiDiMailUI.Display = {
         cMCParams.mailnewsDecodingType = "UTF-8"; break;
       default:
         return true;
+      }
     }
-    cMCParams.body.setAttribute('bidimailui-detected-decoding-type',cMCParams.mailnewsDecodingType);
+    cMCParams.body.setAttribute('bidimailui-detected-decoding-type', cMCParams.mailnewsDecodingType);
 
 
     // This sets parameter no. 3
@@ -459,9 +449,8 @@ BiDiMailUI.Display = {
         // of misdecoding UTF-8 text
         contentToMatch = new RegExp(
           (cMCParams.preferredCharset == "windows-1255") ?
-          "[\\u0590-\\u05FF\\uFB1D-\\uFB4F]{3,}" : "[\\u0600-\\u06FF\\uFE50-\\uFEFC]{3,}");
-      }
-      else {
+            "[\\u0590-\\u05FF\\uFB1D-\\uFB4F]{3,}" : "[\\u0600-\\u06FF\\uFE50-\\uFEFC]{3,}");
+      } else {
         // text in the preferred charset is properly decoded, so we only
         // need to look for a character in the Hebrew or Arabic Unicode range
         contentToMatch = new RegExp(
@@ -475,7 +464,7 @@ BiDiMailUI.Display = {
           // themselves fall within the range C0-FF; this range is all accented
           // Latin letters in windows-1252, whose Unicode values are the
           // same as their octets
-          "[\\u00C0-\\u00FF]{3,}" :
+            "[\\u00C0-\\u00FF]{3,}" :
           // Here we know that cMCParams.mailnewsDecodingType == "UTF-8"; if
           // you decode windows-1255/6 content as UTF-8, you'll get failures
           // because you see multi-octet-starter octets (11xxxxxx) followed
@@ -484,13 +473,12 @@ BiDiMailUI.Display = {
           // such cases is emit \uFFFD, which is the Unicode 'replacement
           // character'; let's be cautious, though, and look for repetitions
           // of this rather than the odd encoding error or what-not
-          "\\uFFFD{3,}");
+            "\\uFFFD{3,}");
       }
       havePreferredCharsetText =
         BiDiMailUI.matchInText(document, NodeFilter, cMCParams.body, contentToMatch) ||
         contentToMatch.test(cMCParams.messageSubject);
-    }
-    else {
+    } else {
       havePreferredCharsetText = false;
     }
 
@@ -498,19 +486,19 @@ BiDiMailUI.Display = {
     // (note its value depends on parameter no. 2)
     let haveUTF8Text;
 
-    contentToMatch = new RegExp (
+    contentToMatch = new RegExp(
       (cMCParams.mailnewsDecodingType == "UTF-8") ?
       // The only characters we can be sure will be properly decoded in windows-1252
       // when they appear after UTF-8 decoding are those with single octets in UTF-8
       // and the same value as windows-1252; if there's anything else we'll be
       // conservative and assume some UTF-8 decoding is necessary
-      "[^\\u0000-\\u007F\\u00A0-\\u00FF]" :
+        "[^\\u0000-\\u007F\\u00A0-\\u00FF]" :
       // cMCParams.mailnewsDecodingType is latin-charset or preferred-charset
       //
       // TODO: some of these are only relevant for UTF-8 misdecoded as windows-1252
       // (or iso-8859-1; mozilla cheats and uses windows-1252),
       //
-      BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE);
+        BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE);
 
     haveUTF8Text =
       BiDiMailUI.matchInText(document, NodeFilter, cMCParams.body, contentToMatch) ||
@@ -519,111 +507,98 @@ BiDiMailUI.Display = {
     // ... and now act based on the parameter values
 
     if (!mustKeepCharset) {
-      switch(cMCParams.mailnewsDecodingType) {
-        case "latin-charset":
-          if (!havePreferredCharsetText) {
-            if (!haveUTF8Text) {
+      switch (cMCParams.mailnewsDecodingType) {
+      case "latin-charset":
+        if (!havePreferredCharsetText) {
+          if (!haveUTF8Text) {
               // NNNN
-            }
-            else {
+          } else {
               // NNNY
-              cMCParams.needCharsetForcing = true;
-              cMCParams.charsetToForce = "utf-8";
-              return;
-            }
+            cMCParams.needCharsetForcing = true;
+            cMCParams.charsetToForce = "utf-8";
+            return;
           }
-          else {
-            if (!haveUTF8Text) {
-              //NNYN
-              cMCParams.needCharsetForcing = true;
-              cMCParams.charsetToForce = cMCParams.preferredCharset;
-              return false;
-            }
-            else {
-              //NNYY
-              cMCParams.recodeUTF8 = true;
-              cMCParams.recodePreferredCharset = true;
+        } else {
+          if (!haveUTF8Text) {
+              // NNYN
+            cMCParams.needCharsetForcing = true;
+            cMCParams.charsetToForce = cMCParams.preferredCharset;
+            return false;
+          }
+
+              // NNYY
+          cMCParams.recodeUTF8 = true;
+          cMCParams.recodePreferredCharset = true;
               // but note we might still need to force the charset!
-            }
-          }
-          break;
-        case "preferred-charset":
-          if (!havePreferredCharsetText) {
-            if (!haveUTF8Text) {
+        }
+        break;
+      case "preferred-charset":
+        if (!havePreferredCharsetText) {
+          if (!haveUTF8Text) {
               // NCNN
-            }
-            else {
+          } else {
               // NCNY
-              cMCParams.needCharsetForcing = true;
-              cMCParams.charsetToForce = "utf-8";
-              return;
-            }
+            cMCParams.needCharsetForcing = true;
+            cMCParams.charsetToForce = "utf-8";
+            return;
           }
-          else {
-            if (!haveUTF8Text) {
+        } else if (!haveUTF8Text) {
               // NCYN
-            }
-            else {
+        } else {
               // NCYY
-              cMCParams.needCharsetForcing = true;
-              cMCParams.charsetToForce = "windows-1252";
-              return;
-            }
-          }
-          break;
-        case "UTF-8":
-          if (!havePreferredCharsetText) {
-            if (!haveUTF8Text) {
+          cMCParams.needCharsetForcing = true;
+          cMCParams.charsetToForce = "windows-1252";
+          return;
+        }
+        break;
+      case "UTF-8":
+        if (!havePreferredCharsetText) {
+          if (!haveUTF8Text) {
               // NUNN
-            }
-            else {
+          } else {
               // NUNY
-            }
           }
-          else {
-            if (!haveUTF8Text) {
+        } else {
+          if (!haveUTF8Text) {
               // NUYN
-              cMCParams.needCharsetForcing = true;
-              cMCParams.charsetToForce = cMCParams.preferredCharset;
-              return;
-            }
-            else {
-              // NUYY
-              cMCParams.needCharsetForcing = true;
-              cMCParams.charsetToForce = "windows-1252";
-              return;
-            }
+            cMCParams.needCharsetForcing = true;
+            cMCParams.charsetToForce = cMCParams.preferredCharset;
+            return;
           }
+
+              // NUYY
+          cMCParams.needCharsetForcing = true;
+          cMCParams.charsetToForce = "windows-1252";
+          return;
+        }
       }
-    }
-    else { // mustKeepCharset
-      switch(cMCParams.mailnewsDecodingType) {
-        case "latin-charset":
+    } else { // mustKeepCharset
+      switch (cMCParams.mailnewsDecodingType) {
+      case "latin-charset":
           // YNNN, YNNY, YNYN, YNYY
-          cMCParams.recodePreferredCharset = havePreferredCharsetText;
-          cMCParams.recodeUTF8 = haveUTF8Text;
-          break;
-        case "preferred-charset":
+        cMCParams.recodePreferredCharset = havePreferredCharsetText;
+        cMCParams.recodeUTF8 = haveUTF8Text;
+        break;
+      case "preferred-charset":
           // YCNN, YCNY, YCYN, YCYY
-          cMCParams.recodePreferredCharset = false;
-          cMCParams.recodeUTF8 = haveUTF8Text;
-          break;
-        case "UTF-8":
+        cMCParams.recodePreferredCharset = false;
+        cMCParams.recodeUTF8 = haveUTF8Text;
+        break;
+      case "UTF-8":
           // YUNN, YUNY, YUYN, YUYY
-          cMCParams.recodePreferredCharset = havePreferredCharsetText;
-          cMCParams.recodeUTF8 = false;
+        cMCParams.recodePreferredCharset = havePreferredCharsetText;
+        cMCParams.recodeUTF8 = false;
       }
     }
 
     // workaround for mozdev bug 23322 / bugzilla bug 486816:
     // Mozilla may be 'cheating' w.r.t. decoding charset
     if (!cMCParams.needCharsetForcing) {
-      contentToMatch = new RegExp (BiDiMailUI.RegExpStrings.BOTCHED_UTF8_DECODING_SEQUENCE);
+      contentToMatch = new RegExp(BiDiMailUI.RegExpStrings.BOTCHED_UTF8_DECODING_SEQUENCE);
       if (BiDiMailUI.matchInText(document, NodeFilter, cMCParams.body, contentToMatch) ||
           contentToMatch.test(cMCParams.messageSubject)) {
         if (mustKeepCharset) {
-        }
-        else {
+        } else {
           cMCParams.needCharsetForcing = true;
           // let's be on the safe side
           cMCParams.charsetToForce = "windows-1252";
@@ -643,11 +618,10 @@ BiDiMailUI.Display = {
         cMCParams.charsetToForce = cMCParams.currentCharset;
       }
     }
-    return;
   },
 
 // returns true if numeric entities were found
-  decodeNumericHTMLEntitiesInText : function(element) {
+  decodeNumericHTMLEntitiesInText(element) {
     let entitiesFound = false;
     const treeWalker = document.createTreeWalker(
       element,
@@ -656,10 +630,10 @@ BiDiMailUI.Display = {
       false
     );
     let node;
-    while((node = treeWalker.nextNode()) != null) {
+    while ((node = treeWalker.nextNode()) != null) {
       node.data = node.data.replace(
         /&#(\d+);/g,
-        function() {
+        () => {
           entitiesFound = true;
           return String.fromCharCode(RegExp.$1);
         }
@@ -667,5 +641,5 @@ BiDiMailUI.Display = {
     }
     return entitiesFound;
   }
-}
+};
 
