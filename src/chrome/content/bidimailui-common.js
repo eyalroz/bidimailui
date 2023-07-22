@@ -1,6 +1,5 @@
 const EXPORTED_SYMBOLS = [ "BiDiMailUI" ];
 var     Services       = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const { Preferences }  = ChromeUtils.import("resource://gre/modules/Preferences.jsm");
 const { XPCOMUtils   } = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 var BiDiMailUI = { };
@@ -22,12 +21,9 @@ BiDiMailUI.Strings.getByName = (stringName) => this.format(stringName, []);
 
 //---------------------------------------------------------
 
-BiDiMailUI.__defineGetter__("UnicodeConverter", function () {
-  delete BiDiMailUI.UnicodeConverter;
-  return BiDiMailUI.UnicodeConverter =
-    Cc["@mozilla.org/intl/scriptableunicodeconverter"]
-      .createInstance(Ci.nsIScriptableUnicodeConverter);
-});
+XPCOMUtils.defineLazyGetter(BiDiMailUI, "UnicodeConverter",
+  () => Cc["@mozilla.org/intl/scriptableunicodeconverter"].createInstance(Ci.nsIScriptableUnicodeConverter)
+);
 
 BiDiMailUI.encode = function (str, charsetEncoding) {
   try {
@@ -72,16 +68,14 @@ BiDiMailUI.decode = function (str, charsetEncoding) {
 
 //---------------------------------------------------------
 
-// Preferences
-
-BiDiMailUI.__defineGetter__("Prefs", function () {
-  delete BiDiMailUI.Prefs;
-  return BiDiMailUI.Prefs = new Preferences("extensions.bidiui.mail.");
+XPCOMUtils.defineLazyGetter(BiDiMailUI, 'Prefs', () => {
+  let Preferences = ChromeUtils.import("resource://gre/modules/Preferences.jsm").Preferences;
+  return new Preferences('extensions.bidiui.mail.');
 });
 
-BiDiMailUI.__defineGetter__("AppPrefs", function () {
-  delete BiDiMailUI.AppPrefs;
-  return BiDiMailUI.AppPrefs = new Preferences();
+XPCOMUtils.defineLazyGetter(BiDiMailUI, 'AppPrefs', () => {
+  let Preferences = ChromeUtils.import("resource://gre/modules/Preferences.jsm").Preferences;
+  return new Preferences();
 });
 
 //---------------------------------------------------------
