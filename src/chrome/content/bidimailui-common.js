@@ -286,14 +286,9 @@ BiDiMailUI.performCorrectiveRecodingOnText = function(
     else if (correctiveRecodingParams.recodePreferredCharset &&
       BiDiMailUI.codepageMisdetectionExpression.test(lines[i])) {
       try {
-    	let charset =
         // at this point, correctiveRecodingParams.mailnewsDecodingType can only be latin or UTF-8
-            (correctiveRecodingParams.mailnewsDecodingType == "latin-charset") ? 'windows-1252' : "UTF-8";
-       workingStr =
-       // BiDiMailUI.encode(lines[i], charset);
-    	   lines[i];
-       lines[i] = BiDiMailUI.decode(workingStr, correctiveRecodingParams.preferredCharset);
-
+        workingStr = lines[i];
+        lines[i] = BiDiMailUI.decode(workingStr, correctiveRecodingParams.preferredCharset);
       } catch(ex) {
         dump("Exception while trying to recode line " + i + " as UTF-8. Line contents:\n" + lines[i] + "\n\nException info:\n\n" + ex);
       }
