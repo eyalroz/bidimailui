@@ -32,4 +32,4 @@
 
   messenger.WindowListener.registerOptionsPage("chrome://bidimailui/content/bidimailui-prefs-dialog.xhtml");
   messenger.WindowListener.startListening();
-})()
+})();
