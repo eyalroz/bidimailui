@@ -51,7 +51,6 @@ BiDiMailUI.Editor = {
             .hidden = hiddenButtonsPref;
   },
 
-
   installEditorWindowEventHandlers : function () {
     document.addEventListener("load", BiDiMailUI.Editor.windowOnLoad, true);
     document.addEventListener("unload", BiDiMailUI.Editor.windowOnUnload, true);
@@ -87,6 +86,7 @@ BiDiMailUI.Editor = {
       // can't get elements - must be empty...
       messageParams.isEmpty = true;
     }
+  }
 }
 
 BiDiMailUI.Editor.directionButtonsPrefListener = {

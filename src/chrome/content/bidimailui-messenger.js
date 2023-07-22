@@ -36,10 +36,6 @@ BiDiMailUI.MessageOverlay = {
   },
 
   updateDirectionMenuButton : function(forcedDirection) {
-#ifdef DEBUG_updateDirectionMenuButton
-    console.log(
-      'updateDirectionMenuButton(forcedDirection = ' + forcedDirection + ')');
-#endif
     const menubutton = document.getElementById('bidimailui-forcing-menubutton');
     if (menubutton) {
       menubutton.setAttribute('selectedItem', (forcedDirection ? forcedDirection : 'autodetect'));
@@ -98,9 +94,6 @@ BiDiMailUI.MessageOverlay = {
         function(str) {
           // using the appropriate setter rather than directly
           // setting the valueNode's data
-#ifdef DEBUG_onLoad
-          console.log('Changing message subject from: "' + document.getElementById('expandedsubjectBox').textContent + '"\nto: "' + str + '"');
-#endif
           document.getElementById('expandedsubjectBox').textContent = str;
         },
       unusableCharsetHandler : BiDiMailUI.MessageOverlay.promptAndSetPreferredSingleByteCharset,
@@ -112,10 +105,6 @@ BiDiMailUI.MessageOverlay = {
   },
 
   onLoad : function() {
-#ifdef DEBUG_onLoad
-    console.log("--- onLoad() ---");
-#endif
-
     let [domDocument, body, charsetPhaseParams] = BiDiMailUI.MessageOverlay.gatherParameters();
     if (!domDocument || !body || !charsetPhaseParams) {
       // If there wasd a serious error, an exception would have been thrown already;
@@ -126,9 +115,6 @@ BiDiMailUI.MessageOverlay = {
 
     BiDiMailUI.Display.ActionPhases.charsetMisdetectionCorrection(charsetPhaseParams);
     if (charsetPhaseParams.needCharsetForcing) {
-#ifdef DEBUG_fixLoadedMessageCharsetIssues
-        console.log("Forcing charset " + charsetPhaseParams.preferredCharset);
-#endif
       BiDiMailUI.MessageOverlay.setForcedCharacterSet(charsetPhaseParams.charsetToForce);
       BiDiMailUI.MessageOverlay.dontReload = true;
       // we're reloading with a different charset, don't do anything else
@@ -157,10 +143,6 @@ BiDiMailUI.MessageOverlay = {
     // This disappears in version 91, probably
     const appPrefValue = BiDiMailUI.AppPrefs.get("mailnews.view_default_charset", null, Ci.nsIPrefLocalizedString);
     let selected = (appPrefValue) ? { value: appPrefValue } : {};
-#ifdef DEBUG_promptAndSetPreferredSingleByteCharset
-    console.log("appPrefValue was " + appPrefValue);
-#endif
-
     const ok = Services.prompt.select(
       window,
       BiDiMailUI.Strings.GetStringFromName("bidimailui.charset_dialog.window_title"),
@@ -170,19 +152,10 @@ BiDiMailUI.MessageOverlay = {
     if (!ok) { return; }
     switch (selected.value) {
       case 0:
-#ifdef DEBUG_promptAndSetPreferredSingleByteCharset
-        console.log("set charset pref to windows-1255");
-#endif
         BiDiMailUI.Prefs.set("display.preferred_single_byte_charset", "windows-1255"); break;
       case 1:
-#ifdef DEBUG_promptAndSetPreferredSingleByteCharset
-        console.log("set charset pref to windows-1256");
-#endif
         BiDiMailUI.Prefs.set("display.preferred_single_byte_charset", "windows-1256"); break;
       case 2:
-#ifdef DEBUG_promptAndSetPreferredSingleByteCharset
-        console.log("user chose no default charset");
-#endif
         BiDiMailUI.Prefs.set("display.user_forgoes_preferred_single_byte_charset", true);
         BiDiMailUI.Prefs.reset("display.preferred_single_byte_charset"); break;
     }
