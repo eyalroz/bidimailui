@@ -12,7 +12,7 @@ BiDiMailUI.Editor = {
 
     top.controllers.insertControllerAt(1, BiDiMailUI.Composition.directionSwitchController);
 
-    HandleComposerDirectionButtons();
+    BiDiMailUI.Editor.HandleComposerDirectionButtons();
     Services.prefs.addObserver(
       BiDiMailUI.Editor.directionButtonsPrefListener.domain,
       BiDiMailUI.Editor.directionButtonsPrefListener
