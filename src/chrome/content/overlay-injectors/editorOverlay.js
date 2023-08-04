@@ -100,7 +100,7 @@ function injectOtherElements() {
        modifiers="&key-bidimail-switch-paragraph-direction.modifiers;"
        key="&key-bidimail-switch-paragraph-direction.keycode;"/>
 </keyset>
-    `,
+`,
     [
       "chrome://bidimailui/locale/bidimailui.dtd"
     ],
@@ -149,5 +149,5 @@ function onUnload(deactivatedWhileWindowOpen) {
   try {
     document.removeEventListener("keydown",           BiDiMailUI.Composition.onKeyDown,              capture);
     document.removeEventListener("keyup",             BiDiMailUI.Composition.onKeyUp,                capture);
-  } catch(ex) { }
+  } catch (ex) { }
 }

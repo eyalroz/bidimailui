@@ -164,7 +164,7 @@ the main toolbar buttons are whole-document direction controls. -->
               accesskey="&menu-bidimail-clear-paragraph-direction.accesskey;"/>
   </menupopup>
 </menu>
-    `,
+`,
     [
       "chrome://bidimailui/locale/bidimailui.dtd"
     ],
@@ -173,9 +173,10 @@ the main toolbar buttons are whole-document direction controls. -->
 }
 
 // called on window load or on add-on activation while window is already open
-function onLoad(activatedWhileWindowOpen) {
+function onLoad(/* activatedWhileWindowOpen */) {
   injectOtherElements();
-  // We currently use a single CSS file for all of our style (not including the dynamically-injecte quotebar CSS for message documents)
+  // We currently use a single CSS file for all of our style (not including the dynamically-injected
+  // quote-bar CSS for message documents)
   WL.injectCSS("chrome://bidimailui/content/skin/classic/bidimailui.css");
 
   window.top.controllers.appendController(BiDiMailUI.Composition.directionSwitchController);
@@ -212,5 +213,5 @@ function onUnload(deactivatedWhileWindowOpen) {
   try {
     document.removeEventListener("keydown",           BiDiMailUI.Composition.onKeyDown,              capture);
     document.removeEventListener("keyup",             BiDiMailUI.Composition.onKeyUp,                capture);
-  } catch(ex) { }
+  } catch (ex) { }
 }

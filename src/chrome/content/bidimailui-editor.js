@@ -70,21 +70,22 @@ BiDiMailUI.Editor = {
         messageParams.isEmpty = true;
       } else if (body.hasChildNodes() && !body.firstChild.hasChildNodes()) {
         if ((body.firstChild == body.lastChild) &&
-            (body.firstChild.nodeName == "BR"))
+            (body.firstChild.nodeName == "BR")) {
           messageParams.isEmpty = true;
-      } else {
-        if (body.firstChild == body.lastChild &&
-            body.firstChild.nodeName == "P" &&
-            body.firstChild.firstChild.nodeName == "BR" &&
-            body.firstChild.firstChild == body.firstChild.lastChild)
-          messageParams.isEmpty = true;
+        }
+      } else if (
+        body.firstChild == body.lastChild &&
+        body.firstChild.nodeName == "P" &&
+        body.firstChild.firstChild.nodeName == "BR" &&
+        body.firstChild.firstChild == body.firstChild.lastChild) {
+        messageParams.isEmpty = true;
       }
-    } catch(e) {
+    } catch (e) {
       // can't get elements - must be empty...
       messageParams.isEmpty = true;
     }
   }
-}
+};
 
 BiDiMailUI.Editor.directionButtonsPrefListener = {
   domain: "extensions.bidiui.mail.compose.show_direction_buttons",
@@ -92,4 +93,4 @@ BiDiMailUI.Editor.directionButtonsPrefListener = {
     if (topic != "nsPref:changed") return;
     BiDiMailUI.Editor.handleComposerDirectionButtons();
   }
-}
+};

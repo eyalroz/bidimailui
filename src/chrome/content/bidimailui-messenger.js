@@ -40,11 +40,11 @@ BiDiMailUI.MessageOverlay = {
     if (menubutton) {
       menubutton.setAttribute('selectedItem', (forcedDirection ? forcedDirection : 'autodetect'));
       document.getElementById('bidimailui-forcing-menu-autodetect')
-              .setAttribute('checked', (!forcedDirection));
+              .setAttribute('checked', String(!forcedDirection));
       document.getElementById('bidimailui-forcing-menu-ltr')
-              .setAttribute('checked', (forcedDirection == 'ltr'));
+              .setAttribute('checked', String(forcedDirection == 'ltr'));
       document.getElementById('bidimailui-forcing-menu-rtl')
-              .setAttribute('checked', (forcedDirection == 'rtl'));
+              .setAttribute('checked', String(forcedDirection == 'rtl'));
     }
   },
 
@@ -67,9 +67,9 @@ BiDiMailUI.MessageOverlay = {
       // The following used to work, but now doesn't:
       // this.docShell.contentViewer.DOMDocument;
     let canActOnDocument =
-      (domDocument && domDocument.baseURI && domDocument.body
-       && (domDocument.baseURI != "about:blank")
-       && !BiDiMailUI.MessageOverlay.isFillerStaticPage(domDocument));
+      (domDocument && domDocument.baseURI && domDocument.body &&
+       (domDocument.baseURI != "about:blank") &&
+       !BiDiMailUI.MessageOverlay.isFillerStaticPage(domDocument));
     if (!canActOnDocument) { return [null, null, null]; }
 
     let msgHdr; // We're assuming only one message is selected
@@ -156,9 +156,10 @@ BiDiMailUI.MessageOverlay = {
     case 1:
       BiDiMailUI.Prefs.set("display.preferred_single_byte_charset", "windows-1256"); break;
     case 2:
+    default:
       BiDiMailUI.Prefs.set("display.user_forgoes_preferred_single_byte_charset", true);
       BiDiMailUI.Prefs.reset("display.preferred_single_byte_charset");
       break;
     }
   }
-}
+};
