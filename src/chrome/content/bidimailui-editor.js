@@ -35,7 +35,7 @@ BiDiMailUI.Editor = {
 
   windowOnUnload : function () {
     // Stop tracking "Show Direction Buttons" pref.
-    Service.prefs.removeObserver(
+    Services.prefs.removeObserver(
       BiDiMailUI.Editor.directionButtonsPrefListener.domain,
       BiDiMailUI.Editor.directionButtonsPrefListener
     );
