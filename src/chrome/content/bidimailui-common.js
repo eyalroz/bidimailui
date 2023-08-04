@@ -260,7 +260,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function (str, correctiveRecodingPa
         // UTF-8 encoding of a \uFFFD (unicode replacement char)
         workingStr = workingStr.replace(
           /[\xC2-\xDF]*&#(\d+);/g,
-          function () {
+          () => {
             let res = String.fromCharCode(RegExp.$1);
             return ((res.charCodeAt(0) > 0xBF) ? "\xEF\xBF\xBD" : res);
           }
@@ -294,7 +294,6 @@ BiDiMailUI.performCorrectiveRecodingOnText = function (str, correctiveRecodingPa
   }
   return lines.join('\n');
 };
-
 
 BiDiMailUI.matchInText = function (document, NodeFilter, element, expression, matchResults) {
   let treeWalker = document.createTreeWalker(
