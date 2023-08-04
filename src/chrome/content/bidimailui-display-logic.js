@@ -50,7 +50,7 @@ BiDiMailUI.Display.ActionPhases.directionAutodetection = function (domDocument) 
 
   const detectedOverallDirection = BiDiMailUI.directionCheck(document, NodeFilter, body);
   body.setAttribute('bidimailui-direction-uniformity', detectedOverallDirection);
-  if (detectedOverallDirection == "mixed") {
+  if (detectedOverallDirection === "mixed") {
     // The message has both LTR and RTL content in the message,
     // so we'll break it up into smaller block elements whose direction
     // can be set separately and detect-and-set for each such element
@@ -151,12 +151,12 @@ BiDiMailUI.Display.splitTextElementsInPlainMessageDOMTree = function (subBody) {
     }
 
     // add the new part of the parent to the document
-    if (firstPartOfParent.nextSibling) firstPartOfParent.parentNode
-      .insertBefore(secondPartOfParent, firstPartOfParent.nextSibling);
-    else firstPartOfParent.parentNode.appendChild(secondPartOfParent);
+    if (firstPartOfParent.nextSibling) {
+      firstPartOfParent.parentNode.insertBefore(secondPartOfParent, firstPartOfParent.nextSibling);
+    } else firstPartOfParent.parentNode.appendChild(secondPartOfParent);
 
     const newNode = treeWalker.nextNode();
-    node = ((newNode != node) ? newNode : treeWalker.nextNode());
+    node = ((newNode !== node) ? newNode : treeWalker.nextNode());
   }
 };
 
@@ -175,21 +175,21 @@ BiDiMailUI.Display.wrapTextNodesInFlowedMessageDOMTree = function (subBody) {
   );
   let node;
   while ((node = treeWalker.nextNode())) {
-    if ((node.parentNode.nodeName.toLowerCase() != 'a') &&
-        (node.parentNode.nodeName.toLowerCase() != 'div') &&
-        (node.parentNode.nodeName.toLowerCase() != 'blockquote')) {
+    if ((node.parentNode.nodeName.toLowerCase() !== 'a') &&
+        (node.parentNode.nodeName.toLowerCase() !== 'div') &&
+        (node.parentNode.nodeName.toLowerCase() !== 'blockquote')) {
       // and other such elements within moz-text-flowed messages
       continue;
     }
     if (node.parentNode.hasAttribute('bidimailui-generated') ||
-        ((node.parentNode.nodeName.toLowerCase() == 'A') &&
+        ((node.parentNode.nodeName.toLowerCase() === 'A') &&
         (node.parentNode.parentNode.hasAttribute('bidimailui-generated')))) {
       continue;
     }
     const wrapperDiv = clonedDiv.cloneNode(false);
 
     let emptyLine;
-    if (node.parentNode.nodeName.toLowerCase() == 'a') {
+    if (node.parentNode.nodeName.toLowerCase() === 'a') {
       node.parentNode.parentNode.replaceChild(wrapperDiv, node.parentNode);
       wrapperDiv.appendChild(node.parentNode);
       emptyLine = false;
@@ -199,17 +199,17 @@ BiDiMailUI.Display.wrapTextNodesInFlowedMessageDOMTree = function (subBody) {
       emptyLine =
         // actually we only see '\n' text nodes for empty lines, but let's add
         // some other options as a safety precaution
-        ((node.nodeValue == '\n') ||
+        ((node.nodeValue === '\n') ||
          !node.nodeValue);
     }
     let sibling;
     // add everything within the current 'paragraph' to the new DIV
     while (wrapperDiv.nextSibling) {
       sibling = wrapperDiv.nextSibling;
-      if (sibling.nodeName.toLowerCase() == 'blockquote') {
+      if (sibling.nodeName.toLowerCase() === 'blockquote') {
         break;
       }
-      if (sibling.nodeName.toLowerCase() == 'br') {
+      if (sibling.nodeName.toLowerCase() === 'br') {
         if (!emptyLine) {
           // if the DIV has any text content, it will
           // have a one-line height; otherwise it will
@@ -233,9 +233,9 @@ BiDiMailUI.Display.preprocessMessageDOM = function (body) {
   for (let i = 0; i < body.childNodes.length; i++) {
     const subBody = body.childNodes.item(i);
 
-    if (subBody.className == "moz-text-plain") {
+    if (subBody.className === "moz-text-plain") {
       BiDiMailUI.Display.splitTextElementsInPlainMessageDOMTree(subBody);
-    } else if (subBody.className == "moz-text-flowed") {
+    } else if (subBody.className === "moz-text-flowed") {
       BiDiMailUI.Display.wrapTextNodesInFlowedMessageDOMTree(subBody);
     }
   }
@@ -265,14 +265,14 @@ BiDiMailUI.Display.gatherElementsRequiringDirectionSetting = function (body, ele
     for (let j = 0; j < nodes.length; j++) {
       // In flowed messages, not touching elements which aren't moz-text-something,
       // as we don't know what to do with them
-      if (subBody.className == "moz-text-flowed" && /^moz-text/.test(nodes[j].className)) continue;
+      if (subBody.className === "moz-text-flowed" && /^moz-text/.test(nodes[j].className)) continue;
       elementsRequiringExplicitDirection.push(nodes[j]);
     }
   }
 };
 
 BiDiMailUI.Display.detectDirections = function (body) {
-  const elementsRequiringExplicitDirection = new Array();
+  const elementsRequiringExplicitDirection = [];
   BiDiMailUI.Display.gatherElementsRequiringDirectionSetting(
     body, elementsRequiringExplicitDirection);
 
@@ -318,8 +318,7 @@ BiDiMailUI.Display.setDirections = function (body, forcedDirection) {
   default: {
     const originalBodyCSSDirectionProperty =
       body.getAttribute('bidimailui-original-direction');
-    if (originalBodyCSSDirectionProperty &&
-      (originalBodyCSSDirectionProperty != "")) {
+    if (originalBodyCSSDirectionProperty?.length > 0) {
       body.style.direction = originalBodyCSSDirectionProperty;
     } else {
       body.style.removeProperty('direction');
@@ -405,12 +404,12 @@ BiDiMailUI.Display.fixLoadedMessageCharsetIssues = function (cMCParams) {
 
   // This sets parameter no. 2
   if ((cMCParams.preferredCharset != null) &&
-      (cMCParams.currentCharset == cMCParams.preferredCharset)) cMCParams.mailnewsDecodingType = "preferred-charset";
-  else if ((((cMCParams.currentCharset == "ISO-8859-8-I") ||
-             (cMCParams.currentCharset == "ISO-8859-8")) &&
-            (cMCParams.preferredCharset == "windows-1255")) ||
-           ((cMCParams.currentCharset == "ISO-8859-6") &&
-            (cMCParams.preferredCharset == "windows-1255"))) {
+      (cMCParams.currentCharset === cMCParams.preferredCharset)) cMCParams.mailnewsDecodingType = "preferred-charset";
+  else if ((((cMCParams.currentCharset === "ISO-8859-8-I") ||
+             (cMCParams.currentCharset === "ISO-8859-8")) &&
+            (cMCParams.preferredCharset === "windows-1255")) ||
+           ((cMCParams.currentCharset === "ISO-8859-6") &&
+            (cMCParams.preferredCharset === "windows-1255"))) {
     cMCParams.mailnewsDecodingType = "preferred-charset";
   } else {
     switch (cMCParams.currentCharset) {
@@ -425,6 +424,8 @@ BiDiMailUI.Display.fixLoadedMessageCharsetIssues = function (cMCParams) {
       // Content-type: text/plain; charset=iso-8859-I
       // in the message... but we can't know that without streaming the raw
       // message, which is expensive
+
+      // fallthrough
     case "UTF-8":
       cMCParams.mailnewsDecodingType = "UTF-8"; break;
     default:
@@ -439,19 +440,19 @@ BiDiMailUI.Display.fixLoadedMessageCharsetIssues = function (cMCParams) {
   let havePreferredCharsetText;
 
   if (cMCParams.preferredCharset != null) {
-    if (cMCParams.mailnewsDecodingType == "preferred-charset") {
+    if (cMCParams.mailnewsDecodingType === "preferred-charset") {
       // text in the preferred charset is properly decoded, so we only
       // need to look for characters in the Hebrew or Arabic Unicode ranges;
       // we look for a sequence, since some odd character may be the result
       // of misdecoding UTF-8 text
       contentToMatch = new RegExp(
-        (cMCParams.preferredCharset == "windows-1255") ?
+        (cMCParams.preferredCharset === "windows-1255") ?
           "[\\u0590-\\u05FF\\uFB1D-\\uFB4F]{3,}" : "[\\u0600-\\u06FF\\uFE50-\\uFEFC]{3,}");
     } else {
       // text in the preferred charset is properly decoded, so we only
       // need to look for a character in the Hebrew or Arabic Unicode range
       contentToMatch = new RegExp(
-        (cMCParams.mailnewsDecodingType == "latin-charset") ?
+        (cMCParams.mailnewsDecodingType === "latin-charset") ?
         // Here we want a sequence of Unicode values of characters whose
         // windows-1252 octet is such that would be decoded as 'clearly'
         // Hebrew or Arabic text; we could be less or more picky depending
@@ -484,7 +485,7 @@ BiDiMailUI.Display.fixLoadedMessageCharsetIssues = function (cMCParams) {
   let haveUTF8Text;
 
   contentToMatch = new RegExp(
-    (cMCParams.mailnewsDecodingType == "UTF-8") ?
+    (cMCParams.mailnewsDecodingType === "UTF-8") ?
     // The only characters we can be sure will be properly decoded in windows-1252
     // when they appear after UTF-8 decoding are those with single octets in UTF-8
     // and the same value as windows-1252; if there's anything else we'll be
