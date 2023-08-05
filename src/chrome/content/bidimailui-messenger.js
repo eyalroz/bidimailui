@@ -13,6 +13,10 @@ BiDiMailUI.MessageOverlay.dontReload = false;
 BiDiMailUI.MessageOverlay.cycleDirectionSettings = function () {
   const messagePane = document.getElementById("messagepane");
   const body = messagePane.contentDocument.body;
+  if (body == null) {
+    console.warn(`cycleDirectionSettings: Could not locate body of content document ${messagePane.contentDocument.URL}`);
+    return;
+  }
   let newForcedDirection;
   switch (body.getAttribute('bidimailui-forced-direction')) {
   case 'ltr':
