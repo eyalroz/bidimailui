@@ -26,7 +26,6 @@
     ["messenger.xhtml",                         "messenger.js"        ],
     ["messageWindow.xhtml",                     "messenger.js"        ],
     ["messengercompose/messengercompose.xhtml", "messengercompose.js" ],
-    ["editorOverlay.xhtml",                     "editorOverlay.js"    ],
     ["customizeToolbar.xhtml",                  "customizeToolbar.js" ]
   ]);
 
