@@ -14,19 +14,19 @@
     ["locale",   "bidimailui", "ur",     "chrome/locale/ur/"    ]
   ]);
   let registerChromeInjectors = function (registrationInfo) {
-    for (let [relativeWindowHref, relativeInjectorPath] of registrationInfo) {
-      messenger.WindowListener.registerWindow(
-        `chrome://messenger/content/${relativeWindowHref}`,
-        `chrome://bidimailui/content/overlay-injectors/${relativeInjectorPath}`
-      );
+    for (let [windowHref, relativeInjectorPath] of registrationInfo) {
+      let absoluteWindowHref = (windowHref.startsWith('about:') || windowHref.startsWith("chrome://")) ?
+        windowHref : `chrome://messenger/content/${windowHref}`;
+      let jsFile = `chrome://bidimailui/content/overlay-injectors/${relativeInjectorPath}`;
+      messenger.WindowListener.registerWindow(absoluteWindowHref, jsFile);
     }
   };
 
   registerChromeInjectors([
-    ["messenger.xhtml",                         "messenger.js"        ],
-    ["messageWindow.xhtml",                     "messenger.js"        ],
-    ["messengercompose/messengercompose.xhtml", "messengercompose.js" ],
-    ["customizeToolbar.xhtml",                  "customizeToolbar.js" ]
+    ["messenger.xhtml",                             "messenger.js"        ],
+    ["messageWindow.xhtml",                         "messenger.js"        ],
+    ["messengercompose/messengercompose.xhtml",     "messengercompose.js" ],
+    ["customizeToolbar.xhtml",                      "customizeToolbar.js" ]
   ]);
 
   messenger.WindowListener.registerOptionsPage("chrome://bidimailui/content/bidimailui-prefs-dialog.xhtml");
