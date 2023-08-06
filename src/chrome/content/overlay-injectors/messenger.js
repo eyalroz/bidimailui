@@ -83,8 +83,11 @@ function onLoad(activatedWhileWindowOpen) {
   // We currently use a single CSS file for all of our style (not including the
   // dynamically-injecte quotebar CSS for message documents)
   WL.injectCSS("chrome://bidimailui/content/skin/classic/bidimailui.css");
-  document.getElementById("messagepane").addEventListener("load", BiDiMailUI.MessageOverlay.onLoad, true);
 
+  // TODO: Is the capture parameter even respected?
+  let doCapture = true;
+  window.addEventListener("MsgLoaded", BiDiMailUI.MessageOverlay.onLoad, doCapture);
+  //
   // Since we no longer have per-platform-skin support, we set this attribute
   // on our root element, so that, in our stylesheet, we can contextualize using
   // this attribute, e.g.
@@ -102,5 +105,5 @@ function onUnload(deactivatedWhileWindowOpen) {
   if (!deactivatedWhileWindowOpen) return;
   // If we've added any elements not through WL.inject functions - we need to remove
   // them manually here. The WL-injected elements get auto-removed
-  document.getElementById("messagepane").removeEventListener("load", BiDiMailUI.MessageOverlay.onLoad);
+  window.removeEventListener("MsgLoaded", BiDiMailUI.MessageOverlay.onLoad);
 }
