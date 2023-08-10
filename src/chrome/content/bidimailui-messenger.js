@@ -95,8 +95,8 @@ BiDiMailUI.MessageOverlay.gatherParameters = function () {
     charsetOverrideInEffect: msgWindow.charsetOverride,
     currentCharset: msgWindow.mailCharacterSet,
     messageHeader: msgHdr,
-    messageSubject: subjectBox.textContent,
-    subjectSetter: (str) => { subjectBox.textContent = str; },
+    messageSubject: subjectBox ? subjectBox.textContent : msgHdr.mime2DecodedSubject,
+    subjectSetter: (str) => { if (subjectBox) { subjectBox.textContent = str; } },
     unusableCharsetHandler : BiDiMailUI.MessageOverlay.promptAndSetPreferredSingleByteCharset,
     needCharsetForcing: false, // this is an out parameter
     charsetToForce: null       // this is an out parameter

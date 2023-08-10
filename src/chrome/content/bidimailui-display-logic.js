@@ -342,13 +342,6 @@ BiDiMailUI.Display.setDirections = function (body, forcedDirection) {
 BiDiMailUI.Display.fixLoadedMessageCharsetIssues = function (cMCParams) {
   let contentToMatch;
 
-  // TODO: perhaps we should prefer the undecoded MIME subject over
-  // the decoded one - and decode it ourselves with the charset
-  // to our liking?
-  if (!cMCParams.messageSubject && cMCParams.messageHeader) {
-    cMCParams.messageSubject = cMCParams.messageHeader.mime2DecodedSubject;
-  }
-
   /*
   There are 4 parameters affecting what we need to do with the loaded message
   with respect to reloading or recoding.
@@ -475,7 +468,7 @@ BiDiMailUI.Display.fixLoadedMessageCharsetIssues = function (cMCParams) {
     }
     havePreferredCharsetText =
       BiDiMailUI.matchInText(document, NodeFilter, cMCParams.body, contentToMatch) ||
-      contentToMatch.test(cMCParams.messageSubject);
+      (cMCParams.messageSubject && contentToMatch.test(cMCParams.messageSubject));
   } else {
     havePreferredCharsetText = false;
   }
