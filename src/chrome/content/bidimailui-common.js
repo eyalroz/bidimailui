@@ -14,10 +14,10 @@ XPCOMUtils.defineLazyGetter(BiDiMailUI.Strings, "bundle",
 
 BiDiMailUI.Strings.format = function (stringName, formatArguments) {
   const args = formatArguments ? Array.from(formatArguments) : [];
-  return this.bundle.formatStringFromName(`bidimailui.${stringName}`, args);
+  return BiDiMailUI.Strings.bundle.formatStringFromName(`bidimailui.${stringName}`, args);
 };
 
-BiDiMailUI.Strings.getByName = (stringName) => this.format(stringName, []);
+BiDiMailUI.Strings.getByName = (stringName) => BiDiMailUI.Strings.format(stringName, []);
 
 //---------------------------------------------------------
 
