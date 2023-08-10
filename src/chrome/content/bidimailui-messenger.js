@@ -66,40 +66,37 @@ BiDiMailUI.MessageOverlay.isFillerStaticPage = function (domDocument) {
 };
 
 BiDiMailUI.MessageOverlay.gatherParameters = function () {
-  if (!msgWindow) { return [null, null, null]; }
-  let domDocument =  msgWindow.messageWindowDocShell.contentViewer.DOMDocument;
-    // The following used to work, but now doesn't:
-    // this.docShell.contentViewer.DOMDocument;
+  let tabmail = window.gTabmail;
+  // Note tabmail should also be available as window.document.getElementById("tabmail");
+  let tabInfo = tabmail?.currentTabInfo;
+  let domDocument = tabInfo.browser.contentDocument;
+  if (!domDocument) {
+    console.info(`No DOM document for the current tab's browser`);
+    return [null, null, null];
+  }
+
   let canActOnDocument =
     (domDocument && domDocument.baseURI && domDocument.body &&
      (domDocument.baseURI != "about:blank") &&
      !BiDiMailUI.MessageOverlay.isFillerStaticPage(domDocument));
-  if (!canActOnDocument) { return [null, null, null]; }
-
-  let msgHdr; // We're assuming only one message is selected
-  try {
-    msgHdr = gMessageDisplay.displayedMessage;
-  } catch (ex) {
-    try {
-      msgHdr = messenger.msgHdrFromURI(gFolderDisplay.selectedMessageUris[0]);
-    } catch (ex) {
-      msgHdr = messenger.msgHdrFromURI(GetLoadedMessage());
-    }
+  if (!canActOnDocument) {
+    console.log(`BiDiMailUI can't act on DOM document ${domDocument.URL}`);
+    return [null, null, null];
   }
-  let displayedMessageSubject = document.getElementById('expandedsubjectBox').textContent;
+
+  let msgHdr = tabInfo.message;
+
+  // Note: Adapt this to Non-3pane message windows!
+
+  let subjectBox = tabmail.currentAboutMessage.document.getElementById('expandedsubjectBox');
 
   const charsetPhaseParams = {
     body: domDocument.body,
     charsetOverrideInEffect: msgWindow.charsetOverride,
     currentCharset: msgWindow.mailCharacterSet,
     messageHeader: msgHdr,
-    messageSubject: displayedMessageSubject,
-    subjectSetter:
-      function (str) {
-        // using the appropriate setter rather than directly
-        // setting the valueNode's data
-        document.getElementById('expandedsubjectBox').textContent = str;
-      },
+    messageSubject: subjectBox.textContent,
+    subjectSetter: (str) => { subjectBox.textContent = str; },
     unusableCharsetHandler : BiDiMailUI.MessageOverlay.promptAndSetPreferredSingleByteCharset,
     needCharsetForcing: false, // this is an out parameter
     charsetToForce: null       // this is an out parameter
