@@ -25,46 +25,11 @@ XPCOMUtils.defineLazyGetter(BiDiMailUI, "UnicodeConverter",
   () => Cc["@mozilla.org/intl/scriptableunicodeconverter"].createInstance(Ci.nsIScriptableUnicodeConverter)
 );
 
-BiDiMailUI.encode = function (str, charsetEncoding) {
-  try {
-    return new TextEncoder(charsetEncoding).encode(str);
-  } catch (ex) {
-    BiDiMailUI.UnicodeConverter.charset = charsetEncoding;
-    return BiDiMailUI.UnicodeConverter.ConvertFromUnicode(str);
-  }
+BiDiMailUI.decodeString = function (str, charsetEncoding) {
+  BiDiMailUI.UnicodeConverter.charset = charsetEncoding;
+  return BiDiMailUI.UnicodeConverter.ConvertToUnicode(str);
 };
 
-BiDiMailUI.decode = function (str, charsetEncoding) {
-  try {
-    return new TextDecoder(charsetEncoding).decode(str);
-  } catch (ex) {
-    BiDiMailUI.UnicodeConverter.charset = charsetEncoding;
-    return BiDiMailUI.UnicodeConverter.ConvertToUnicode(str);
-  }
-};
-
-//---------------------------------------------------------
-
-// // General-purpose Javascript stuff
-//
-// BiDiMailUI.JS = {
-//   // Useful for debugging charset-related pattern detection
-//   stringToScanCodes : function (str)
-//   {
-//     if (str == null)
-//       return null;
-//     let scanCodesString = "";
-//     for (let i = 0; i < str.length; i++) {
-//       let charcode = "??";
-//       try {
-//         charcode = str.charCodeAt(i).toString(16);
-//       }
-//       catch (ex) { }
-//       scanCodesString += charcode + " ";
-//     }
-//     return scanCodesString;
-//   },
-// }
 
 //---------------------------------------------------------
 
@@ -193,16 +158,14 @@ BiDiMailUI.performCorrectiveRecoding = function (
     BiDiMailUI.UnicodeConverter.charset = correctiveRecodingParams.preferredCharset;
   } catch (ex) { }
 
-  let treeWalker = document.createTreeWalker(
-    correctiveRecodingParams.body,
-    NodeFilter.SHOW_TEXT,
-    null, // additional filter function
-    false
-  );
+  // TODO: This is the wrong body, I think
+  let treeWalker = document.createTreeWalker(correctiveRecodingParams.body, NodeFilter.SHOW_TEXT);
   let node;
+  node = correctiveRecodingParams.body;
   while ((node = treeWalker.nextNode())) {
-    if (node.data)
+    if (node.data) {
       node.data = BiDiMailUI.performCorrectiveRecodingOnText(node.data, correctiveRecodingParams);
+    }
   }
   if (correctiveRecodingParams.recodeUTF8) {
     correctiveRecodingParams.body.setAttribute('bidimailui-recoded-utf8', true);
@@ -225,11 +188,15 @@ BiDiMailUI.codepageMisdetectionExpression =
 BiDiMailUI.utf8MisdetectionExpression =
   new RegExp(BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE);
 
+
 BiDiMailUI.performCorrectiveRecodingOnText = function (str, correctiveRecodingParams) {
-  if (!str) return null;
-  if (!correctiveRecodingParams.recodeUTF8 &&
-    !correctiveRecodingParams.recodePreferredCharset) return null;
+  if (!str || str.length == 0) return null;
+  if (!correctiveRecodingParams.recodeUTF8 && !correctiveRecodingParams.recodePreferredCharset) return null;
   let lines = str.split('\n');
+  let encoderForUTF8Recoding = (correctiveRecodingParams.recodeUTF8) ? new TextEncoder(
+    (correctiveRecodingParams.mailnewsDecodingType === "latin-charset") ?
+      'windows-1252' : correctiveRecodingParams.preferredCharset) : null;
+  let utf8Decoder = new TextDecoder("UTF-8");
   for (let i = 0; i < lines.length; i++) {
     let workingStr;
     // Note: It's _important_ to check for UTF-8 first, because that has the
@@ -237,25 +204,37 @@ BiDiMailUI.performCorrectiveRecodingOnText = function (str, correctiveRecodingPa
     if (correctiveRecodingParams.recodeUTF8 &&
       BiDiMailUI.utf8MisdetectionExpression.test(lines[i])) {
       try {
-        workingStr = lines[i];
-
-        let charset =
-          (correctiveRecodingParams.mailnewsDecodingType === "latin-charset") ?
-            'windows-1252' : correctiveRecodingParams.preferredCharset;
-        // at this point, correctiveRecodingParams.mailnewsDecodingType can only be latin or preferred
-        workingStr = BiDiMailUI.encode(workingStr, charset);
+        let encoded = encoderForUTF8Recoding.encode(lines[i]);
 
         // We see a lot of D7 20's instead of D7 A0's which are the 2-byte sequence for
         // the Hebrew letter Nun; I guess some clients or maybe even Mozilla replace A0
         // (a non-breaking space in windows-1252) with 20 (a normal space)
-        workingStr = workingStr.replace(/([\xD7-\xD9])\x20/g, "$1\xA0");
+        // workingStr = workingStr.replace(/([\xD7-\xD9])\x20/g, "$1\xA0");
+        encoded.forEach((elem, idx, arr) => {
+          if (elem >= 0xD7 && elem <= 0xD9 && arr[idx + 1] === 0x20) {
+            arr[idx + 1] = 0xA0;
+          }
+        });
 
         // remove some higher-than-0x7F characters originating in HTML entities, such as &nbsp;
         // (we remove them only if they're not the second byte of a two-byte sequence; we ignore
         // the possibility of their being part of a 3-to-6-byte sequence)
-        workingStr = workingStr.replace(/(^|[\x00-\xBF])\xA0+/g, "$1 ");
+        // workingStr = workingStr.replace(/(^|[\x00-\xBF])\xA0+/g, "$1 ");
+        let processed = [];
+        let inSequence = true;
+        for (let j = 0; j < encoded.length; j++) {
+          if (inSequence) {
+            if (encoded[j] === 0xA0) continue;
+          } else if (encoded[j] <= 0xBF && j < length - 1 && encoded[j + 1] === 0xA0) {
+            inSequence = true;
+            continue;
+          }
+          processed.push(encoded[j]);
+        }
+        encoded = new Uint8Array(processed);
 
-        // decode any numeric HTML entities ;
+        // TODO: Re-enable this
+/*         // decode any numeric HTML entities ;
         // weird stuff we don't recognize will be replaced with the
         // UTF-8 encoding of a \uFFFD (unicode replacement char)
         workingStr = workingStr.replace(
@@ -264,15 +243,22 @@ BiDiMailUI.performCorrectiveRecodingOnText = function (str, correctiveRecodingPa
             let res = String.fromCharCode(RegExp.$1);
             return ((res.charCodeAt(0) > 0xBF) ? "\xEF\xBF\xBD" : res);
           }
-        );
+        ); */
 
         // first byte of a two-byte sequence followed by a byte not completing the sequence
-        workingStr = workingStr.replace(/[\xD7-\xD9]([^\x80-\xBF]|$)/g, "$1");
-        workingStr = BiDiMailUI.decode(workingStr, "UTF-8");
+        // workingStr = workingStr.replace(/[\xD7-\xD9]([^\x80-\xBF]|$)/g, "$1");
 
-        lines[i] = workingStr;
+        encoded.filter((e, idx, arr) => {
+          if (!(e >= 0xD7 && e <= 0xD9)) return true;
+          if (idx == arr.length + 1) return false;
+          let nextCharCompletesATwoByteSequence = (arr[idx + 1] >= 0x80 && arr[idx + 1] <= 0xBF);
+          return nextCharCompletesATwoByteSequence;
+        });
+        lines[i] = utf8Decoder.decode(encoded);
       } catch (ex) {
-        dump("Exception while trying to recode line " + i + " as UTF-8. Line contents:\n" + lines[i] + "\n\nException info:\n\n" + ex);
+        console.error(`Exception while trying to correct mis-decoded UTF-8 text `
+          + `on line ${i}. Line contents:\n${lines[i]}\n\nException info:\n${ex}`);
+
         // in some cases we seem to get manged UTF-8 text
         // which can be fixed by re-applying the current character set to the message,
         // then recoding if necessary; see
@@ -285,40 +271,34 @@ BiDiMailUI.performCorrectiveRecodingOnText = function (str, correctiveRecodingPa
       BiDiMailUI.codepageMisdetectionExpression.test(lines[i])) {
       try {
         // at this point, correctiveRecodingParams.mailnewsDecodingType can only be latin or UTF-8
-        workingStr = lines[i];
-        lines[i] = BiDiMailUI.decode(workingStr, correctiveRecodingParams.preferredCharset);
+        lines[i] = BiDiMailUI.decodeString(lines[i], correctiveRecodingParams.preferredCharset);
       } catch (ex) {
-        dump("Exception while trying to recode line " + i + " as UTF-8. Line contents:\n" + lines[i] + "\n\nException info:\n\n" + ex);
+        console.error(`Exception while trying to correct mis-decoded ${correctiveRecodingParams.preferredCharset} text `
+          + `on line ${i}.Line contents:\n${lines[i]}\n\nException info:\n${ex}`);
       }
     }
   }
   return lines.join('\n');
 };
 
-BiDiMailUI.matchInText = function (document, NodeFilter, element, expression, matchResults) {
-  let treeWalker = document.createTreeWalker(
-    element,
-    NodeFilter.SHOW_TEXT,
-    null, // additional filter function
-    false
-  );
-  if (matchResults) {
-    matchResults.hasMatching = false;
-    matchResults.hasNonMatching = false;
-  }
+BiDiMailUI.textMatches = function (document, NodeFilter, element, expression) {
+  let treeWalker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
   let node;
-  while ((node = treeWalker.nextNode())) {
-    if (expression.test(node.data)) {
-      if (matchResults) {
-        matchResults.hasMatching = true;
-      } else {
-        return true;
-      }
-    } else if (matchResults) {
-      matchResults.hasNonMatching = true;
-    }
+  while (node = treeWalker.nextNode()) {
+    if (expression.test(node.data)) { return true; }
   }
-  return (matchResults ? matchResults.hasMatching : false);
+  return false;
+};
+
+BiDiMailUI.determineTextMatchUniformity = function (document, NodeFilter, element, expression) {
+  let treeWalker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+  let hasMatching_ = false, hasNonMatching_ = false;
+  let node;
+  while (node = treeWalker.nextNode()) {
+    if (expression.test(node.data)) { hasMatching_ = true; if (hasNonMatching_) break; }
+    else { hasNonMatching_ = true; if (hasMatching_) break; }
+  }
+  return { hasMatching : hasMatching_, hasNonMatching : hasNonMatching_ };
 };
 
 BiDiMailUI.neutralsOnly = function (str) {
@@ -381,11 +361,9 @@ BiDiMailUI.directionCheck = function (document, NodeFilter, obj) {
   if (allNeutralExpression.test(obj.textContent)) {
     return "neutral";
   }
-  let matchResults = {};
-  BiDiMailUI.matchInText(document, NodeFilter, obj, rtlLineExpression, matchResults);
-  return (matchResults.hasMatching ?
-    (matchResults.hasNonMatching ? "mixed" : "rtl") : "ltr");
-  //  return rtlLineExpression.test(element.textContent);
+  let matchResults = BiDiMailUI.determineTextMatchUniformity(document, NodeFilter, obj, rtlLineExpression);
+  if (matchResults.hasMatching && matchResults.hasNonMatching) { return "mixed"; }
+  return (matchResults.hasMatching) ? "rtl" : "ltr";
 };
 
 BiDiMailUI.getMessageEditor = function (document) {
