@@ -43,7 +43,7 @@ BiDiMailUI.MessageOverlay.forceDirection = function (ev, forcedDirection) {
 BiDiMailUI.MessageOverlay.updateDirectionMenuButton = function (forcedDirection) {
   const menubutton = document.getElementById('bidimailui-forcing-menubutton');
   if (menubutton) {
-    menubutton.setAttribute('selectedItem', (forcedDirection ? forcedDirection : 'autodetect'));
+    menubutton.setAttribute('selectedItem', (forcedDirection ?? 'autodetect'));
     document.getElementById('bidimailui-forcing-menu-autodetect')
             .setAttribute('checked', String(!forcedDirection));
     document.getElementById('bidimailui-forcing-menu-ltr')
@@ -75,10 +75,9 @@ BiDiMailUI.MessageOverlay.gatherParameters = function () {
     return [null, null, null];
   }
 
-  let canActOnDocument =
-    (domDocument && domDocument.baseURI && domDocument.body &&
-     (domDocument.baseURI != "about:blank") &&
-     !BiDiMailUI.MessageOverlay.isFillerStaticPage(domDocument));
+  let canActOnDocument = (domDocument?.baseURI && domDocument?.body)
+    && (domDocument.baseURI != "about:blank")
+    && !BiDiMailUI.MessageOverlay.isFillerStaticPage(domDocument);
   if (!canActOnDocument) {
     console.log(`BiDiMailUI can't act on DOM document ${domDocument.URL}`);
     return [null, null, null];
