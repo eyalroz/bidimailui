@@ -85,23 +85,21 @@ BiDiMailUI.MessageOverlay.gatherParameters = function () {
   }
 
   let msgHdr = tabInfo.message;
+  let aboutMessage = tabmail.currentAboutMessage;
 
   // Note: Adapt this to Non-3pane message windows!
 
-  let subjectBox = tabmail.currentAboutMessage.document.getElementById('expandedsubjectBox');
+  let subjectBox = aboutMessage.document.getElementById('expandedsubjectBox');
 
   const charsetPhaseParams = {
     body: domDocument.body,
-    charsetOverrideInEffect: msgWindow.charsetOverride,
-    currentCharset: msgWindow.mailCharacterSet,
+    charsetOverrideInEffect: true,
+    currentCharset: aboutMessage.currentCharacterSet,
     messageHeader: msgHdr,
     messageSubject: subjectBox ? subjectBox.textContent : msgHdr.mime2DecodedSubject,
     subjectSetter: (str) => { if (subjectBox) { subjectBox.textContent = str; } },
     unusableCharsetHandler : BiDiMailUI.MessageOverlay.promptAndSetPreferredSingleByteCharset,
-    needCharsetForcing: false, // this is an out parameter
-    charsetToForce: null       // this is an out parameter
   };
-
   return [domDocument, domDocument.body, charsetPhaseParams];
 };
 
