@@ -23,6 +23,7 @@
   };
 
   registerChromeInjectors([
+    ["about:3pane",                                 "3pane.js"            ],
     ["messenger.xhtml",                             "messenger.js"        ],
     ["about:message",                               "3pane.js"            ],
     ["messageWindow.xhtml",                         "messenger.js"        ],
