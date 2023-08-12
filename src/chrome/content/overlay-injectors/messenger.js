@@ -45,36 +45,6 @@ function injectToolbarButton() {
   ],
   debugInjection);
 }
-function injectOtherElements() {
-  WL.injectElements(`
-    <keyset id="mailKeys">
-      <key id="key-bidimailui-cycle"
-           modifiers="&key-bidimail-cycle-document-direction.modifiers;"
-           key="&key-bidimail-cycle-document-direction.keycode;"
-           oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
-    </keyset>
-
-    <menupopup id="mailContext">
-      <menuseparator insertafter="mailContext-sep-clipboard"/>
-      <menuitem id="context-bidiui-cycle-message-direction"
-                label="&menu-bidimail-cycle-message-direction.label;"
-                key="key-bidimailui-cycle"
-                accesskey="&menu-bidimail-cycle-document-direction.accesskey;"
-                oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
-    </menupopup>
-
-    <menupopup id="menu_View_Popup">
-      <menuitem insertafter="mailviewCharsetMenu"
-                label="&menu-bidimail-cycle-message-direction.label;"
-                accesskey="&menu-bidimail-cycle-document-direction.accesskey;"
-                key="key-bidimailui-cycle"
-                oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
-    </menupopup>`,
-  [
-    "chrome://bidimailui/locale/bidimailui.dtd"
-  ],
-  debugInjection);
-}
 
 function onLoadForWin() {
   console.log(`window is ${window}`);
@@ -84,9 +54,8 @@ function onLoadForWin() {
 // called on window load or on add-on activation while window is already open
 function onLoad(activatedWhileWindowOpen) {
   injectToolbarButton();
-  injectOtherElements();
   // We currently use a single CSS file for all of our style (not including the
-  // dynamically-injecte quotebar CSS for message documents)
+  // dynamically-injected quotebar CSS for message documents)
   WL.injectCSS("chrome://bidimailui/content/skin/classic/bidimailui.css");
 
   // TODO: Is the capture parameter even respected?
