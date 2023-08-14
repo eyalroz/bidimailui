@@ -10,11 +10,26 @@ BiDiMailUI.MessageOverlay = {};
 // character set mis-detection, to prevent repeated reloading
 BiDiMailUI.MessageOverlay.dontReload = false;
 
-BiDiMailUI.MessageOverlay.cycleDirectionSettings = function () {
-  const messagePane = document.getElementById("messagepane");
-  const body = messagePane.contentDocument.body;
+
+// Get the innermost window containing the actual displayed message; it is not necessarily/not usually
+// the outer window with the menu and toolbars etc. Also, the first option will work for 3-pane (outer)
+// TB windows, and the second will work for single-message (outer) TB windows
+BiDiMailUI.MessageOverlay.getInnerMostMessageWindow = function (win) {
+  return win?.document.getElementById("tabmail")?.currentAboutMessage
+    ||   win?.document.getElementById("messageBrowser")?.contentWindow;
+};
+
+BiDiMailUI.MessageOverlay.getActualMessageDocument = function (win) {
+  if (typeof win == 'undefined') {
+    win = window;
+  }
+  return (BiDiMailUI.MessageOverlay.getInnerMostMessageWindow(win) ?? win)?.getMessagePaneBrowser()?.contentWindow?.document;
+};
+
+BiDiMailUI.MessageOverlay.cycleDirectionSettings = function (win) {
+  let body = BiDiMailUI.MessageOverlay.getActualMessageDocument(window).body;
   if (body == null) {
-    console.warn(`cycleDirectionSettings: Could not locate body of content document ${messagePane.contentDocument.URL}`);
+    console.warn(`cycleDirectionSettings: Could not determine body of displayed message`);
     return;
   }
   let newForcedDirection;
@@ -33,8 +48,7 @@ BiDiMailUI.MessageOverlay.cycleDirectionSettings = function () {
 };
 
 BiDiMailUI.MessageOverlay.forceDirection = function (ev, forcedDirection) {
-  const messagePane = document.getElementById("messagepane");
-  const body = messagePane.contentDocument.body;
+  let body = BiDiMailUI.MessageOverlay.getActualMessageDocument(window).body;
   BiDiMailUI.Display.setMessageDirectionForcing(body, forcedDirection);
   BiDiMailUI.MessageOverlay.updateDirectionMenuButton(forcedDirection);
   ev.stopPropagation();
@@ -65,13 +79,16 @@ BiDiMailUI.MessageOverlay.isFillerStaticPage = function (domDocument) {
   return /^http:\/\/.*www\.mozilla.*\/start\/$/.test(domDocument.baseURI);
 };
 
-BiDiMailUI.MessageOverlay.gatherParameters = function () {
-  let tabmail = window.gTabmail;
-  // Note tabmail should also be available as window.document.getElementById("tabmail");
-  let tabInfo = tabmail?.currentTabInfo;
-  let domDocument = tabInfo.browser.contentDocument;
+
+BiDiMailUI.MessageOverlay.gatherParameters = function (win) {
+  // Note: Unfortunately, the window here may be undefined :-(
+  // we have some fallback for that in the definition of the two functions below, but it's
+  // rather ugly.
+  let aboutMessage = BiDiMailUI.MessageOverlay.getInnerMostMessageWindow(win);
+  let domDocument = BiDiMailUI.MessageOverlay.getActualMessageDocument(win);
+
   if (!domDocument) {
-    console.info(`No DOM document for the current tab's browser`);
+    console.info(`Failed obtaining DOM document for the current tab's browser`);
     return [null, null, null];
   }
 
@@ -79,14 +96,9 @@ BiDiMailUI.MessageOverlay.gatherParameters = function () {
     && (domDocument.baseURI != "about:blank")
     && !BiDiMailUI.MessageOverlay.isFillerStaticPage(domDocument);
   if (!canActOnDocument) {
-    console.log(`BiDiMailUI can't act on DOM document ${domDocument.URL}`);
+    console.warn(`BiDiMailUI can't act on DOM document ${domDocument.URL}`);
     return [null, null, null];
   }
-
-  let msgHdr = tabInfo.message;
-  let aboutMessage = tabmail.currentAboutMessage;
-
-  // Note: Adapt this to Non-3pane message windows!
 
   let subjectBox = aboutMessage.document.getElementById('expandedsubjectBox');
 
@@ -94,16 +106,17 @@ BiDiMailUI.MessageOverlay.gatherParameters = function () {
     body: domDocument.body,
     charsetOverrideInEffect: true,
     currentCharset: aboutMessage.currentCharacterSet,
-    messageHeader: msgHdr,
-    messageSubject: subjectBox ? subjectBox.textContent : msgHdr.mime2DecodedSubject,
+    messageHeader: aboutMessage.gMessage,
+    messageSubject: subjectBox ? subjectBox.textContent : aboutMessage.gMessage.mime2DecodedSubject,
     subjectSetter: (str) => { if (subjectBox) { subjectBox.textContent = str; } },
     unusableCharsetHandler : BiDiMailUI.MessageOverlay.promptAndSetPreferredSingleByteCharset,
   };
   return [domDocument, domDocument.body, charsetPhaseParams];
 };
 
-BiDiMailUI.MessageOverlay.onLoad = function () {
-  let [domDocument, body, charsetPhaseParams] = BiDiMailUI.MessageOverlay.gatherParameters();
+
+BiDiMailUI.MessageOverlay.onLoad = function (win) {
+  let [domDocument, body, charsetPhaseParams] = BiDiMailUI.MessageOverlay.gatherParameters(win);
   if (!domDocument || !body || !charsetPhaseParams) {
     // If there wasd a serious error, an exception would have been thrown already;
     // so we're just silently failing
