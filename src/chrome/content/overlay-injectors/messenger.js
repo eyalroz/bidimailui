@@ -76,6 +76,11 @@ function injectOtherElements() {
   debugInjection);
 }
 
+function onLoadForWin() {
+  console.log(`window is ${window}`);
+  BiDiMailUI.MessageOverlay.onLoad(window);
+}
+
 // called on window load or on add-on activation while window is already open
 function onLoad(activatedWhileWindowOpen) {
   injectToolbarButton();
@@ -86,7 +91,7 @@ function onLoad(activatedWhileWindowOpen) {
 
   // TODO: Is the capture parameter even respected?
   let doCapture = true;
-  window.addEventListener("MsgLoaded", BiDiMailUI.MessageOverlay.onLoad, doCapture);
+  window.addEventListener("MsgLoaded", onLoadForWin, doCapture);
   //
   // Since we no longer have per-platform-skin support, we set this attribute
   // on our root element, so that, in our stylesheet, we can contextualize using
@@ -105,5 +110,5 @@ function onUnload(deactivatedWhileWindowOpen) {
   if (!deactivatedWhileWindowOpen) return;
   // If we've added any elements not through WL.inject functions - we need to remove
   // them manually here. The WL-injected elements get auto-removed
-  window.removeEventListener("MsgLoaded", BiDiMailUI.MessageOverlay.onLoad);
+  window.removeEventListener("MsgLoaded", onLoadForWin);
 }

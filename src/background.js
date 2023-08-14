@@ -24,6 +24,7 @@
 
   registerChromeInjectors([
     ["messenger.xhtml",                             "messenger.js"        ],
+    ["about:message",                               "3pane.js"            ],
     ["messageWindow.xhtml",                         "messenger.js"        ],
     ["messengercompose/messengercompose.xhtml",     "messengercompose.js" ],
     ["customizeToolbar.xhtml",                      "customizeToolbar.js" ]
