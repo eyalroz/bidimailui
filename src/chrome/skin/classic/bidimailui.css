@@ -16,476 +16,676 @@
      we may need to remove it
 */
 
-/* Messenger Main Toolbar - large icons */
-
-#bidimailui-forcing-menubutton {
-  list-style-image: var(--icon-forcing);
-}
-
-#bidimailui-forcing-menubutton {
-  --icon-forcing: url("chrome://bidimailui/content/skin/classic/light/autodetect-main-bar-24x24.png");
-}
-
-#bidimailui-forcing-menubutton[selectedItem="ltr"] {
-  --icon-forcing: url("chrome://bidimailui/content/skin/classic/light/ltr-main-bar-24x24.png");
-}
-
-#bidimailui-forcing-menubutton[selectedItem="rtl"] {
-  --icon-forcing: url("chrome://bidimailui/content/skin/classic/light/rtl-main-bar-24x24.png");
-}
-
-/* Messenger Main Toolbar - small icons */
-
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton {
-  --icon-forcing: url("chrome://bidimailui/content/skin/classic/light/autodetect-main-bar-16x16.png");
-}
-
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"] {
-  --icon-forcing: url("chrome://bidimailui/content/skin/classic/light/ltr-main-bar-16x16.png");
-}
-
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"] {
-  --icon-forcing: url("chrome://bidimailui/content/skin/classic/light/rtl-main-bar-16x16.png");
-}
-
-/* Messenger Main Toolbar - icon variants via regions within the icon */
-
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton {
-  -moz-image-region: rect(0px 16px 16px 0px);
-}
-
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton:hover {
-  -moz-image-region: rect(0px 32px 16px 16px);
-}
-
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton:hover:active {
-  -moz-image-region: rect(0px 48px 16px 32px);
-}
-
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"] {
-  -moz-image-region: rect(0px 16px 16px 0px);
-}
-
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"]:hover {
-  -moz-image-region: rect(0px 32px 16px 16px);
-}
-
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"]:hover:active {
-  -moz-image-region: rect(0px 48px 16px 32px);
-}
-
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"] {
-  -moz-image-region: rect(0px 16px 16px 0px);
-}
-
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover {
-  -moz-image-region: rect(0px 32px 16px 16px);
-}
-
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover:active {
-  -moz-image-region: rect(0px 48px 16px 32px);
-}
-
-toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
-  -moz-image-region: rect(0px 64px 16px 48px) !important;
-}
-
-[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton {
-  -moz-image-region: rect(0px 24px 24px 0px);
-}
-
-[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton:hover {
-  -moz-image-region: rect(0px 48px 24px 24px);
-}
-
-[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton:hover:active {
-  -moz-image-region: rect(0px 72px 16px 48px);
-}
-
-[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"] {
-  -moz-image-region: rect(0px 24px 24px 0px);
-}
-
-[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"]:hover {
-  -moz-image-region: rect(0px 48px 24px 24px);
-}
-
-[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"]:hover:active {
-  -moz-image-region: rect(0px 72px 16px 48px);
-}
-
-[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"] {
-  -moz-image-region: rect(0px 24px 24px 0px);
-}
-
-[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover {
-  -moz-image-region: rect(0px 48px 24px 24px);
-}
-
-[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover:active {
-  -moz-image-region: rect(0px 72px 16px 48px);
-}
-
-[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
-  -moz-image-region: rect(0px 96px 16px 72px) !important;
-}
-
-#bidimailui-forcing-menubutton {
-  -moz-image-region: rect(0px 24px 24px 0px);
-}
-
-#bidimailui-forcing-menubutton:hover {
-  -moz-image-region: rect(0px 48px 24px 24px);
-}
-
-#bidimailui-forcing-menubutton:hover:active {
-  -moz-image-region: rect(0px 72px 24px 48px);
-}
-
-#bidimailui-forcing-menubutton[selectedItem="ltr"] {
-  -moz-image-region: rect(0px 24px 24px 0px);
-}
-
-#bidimailui-forcing-menubutton[selectedItem="ltr"]:hover {
-  -moz-image-region: rect(0px 48px 24px 24px);
-}
-
-#bidimailui-forcing-menubutton[selectedItem="ltr"]:hover:active {
-  -moz-image-region: rect(0px 72px 24px 48px);
-}
-
-#bidimailui-forcing-menubutton[selectedItem="rtl"] {
-  -moz-image-region: rect(0px 24px 24px 0px);
-}
-
-#bidimailui-forcing-menubutton[selectedItem="rtl"]:hover {
-  -moz-image-region: rect(0px 48px 24px 24px);
-}
-
-#bidimailui-forcing-menubutton[selectedItem="rtl"]:hover:active {
-  -moz-image-region: rect(0px 72px 24px 48px);
-}
-
-#bidimailui-forcing-menubutton[disabled="true"] {
-  -moz-image-region: rect(0px 96px 24px 72px) !important;
-}
-
-#bidimailui-forcing-menubutton[platform="Darwin"] {
-  -moz-image-region: rect(0px 32px 32px 0px);
-}
-
-#bidimailui-forcing-menubutton[platform="Darwin"]:hover {
-  -moz-image-region: rect(0px 64px 32px 32px);
-}
-
-#bidimailui-forcing-menubutton[platform="Darwin"]:hover:active {
-  -moz-image-region: rect(0px 96px 32px 64px);
-}
-
-#bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"] {
-  -moz-image-region: rect(0px 32px 32px 0px);
-}
-
-#bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"]:hover {
-  -moz-image-region: rect(0px 64px 32px 32px);
-}
-
-#bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"]:hover:active {
-  -moz-image-region: rect(0px 96px 32px 64px);
-}
-
-[platform="Darwin"] #bidimailui-forcing-menubutton[selectedItem="rtl"] {
-  -moz-image-region: rect(0px 32px 32px 0px);
-}
-
-[platform="Darwin"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover {
-  -moz-image-region: rect(0px 64px 32px 32px);
-}
-
-[platform="Darwin"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover:active {
-  -moz-image-region: rect(0px 96px 32px 64px);
-}
-
-[platform="Darwin"] #bidimailui-forcing-menubutton[disabled="true"] {
-  -moz-image-region: rect(0px 128px 24px 96px) !important;
-}
-
-
-/* Composer/Editor Main Toolbar - small icons */
-
-#button-direction-ltr-main-bar,
-#button-direction-ltr-main-bar {
-  list-style-image: var(--icon-forcing);
-}
-
-#button-direction-ltr-main-bar {
-  --icon-forcing("chrome://bidimailui/content/skin/classic/light/ltr-main-bar-24x24.png");
-}
-
-#button-direction-rtl-main-bar {
-  --icon-forcing("chrome://bidimailui/content/skin/classic/light/rtl-main-bar-24x24.png");
-}
-
-toolbar[iconsize="small"] #button-direction-ltr-main-bar {
-  --icon-forcing("chrome://bidimailui/content/skin/classic/light/ltr-main-bar-16x16.png");
-}
-
-toolbar[iconsize="small"] #button-direction-rtl-main-bar {
-  --icon-forcing("chrome://bidimailui/content/skin/classic/light/rtl-main-bar-16x16.png");
-}
-
-#button-direction-ltr-main-bar {
-  -moz-image-region: rect(0px 16px 16px 0px);
-}
-
-toolbar[iconsize="small"] #button-direction-ltr-main-bar {
-  -moz-image-region: rect(0px 16px 16px 0px);
-}
-
-toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover {
-  -moz-image-region: rect(0px 32px 16px 16px);
-}
-
-toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover:active {
-  -moz-image-region: rect(0px 48px 16px 32px);
-}
-
-toolbar[iconsize="small"] #button-direction-ltr-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 64px 16px 48px) !important;
-}
-
-toolbar[iconsize="small"] #button-direction-rtl-main-bar {
-  -moz-image-region: rect(0px 16px 16px 0px);
-}
-
-toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover {
-  -moz-image-region: rect(0px 32px 16px 16px);
-}
-
-toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover:active {
-  -moz-image-region: rect(0px 48px 16px 32px);
-}
-
-toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 64px 16px 48px) !important;
-}
-
-[platform="Darwin"] toolbar[iconsize="small"] #button-direction-ltr-main-bar {
-  -moz-image-region: rect(0px 24px 24px 0px);
-}
-
-[platform="Darwin"] toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover {
-  -moz-image-region: rect(0px 48px 24px 24px);
-}
-
-[platform="Darwin"] toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover:active {
-  -moz-image-region: rect(0px 72px 16px 48px);
-}
-
-[platform="Darwin"] toolbar[iconsize="small"] #button-direction-ltr-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 96px 16px 72px) !important;
-}
-
-[platform="Darwin"] toolbar[iconsize="small"] #button-direction-rtl-main-bar {
-  -moz-image-region: rect(0px 24px 24px 0px);
-}
-
-[platform="Darwin"] toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover {
-  -moz-image-region: rect(0px 48px 24px 24px);
-}
-
-[platform="Darwin"] toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover:active {
-  -moz-image-region: rect(0px 72px 16px 48px);
-}
-
-[platform="Darwin"] toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 96px 16px 72px) !important;
-}
-
-
-/* Composer/Editor Main Toolbar Buttons - large icons */
-
-#button-direction-ltr-main-bar {
-  -moz-image-region: rect(0px 24px 24px 0px);
-}
-
-#button-direction-ltr-main-bar:hover {
-  -moz-image-region: rect(0px 48px 24px 24px);
-}
-
-#button-direction-ltr-main-bar:hover:active {
-  -moz-image-region: rect(0px 72px 24px 48px);
-}
-
-#button-direction-ltr-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 96px 24px 72px) !important;
-}
-
-#button-direction-rtl-main-bar {
-  -moz-image-region: rect(0px 24px 24px 0px);
-}
-
-#button-direction-rtl-main-bar:hover {
-  -moz-image-region: rect(0px 48px 24px 24px);
-}
-
-#button-direction-rtl-main-bar:hover:active {
-  -moz-image-region: rect(0px 72px 24px 48px);
-}
-
-#button-direction-rtl-main-bar[disabled="true"] {
-  -moz-image-region: rect(0px 96px 24px 72px) !important;
-}
-
-#button-direction-ltr-main-bar[platform="Darwin"] {
-  -moz-image-region: rect(0px 32px 32px 0px);
-}
-
-#button-direction-ltr-main-bar[platform="Darwin"]:hover {
-  -moz-image-region: rect(0px 64px 32px 32px);
-}
-
-#button-direction-ltr-main-bar[platform="Darwin"]:hover:active {
-  -moz-image-region: rect(0px 96px 32px 64px);
-}
-
-#button-direction-ltr-main-bar[disabled="true"][platform="Darwin"] {
-  -moz-image-region: rect(0px 128px 24px 96px) !important;
-}
-
-#button-direction-rtl-main-bar[platform="Darwin"] {
-  -moz-image-region: rect(0px 32px 32px 0px);
-}
-
-#button-direction-rtl-main-bar[platform="Darwin"]:hover {
-  -moz-image-region: rect(0px 64px 32px 32px);
-}
-
-#button-direction-rtl-main-bar[platform="Darwin"]:hover:active {
-  -moz-image-region: rect(0px 96px 32px 64px);
-}
-
-#button-direction-rtl-main-bar[disabled="true"][platform="Darwin"] {
-  -moz-image-region: rect(0px 128px 24px 96px) !important;
-}
-
-/* Composer/Editor Formatting Bar Buttons */
-
-#button-direction-rtl-formatting-bar,
-#button-direction-ltr-formatting-bar {
-  list-style-image: var(--icon-par-dir);
-}
-
-#button-direction-ltr-formatting-bar {
-  --icon-par-dir: url("chrome://bidimailui/content/skin/classic/light/ltr-formatting-bar.png");
-}
-
-#button-direction-rtr-formatting-bar {
-  --icon-par-dir: url("chrome://bidimailui/content/skin/classic/light/rtl-formatting-bar.png");
-}
-
-#button-direction-ltr-formatting-bar {
-  -moz-image-region: rect(0px 19px 18px 0px);
-}
-
-#button-direction-ltr-formatting-bar[disabled="true"] {
-  -moz-image-region: rect(0px 38px 18px 19px) !important;
-}
-
-#button-direction-rtl-formatting-bar {
-  -moz-image-region: rect(0px 19px 18px 0px);
-}
-
-#button-direction-rtl-formatting-bar[disabled="true"] {
-  -moz-image-region: rect(0px 38px 18px 19px) !important;
-}
-
 [platform="Darwin"] #FormatToolbar > toolbarbutton[rtlmode="true"] {
   list-style-image: url("chrome://bidimailui/content/skin/classic/format-buttons-rtl.png")  !important;
 }
 
-#button-direction-ltr-formatting-bar[platform="Darwin"] {
-  -moz-image-region: rect(0px 19px 18px 0px);
-}
+/* Light theme */
 
-#button-direction-ltr-formatting-bar[disabled="true"][platform="Darwin"] {
-  -moz-image-region: rect(0px 38px 18px 19px) !important;
-}
-
-#button-direction-rtl-formatting-bar[platform="Darwin"] {
-  -moz-image-region: rect(0px 19px 18px 0px);
-}
-
-#button-direction-rtl-formatting-bar[disabled="true"][platform="Darwin"] {
-  -moz-image-region: rect(0px 38px 18px 19px) !important;
-}
-
-@media (prefers-color-scheme: dark) {
-
-/* Messenger Main Toolbar Buttons - small icons */
+/* Messenger Main Toolbar - icon variants via regions within the icon */
 
 toolbar[iconsize="small"] #bidimailui-forcing-menubutton {
-  --icon-forcing: url("chrome://bidimailui/content/skin/classic/dark/autodetect-main-bar-16x16.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/autodetect-main-bar-16x16-regular.png");
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/autodetect-main-bar-16x16-hover.png");
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/autodetect-main-bar-16x16-active.png");
 }
 
 toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"] {
-  --icon-forcing: url("chrome://bidimailui/content/skin/classic/dark/ltr-main-bar-16x16.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-regular.png");
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-hover.png");
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-active.png");
 }
 
 toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"] {
-  --icon-forcing: url("chrome://bidimailui/content/skin/classic/dark/rtl-main-bar-16x16.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-regular.png");
 }
 
-/* Messenger Main Toolbar Buttons - large icons */
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-hover.png");
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-active.png");
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/autodetect-main-bar-16x16-disabled.png") !important;
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/autodetect-main-bar-16x16-hover.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/autodetect-main-bar-16x16-hover.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/autodetect-main-bar-16x16-active.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-regular.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-hover.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-active.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-regular.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-hover.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-active.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/autodetect-main-bar-16x16-disabled.png") !important;
+}
 
 #bidimailui-forcing-menubutton {
-  --icon-forcing: url("chrome://bidimailui/content/skin/classic/dark/autodetect-main-bar-24x24.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/autodetect-main-bar-24x24-regular.png");
+}
+
+#bidimailui-forcing-menubutton:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/autodetect-main-bar-24x24-hover.png");
+}
+
+#bidimailui-forcing-menubutton:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/autodetect-main-bar-24x24-active.png");
 }
 
 #bidimailui-forcing-menubutton[selectedItem="ltr"] {
-  --icon-forcing: url("chrome://bidimailui/content/skin/classic/dark/ltr-main-bar-24x24.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-24x24-regular.png");
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-24x24-hover.png");
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-24x24-active.png");
 }
 
 #bidimailui-forcing-menubutton[selectedItem="rtl"] {
-  --icon-forcing: url("chrome://bidimailui/content/skin/classic/dark/rtl-main-bar-24x24.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-24x24-regular.png");
+}
+
+#bidimailui-forcing-menubutton[selectedItem="rtl"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-24x24-hover.png");
+}
+
+#bidimailui-forcing-menubutton[selectedItem="rtl"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-24x24-active.png");
+}
+
+#bidimailui-forcing-menubutton[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/autodetect-main-bar-24x24-disabled.png") !important;
+}
+
+#bidimailui-forcing-menubutton[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/autodetect-main-bar-16x16-regular.png");
+}
+
+#bidimailui-forcing-menubutton[platform="Darwin"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/autodetect-main-bar-16x16-hover.png");
+}
+
+#bidimailui-forcing-menubutton[platform="Darwin"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/autodetect-main-bar-16x16-active.png");
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-regular.png");
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-hover.png");
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-active.png");
+}
+
+[platform="Darwin"] #bidimailui-forcing-menubutton[selectedItem="rtl"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-regular.png");
+}
+
+[platform="Darwin"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-hover.png");
+}
+
+[platform="Darwin"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-active.png");
+}
+
+[platform="Darwin"] #bidimailui-forcing-menubutton[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/autodetect-main-bar-16x16-disabled.png") !important;
 }
 
 /* Composer/Editor Main Toolbar - small icons */
 
+#button-direction-ltr-main-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-regular.png");
+}
+
 toolbar[iconsize="small"] #button-direction-ltr-main-bar {
-  --icon-forcing: url("chrome://bidimailui/content/skin/classic/dark/ltr-main-bar-16x16.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-regular.png");
+}
+
+toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-hover.png");
+}
+
+toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-active.png");
+}
+
+toolbar[iconsize="small"] #button-direction-ltr-main-bar[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-disabled.png") !important;
 }
 
 toolbar[iconsize="small"] #button-direction-rtl-main-bar {
-  --icon-forcing: url("chrome://bidimailui/content/skin/classic/dark/rtl-main-bar-16x16.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-regular.png");
 }
 
-toolbar[iconsize="small"] #button-direction-ltr-main-bar {
-  --icon-forcing: url("chrome://bidimailui/content/skin/classic/dark/ltr-main-bar-16x16.png");
+toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-hover.png");
+}
+
+toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-active.png");
+}
+
+toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-disabled.png") !important;
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-ltr-main-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-regular.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-hover.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-active.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-ltr-main-bar[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-disabled.png") !important;
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-rtl-main-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-regular.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-hover.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-active.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-disabled.png") !important;
 }
 
 /* Composer/Editor Main Toolbar Buttons - large icons */
 
 #button-direction-ltr-main-bar {
-  --icon-forcing: url("chrome://bidimailui/content/skin/classic/dark/ltr-main-bar-24x24.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-24x24-regular.png");
+}
+
+#button-direction-ltr-main-bar:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-24x24-hover.png");
+}
+
+#button-direction-ltr-main-bar:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-24x24-active.png");
+}
+
+#button-direction-ltr-main-bar[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-24x24-disabled.png") !important;
 }
 
 #button-direction-rtl-main-bar {
-  --icon-forcing: url("chrome://bidimailui/content/skin/classic/dark/rtl-main-bar-24x24.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-24x24-regular.png");
 }
 
-#button-direction-ltr-main-bar {
-  --icon-forcing: url("chrome://bidimailui/content/skin/classic/dark/ltr-main-bar-24x24.png");
+#button-direction-rtl-main-bar:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-24x24-hover.png");
+}
+
+#button-direction-rtl-main-bar:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-24x24-active.png");
+}
+
+#button-direction-rtl-main-bar[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-24x24-disabled.png") !important;
+}
+
+#button-direction-ltr-main-bar[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-regular.png");
+}
+
+#button-direction-ltr-main-bar[platform="Darwin"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-hover.png");
+}
+
+#button-direction-ltr-main-bar[platform="Darwin"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-active.png");
+}
+
+#button-direction-ltr-main-bar[disabled="true"][platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-main-bar-16x16-disabled.png") !important;
+}
+
+#button-direction-rtl-main-bar[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-regular.png");
+}
+
+#button-direction-rtl-main-bar[platform="Darwin"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-hover.png");
+}
+
+#button-direction-rtl-main-bar[platform="Darwin"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-active.png");
+}
+
+#button-direction-rtl-main-bar[disabled="true"][platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-main-bar-16x16-disabled.png") !important;
 }
 
 /* Composer/Editor Formatting Bar Buttons */
 
 #button-direction-ltr-formatting-bar {
-  --icon-par-dir: url("chrome://bidimailui/content/skin/classic/dark/ltr-formatting-bar.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-formatting-bar-enabled.png");
+}
+
+#button-direction-ltr-formatting-bar[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-formatting-bar-disabled.png") !important;
 }
 
 #button-direction-rtl-formatting-bar {
-  --icon-par-dir: url("chrome://bidimailui/content/skin/classic/dark/rtl-formatting-bar.png");
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-formatting-bar-enabled.png");
+}
+
+#button-direction-rtl-formatting-bar[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-formatting-bar-disabled.png") !important;
+}
+
+#button-direction-ltr-formatting-bar[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-formatting-bar-enabled.png");
+}
+
+#button-direction-ltr-formatting-bar[disabled="true"][platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/ltr-formatting-bar-disabled.png") !important;
+}
+
+#button-direction-rtl-formatting-bar[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-formatting-bar-enabled.png");
+}
+
+#button-direction-rtl-formatting-bar[disabled="true"][platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/light/single/rtl-formatting-bar-disabled.png") !important;
+}
+
+@media (prefers-color-scheme: dark) {
+
+/* Messenger Main Toolbar - icon variants via regions within the icon */
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/autodetect-main-bar-16x16-regular.png");
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/autodetect-main-bar-16x16-hover.png");
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/autodetect-main-bar-16x16-active.png");
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-regular.png");
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-hover.png");
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-active.png");
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-regular.png");
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-hover.png");
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-active.png");
+}
+
+toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/autodetect-main-bar-16x16-disabled.png") !important;
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/autodetect-main-bar-16x16-hover.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/autodetect-main-bar-16x16-hover.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/autodetect-main-bar-16x16-active.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-regular.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-hover.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="ltr"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-active.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-regular.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-hover.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-active.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #bidimailui-forcing-menubutton[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/autodetect-main-bar-16x16-disabled.png") !important;
+}
+
+#bidimailui-forcing-menubutton {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/autodetect-main-bar-24x24-regular.png");
+}
+
+#bidimailui-forcing-menubutton:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/autodetect-main-bar-24x24-hover.png");
+}
+
+#bidimailui-forcing-menubutton:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/autodetect-main-bar-24x24-active.png");
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-24x24-regular.png");
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-24x24-hover.png");
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-24x24-active.png");
+}
+
+#bidimailui-forcing-menubutton[selectedItem="rtl"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-24x24-regular.png");
+}
+
+#bidimailui-forcing-menubutton[selectedItem="rtl"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-24x24-hover.png");
+}
+
+#bidimailui-forcing-menubutton[selectedItem="rtl"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-24x24-active.png");
+}
+
+#bidimailui-forcing-menubutton[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/autodetect-main-bar-24x24-disabled.png") !important;
+}
+
+#bidimailui-forcing-menubutton[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/autodetect-main-bar-16x16-regular.png");
+}
+
+#bidimailui-forcing-menubutton[platform="Darwin"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/autodetect-main-bar-16x16-hover.png");
+}
+
+#bidimailui-forcing-menubutton[platform="Darwin"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/autodetect-main-bar-16x16-active.png");
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-regular.png");
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-hover.png");
+}
+
+#bidimailui-forcing-menubutton[selectedItem="ltr"][platform="Darwin"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-active.png");
+}
+
+[platform="Darwin"] #bidimailui-forcing-menubutton[selectedItem="rtl"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-regular.png");
+}
+
+[platform="Darwin"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-hover.png");
+}
+
+[platform="Darwin"] #bidimailui-forcing-menubutton[selectedItem="rtl"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-active.png");
+}
+
+[platform="Darwin"] #bidimailui-forcing-menubutton[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/autodetect-main-bar-16x16-disabled.png") !important;
+}
+
+/* Composer/Editor Main Toolbar - small icons */
+
+#button-direction-ltr-main-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-regular.png");
+}
+
+toolbar[iconsize="small"] #button-direction-ltr-main-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-regular.png");
+}
+
+toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-hover.png");
+}
+
+toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-active.png");
+}
+
+toolbar[iconsize="small"] #button-direction-ltr-main-bar[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-disabled.png") !important;
+}
+
+toolbar[iconsize="small"] #button-direction-rtl-main-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-regular.png");
+}
+
+toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-hover.png");
+}
+
+toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-active.png");
+}
+
+toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-disabled.png") !important;
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-ltr-main-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-regular.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-hover.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-ltr-main-bar:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-active.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-ltr-main-bar[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-disabled.png") !important;
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-rtl-main-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-regular.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-hover.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-rtl-main-bar:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-active.png");
+}
+
+[platform="Darwin"] toolbar[iconsize="small"] #button-direction-rtl-main-bar[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-disabled.png") !important;
+}
+
+/* Composer/Editor Main Toolbar Buttons - large icons */
+
+#button-direction-ltr-main-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-24x24-regular.png");
+}
+
+#button-direction-ltr-main-bar:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-24x24-hover.png");
+}
+
+#button-direction-ltr-main-bar:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-24x24-active.png");
+}
+
+#button-direction-ltr-main-bar[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-24x24-disabled.png") !important;
+}
+
+#button-direction-rtl-main-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-24x24-regular.png");
+}
+
+#button-direction-rtl-main-bar:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-24x24-hover.png");
+}
+
+#button-direction-rtl-main-bar:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-24x24-active.png");
+}
+
+#button-direction-rtl-main-bar[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-24x24-disabled.png") !important;
+}
+
+#button-direction-ltr-main-bar[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-regular.png");
+}
+
+#button-direction-ltr-main-bar[platform="Darwin"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-hover.png");
+}
+
+#button-direction-ltr-main-bar[platform="Darwin"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-active.png");
+}
+
+#button-direction-ltr-main-bar[disabled="true"][platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-main-bar-16x16-disabled.png") !important;
+}
+
+#button-direction-rtl-main-bar[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-regular.png");
+}
+
+#button-direction-rtl-main-bar[platform="Darwin"]:hover {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-hover.png");
+}
+
+#button-direction-rtl-main-bar[platform="Darwin"]:hover:active {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-active.png");
+}
+
+#button-direction-rtl-main-bar[disabled="true"][platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-main-bar-16x16-disabled.png") !important;
+}
+
+/* Composer/Editor Formatting Bar Buttons */
+
+#button-direction-ltr-formatting-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-formatting-bar-enabled.png");
+}
+
+#button-direction-ltr-formatting-bar[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-formatting-bar-disabled.png") !important;
+}
+
+#button-direction-rtl-formatting-bar {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-formatting-bar-enabled.png");
+}
+
+#button-direction-rtl-formatting-bar[disabled="true"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-formatting-bar-disabled.png") !important;
+}
+
+#button-direction-ltr-formatting-bar[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-formatting-bar-enabled.png");
+}
+
+#button-direction-ltr-formatting-bar[disabled="true"][platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/ltr-formatting-bar-disabled.png") !important;
+}
+
+#button-direction-rtl-formatting-bar[platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-formatting-bar-enabled.png");
+}
+
+#button-direction-rtl-formatting-bar[disabled="true"][platform="Darwin"] {
+  list-style-image: url("chrome://bidimailui/content/skin/classic/dark/single/rtl-formatting-bar-disabled.png") !important;
 }
 
 } /* @media (prefers-color-scheme: dark) */
