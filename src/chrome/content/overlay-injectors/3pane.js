@@ -1,6 +1,10 @@
 var Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
 
+// Note: There are some duplicates with injections from messenger.js, as those are not (easily) accessible
+// from within this window. Specifically: The accel key for cycling message direction forcing mode,
+// and the two scripts
+
 const debugInjection = false;
 
 Services.scriptloader.loadSubScript("chrome://bidimailui/content/bidimailui-display-logic.js", window, "UTF-8");
@@ -21,14 +25,6 @@ function injectOtherElements() {
                 label="&menu-bidimail-cycle-message-direction.label;"
                 key="key-bidimailui-cycle"
                 accesskey="&menu-bidimail-cycle-document-direction.accesskey;"
-                oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
-    </menupopup>
-
-    <menupopup id="menu_View_Popup">
-      <menuitem insertafter="mailviewCharsetMenu"
-                label="&menu-bidimail-cycle-message-direction.label;"
-                accesskey="&menu-bidimail-cycle-document-direction.accesskey;"
-                key="key-bidimailui-cycle"
                 oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
     </menupopup>`,
   [
