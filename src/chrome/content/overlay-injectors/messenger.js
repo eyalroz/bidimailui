@@ -54,15 +54,15 @@ function injectViewMenuItems() {
   WL.injectElements(`
     <keyset id="mailKeys">
       <key id="key-bidimailui-cycle"
-           modifiers="&key-bidimail-cycle-document-direction.modifiers;"
-           key="&key-bidimail-cycle-document-direction.keycode;"
+           modifiers="&key-bidimail-cycle-direction-setting-mode.modifiers;"
+           key="&key-bidimail-cycle-direction-setting-mode.keycode;"
            oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
     </keyset>
     <menupopup id="menu_View_Popup">
       <menuseparator insertafter="viewAfterAttachmentsSeparator" />
       <menuitem insertafter="viewAfterAttachmentsSeparator"
-                label="&menu-bidimail-cycle-message-direction.label;"
-                accesskey="&menu-bidimail-cycle-document-direction.accesskey;"
+                label="&menu-bidimail-cycle-direction-setting-mode.label;"
+                accesskey="&menu-bidimail-cycle-direction-setting-mode.accesskey;"
                 key="key-bidimailui-cycle"
                 oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
     </menupopup>`,

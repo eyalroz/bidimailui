@@ -8,8 +8,8 @@
 <!ENTITY bidimailui-forcing-menu.label "التحكم في اتجاه ارسالة:">
 <!ENTITY bidimailui-forcing-menubutton.label "الاتجاه">
 <!ENTITY bidimailui-forcing-menubutton.tip "التحكم في اتجاه ارسالة">
-<!ENTITY key-bidimail-cycle-document-direction.keycode "ب">
-<!ENTITY key-bidimail-cycle-document-direction.modifiers "accel,shift">
+<!ENTITY key-bidimail-cycle-direction-setting-mode.keycode "ب">
+<!ENTITY key-bidimail-cycle-direction-setting-mode.modifiers "accel,shift">
 <!ENTITY key-bidimail-insert-lrm.keycode "س">
 <!ENTITY key-bidimail-insert-lrm.modifiers "accel,shift">
 <!ENTITY key-bidimail-insert-rlm.keycode "م">
@@ -22,8 +22,8 @@
 <!ENTITY menu-bidimail-clear-paragraph-direction.accesskey "م">
 <!ENTITY menu-bidimail-contol-character.label "رمز تحكّم">
 <!ENTITY menu-bidimail-contol-character.accesskey "ت">
-<!ENTITY menu-bidimail-cycle-document-direction.accesskey "ب">
-<!ENTITY menu-bidimail-cycle-message-direction.label "بدّل اتجاه الرسالة">
+<!ENTITY menu-bidimail-cycle-direction-setting-mode.accesskey "ب">
+<!ENTITY menu-bidimail-cycle-direction-setting-mode.label "بدّل أسلوب اتجاه">
 <!ENTITY menu-bidimail-insert-contol-character.accesskey "ت">
 <!ENTITY menu-bidimail-insert-contol-character.label "أدرِج رمز تحكّم">
 <!ENTITY menu-bidimail-lrm.accesskey "س">
