@@ -8,8 +8,8 @@
 <!ENTITY bidimailui-forcing-menu.label                       "בקרת כיוון הודעה:">
 <!ENTITY bidimailui-forcing-menubutton.label                 "כיוון">
 <!ENTITY bidimailui-forcing-menubutton.tip                   "בקרת כיוון הודעה">
-<!ENTITY key-bidimail-cycle-document-direction.keycode       "ע">
-<!ENTITY key-bidimail-cycle-document-direction.modifiers     "accel,shift">
+<!ENTITY key-bidimail-cycle-direction-setting-mode.keycode   "ע">
+<!ENTITY key-bidimail-cycle-direction-setting-mode.modifiers "accel,shift">
 <!ENTITY key-bidimail-insert-lrm.keycode                     "ש">
 <!ENTITY key-bidimail-insert-lrm.modifiers                   "accel,shift">
 <!ENTITY key-bidimail-insert-rlm.keycode                     "י">
@@ -22,8 +22,8 @@
 <!ENTITY menu-bidimail-clear-paragraph-direction.label       "נקה קביעת כיוון פיסקה">
 <!ENTITY menu-bidimail-contol-character.accesskey            "ב">
 <!ENTITY menu-bidimail-contol-character.label                "תו בקרה">
-<!ENTITY menu-bidimail-cycle-document-direction.accesskey    "ע">
-<!ENTITY menu-bidimail-cycle-message-direction.label         "עבור לאופן כיוון ההודעה הבא בסבב">
+<!ENTITY menu-bidimail-cycle-direction-setting-mode.accesskey "ע">
+<!ENTITY menu-bidimail-cycle-direction-setting-mode.label    "עבור אופן כיוון הודעה">
 <!ENTITY menu-bidimail-insert-contol-character.accesskey     "ב">
 <!ENTITY menu-bidimail-insert-contol-character.label         "הוסף תו בקרה">
 <!ENTITY menu-bidimail-lrm.accesskey                         "ש">

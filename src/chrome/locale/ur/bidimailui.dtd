@@ -8,8 +8,8 @@
 <!ENTITY bidimailui-forcing-menu-rtl.label                            "Force Right-to-Left">
 <!ENTITY bidimailui-forcing-menubutton.label                          "Direction">
 <!ENTITY bidimailui-forcing-menubutton.tip                            "Message Direction Control">
-<!ENTITY key-bidimail-cycle-document-direction.keycode "X">
-<!ENTITY key-bidimail-cycle-document-direction.modifiers "accel,shift">
+<!ENTITY key-bidimail-cycle-direction-setting-mode.keycode            "X">
+<!ENTITY key-bidimail-cycle-direction-setting-mode.modifiers          "accel,shift">
 <!ENTITY key-bidimail-insert-lrm.keycode                              "L">
 <!ENTITY key-bidimail-insert-lrm.modifiers                            "accel,shift">
 <!ENTITY key-bidimail-insert-rlm.keycode                              "R">
@@ -22,8 +22,8 @@
 <!ENTITY menu-bidimail-clear-paragraph-direction.accesskey            "a">
 <!ENTITY menu-bidimail-contol-character.accesskey                     "n">
 <!ENTITY menu-bidimail-contol-character.label                         "کنٹرول حرف">
-<!ENTITY menu-bidimail-cycle-document-direction.accesskey             "y">
-<!ENTITY menu-bidimail-cycle-message-direction.label                  "Cycle Message Direction Mode">
+<!ENTITY menu-bidimail-cycle-direction-setting-mode.accesskey             "y">
+<!ENTITY menu-bidimail-cycle-direction-setting-mode.label             "Cycle Direction Setting Mode">
 <!ENTITY menu-bidimail-insert-contol-character.accesskey              "I">
 <!ENTITY menu-bidimail-insert-contol-character.label                  "کنٹرول حرف ڈالیں">
 <!ENTITY menu-bidimail-lrm.accesskey                                  "L">

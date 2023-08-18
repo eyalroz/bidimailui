@@ -14,17 +14,17 @@ function injectOtherElements() {
   WL.injectElements(`
     <keyset id="mailKeys">
       <key id="key-bidimailui-cycle"
-           modifiers="&key-bidimail-cycle-document-direction.modifiers;"
-           key="&key-bidimail-cycle-document-direction.keycode;"
+           modifiers="&key-bidimail-cycle-direction-setting-mode.modifiers;"
+           key="&key-bidimail-cycle-direction-setting-mode.keycode;"
            oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
     </keyset>
 
     <menupopup id="mailContext">
       <menuseparator insertafter="mailContext-sep-clipboard"/>
-      <menuitem id="context-bidiui-cycle-message-direction"
-                label="&menu-bidimail-cycle-message-direction.label;"
+      <menuitem id="context-bidiui-cycle-direction-setting-mode"
+                label="&menu-bidimail-cycle-direction-setting-mode.label;"
                 key="key-bidimailui-cycle"
-                accesskey="&menu-bidimail-cycle-document-direction.accesskey;"
+                accesskey="&menu-bidimail-cycle-direction-setting-mode.accesskey;"
                 oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
     </menupopup>`,
   [
