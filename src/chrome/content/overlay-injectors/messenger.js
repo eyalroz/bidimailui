@@ -1,6 +1,10 @@
 var Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
 
+// Note: There are some duplicates with injections from 3pane.js, as those are not (easily) accessible
+// from within this window. Specifically: The accel key for cycling message direction forcing mode,
+// and the two scripts
+
 const debugInjection = false;
 
 Services.scriptloader.loadSubScript("chrome://bidimailui/content/bidimailui-display-logic.js", window, "UTF-8");
@@ -46,14 +50,36 @@ function injectToolbarButton() {
   debugInjection);
 }
 
+function injectViewMenuItems() {
+  WL.injectElements(`
+    <keyset id="mailKeys">
+      <key id="key-bidimailui-cycle"
+           modifiers="&key-bidimail-cycle-document-direction.modifiers;"
+           key="&key-bidimail-cycle-document-direction.keycode;"
+           oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
+    </keyset>
+    <menupopup id="menu_View_Popup">
+      <menuseparator insertafter="viewAfterAttachmentsSeparator" />
+      <menuitem insertafter="viewAfterAttachmentsSeparator"
+                label="&menu-bidimail-cycle-message-direction.label;"
+                accesskey="&menu-bidimail-cycle-document-direction.accesskey;"
+                key="key-bidimailui-cycle"
+                oncommand="BiDiMailUI.MessageOverlay.cycleDirectionSettings()" />
+    </menupopup>`,
+    [
+      "chrome://bidimailui/locale/bidimailui.dtd"
+    ],
+    debugInjection);
+}
+
 function onLoadForWin() {
-  console.log(`window is ${window}`);
   BiDiMailUI.MessageOverlay.onLoad(window);
 }
 
 // called on window load or on add-on activation while window is already open
 function onLoad(activatedWhileWindowOpen) {
   injectToolbarButton();
+  injectViewMenuItems();
   // We currently use a single CSS file for all of our style (not including the
   // dynamically-injected quotebar CSS for message documents)
   WL.injectCSS("chrome://bidimailui/content/skin/classic/bidimailui.css");
