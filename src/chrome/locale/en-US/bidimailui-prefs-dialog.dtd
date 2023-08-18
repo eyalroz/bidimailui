@@ -1,4 +1,4 @@
-﻿<!ENTITY bidimailui-settings                   "BiDi Mail UI Options">
+<!ENTITY bidimailui-settings                   "BiDi Mail UI Options">
 <!ENTITY message-composition-groupbox-caption    "Message Composition">
 <!ENTITY default-dir                             "Default Direction:">
 <!ENTITY ltr.label                               "Left to Right">
