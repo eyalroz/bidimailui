@@ -608,11 +608,6 @@ BiDiMailUI.Composition.onUnload = function () {
   );
 };
 
-BiDiMailUI.Composition.onInit = function () {
-  document.getElementById("msgcomposeWindow").removeEventListener("compose-window-init", BiDiMailUI.Composition.onInit);
-  gMsgCompose.RegisterStateListener(BiDiMailUI.Composition.msgComposeStateListener);
-};
-
 BiDiMailUI.Composition.findClosestBlockElement = function (node) {
   // Try to locate the closest ancestor with display:block
   const v = node.ownerDocument.defaultView;
