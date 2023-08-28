@@ -1,7 +1,7 @@
 var Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
 
-const debugInjection = false;
+const debugInjection = true;
 
 Services.scriptloader.loadSubScript("chrome://bidimailui/content/bidimailui-display-logic.js", window, "UTF-8");
 Services.scriptloader.loadSubScript("chrome://bidimailui/content/bidimailui-composer.js", window, "UTF-8");
@@ -173,21 +173,20 @@ the main toolbar buttons are whole-document direction controls. -->
 }
 
 // called on window load or on add-on activation while window is already open
-function onLoad(/* activatedWhileWindowOpen */) {
+function onLoad(activatedWhileWindowOpen) {
+  const capture = true;
+  window.addEventListener("keypress",              BiDiMailUI.Composition.onKeyPress,             capture);
+  if (BiDiMailUI.Prefs.get("compose.ctrl_shift_switches_direction", true)) {
+    document.addEventListener("keydown",           BiDiMailUI.Composition.onKeyDown,              capture);
+    document.addEventListener("keyup",             BiDiMailUI.Composition.onKeyUp,                capture);
+  }
   injectOtherElements();
   // We currently use a single CSS file for all of our style (not including the dynamically-injected
   // quote-bar CSS for message documents)
   WL.injectCSS("chrome://bidimailui/content/skin/classic/bidimailui.css");
 
   window.top.controllers.appendController(BiDiMailUI.Composition.directionSwitchController);
-
-  const capture = true;
-  window.addEventListener("compose-window-init",   BiDiMailUI.Composition.onInit, capture);
-  window.addEventListener("keypress",              BiDiMailUI.Composition.onKeyPress,             capture);
-  if (BiDiMailUI.Prefs.get("compose.ctrl_shift_switches_direction", true)) {
-    document.addEventListener("keydown",           BiDiMailUI.Composition.onKeyDown,              capture);
-    document.addEventListener("keyup",             BiDiMailUI.Composition.onKeyUp,                capture);
-  }
+  window.gMsgCompose.RegisterStateListener(BiDiMailUI.Composition.msgComposeStateListener);
 
   // Since we no longer have per-platform-skin support, we set this attribute
   // on our root element, so that, in our stylesheet, we can contextualize using
@@ -207,8 +206,9 @@ function onUnload(deactivatedWhileWindowOpen) {
   // If we've added any elements not through WL.inject functions - we need to remove
   // them manually here. The WL-injected elements get auto-removed
 
+  window.gMsgCompose.UnregisterStateListener(BiDiMailUI.Composition.msgComposeStateListener);
+
   const capture = true;
-  window.removeEventListener("compose-window-init",   BiDiMailUI.Composition.onInit, capture);
   window.removeEventListener("keypress",              BiDiMailUI.Composition.onKeyPress,             capture);
   try {
     document.removeEventListener("keydown",           BiDiMailUI.Composition.onKeyDown,              capture);
