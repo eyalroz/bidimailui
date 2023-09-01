@@ -435,8 +435,7 @@ BiDiMailUI.Composition.setInitialDirection = function (messageParams) {
   // direction for new messages
   if (!messageParams || !messageParams.isReply ||
        BiDiMailUI.Prefs.get("compose.reply_in_default_direction", false)) {
-    let defaultDirection = BiDiMailUI.Prefs.get(
-      "compose.default_direction", "ltr").toLowerCase();
+    let defaultDirection = BiDiMailUI.Prefs.get("compose.default_direction", "ltr").toLowerCase();
     let initialDirection;
     switch (defaultDirection) {
     case "last_used":
@@ -579,10 +578,8 @@ BiDiMailUI.Composition.onEverythingLoadedAndReady = function () {
 
   // Decide which direction switch item should appear in the context menu -
   // the switch for the whole document or for the current paragraph
-  document.getElementById("contextSwitchParagraphDirectionItem")
-    .hidden = !isHTMLEditor;
-  document.getElementById("contextBodyDirectionItem")
-    .hidden = isHTMLEditor;
+  document.getElementById("contextSwitchParagraphDirectionItem").hidden = !isHTMLEditor;
+  document.getElementById("contextBodyDirectionItem").hidden = isHTMLEditor;
 
   if (isHTMLEditor) {
     // Determine Enter key behavior
