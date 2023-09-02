@@ -23,7 +23,9 @@ BiDiMailUI.MessageOverlay.getActualMessageDocument = function (win) {
   if (typeof win == 'undefined') {
     win = window;
   }
-  return (BiDiMailUI.MessageOverlay.getInnerMostMessageWindow(win) ?? win)?.getMessagePaneBrowser()?.contentWindow?.document;
+  let windowWithMessagePane = BiDiMailUI.MessageOverlay.getInnerMostMessageWindow(win) ?? win;
+  let messagePaneBrowser = windowWithMessagePane?.getMessagePaneBrowser?.();
+  return messagePaneBrowser?.contentWindow.document;
 };
 
 BiDiMailUI.MessageOverlay.cycleDirectionSettings = function (win) {
@@ -88,7 +90,9 @@ BiDiMailUI.MessageOverlay.gatherParameters = function (win) {
   let domDocument = BiDiMailUI.MessageOverlay.getActualMessageDocument(win);
 
   if (!domDocument) {
-    console.info(`Failed obtaining DOM document for the current tab's browser`);
+    // This should only happen when no message is loaded in the window, e.g. when you just
+    // opened Thunderbird and see the app's welcome message. Let's assume that's the case
+    // and not fill up the console
     return [null, null, null];
   }
 
