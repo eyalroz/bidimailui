@@ -511,16 +511,17 @@ BiDiMailUI.Composition.onEverythingLoadedAndReady = function () {
       (messageParams.isReply ? gMsgCompose.originalMsgURI : null),
     messageSubject:
       document.getElementById("msgSubject").value,
-    subjectSetter: function (str) {
+    subjectSetter: (str) => {
       document.getElementById("msgSubject").value = str;
     },
-    unusableCharsetHandler : function () { return null; },
+    unusableCharsetHandler : () => null,
       //
     needCharsetForcing: false,
       // this is an out parameter, irrelevant in our case
-    charsetToForce: null,
+    charsetToForce: null
       // this is an out parameter, irrelevant in our case
-  }
+  };
+
 
   // Note: we can't base ourselves on the way the charset
   // was handled in the original message, since the option
