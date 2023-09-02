@@ -149,14 +149,6 @@ BiDiMailUI.performCorrectiveRecoding = function (document, NodeFilter, recodingP
   let needAnyRecoding = recodingParams.recodePreferredCharset || recodingParams.recodeUTF8;
   if (!needAnyRecoding) return;
 
-  try {
-    // This redundant setting of the charset is necessary to overcome an
-    // issue with TB 2.x in which the first time you set the charset and
-    // attempted to recode, you'd get a NS_ERROR_FAILURE exception;
-    // see bug 23321
-    BiDiMailUI.UnicodeConverter.charset = recodingParams.preferredCharset;
-  } catch (ex) { }
-
   // TODO: This is the wrong body, I think
   let treeWalker = document.createTreeWalker(recodingParams.body, NodeFilter.SHOW_TEXT);
   let node;
