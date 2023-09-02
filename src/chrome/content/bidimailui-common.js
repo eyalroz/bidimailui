@@ -149,7 +149,6 @@ BiDiMailUI.performCorrectiveRecoding = function (document, NodeFilter, recodingP
   let needAnyRecoding = recodingParams.recodePreferredCharset || recodingParams.recodeUTF8;
   if (!needAnyRecoding) return;
 
-  // TODO: This is the wrong body, I think
   let treeWalker = document.createTreeWalker(recodingParams.body, NodeFilter.SHOW_TEXT);
   let node;
   node = recodingParams.body;
@@ -168,8 +167,8 @@ BiDiMailUI.performCorrectiveRecoding = function (document, NodeFilter, recodingP
 
   if (recodingParams.subjectSetter) {
     try {
-      recodingParams.subjectSetter(
-        BiDiMailUI.performCorrectiveRecodingOnText(recodingParams.messageSubject, recodingParams));
+      let recodedSubject = BiDiMailUI.performCorrectiveRecodingOnText(recodingParams.messageSubject, recodingParams);
+      recodingParams.subjectSetter(recodedSubject);
     } catch (ex) { }
   }
 };
