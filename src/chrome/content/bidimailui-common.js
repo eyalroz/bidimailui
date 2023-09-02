@@ -145,40 +145,39 @@ BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE =
 BiDiMailUI.RegExpStrings.BOTCHED_UTF8_DECODING_SEQUENCE =
   "(?:^|\x0A)\\uFFFD{3}";
 
-BiDiMailUI.performCorrectiveRecoding = function (
-  document, NodeFilter, correctiveRecodingParams) {
-  if (!correctiveRecodingParams.recodePreferredCharset &&
-      !correctiveRecodingParams.recodeUTF8) return;
+BiDiMailUI.performCorrectiveRecoding = function (document, NodeFilter, recodingParams) {
+  let needAnyRecoding = recodingParams.recodePreferredCharset || recodingParams.recodeUTF8;
+  if (!needAnyRecoding) return;
 
   try {
     // This redundant setting of the charset is necessary to overcome an
     // issue with TB 2.x in which the first time you set the charset and
     // attempted to recode, you'd get a NS_ERROR_FAILURE exception;
     // see bug 23321
-    BiDiMailUI.UnicodeConverter.charset = correctiveRecodingParams.preferredCharset;
+    BiDiMailUI.UnicodeConverter.charset = recodingParams.preferredCharset;
   } catch (ex) { }
 
   // TODO: This is the wrong body, I think
-  let treeWalker = document.createTreeWalker(correctiveRecodingParams.body, NodeFilter.SHOW_TEXT);
+  let treeWalker = document.createTreeWalker(recodingParams.body, NodeFilter.SHOW_TEXT);
   let node;
-  node = correctiveRecodingParams.body;
+  node = recodingParams.body;
   while ((node = treeWalker.nextNode())) {
     if (node.data) {
-      node.data = BiDiMailUI.performCorrectiveRecodingOnText(node.data, correctiveRecodingParams);
+      node.data = BiDiMailUI.performCorrectiveRecodingOnText(node.data, recodingParams);
     }
   }
-  if (correctiveRecodingParams.recodeUTF8) {
-    correctiveRecodingParams.body.setAttribute('bidimailui-recoded-utf8', true);
+  if (recodingParams.recodeUTF8) {
+    recodingParams.body.setAttribute('bidimailui-recoded-utf8', true);
   }
-  if (correctiveRecodingParams.recodePreferredCharset) {
-    correctiveRecodingParams.body.setAttribute(
-      'bidimailui-recoded-charset', correctiveRecodingParams.preferredCharset);
+  if (recodingParams.recodePreferredCharset) {
+    recodingParams.body.setAttribute(
+      'bidimailui-recoded-charset', recodingParams.preferredCharset);
   }
 
-  if (correctiveRecodingParams.subjectSetter) {
+  if (recodingParams.subjectSetter) {
     try {
-      correctiveRecodingParams.subjectSetter(
-        BiDiMailUI.performCorrectiveRecodingOnText(correctiveRecodingParams.messageSubject, correctiveRecodingParams));
+      recodingParams.subjectSetter(
+        BiDiMailUI.performCorrectiveRecodingOnText(recodingParams.messageSubject, recodingParams));
     } catch (ex) { }
   }
 };
