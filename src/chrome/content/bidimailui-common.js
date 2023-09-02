@@ -149,12 +149,14 @@ BiDiMailUI.performCorrectiveRecoding = function (document, NodeFilter, recodingP
   let needAnyRecoding = recodingParams.recodePreferredCharset || recodingParams.recodeUTF8;
   if (!needAnyRecoding) return;
 
-  let treeWalker = document.createTreeWalker(recodingParams.body, NodeFilter.SHOW_TEXT);
-  let node;
-  node = recodingParams.body;
-  while ((node = treeWalker.nextNode())) {
-    if (node.data) {
-      node.data = BiDiMailUI.performCorrectiveRecodingOnText(node.data, recodingParams);
+  for (let child of recodingParams.body.childNodes) {
+    if (!child?.className?.startsWith("moz-text-")) continue; // Note this will skip non-element nodes
+    let treeWalker = document.createTreeWalker(child, NodeFilter.SHOW_TEXT);
+    let node;
+    while (node = treeWalker.nextNode()) {
+      if (node.data) {
+        node.data = BiDiMailUI.performCorrectiveRecodingOnText(node.data, recodingParams);
+      }
     }
   }
   if (recodingParams.recodeUTF8) {
