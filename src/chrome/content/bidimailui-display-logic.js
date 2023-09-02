@@ -328,6 +328,31 @@ BiDiMailUI.Display.setDirections = function (body, forcedDirection) {
   }
 };
 
+// The actions we need to take to fix character set misdecoding issues depends, among
+// other things, on how the message was decoded to begin with - via a categorization
+// into one of three kinds of decoding. This function performs the categorization
+// (using a preference to fill in when the actual decoding it not know).
+BiDiMailUI.Display.resolveDecodingType = (preferred, current) => {
+  if ((preferred != null) && (current == preferred)) {
+    return "preferred-charset";
+  }
+  if (["ISO-8859-8-I", "ISO-8859-8", "windows-1255", "ISO-8859-6", "windows-1256"].includes(current)) {
+    return "preferred-charset";
+  }
+  if (["US-ASCII", "ISO-8859-1", "windows-1252", null].includes(current)) {
+    return "latin-charset";
+  }
+  if (["", "UTF-8"].includes(current)) {
+    // sometimes the charset is misread, and Mozilla sets it to "" while
+    // using UTF-8; this is the case specifically for
+    // Content-type: text/plain; charset=iso-8859-I
+    // in the message... but we can't know that without streaming the raw
+    // message, which is expensive
+    return "UTF-8";
+  }
+  return "UTF-8";  // a default of sorts
+};
+
 
 // Detect and attempt to recode content of wholly or partially mis-decoded messages
 //
@@ -399,30 +424,7 @@ BiDiMailUI.Display.fixLoadedMessageCharsetIssues = function (cMCParams) {
   const mustKeepCharset = cMCParams.dontReload || cMCParams.charsetOverrideInEffect;
 
   // This sets parameter no. 2
-  let decodingTypeResolver = (preferred, current) => {
-    if (typeof current === 'undefined') {
-      return "latin-charset"; // I guess!
-    }
-    if ((preferred != null) && (current == preferred)) {
-      return "preferred-charset";
-    }
-    if (["ISO-8859-8-I", "ISO-8859-8", "windows-1255", "ISO-8859-6", "windows-1256"].includes(current)) {
-      return "preferred-charset";
-    }
-    if (["US-ASCII", "ISO-8859-1", "windows-1252", null].includes(current)) {
-      return "latin-charset";
-    }
-    if (["", "UTF-8"].includes(current)) {
-      // sometimes the charset is misread, and Mozilla sets it to "" while
-      // using UTF-8; this is the case specifically for
-      // Content-type: text/plain; charset=iso-8859-I
-      // in the message... but we can't know that without streaming the raw
-      // message, which is expensive
-      return "UTF-8";
-    }
-    return "UTF-8";  // a default of sorts
-  };
-  cMCParams.mailnewsDecodingType = decodingTypeResolver(cMCParams.preferredCharset, cMCParams.currentCharset);
+  cMCParams.mailnewsDecodingType = BiDiMailUI.Display.resolveDecodingType(cMCParams?.preferredCharset, cMCParams?.currentCharset);
   cMCParams.body.setAttribute('bidimailui-detected-decoding-type', cMCParams.mailnewsDecodingType);
 
 
