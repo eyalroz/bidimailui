@@ -595,7 +595,7 @@ BiDiMailUI.Display.decodeNumericHTMLEntitiesInText = function (element) {
   let entitiesFound = false;
   let replacer =  () => {
     entitiesFound = true;
-    return String.fromCharCode(RegExp.$1);
+    return String.fromCharCode(Number(RegExp.$1));
   };
   let node;
   while ((node = textWalker.nextNode()) != null) {

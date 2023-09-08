@@ -179,10 +179,8 @@ BiDiMailUI.performCorrectiveRecoding = function (document, filter, recodingParam
   }
 };
 
-BiDiMailUI.codepageMisdetectionExpression =
-  new RegExp(BiDiMailUI.RegExpStrings.CODEPAGE_MISDETECTION_SEQUENCE);
-BiDiMailUI.utf8MisdetectionExpression =
-  new RegExp(BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE);
+BiDiMailUI.codepageMisdetectionExpression = new RegExp(BiDiMailUI.RegExpStrings.CODEPAGE_MISDETECTION_SEQUENCE);
+BiDiMailUI.utf8MisdetectionExpression = new RegExp(BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE);
 
 
 BiDiMailUI.performCorrectiveRecodingOnText = function (str, correctiveRecodingParams) {
