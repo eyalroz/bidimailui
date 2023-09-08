@@ -1,4 +1,7 @@
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Delivered-To: some@one.com
 Message-ID: <20060204221522.9845.some@one.com.yahoo.com>
 Date: Sat, 01 Jan 2006 14:15:22 -0800 (PST)
@@ -12,6 +15,9 @@ Subject: Message 1
 îìì áòáøéú á-plaintext
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Delivered-To: some@one.com
 To: some@one.com
 Cc: some@one.com
@@ -70,6 +76,9 @@ nbsp;&nbsp;&nbsp; =D7=99=D7=93=D7=99=D7=93=D7=99 =D7=9B=D7=93=D7=
 --Boundary_(ID_7JB7HTpgOhLbgTYOJRU99g)--
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Delivered-To: some@one.com
 Message-ID: <20060206183343.72063.some@one.com.mud.yahoo.com>
 Date: Mon, 03 Jan 2006 10:33:43 -0800 (PST)
@@ -125,6 +134,9 @@ Content-Transfer-Encoding: 8bit
 --0-1154235558-1139250823=:71677--
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 10000000
+X-Mozilla-Keys:                                                                                 
 X-Sieve: CMU Sieve 2.3
 X-Resolved-to: some@one.com
 X-Delivered-to: some@one.com
@@ -192,6 +204,9 @@ Content-transfer-encoding: 8BIT
 
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Delivered-To: some@one.com
 X-Sender: some@one.com
 To: some@one.com
@@ -247,6 +262,9 @@ cm1zLwogCg==
 
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Delivered-To: some@one.com
 To: some@one.com
 Thread-index: AcY9DgDdcqkDnXgiQRuC7lutkknCxAAHzj0Q
@@ -285,6 +303,9 @@ dir=3DLTR></span></p>
 
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Delivered-To: some@one.com
 Message-ID: <20060121214044.32860.some@one.com.mud.yahoo.com>
 To: someone <some@one.com>
@@ -306,6 +327,9 @@ Content-Transfer-Encoding: 8bit
 
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Message-ID: <20060301145830.14041.some@one.com.mud.yahoo.com>
 To: some@one.com
 From: some@one.com
@@ -319,6 +343,9 @@ This message's subject has Hebrew in it, but the body does not.
 
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Delivered-To: some@one.com
 X-Sender: some@one.com
 Message-ID: <20060314125312.5434.some@one.com.mud.yahoo.com>
@@ -457,6 +484,9 @@ Bring photos to life! <a href="http://pa.yahoo.com/*http://us.rd.yahoo.com/evt=3
 --0-866084962-1142340792=:3980--
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 10000000
+X-Mozilla-Keys:                                                                                 
 Message-ID: <44229436.some@one.com.il>
 Date: Thu, 13 Jan 2006 14:27:34 +0200
 From: some@one.com
@@ -496,6 +526,9 @@ The quick brown fox jumped over the lazy dog.
 --------------070006060903030904010202--
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Delivered-To: some@one.com
 X-Sender: some@one.com.il
 To: some@one.com
@@ -546,6 +579,9 @@ i">
 
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Delivered-To: some@one.com
 X-Sender: some@one.com.il
 To: some@one.com
@@ -576,6 +612,9 @@ Content-Transfer-Encoding: 8bit
 
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Delivered-To: some@one.com
 X-Sender: some@one.com.il
 To: some@one.com
@@ -601,6 +640,9 @@ Here are some nasty characters: ï¿½
 --0-1101237084-1152616911=:85406--
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 10000000
+X-Mozilla-Keys:                                                                                 
 Delivered-To: some@one.com
 X-Sender: some@one.com.il
 To: some@one.com
@@ -635,6 +677,9 @@ Content-Disposition: inline; filename="myfile.htm"
 
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Message-ID: <1164392064.4567368006af2@webmail.technion.ac.il>
 Date: Sun, 18 Feb 2006 21:17:44 +0200
 From: some@one.com
@@ -651,6 +696,9 @@ Status: RO
 
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Return-Path: <another@one.com>
 Message-ID: <1198738127.47734acfeac57@mail.one.com>
 Date: Sun, 19 Feb 2006 21:17:44 +0200
@@ -681,6 +729,9 @@ Quoting Somebody <some@one.com>:
 îé ùìåîã àú-äøàùåğåú òì-îğú ììîåã òì-äçãùåú, øàåé ìäéåú îåøä.
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Return-Path: <another@one.com>
 Subject: Message 20 - äú÷áìä úâåáä ìğåùà
 From: some@one.com
@@ -705,6 +756,9 @@ http://forums.abc.org/viewtopic.php?p=1234#1234
 http://forums.abc.org/viewtopic.php?t=1234&unwatch=topic
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Return-Path: <another@one.com>
 Subject: Message 21
 From: some@one.com
@@ -721,6 +775,9 @@ Status: RO
 ôğéîé	1234
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 To: some@one.com
 Message-ID: <fpk8n7+dhhm@eGroups.com>
 From: some@one.com
@@ -747,6 +804,9 @@ Content-Transfer-Encoding: quoted-printable
 
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 To: some@one.com
 Message-ID: <1092259026.2593.46399.w60@yahoogroups.com>
 From: some@one.com
@@ -770,6 +830,9 @@ by Catholick that 'I shall return from the grave and have my
 revenge!'
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 10000000
+X-Mozilla-Keys:                                                                                 
 Message-ID: <1203887840.47c1dee09e49a@webmail.technion.ac.il>
 Date: Sun, 25 Feb 2006 21:17:44 +0200
 From: some@one.com
@@ -798,6 +861,9 @@ nteVJnF1b3Q71548YnI+PGJyPteW15Qg16DXldep15Ag15fXqdeV15EsINeV15vXk9eQ15kg16nX
 ---MOQ12038878384ca20b98f61f198424f731846b73f657--
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 From: some@one.com
 To: some@one.com
 Subject: Message 26
@@ -825,6 +891,9 @@ Content-Transfer-Encoding: 8bit
 ------=_NextPart_000_15216_01C9ABC1.49601040--
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Message-Id: <20100407115742.B6444232BF6@messaging.couchsurfing.com>
 Date: Sun, 27 Feb 2006 21:17:44 +0200
 From: some@one.com
@@ -845,6 +914,9 @@ Some text before the table.
 </html>
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Message-ID: <4C134B0C.3070802@technion.ac.il>
 Date: Sun, 1 Mar 2006 21:17:44 +0200
 From: some@one.com
@@ -859,6 +931,9 @@ Subject: FW: ×³Å¾×³â€º×³Ã—×³â€˜ ×³Â©×³ ×³Â©×³Å“×³- ×³Å“×³ ×³Â¦×³â„¢×³â€™×³â€¢×³Ã
 
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Message-ID: <4C134B0C.3070802@technion.ac.il>
 Date: Sun, 2 Mar 2006 21:17:44 +0200
 From: some@one.com
@@ -872,6 +947,9 @@ Subject: Re: ÃºÃ¶Ã¤Ã©Ã¸Ã© Ã²Ã£Ã¥Ãº Ã—Â¨Ã—&#65533;Ã—Â©Ã—â„¢Ã—Âª Ã¡ÃºÃ¡Ã©Ã²Ã¤ - Ã¨
 Ã—&#65533;Ã—&#65533;Ã—â„¢Ã—&#65533;Ã©Ã¤ Ã—â€¢Ã—&#65533;Ã—â€¢Ã—-Ã—&#65533;Ã—â€œ
 
 From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Message-ID: <AANLkTimmfydNcBTs8Ureuqr_3+tz_55dpYRTzT46e5BY@mail.gmail.com>
 Date: Sun, 3 Mar 2006 21:17:44 +0200
 From: some@one.com
@@ -905,6 +983,9 @@ Content-Transfer-Encoding: quoted-printable
 =D7=91=D7=95=D7=90=D7=95 =D7=9C=D7=A7=D7=97=D7=AA =D7=97=D7=9C=D7=A7!
 
 From - Tue Jul 05 16:49:22 2011
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
 Message-ID: <iuukrp+rrr4@eGroups.com>
 Date: Sun, 3 Mar 2006 21:17:44 +0200
 From: some@one.com
@@ -915,4 +996,23 @@ Content-Type: text/plain; charset="iso-8859-8-i"
 Content-Transfer-Encoding: 8bit
 
 × ×™×¡×™×•×Ÿ ×‘×¡×“×¨ ×“×™×Ÿ ××–×¨×—×™ – ×™×ª×¨×•×Ÿ.
+
+From some@one.com
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
+Date: Wed, 6 Sep 2023 16:33:52 +0200
+From: some@one.com
+To: some@one.com
+Message-ID: <ZPiN0Nt8rxUrPen7@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; Format=flowed
+Content-Transfer-Encoding: 8bit
+Subject: Message 32
+
+first line, followed by an empty second line
+
+third line
+Ø®Ø§Ù„Ø¯ Ø­Ø³Ù†ÙŠ fourth line with Arabic then English text
+
 
