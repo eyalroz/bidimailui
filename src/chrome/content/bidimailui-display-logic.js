@@ -55,7 +55,7 @@ BiDiMailUI.Display.ActionPhases.directionAutodetection = function (domDocument) 
     // so we'll break it up into smaller block elements whose direction
     // can be set separately and detect-and-set for each such element
     BiDiMailUI.Display.preprocessMessageDOM(body);
-    BiDiMailUI.Display.detectDirections(body);
+    BiDiMailUI.Display.detectAndMarkDirections(body);
   }
   // If the body isn't mixed, the message is either neutral in
   // direction, all-LTR or all-RTL, in all which cases it's enough
@@ -244,7 +244,8 @@ BiDiMailUI.Display.preprocessMessageDOM = function (body) {
 // Gather all the elements whose contents' direction
 // we need to check and whose direction we set accordingly
 // (or force, as the case may be)
-BiDiMailUI.Display.gatherElementsRequiringDirectionSetting = function (body, elementsRequiringExplicitDirection) {
+BiDiMailUI.Display.gatherElementsRequiringDirectionSetting = function (body) {
+  let gatheredElements = [];
   for (let i = 0; i < body.childNodes.length; i++) {
     const subBody = body.childNodes.item(i);
 
@@ -252,7 +253,7 @@ BiDiMailUI.Display.gatherElementsRequiringDirectionSetting = function (body, ele
     // as we don't know what to do with them
     if (!/^moz-text/.test(subBody.className)) continue;
 
-    elementsRequiringExplicitDirection.push(subBody);
+    gatheredElements.push(subBody);
 
     const tagNames = {
       "moz-text-plain"   : "pre, blockquote",
@@ -266,26 +267,20 @@ BiDiMailUI.Display.gatherElementsRequiringDirectionSetting = function (body, ele
       // In flowed messages, not touching elements which aren't moz-text-something,
       // as we don't know what to do with them
       if (subBody.className === "moz-text-flowed" && /^moz-text/.test(nodes[j].className)) continue;
-      elementsRequiringExplicitDirection.push(nodes[j]);
+      gatheredElements.push(nodes[j]);
     }
   }
+  return gatheredElements;
 };
 
-BiDiMailUI.Display.detectDirections = function (body) {
-  const elementsRequiringExplicitDirection = [];
-  BiDiMailUI.Display.gatherElementsRequiringDirectionSetting(
-    body, elementsRequiringExplicitDirection);
-
-  // direction-check all of the elements whose direction should be set explicitly
-
-  for (let i = 0; i < elementsRequiringExplicitDirection.length; i++) {
-    let node = elementsRequiringExplicitDirection[i];
+BiDiMailUI.Display.detectAndMarkDirections = function (body) {
+  const elements = BiDiMailUI.Display.gatherElementsRequiringDirectionSetting(body);
+  elements.forEach((element) => {
     try {
-      const detectedDirection = BiDiMailUI.directionCheck(document, NodeFilter, node);
-      node.setAttribute('bidimailui-direction-uniformity', detectedDirection);
-    } catch (ex) {
-    }
-  }
+      const directionUniformity = BiDiMailUI.directionCheck(document, NodeFilter, element);
+      element.setAttribute('bidimailui-direction-uniformity', directionUniformity);
+    } catch (ex) { }
+  });
 };
 
 BiDiMailUI.Display.setDirections = function (body, forcedDirection) {
@@ -445,7 +440,7 @@ BiDiMailUI.Display.fixLoadedMessageCharsetIssues = function (cMCParams) {
   } else {
     // text in the preferred charset is properly decoded, so we only
     // need to look for a character in the Hebrew or Arabic Unicode range
-    patternToMatch = new RegExp( (cMCParams.mailnewsDecodingType === "latin-charset") ?
+    patternToMatch = new RegExp((cMCParams.mailnewsDecodingType === "latin-charset") ?
       // Here we want a sequence of Unicode values of characters whose
       // windows-1252 octet is such that would be decoded as 'clearly'
       // Hebrew or Arabic text; we could be less or more picky depending
@@ -605,25 +600,18 @@ BiDiMailUI.Display.fixLoadedMessageCharsetIssues = function (cMCParams) {
   return true;
 };
 
-
 // returns true if numeric entities were found
 BiDiMailUI.Display.decodeNumericHTMLEntitiesInText = function (element) {
+  const NoFilter = null;
+  const treeWalker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, NoFilter, false);
   let entitiesFound = false;
-  const treeWalker = document.createTreeWalker(
-    element,
-    NodeFilter.SHOW_TEXT,
-    null, // additional filter function
-    false
-  );
+  let replacer =  () => {
+    entitiesFound = true;
+    return String.fromCharCode(RegExp.$1);
+  };
   let node;
   while ((node = treeWalker.nextNode()) != null) {
-    node.data = node.data.replace(
-      /&#(\d+);/g,
-      () => {
-        entitiesFound = true;
-        return String.fromCharCode(RegExp.$1);
-      }
-    );
+    node.data = node.data.replace(/&#(\d+);/g, replacer);
   }
   return entitiesFound;
 };
