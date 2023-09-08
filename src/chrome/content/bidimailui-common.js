@@ -145,15 +145,19 @@ BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE =
 BiDiMailUI.RegExpStrings.BOTCHED_UTF8_DECODING_SEQUENCE =
   "(?:^|\x0A)\\uFFFD{3}";
 
-BiDiMailUI.performCorrectiveRecoding = function (document, NodeFilter, recodingParams) {
+BiDiMailUI.createTextWalker = function (element, filter) {
+  return element.ownerDocument.createTreeWalker(element, NodeFilter.SHOW_TEXT, filter);
+};
+
+BiDiMailUI.performCorrectiveRecoding = function (document, filter, recodingParams) {
   let needAnyRecoding = recodingParams.recodePreferredCharset || recodingParams.recodeUTF8;
   if (!needAnyRecoding) return;
 
   for (let child of recodingParams.body.childNodes) {
     if (!child?.className?.startsWith("moz-text-")) continue; // Note this will skip non-element nodes
-    let treeWalker = document.createTreeWalker(child, NodeFilter.SHOW_TEXT);
+    let textWalker = BiDiMailUI.createTextWalker(child);
     let node;
-    while (node = treeWalker.nextNode()) {
+    while (node = textWalker.nextNode()) {
       if (node.data) {
         node.data = BiDiMailUI.performCorrectiveRecodingOnText(node.data, recodingParams);
       }
@@ -274,21 +278,26 @@ BiDiMailUI.performCorrectiveRecodingOnText = function (str, correctiveRecodingPa
 };
 
 BiDiMailUI.textMatches = function (document, NodeFilter, element, expression) {
-  let treeWalker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+  let textWalker = BiDiMailUI.createTextWalker(element);
   let node;
-  while (node = treeWalker.nextNode()) {
+  while (node = textWalker.nextNode()) {
     if (expression.test(node.data)) { return true; }
   }
   return false;
 };
 
-BiDiMailUI.determineTextMatchUniformity = function (document, NodeFilter, element, expression) {
-  let treeWalker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+BiDiMailUI.determineTextMatchUniformity = function (document, nodeFilter, element, expression) {
+  let textWalker = BiDiMailUI.createTextWalker(element);
   let hasMatching_ = false, hasNonMatching_ = false;
   let node;
-  while (node = treeWalker.nextNode()) {
-    if (expression.test(node.data)) { hasMatching_ = true; if (hasNonMatching_) break; }
-    else { hasNonMatching_ = true; if (hasMatching_) break; }
+  while (node = textWalker.nextNode()) {
+    if (expression.test(node.data)) {
+      hasMatching_ = true;
+      if (hasNonMatching_) break;
+    } else {
+      hasNonMatching_ = true;
+      if (hasMatching_) break;
+    }
   }
   return { hasMatching : hasMatching_, hasNonMatching : hasNonMatching_ };
 };

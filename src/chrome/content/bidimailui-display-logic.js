@@ -118,19 +118,14 @@ BiDiMailUI.Display.populatePreferredCharset = function (cMCParams) {
 // separated by double \n's (with possibly some neutral characters between
 // them, e.g. hello\n---\ngoodbye )
 BiDiMailUI.Display.splitTextElementsInPlainMessageDOMTree = function (subBody) {
-  const treeWalker = document.createTreeWalker(
-    subBody,
-    NodeFilter.SHOW_TEXT,
-    null,
-    false
-  );
-  let node = treeWalker.nextNode();
+  let textWalker = BiDiMailUI.createTextWalker(subBody);
+  let node = textWalker.nextNode();
   while (node) {
     // TODO: ensure the parent's a PRE or BLOCKQUOTE or something else that's nice
     let textSplit = new RegExp(BiDiMailUI.RegExpStrings.TEXT_SPLIT_SEQUENCE, "m");
 
     if (!textSplit.test(node.nodeValue)) {
-      node = treeWalker.nextNode();
+      node = textWalker.nextNode();
       continue;
     }
     const restOfText = node.cloneNode(false);
@@ -155,8 +150,8 @@ BiDiMailUI.Display.splitTextElementsInPlainMessageDOMTree = function (subBody) {
       firstPartOfParent.parentNode.insertBefore(secondPartOfParent, firstPartOfParent.nextSibling);
     } else firstPartOfParent.parentNode.appendChild(secondPartOfParent);
 
-    const newNode = treeWalker.nextNode();
-    node = ((newNode !== node) ? newNode : treeWalker.nextNode());
+    const newNode = textWalker.nextNode();
+    node = ((newNode !== node) ? newNode : textWalker.nextNode());
   }
 };
 
@@ -166,35 +161,33 @@ BiDiMailUI.Display.splitTextElementsInPlainMessageDOMTree = function (subBody) {
 BiDiMailUI.Display.wrapTextNodesInFlowedMessageDOMTree = function (subBody) {
   let ns = subBody.ownerDocument.documentElement.lookupNamespaceURI("html");
   let clonedDiv = subBody.ownerDocument.createElementNS(ns, "div");
-  clonedDiv.setAttribute('bidimailui-generated', true);
-  const treeWalker = document.createTreeWalker(
-    subBody,
-    NodeFilter.SHOW_TEXT,
-    null,
-    false
-  );
+  clonedDiv.setAttribute("bidimailui-generated", "true");
+  let textWalker = BiDiMailUI.createTextWalker(subBody);
   let node;
-  while ((node = treeWalker.nextNode())) {
-    if ((node.parentNode.nodeName.toLowerCase() !== 'a') &&
-        (node.parentNode.nodeName.toLowerCase() !== 'div') &&
-        (node.parentNode.nodeName.toLowerCase() !== 'blockquote')) {
+  while ((node = textWalker.nextNode())) {
+    let parent = node.parentNode;
+    let grandParent = parent.parentNode;
+    let parentName = parent.nodeName.toLowerCase();
+    if ((parentName !== 'a') &&
+        (parentName !== 'div') &&
+        (parentName !== 'blockquote')) {
       // and other such elements within moz-text-flowed messages
       continue;
     }
-    if (node.parentNode.hasAttribute('bidimailui-generated') ||
-        ((node.parentNode.nodeName.toLowerCase() === 'A') &&
-        (node.parentNode.parentNode.hasAttribute('bidimailui-generated')))) {
+    if (parent.hasAttribute('bidimailui-generated') ||
+        ((parentName === 'A') &&
+        (grandParent.hasAttribute('bidimailui-generated')))) {
       continue;
     }
     const wrapperDiv = clonedDiv.cloneNode(false);
 
     let emptyLine;
-    if (node.parentNode.nodeName.toLowerCase() === 'a') {
-      node.parentNode.parentNode.replaceChild(wrapperDiv, node.parentNode);
-      wrapperDiv.appendChild(node.parentNode);
+    if (parentName === 'a') {
+      grandParent.replaceChild(wrapperDiv, parent);
+      wrapperDiv.appendChild(parent);
       emptyLine = false;
     } else {
-      node.parentNode.replaceChild(wrapperDiv, node);
+      parent.replaceChild(wrapperDiv, node);
       wrapperDiv.appendChild(node);
       emptyLine =
         // actually we only see '\n' text nodes for empty lines, but let's add
@@ -206,10 +199,9 @@ BiDiMailUI.Display.wrapTextNodesInFlowedMessageDOMTree = function (subBody) {
     // add everything within the current 'paragraph' to the new DIV
     while (wrapperDiv.nextSibling) {
       sibling = wrapperDiv.nextSibling;
-      if (sibling.nodeName.toLowerCase() === 'blockquote') {
-        break;
-      }
-      if (sibling.nodeName.toLowerCase() === 'br') {
+      let siblingName = sibling.nodeName.toLowerCase();
+      if (siblingName === 'blockquote') break;
+      if (siblingName === 'br') {
         if (!emptyLine) {
           // if the DIV has any text content, it will
           // have a one-line height; otherwise it will
@@ -602,15 +594,14 @@ BiDiMailUI.Display.fixLoadedMessageCharsetIssues = function (cMCParams) {
 
 // returns true if numeric entities were found
 BiDiMailUI.Display.decodeNumericHTMLEntitiesInText = function (element) {
-  const NoFilter = null;
-  const treeWalker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, NoFilter, false);
+  let textWalker = BiDiMailUI.createTextWalker(element);
   let entitiesFound = false;
   let replacer =  () => {
     entitiesFound = true;
     return String.fromCharCode(RegExp.$1);
   };
   let node;
-  while ((node = treeWalker.nextNode()) != null) {
+  while ((node = textWalker.nextNode()) != null) {
     node.data = node.data.replace(/&#(\d+);/g, replacer);
   }
   return entitiesFound;
