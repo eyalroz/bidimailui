@@ -34,7 +34,8 @@
     "Cu": "readonly",
     "pref": "readonly",
     "IsHTMLEditor": "readonly",
-    "GetCurrentEditor": "readonly"
+    "GetCurrentEditor": "readonly",
+    "GetCurrentEditorElement": "readonly"
   },
   "parserOptions": {
     "ecmaVersion": 2022
@@ -60,9 +61,7 @@
       "off", "double"
     ],
     "operator-linebreak": [
-      2, "after", {
-        "overrides": { "?": "after", ":": "none" }
-      }
+      "error", "after", { "overrides": { ":": "ignore" } }
     ],
     "comma-dangle": ["error", {
         "arrays": "only-multiline",
@@ -104,7 +103,6 @@
     "no-return-assign": "off",
     "no-await-in-loop": "warn",
     "one-var": "off",
-    "operator-linebreak" : "warn",
     "vars-on-top": "off",
     "no-var": "off",
     "prefer-const": "off",
