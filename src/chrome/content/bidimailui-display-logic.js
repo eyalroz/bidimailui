@@ -222,13 +222,10 @@ BiDiMailUI.Display.wrapTextNodesInFlowedMessageDOMTree = function (subBody) {
 };
 
 BiDiMailUI.Display.preprocessMessageDOM = function (body) {
-  for (let i = 0; i < body.childNodes.length; i++) {
-    const subBody = body.childNodes.item(i);
-
-    if (subBody.className === "moz-text-plain") {
-      BiDiMailUI.Display.splitTextElementsInPlainMessageDOMTree(subBody);
-    } else if (subBody.className === "moz-text-flowed") {
-      BiDiMailUI.Display.wrapTextNodesInFlowedMessageDOMTree(subBody);
+  for (const subBody of [ ...body.children ]) {
+    switch (subBody.className) {
+    case "moz-text-plain":   BiDiMailUI.Display.splitTextElementsInPlainMessageDOMTree(subBody); break;
+    case "moz-text-flowed":  BiDiMailUI.Display.wrapTextNodesInFlowedMessageDOMTree(subBody);
     }
   }
 };
