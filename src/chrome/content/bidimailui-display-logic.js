@@ -26,14 +26,14 @@ BiDiMailUI.Display.ActionPhases.charsetMisdetectionCorrection = function (cMCPar
   }
 
   if (cMCParams.charsetOverrideInEffect) {
-    cMCParams.body.setAttribute('bidimailui-charset-is-forced', true);
+    cMCParams.body.setAttribute("bidimailui-charset-is-forced", "true");
   }
 };
 
 BiDiMailUI.Display.ActionPhases.htmlNumericEntitiesDecoding = function (body) {
   if (BiDiMailUI.Prefs.get("display.decode_numeric_html_entities", false)) {
     if (BiDiMailUI.Display.decodeNumericHTMLEntitiesInText(body)) {
-      body.setAttribute('bidimailui-found-numeric-entities', true);
+      body.setAttribute("bidimailui-found-numeric-entities", true);
     }
   }
 };
@@ -101,8 +101,9 @@ BiDiMailUI.Display.canonicalizePreferredCharset = function (charset) {
   case "windows-1256":
   case "ISO-8859-6":
     return "windows-1256";
+  default:
+    return null;
   }
-  return null; // Should we support no preference again?
 };
 
 BiDiMailUI.Display.populatePreferredCharset = function (cMCParams) {
@@ -155,7 +156,7 @@ BiDiMailUI.Display.splitTextElementsInPlainMessageDOMTree = function (subBody) {
   }
 };
 
-// wraps every sequence of text node, A's etc in a
+// wraps every sequence of text node, A's etc. in a
 // moz-text-flowed message's DOM tree within a DIV
 // (whose direction we can later set)
 BiDiMailUI.Display.wrapTextNodesInFlowedMessageDOMTree = function (subBody) {
@@ -203,19 +204,18 @@ BiDiMailUI.Display.wrapTextNodesInFlowedMessageDOMTree = function (subBody) {
       if (siblingName === 'blockquote') break;
       if (siblingName === 'br') {
         if (!emptyLine) {
-          // if the DIV has any text content, it will
-          // have a one-line height; otherwise it will
-          // have no height and we need the BR after it
+          // if the DIV has any text content, it will have a one-line
+          // height; otherwise it will have no height, and we need the
+          // BR after it
           wrapperDiv.parentNode.removeChild(sibling);
         }
         break;
       }
       wrapperDiv.parentNode.removeChild(sibling);
       wrapperDiv.appendChild(sibling);
-      // we're assuming empty lines in moz-text-flowed messages
-      // can only be one empty text node followed by a BR; and
-      // if we got here, we haven't hit BR right after the first
-      // text node
+      // we're assuming empty lines in moz-text-flowed messages  can only be
+      // one empty text node followed by a BR; and if we got here, we haven't
+      // hit BR right after the first text node
       emptyLine = false;
     }
   }
@@ -320,7 +320,7 @@ BiDiMailUI.Display.setDirections = function (body, forcedDirection) {
 // into one of three kinds of decoding. This function performs the categorization
 // (using a preference to fill in when the actual decoding it not know).
 BiDiMailUI.Display.resolveDecodingType = (preferred, current) => {
-  if ((preferred != null) && (current == preferred)) {
+  if ((preferred !== null) && (current === preferred)) {
     return "preferred-charset";
   }
   if (["ISO-8859-8-I", "ISO-8859-8", "windows-1255", "ISO-8859-6", "windows-1256"].includes(current)) {

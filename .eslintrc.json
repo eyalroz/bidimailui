@@ -108,6 +108,7 @@
     "prefer-const": "off",
     "prefer-destructuring": "off",
     "function-paren-newline": "off",
+    "default-case": "off",
     "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1, "maxBOF": 1} ],
     "comment: will need to look at the following one-by-one": "off",
     "no-unused-vars": "off",
