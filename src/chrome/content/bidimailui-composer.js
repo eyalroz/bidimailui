@@ -451,8 +451,7 @@ BiDiMailUI.Composition.setInitialDirection = function (messageParams) {
   } else {
     // We get here for drafts, for messages without URIs, and due to problems
     // in locating the original message window/tab
-    let detectionDirection = BiDiMailUI.directionCheck(
-      document, NodeFilter, BiDiMailUI.getMessageEditor(document).contentDocument.body);
+    let detectionDirection = BiDiMailUI.directionCheck(BiDiMailUI.getMessageEditor(document).contentDocument.body);
     if ((detectionDirection  == "rtl") || (detectionDirection == "mixed")) {
       BiDiMailUI.Composition.setDocumentDirection("rtl");
     } else if (detectionDirection == "ltr") {

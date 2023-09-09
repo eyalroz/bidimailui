@@ -48,7 +48,7 @@ BiDiMailUI.Display.ActionPhases.directionAutodetection = function (domDocument) 
   const body = domDocument.body;
   BiDiMailUI.Display.linkStylesheet(domDocument, 'bidimailui-direction-autodetection-css', 'direction-autodetection.css');
 
-  const detectedOverallDirection = BiDiMailUI.directionCheck(document, NodeFilter, body);
+  const detectedOverallDirection = BiDiMailUI.directionCheck(body);
   body.setAttribute('bidimailui-direction-uniformity', detectedOverallDirection);
   if (detectedOverallDirection === "mixed") {
     // The message has both LTR and RTL content in the message,
@@ -266,7 +266,7 @@ BiDiMailUI.Display.detectAndMarkDirections = function (body) {
   const elements = BiDiMailUI.Display.gatherElementsRequiringDirectionSetting(body);
   elements.forEach((element) => {
     try {
-      const directionUniformity = BiDiMailUI.directionCheck(document, NodeFilter, element);
+      const directionUniformity = BiDiMailUI.directionCheck(element);
       element.setAttribute('bidimailui-direction-uniformity', directionUniformity);
     } catch (ex) { }
   });
@@ -337,6 +337,134 @@ BiDiMailUI.Display.resolveDecodingType = (preferred, current) => {
   return "UTF-8";  // a default of sorts
 };
 
+// Returns a regular express pattern for matching text in the preferred
+// charset, within a message which has already been decoded (depending
+// on how it was decoded)
+BiDiMailUI.Display.getDecodedCharsetMatchPattern = function (preferredCharset, messageDecodingType) {
+  switch (messageDecodingType) {
+  case "preferred-charset":
+    // text in the preferred charset is properly decoded, so we only need to look for
+    // characters in the Hebrew or Arabic Unicode ranges; we look for a sequence,
+    // since some odd character may be the result of misdecoding UTF-8 text
+    return (preferredCharset === "windows-1255") ?
+      "[\\u0590-\\u05FF\\uFB1D-\\uFB4F]{3,}" :
+      // it's "windows-1256"
+      "[\\u0600-\\u06FF\\uFE50-\\uFEFC]{3,}";
+    // In the remaining cases, text in the preferred charset isn't properly decoded, so we only
+    // need to look for a character in the Hebrew or Arabic Unicode range
+  case "latin-charset":
+    // Here we want a sequence of Unicode values of characters whose
+    // windows-1252 octet is such that would be decoded as 'clearly'
+    // Hebrew or Arabic text; we could be less or more picky depending
+    // on what we feel about characters like power-of-2, paragraph-mark,
+    // plus-minus etc. ; let's be conservative: the windows-1255
+    // and windows-1256 octet ranges corresponding to the letters
+    // themselves fall within the range C0-FF; this range is all accented
+    // Latin letters in windows-1252, whose Unicode values are the
+    // same as their octets
+    return "[\\u00C0-\\u00FF]{3,}";
+  case "utf-8":
+  default:
+    // Here we know that cMCParams.mailnewsDecodingType == "UTF-8"; if
+    // you decode windows-1255/6 content as UTF-8, you'll get failures
+    // because you see multi-octet-starter octets (11xxxxxx) followed
+    // by other multi-octet-starter octets rather than
+    // multi-octect-continuer octets (10xxxxxx); what mailnews does in
+    // such cases is emit \uFFFD, which is the Unicode 'replacement
+    // character'; let's be cautious, though, and look for repetitions
+    // of this rather than the odd encoding error or what-not
+    return "\\uFFFD{3,}";
+  }
+};
+
+/**
+ * Resolves the (possibly-refinable) strategy for handling potential misdecoded message text
+ *
+ * @param[in] mustKeepCharset
+ *     Message has been reloaded (by the previous run of this function) or has
+ *     otherwise been forced into a specific charset (Y/N) . This will always
+ *     be true in TB 91 and later, as they don't support reloading, so it is as
+ *     though the charset was forced.
+ * @param[in] decodingType
+ *     Charset used by mozilla to decode the message
+ *
+ *       L = Latin charset - windows-1252/equivalents, including no/empty charset
+ *       P = Preferred charset - windows-1255/6
+ *       U = UTF-8,
+ * @param[in] havePreferredCharsetText
+ *     Message contains windows-1255/6 text (Y/N)
+ * @param[in] haveUTF8Text
+ *     Message contains UTF-8 text (that is, UTF-8 octet sequences which are not
+ *     iso-8859-1 chars 0-127) (Y/N)
+ *
+ * The strategy resolution logic is as follows:
+ *
+ *   *NNN - No problem, do nothing
+ *   NLNY - Reload with UTF-8 (and continue with YUNY)
+ *   NLYN - Reload with windows-1255/6  (and continue with YCYN)
+ *   *LYY - Recode both UTF-8 and windows-1255/6
+ *   *PNN - No problem, do nothing
+ *   NPNY - Reload with UTF-8 (and continue with YUNY)
+ *   *PYN - No problem, do nothing
+ *   NPYY - This is bad, since we can't effectively recode; strangely enough, the
+ *          best bet should be reloading with windows-1252 (and continue
+ *          with one of YNNN-YNYY)
+ *   *UN* - No problem, do nothing
+ *   NUYN - Reload with windows-1255/6
+ *   NUYY - This is bad, since we can't effectively recode; strangely enough, the
+ *          best bet should be reloading with windows-1252 (and continue
+ *          with one of YNNN-YNYY)
+ *   YLNY - recode UTF-8 text
+ *   YLYN - recode windows-1255/6 text
+ *   YP*Y - This is very bad, since we're not allowed to change charset;
+ *          we'll try recoding UTF-8 text, but it probably won't work well
+ *   *UY* - This is very bad, since we're not allowed to change charset;
+ *          we'll try recoding windows-1255/6 text, but it probably won't work well
+ *
+ * Extra Notes:
+ *
+ * 1. (Before TB 91) If we tell the app to change the charset, the message will be
+ *    reloaded and this function will be triggered again
+ * 2. There's 'waste' in this algorithm - after recoding, we again check for UTF-8
+ *    and windows-1255/6 text although we sometimes know the answer; but how to
+ *    safely convey this information to the next load event? Using a global variable
+ *    may be unsafe
+ */
+BiDiMailUI.Display.resolveCharsetHandlingStrategy = function (
+  mustKeepCharset, decodingType, havePreferredCharsetText, haveUTF8Text) {
+  let stateCode =
+    (mustKeepCharset ? "Y" : "N") +
+    (decodingType.charAt(0).toUpperCase()) + // So it's L, P or U
+    (havePreferredCharsetText ? "Y" : "N") +
+    (haveUTF8Text ? "Y" : "N");
+  const strategies = {
+    NLNN : {},
+    NLNY : { needCharsetForcing: true, charsetToForce: "utf-8" },
+    NLYN : { needCharsetForcing: true, charsetToForce: "preferred" },
+    NLYY : { recodeUTF8: true, recodePreferredCharset: true }, // but note we might still decide to force the charset!
+    NPNN : {},
+    NPNY : { needCharsetForcing: true, charsetToForce: "utf-8" },
+    NPYN : {},
+    NPYY : { needCharsetForcing: true, charsetToForce: "windows-1252" },
+    NUNN : {},
+    NUNY : {},
+    NUYN : { needCharsetForcing: true, charsetToForce: "preferred" },
+    NUYY : { needCharsetForcing: true, charsetToForce: "windows-1252" },
+    YLNN : { recodePreferredCharset: false, recodeUTF8: false },
+    YLNY : { recodePreferredCharset: false, recodeUTF8: true  },
+    YLYN : { recodePreferredCharset: true,  recodeUTF8: false },
+    YLYY : { recodePreferredCharset: true,  recodeUTF8: true  },
+    YPNN : { recodePreferredCharset: false, recodeUTF8: false },
+    YPNY : { recodePreferredCharset: false, recodeUTF8: true  },
+    YPYN : { recodePreferredCharset: false, recodeUTF8: false },
+    YPYY : { recodePreferredCharset: false, recodeUTF8: true  },
+    YUNN : { recodePreferredCharset: false, recodeUTF8: false },
+    YUNY : { recodePreferredCharset: false, recodeUTF8: false },
+    YUYN : { recodePreferredCharset: true,  recodeUTF8: false },
+    YUYY : { recodePreferredCharset: true,  recodeUTF8: false }
+  };
+  return strategies[stateCode];
+};
 
 // Detect and attempt to recode content of wholly or partially mis-decoded messages
 //
@@ -350,60 +478,6 @@ BiDiMailUI.Display.resolveDecodingType = (preferred, current) => {
 //   windows-1256 or null; see populatePreferredCharset().
 //
 BiDiMailUI.Display.fixLoadedMessageCharsetIssues = function (cMCParams) {
-  let patternToMatch;
-
-  /*
-  There are 4 parameters affecting what we need to do with the loaded message
-  with respect to reloading or recoding.
-
-  1. Message has been reloaded (by the previous run of this function) or has
-     otherwise been forced into a specific charset (Y/N) . This will always
-     be true in TB 91 and later, as they don't support reloading, so it is as
-     though the charset was forced.
-  2. Charset used by mozilla to decode the message (
-       N = windows-1252/equivalents, including no/empty charset
-       C = windows-1255/6
-       U = UTF-8,
-     we won't handle any issues with other charsets
-  3. Message contains windows-1255/6 text (Y/N)
-  4. Message contains UTF-8 text (that is, UTF-8 octet sequences
-     which are not iso-8859-1 chars 0-127) (Y/N)
-
-  What should we do for each combination of values?
-  (* means all possible values)
-
-  *NNN - No problem, do nothing
-  NNNY - Reload with UTF-8 (and continue with YUNY)
-  NNYN - Reload with windows-1255/6  (and continue with YCYN)
-  *NYY - Recode both UTF-8 and windows-1255/6
-  *CNN - No problem, do nothing
-  NCNY - Reload with UTF-8 (and continue with YUNY)
-  *CYN - No problem, do nothing
-  NCYY - This is bad, since we can't effectively recode; strangely enough, the
-         best bet should be reloading with windows-1252 (and continue
-         with one of YNNN-YNYY)
-  *UN* - No problem, do nothing
-  NUYN - Reload with windows-1255/6
-  NUYY - This is bad, since we can't effectively recode; strangely enough, the
-         best bet should be reloading with windows-1252 (and continue
-         with one of YNNN-YNYY)
-  YNNY - recode UTF-8 text
-  YNYN - recode windows-1255/6 text
-  YC*Y - This is very bad, since we're not allowed to change charset;
-         we'll try recoding UTF-8 text, but it probably won't work well
-  *UY* - This is very bad, since we're not allowed to change charset;
-         we'll try recoding windows-1255/6 text, but it probably won't work well
-
-  Extra Notes:
-
-  1. (Before TB 91) If we tell the app to change the charset, the message will be
-      reloaded and this function will be triggered again
-  2. There's 'waste' in this algorithm - after recoding, we again check for UTF-8
-     and windows-1255/6 text although we sometimes know the answer; but how to
-     safely convey this information to the next load event? Using a global variable
-      may be unsafe
-  */
-
   // This sets parameter no. 1 (and will be true for TB 91)
   const mustKeepCharset = cMCParams.dontReload || cMCParams.charsetOverrideInEffect;
 
@@ -411,53 +485,19 @@ BiDiMailUI.Display.fixLoadedMessageCharsetIssues = function (cMCParams) {
   cMCParams.mailnewsDecodingType = BiDiMailUI.Display.resolveDecodingType(cMCParams?.preferredCharset, cMCParams?.currentCharset);
   cMCParams.body.setAttribute('bidimailui-detected-decoding-type', cMCParams.mailnewsDecodingType);
 
-
   // This sets parameter no. 3
   // (note its value depends on parameter no. 2)
-  let havePreferredCharsetText;
-  if (cMCParams.preferredCharset != null) { havePreferredCharsetText = false; }
-  if (cMCParams.mailnewsDecodingType === "preferred-charset") {
-    // text in the preferred charset is properly decoded, so we only
-    // need to look for characters in the Hebrew or Arabic Unicode ranges;
-    // we look for a sequence, since some odd character may be the result
-    // of misdecoding UTF-8 text
-    patternToMatch = new RegExp(
-      (cMCParams.preferredCharset === "windows-1255") ?
-        "[\\u0590-\\u05FF\\uFB1D-\\uFB4F]{3,}" :
-        // it's "windows-1256"
-        "[\\u0600-\\u06FF\\uFE50-\\uFEFC]{3,}");
-  } else {
-    // text in the preferred charset is properly decoded, so we only
-    // need to look for a character in the Hebrew or Arabic Unicode range
-    patternToMatch = new RegExp((cMCParams.mailnewsDecodingType === "latin-charset") ?
-      // Here we want a sequence of Unicode values of characters whose
-      // windows-1252 octet is such that would be decoded as 'clearly'
-      // Hebrew or Arabic text; we could be less or more picky depending
-      // on what we feel about characters like power-of-2, paragraph-mark,
-      // plus-minus etc. ; let's be conservative: the windows-1255
-      // and windows-1256 octet ranges corresponding to the letters
-      // themselves fall within the range C0-FF; this range is all accented
-      // Latin letters in windows-1252, whose Unicode values are the
-      // same as their octets
-      "[\\u00C0-\\u00FF]{3,}" :
-      // Here we know that cMCParams.mailnewsDecodingType == "UTF-8"; if
-      // you decode windows-1255/6 content as UTF-8, you'll get failures
-      // because you see multi-octet-starter octets (11xxxxxx) followed
-      // by other multi-octet-starter octets rather than
-      // multi-octect-continuer octets (10xxxxxx); what mailnews does in
-      // such cases is emit \uFFFD, which is the Unicode 'replacement
-      // character'; let's be cautious, though, and look for repetitions
-      // of this rather than the odd encoding error or what-not
-      "\\uFFFD{3,}");
-  }
-  havePreferredCharsetText = BiDiMailUI.textMatches(document, NodeFilter, cMCParams.body, patternToMatch) ||
-    (cMCParams.messageSubject && patternToMatch.test(cMCParams.messageSubject));
+
+  let preferredCharsetMatcher = new RegExp(
+    BiDiMailUI.Display.getDecodedCharsetMatchPattern(cMCParams.preferredCharset, cMCParams.mailnewsDecodingType));
+  const havePreferredCharsetText =
+    BiDiMailUI.textMatches(cMCParams.body, preferredCharsetMatcher) ||
+    (cMCParams.messageSubject && preferredCharsetMatcher.test(cMCParams.messageSubject));
 
   // This sets parameter no. 4
   // (note its value depends on parameter no. 2)
-  let haveUTF8Text;
 
-  patternToMatch = new RegExp((cMCParams.mailnewsDecodingType === "UTF-8") ?
+  let utf8Matcher = new RegExp((cMCParams.mailnewsDecodingType === "UTF-8") ?
     // The only characters we can be sure will be properly decoded in windows-1252
     // when they appear after UTF-8 decoding are those with single octets in UTF-8
     // and the same value as windows-1252; if there's anything else we'll be
@@ -470,123 +510,48 @@ BiDiMailUI.Display.fixLoadedMessageCharsetIssues = function (cMCParams) {
     //
     BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE);
 
-  haveUTF8Text = BiDiMailUI.textMatches(document, NodeFilter, cMCParams.body, patternToMatch) ||
-    patternToMatch.test(cMCParams.messageSubject);
+  const haveUTF8Text = BiDiMailUI.textMatches(cMCParams.body, utf8Matcher) ||
+    utf8Matcher.test(cMCParams.messageSubject);
 
   // ... and now act based on the parameter values
-
-  if (!mustKeepCharset) {
-    switch (cMCParams.mailnewsDecodingType) {
-    case "latin-charset":
-      if (!havePreferredCharsetText) {
-        if (!haveUTF8Text) {
-          // NNNN
-        } else {
-          // NNNY
-          cMCParams.needCharsetForcing = true;
-          cMCParams.charsetToForce = "utf-8";
-          return false;
-        }
-      } else {
-        if (!haveUTF8Text) {
-          // NNYN
-          cMCParams.needCharsetForcing = true;
-          cMCParams.charsetToForce = cMCParams.preferredCharset;
-          return false;
-        }
-        // NNYY
-        cMCParams.recodeUTF8 = true;
-        cMCParams.recodePreferredCharset = true;
-            // but note we might still need to force the charset!
-      }
-      break;
-    case "preferred-charset":
-      if (!havePreferredCharsetText) {
-        if (!haveUTF8Text) {
-          // NCNN
-        } else {
-          // NCNY
-          cMCParams.needCharsetForcing = true;
-          cMCParams.charsetToForce = "utf-8";
-          return false;
-        }
-      } else if (!haveUTF8Text) {
-        // NCYN
-      } else {
-        // NCYY
-        cMCParams.needCharsetForcing = true;
-        cMCParams.charsetToForce = "windows-1252";
-        return false;
-      }
-      break;
-    case "UTF-8":
-      if (!havePreferredCharsetText) {
-        if (!haveUTF8Text) {
-          // NUNN
-        } else {
-          // NUNY
-        }
-      } else {
-        if (!haveUTF8Text) {
-          // NUYN
-          cMCParams.needCharsetForcing = true;
-          cMCParams.charsetToForce = cMCParams.preferredCharset;
-          return false;
-        }
-        // NUYY
-        cMCParams.needCharsetForcing = true;
-        cMCParams.charsetToForce = "windows-1252";
-        return false;
-      }
-    }
-  } else { // mustKeepCharset
-    switch (cMCParams.mailnewsDecodingType) {
-    case "latin-charset":
-      // YNNN, YNNY, YNYN, YNYY
-      cMCParams.recodePreferredCharset = havePreferredCharsetText;
-      cMCParams.recodeUTF8 = haveUTF8Text;
-      break;
-    case "preferred-charset":
-      // YCNN, YCNY, YCYN, YCYY
-      cMCParams.recodePreferredCharset = false;
-      cMCParams.recodeUTF8 = haveUTF8Text;
-      break;
-    case "UTF-8":
-      // YUNN, YUNY, YUYN, YUYY
-      cMCParams.recodePreferredCharset = havePreferredCharsetText;
-      cMCParams.recodeUTF8 = false;
-    }
+  let strategy = BiDiMailUI.Display.resolveCharsetHandlingStrategy(
+    mustKeepCharset, cMCParams.mailnewsDecodingType, havePreferredCharsetText, haveUTF8Text);
+  if (strategy.charsetToForce === "preferred") {
+    strategy.charsetToForce = cMCParams.preferredCharset;
   }
 
   // workaround for mozdev bug 23322 / bugzilla bug 486816:
   // Mozilla may be 'cheating' w.r.t. decoding charset
   //
   // ... and it seems we can never meet this criterion with TB 91 or later
-  if (!cMCParams.needCharsetForcing) {
-    patternToMatch = new RegExp(BiDiMailUI.RegExpStrings.BOTCHED_UTF8_DECODING_SEQUENCE);
-    if (BiDiMailUI.textMatches(document, NodeFilter, cMCParams.body, patternToMatch) ||
+  if (!strategy.needCharsetForcing) {
+    let patternToMatch = new RegExp(BiDiMailUI.RegExpStrings.BOTCHED_UTF8_DECODING_SEQUENCE);
+    if (BiDiMailUI.textMatches(cMCParams.body, patternToMatch) ||
         patternToMatch.test(cMCParams.messageSubject)) {
       if (!mustKeepCharset) {
-        cMCParams.needCharsetForcing = true;
+        strategy.needCharsetForcing = true;
         // let's be on the safe side
-        cMCParams.charsetToForce = "windows-1252";
-        return false;
+        strategy.charsetToForce = "windows-1252";
       }
     }
   }
 
-  // at this point we _believe_ there's no need for charset forcing,
-  // and we'll only perform corrective recoding
-  if (cMCParams.recodeUTF8 || cMCParams.recodePreferredCharset) {
-    BiDiMailUI.performCorrectiveRecoding(document, NodeFilter, cMCParams);
+  cMCParams = { ...cMCParams, ...strategy };
+
+  if (!strategy.needCharsetForcing) {
+    BiDiMailUI.performCorrectiveRecoding(document, cMCParams);
     // it may be the case that the corrective recoding suggests we need to force
     // the charset even though we've already done so; currently this is only
     // possible in the situation of bug 18707
-    if (!mustKeepCharset && cMCParams.needCharsetForcing) {
+    //
+    // TODO: Can this even happen with TB 115 or later?
+    //
+    if (!mustKeepCharset && strategy.needCharsetForcing) {
+      strategy.charsetToForce = cMCParams.currentCharset;
       cMCParams.charsetToForce = cMCParams.currentCharset;
     }
   }
-  return true;
+  return !cMCParams.needCharsetForcing;
 };
 
 // returns true if numeric entities were found

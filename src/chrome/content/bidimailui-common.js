@@ -149,7 +149,7 @@ BiDiMailUI.createTextWalker = function (element, filter) {
   return element.ownerDocument.createTreeWalker(element, NodeFilter.SHOW_TEXT, filter);
 };
 
-BiDiMailUI.performCorrectiveRecoding = function (document, filter, recodingParams) {
+BiDiMailUI.performCorrectiveRecoding = function (document, recodingParams) {
   let needAnyRecoding = recodingParams.recodePreferredCharset || recodingParams.recodeUTF8;
   if (!needAnyRecoding) return;
 
@@ -275,7 +275,7 @@ BiDiMailUI.performCorrectiveRecodingOnText = function (str, correctiveRecodingPa
   return lines.join('\n');
 };
 
-BiDiMailUI.textMatches = function (document, NodeFilter, element, expression) {
+BiDiMailUI.textMatches = function (element, expression) {
   let textWalker = BiDiMailUI.createTextWalker(element);
   let node;
   while (node = textWalker.nextNode()) {
@@ -284,7 +284,7 @@ BiDiMailUI.textMatches = function (document, NodeFilter, element, expression) {
   return false;
 };
 
-BiDiMailUI.determineTextMatchUniformity = function (document, nodeFilter, element, expression) {
+BiDiMailUI.determineTextMatchUniformity = function (element, expression) {
   let textWalker = BiDiMailUI.createTextWalker(element);
   let hasMatching_ = false, hasNonMatching_ = false;
   let node;
@@ -309,7 +309,7 @@ BiDiMailUI.neutralsOnly = function (str) {
 
 // returns "rtl", "ltr", "neutral" or "mixed"; but only an element
 // with more than one text node can be mixed
-BiDiMailUI.directionCheck = function (document, NodeFilter, obj) {
+BiDiMailUI.directionCheck = function (obj) {
   const RTL_CHARACTER_INNER =
    "\\u0590-\\u05FF\\uFB1D-\\uFB4F\\u0600-\\u06FF\\uFB50-\\uFDFF\\uFE70-\\uFEFC";
   const RTL_CHARACTER = "[" + RTL_CHARACTER_INNER + "]";
@@ -360,7 +360,7 @@ BiDiMailUI.directionCheck = function (document, NodeFilter, obj) {
   if (allNeutralExpression.test(obj.textContent)) {
     return "neutral";
   }
-  let matchResults = BiDiMailUI.determineTextMatchUniformity(document, NodeFilter, obj, rtlLineExpression);
+  let matchResults = BiDiMailUI.determineTextMatchUniformity(obj, rtlLineExpression);
   if (matchResults.hasMatching && matchResults.hasNonMatching) { return "mixed"; }
   return (matchResults.hasMatching) ? "rtl" : "ltr";
 };
