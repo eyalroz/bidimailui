@@ -234,32 +234,29 @@ BiDiMailUI.Display.preprocessMessageDOM = function (body) {
 // we need to check and whose direction we set accordingly
 // (or force, as the case may be)
 BiDiMailUI.Display.gatherElementsRequiringDirectionSetting = function (body) {
-  let gatheredElements = [];
-  for (let i = 0; i < body.childNodes.length; i++) {
-    const subBody = body.childNodes.item(i);
+  // We'll pick up both complete sub-bodies - for whole-MIME-part-scope direction setting,
+  // but also some sub-elements, created either by the message author (in case of HTML) or
+  // by Thunderbird (when it lays out text messages), to perform higher-granularity
+  // direction setting (e.g. think paragraphs within a text message)
 
-    // Not touching elements which aren't moz-text-something,
-    // as we don't know what to do with them
-    if (!/^moz-text/.test(subBody.className)) continue;
-
-    gatheredElements.push(subBody);
-
-    const tagNames = {
-      "moz-text-plain"   : "pre, blockquote",
-      "moz-text-flowed"  : "div, blockquote",
-      "moz-text-html"    : "div, table, blockquote"
+  // TODO: Perhaps we can replace this whole function with a single more complex selector
+  const relevantSubBodies = [ ...body.children ].filter((subBody) => /^moz-text/.test(subBody.className));
+    // ... as we don't know what we're supposed to do with unmarked body children.
+  let gatheredFromSubBodies = relevantSubBodies.map((subBody) => {
+    const tags = {
+      "moz-text-plain"   : [ "pre, blockquote" ],
+      "moz-text-flowed"  : [ "div, blockquote" ],
+      "moz-text-html"    : [ "div, table, blockquote" ]
     };
-
-      // On older JS engines you would need to use getElementsByTagName("TAG") for each tag
-    const nodes =  subBody.querySelectorAll(tagNames[subBody.className]);
-    for (let j = 0; j < nodes.length; j++) {
-      // In flowed messages, not touching elements which aren't moz-text-something,
-      // as we don't know what to do with them
-      if (subBody.className === "moz-text-flowed" && /^moz-text/.test(nodes[j].className)) continue;
-      gatheredElements.push(nodes[j]);
+    let selector = `:is(${tags[subBody.className]})`;
+    // TODO: Do we need this next bit?
+    if (subBody.className === "moz-text-flowed") {
+      selector += `:is(.moz-text-plain, .moz-text-html)`;
     }
-  }
-  return gatheredElements;
+    // So, the selector might be, say, ":is(pre, blockquote)"
+    return [...subBody.querySelectorAll(selector)];
+  });
+  return [...relevantSubBodies, ...gatheredFromSubBodies.flat()];
 };
 
 BiDiMailUI.Display.detectAndMarkDirections = function (body) {
