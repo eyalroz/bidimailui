@@ -10,9 +10,52 @@ BiDiMailUI.Display = {};
 
 BiDiMailUI.Display.ActionPhases = {};
 
+
+// Detect and attempt to recode content of wholly or partially mis-decoded messages;
+// mark DOM as appropriate; if the character set was not forced - indicate
+// the correction strategy via cMCParams.
+//
+// Notes:
+//
+// * Beginning with TB 91, it is not possible to force a message' character set.
+//   This cripples a lot of the logic here - and prevents us from correcting
+//   a lot of the character set mis-decoding
+// * The return value is false if  a reload is necessary. But - again, it can't
+//   be respected. So we'll have to do the best we can.
+// * This function assumes the preferred charset is either windows-1255,
+//   windows-1256 or null; see getPreferredCharset().
 BiDiMailUI.Display.ActionPhases.charsetMisdetectionCorrection = function (cMCParams) {
   cMCParams.preferredCharset ??= BiDiMailUI.Display.getPreferredCharset();
-  BiDiMailUI.Display.fixLoadedMessageCharsetIssues(cMCParams);
+
+  BiDiMailUI.Display.examineMessageForCharsetCorrection(cMCParams);
+  // ... and now act based on the parameter values
+  let strategy = BiDiMailUI.Display.resolveCharsetHandlingStrategy(
+    cMCParams.mustKeepCharset, cMCParams.mailnewsDecodingType, cMCParams.havePreferredCharsetText, cMCParams.haveUTF8Text);
+  if (strategy.charsetToForce === "preferred") {
+    strategy.charsetToForce = cMCParams.preferredCharset;
+  }
+  BiDiMailUI.Display.possiblyCorrectCharsetHandlingStrategy(strategy, cMCParams);
+
+  cMCParams = { ...cMCParams, ...strategy };
+
+  if (!strategy.needCharsetForcing) {
+    BiDiMailUI.performCorrectiveRecoding(document, cMCParams);
+    // it may be the case that the corrective recoding suggests we need to force
+    // the charset even though we've already done so; currently this is only
+    // possible in the situation of bug 18707
+    //
+    // TODO: Can this even happen with TB 115 or later?
+    //
+    if (!cMCParams.mustKeepCharset && strategy.needCharsetForcing) {
+      strategy.charsetToForce = cMCParams.currentCharset;
+      cMCParams.charsetToForce = cMCParams.currentCharset;
+    }
+  }
+
+  if (strategy.needCharsetForcing) {
+    // This is where we would force the charset. But, alas, we can't
+    // do this since Thunderbird 91... so doing nothing.
+  }
 };
 
 BiDiMailUI.Display.ActionPhases.htmlNumericEntitiesDecoding = function (body) {
@@ -450,39 +493,27 @@ BiDiMailUI.Display.resolveCharsetHandlingStrategy = function (
   return strategies[stateCode];
 };
 
-// Detect and attempt to recode content of wholly or partially mis-decoded messages;
-// mark DOM as appropriate; if the character set was not forced - indicate
-// the correction strategy via cMCParams.
+// Apply different examinations to the message, to inform a decision
+// regarding what kind of charset mis-detection correction action it needs;
+// also, make some DOM markings regarding this examination.
 //
-// Notes:
-//
-// * Beginning with TB 91, it is not possible to force a message' character set.
-//   This cripples a lot of the logic here - and prevents us from correcting
-//   a lot of the character set mis-decoding
-// * The return value is false if  a reload is necessary. But - again, it can't
-//   be respected. So we'll have to do the best we can.
-// * This function assumes the preferred charset is either windows-1255,
-//   windows-1256 or null; see getPreferredCharset().
-//
-BiDiMailUI.Display.fixLoadedMessageCharsetIssues = function (cMCParams) {
-
+// Note Beginning with TB 91, it is not possible to force a message' character set.
+// This cripples a lot of the logic here - and prevents us from correcting
+// a lot of the character set mis-decoding
+BiDiMailUI.Display.examineMessageForCharsetCorrection = function (cMCParams) {
   if (cMCParams.charsetOverrideInEffect) {
     cMCParams.body.setAttribute("bidimailui-charset-is-forced", "true");
   }
 
   // This sets parameter no. 1 (and will always be true for TB 91 and later)
-  const mustKeepCharset = cMCParams.dontReload || cMCParams.charsetOverrideInEffect;
+  cMCParams.mustKeepCharset = cMCParams.dontReload || cMCParams.charsetOverrideInEffect;
 
-  // This sets parameter no. 2
   cMCParams.mailnewsDecodingType = BiDiMailUI.Display.resolveDecodingType(cMCParams?.preferredCharset, cMCParams?.currentCharset);
   cMCParams.body.setAttribute('bidimailui-detected-decoding-type', cMCParams.mailnewsDecodingType);
 
-  // This sets parameter no. 3
-  // (note its value depends on parameter no. 2)
-
   let preferredCharsetMatcher = new RegExp(
     BiDiMailUI.Display.getDecodedCharsetMatchPattern(cMCParams.preferredCharset, cMCParams.mailnewsDecodingType));
-  const havePreferredCharsetText =
+  cMCParams.havePreferredCharsetText =
     BiDiMailUI.textMatches(cMCParams.body, preferredCharsetMatcher) ||
     (cMCParams.messageSubject && preferredCharsetMatcher.test(cMCParams.messageSubject));
 
@@ -502,48 +533,32 @@ BiDiMailUI.Display.fixLoadedMessageCharsetIssues = function (cMCParams) {
     //
     BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE);
 
-  const haveUTF8Text = BiDiMailUI.textMatches(cMCParams.body, utf8Matcher) ||
+  cMCParams.haveUTF8Text = BiDiMailUI.textMatches(cMCParams.body, utf8Matcher) ||
     utf8Matcher.test(cMCParams.messageSubject);
+};
 
-  // ... and now act based on the parameter values
-  let strategy = BiDiMailUI.Display.resolveCharsetHandlingStrategy(
-    mustKeepCharset, cMCParams.mailnewsDecodingType, havePreferredCharsetText, haveUTF8Text);
-  if (strategy.charsetToForce === "preferred") {
-    strategy.charsetToForce = cMCParams.preferredCharset;
-  }
+BiDiMailUI.Display.checkForBotchedUTF8Decoding = function (cMCParams) {
+  let patternToMatch = new RegExp(BiDiMailUI.RegExpStrings.BOTCHED_UTF8_DECODING_SEQUENCE);
+  return BiDiMailUI.textMatches(cMCParams.body, patternToMatch) ||
+    patternToMatch.test(cMCParams.messageSubject);
+};
 
-  // workaround for mozdev bug 23322 / bugzilla bug 486816:
-  // Mozilla may be 'cheating' w.r.t. decoding charset
-  //
-  // ... and it seems we can never meet this criterion with TB 91 or later
+// workaround for mozdev bug 23322 / bugzilla bug 486816:
+// Mozilla may be 'lying' w.r.t. decoding charset
+//
+// ... and it seems we can never meet this criterion with TB 91 or later
+//
+// TODO: Try to integrate this into the previous two methods (examine, resolve strategy)
+BiDiMailUI.Display.possiblyCorrectCharsetHandlingStrategy = function (strategy, cMCParams) {
   if (!strategy.needCharsetForcing) {
-    let patternToMatch = new RegExp(BiDiMailUI.RegExpStrings.BOTCHED_UTF8_DECODING_SEQUENCE);
-    if (BiDiMailUI.textMatches(cMCParams.body, patternToMatch) ||
-        patternToMatch.test(cMCParams.messageSubject)) {
-      if (!mustKeepCharset) {
+    if (BiDiMailUI.Display.checkForBotchedUTF8Decoding(cMCParams)) {
+      if (!cMCParams.mustKeepCharset) {
         strategy.needCharsetForcing = true;
         // let's be on the safe side
         strategy.charsetToForce = "windows-1252";
       }
     }
   }
-
-  cMCParams = { ...cMCParams, ...strategy };
-
-  if (!strategy.needCharsetForcing) {
-    BiDiMailUI.performCorrectiveRecoding(document, cMCParams);
-    // it may be the case that the corrective recoding suggests we need to force
-    // the charset even though we've already done so; currently this is only
-    // possible in the situation of bug 18707
-    //
-    // TODO: Can this even happen with TB 115 or later?
-    //
-    if (!mustKeepCharset && strategy.needCharsetForcing) {
-      strategy.charsetToForce = cMCParams.currentCharset;
-      cMCParams.charsetToForce = cMCParams.currentCharset;
-    }
-  }
-  return !cMCParams.needCharsetForcing;
 };
 
 // returns true if numeric entities were found
