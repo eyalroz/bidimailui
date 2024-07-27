@@ -1,5 +1,5 @@
-var Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-var { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm");
+var Services = globalThis.Services || ChromeUtils.importESModule("resource://gre/modules/Services.sys.mjs").Services;
+var { MailServices } = ChromeUtils.importESModule("resource:///modules/MailServices.sys.mjs");
 var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
 
 BiDiMailUI.Composition = {};

@@ -1,4 +1,4 @@
-var Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+var Services = globalThis.Services || ChromeUtils.importESModule("resource://gre/modules/Services.sys.mjs").Services;
 var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
 
 // Note: There are some duplicates with injections from messenger.js, as those are not (easily) accessible

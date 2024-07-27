@@ -1,6 +1,6 @@
 const EXPORTED_SYMBOLS = [ "BiDiMailUI" ];
-var     Services       = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const { XPCOMUtils   } = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
+var     Services       = globalThis.Services || ChromeUtils.importESModule("resource://gre/modules/Services.sys.mjs").Services;
+const { XPCOMUtils   } = ChromeUtils.importESModule("resource://gre/modules/XPCOMUtils.sys.mjs");
 
 var BiDiMailUI = { };
 
@@ -34,12 +34,12 @@ BiDiMailUI.decodeString = function (str, charsetEncoding) {
 //---------------------------------------------------------
 
 XPCOMUtils.defineLazyGetter(BiDiMailUI, 'Prefs', () => {
-  let Preferences = ChromeUtils.import("resource://gre/modules/Preferences.jsm").Preferences;
+  let Preferences = ChromeUtils.importESModule("resource://gre/modules/Preferences.sys.mjs").Preferences;
   return new Preferences('extensions.bidiui.mail.');
 });
 
 XPCOMUtils.defineLazyGetter(BiDiMailUI, 'AppPrefs', () => {
-  let Preferences = ChromeUtils.import("resource://gre/modules/Preferences.jsm").Preferences;
+  let Preferences = ChromeUtils.importESModule("resource://gre/modules/Preferences.sys.mjs").Preferences;
   return new Preferences();
 });
 
