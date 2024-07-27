@@ -8,7 +8,7 @@ var BiDiMailUI = { };
 
 BiDiMailUI.Strings = {};
 
-XPCOMUtils.defineLazyGetter(BiDiMailUI.Strings, "bundle",
+ChromeUtils.defineLazyGetter(BiDiMailUI.Strings, "bundle",
   () => Services.strings.createBundle("chrome://bidimailui/locale/bidimailui.properties")
 );
 
@@ -21,7 +21,7 @@ BiDiMailUI.Strings.getByName = (stringName) => BiDiMailUI.Strings.format(stringN
 
 //---------------------------------------------------------
 
-XPCOMUtils.defineLazyGetter(BiDiMailUI, "UnicodeConverter",
+ChromeUtils.defineLazyGetter(BiDiMailUI, "UnicodeConverter",
   () => Cc["@mozilla.org/intl/scriptableunicodeconverter"].createInstance(Ci.nsIScriptableUnicodeConverter)
 );
 
@@ -33,12 +33,12 @@ BiDiMailUI.decodeString = function (str, charsetEncoding) {
 
 //---------------------------------------------------------
 
-XPCOMUtils.defineLazyGetter(BiDiMailUI, 'Prefs', () => {
+ChromeUtils.defineLazyGetter(BiDiMailUI, 'Prefs', () => {
   let Preferences = ChromeUtils.importESModule("resource://gre/modules/Preferences.sys.mjs").Preferences;
   return new Preferences('extensions.bidiui.mail.');
 });
 
-XPCOMUtils.defineLazyGetter(BiDiMailUI, 'AppPrefs', () => {
+ChromeUtils.defineLazyGetter(BiDiMailUI, 'AppPrefs', () => {
   let Preferences = ChromeUtils.importESModule("resource://gre/modules/Preferences.sys.mjs").Preferences;
   return new Preferences();
 });
