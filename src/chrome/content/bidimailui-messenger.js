@@ -106,7 +106,7 @@ BiDiMailUI.MessageOverlay.gatherParameters = function (win) {
 
   // Note: This is very brittle, and is likely to break with minor changes to
   // the TB UI; it would have been better to hook into TB's own determination
-  // of the message subject, recode at that point, and let it flow from there 
+  // of the message subject, recode at that point, and let it flow from there
   // to the UI.
   let subjectSpan = aboutMessage.document.getElementById('expandedsubjectBox').children.item(1);
 
