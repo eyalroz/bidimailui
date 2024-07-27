@@ -38,7 +38,7 @@ BiDiMailUI.Display.ActionPhases.charsetMisdetectionCorrection = function (cMCPar
 
   cMCParams = { ...cMCParams, ...strategy };
 
-  if (!strategy.needCharsetForcing) {
+  if (!strategy.forceCharsetChange) {
     BiDiMailUI.performCorrectiveRecoding(document, cMCParams);
     // it may be the case that the corrective recoding suggests we need to force
     // the charset even though we've already done so; currently this is only
@@ -46,13 +46,13 @@ BiDiMailUI.Display.ActionPhases.charsetMisdetectionCorrection = function (cMCPar
     //
     // TODO: Can this even happen with TB 115 or later?
     //
-    if (!cMCParams.mustKeepCharset && strategy.needCharsetForcing) {
+    if (!cMCParams.mustKeepCharset && strategy.forceCharsetChange) {
       strategy.charsetToForce = cMCParams.currentCharset;
       cMCParams.charsetToForce = cMCParams.currentCharset;
     }
   }
 
-  if (strategy.needCharsetForcing) {
+  if (strategy.forceCharsetChange) {
     // This is where we would force the charset. But, alas, we can't
     // do this since Thunderbird 91... so doing nothing.
   }
@@ -466,17 +466,17 @@ BiDiMailUI.Display.resolveCharsetHandlingStrategy = function (
     (haveUTF8Text ? "Y" : "N");
   const strategies = {
     NLNN : {},
-    NLNY : { needCharsetForcing: true, charsetToForce: "utf-8" },
-    NLYN : { needCharsetForcing: true, charsetToForce: "preferred" },
-    NLYY : { recodeUTF8: true, recodePreferredCharset: true }, // but note we might still decide to force the charset!
+    NLNY : { forceCharsetChange: true, charsetToForce: "utf-8" },
+    NLYN : { forceCharsetChange: true, charsetToForce: "preferred" },
+    NLYY : { recodeUTF8: true, recodePreferredCharset: true }, // but see possiblyCorrectCharsetHandlingStrategy() !
     NPNN : {},
-    NPNY : { needCharsetForcing: true, charsetToForce: "utf-8" },
+    NPNY : { forceCharsetChange: true, charsetToForce: "utf-8" },
     NPYN : {},
-    NPYY : { needCharsetForcing: true, charsetToForce: "windows-1252" },
+    NPYY : { forceCharsetChange: true, charsetToForce: "windows-1252" },
     NUNN : {},
     NUNY : {},
-    NUYN : { needCharsetForcing: true, charsetToForce: "preferred" },
-    NUYY : { needCharsetForcing: true, charsetToForce: "windows-1252" },
+    NUYN : { forceCharsetChange: true, charsetToForce: "preferred" },
+    NUYY : { forceCharsetChange: true, charsetToForce: "windows-1252" },
     YLNN : { recodePreferredCharset: false, recodeUTF8: false },
     YLNY : { recodePreferredCharset: false, recodeUTF8: true  },
     YLYN : { recodePreferredCharset: true,  recodeUTF8: false },
@@ -550,10 +550,10 @@ BiDiMailUI.Display.checkForBotchedUTF8Decoding = function (cMCParams) {
 //
 // TODO: Try to integrate this into the previous two methods (examine, resolve strategy)
 BiDiMailUI.Display.possiblyCorrectCharsetHandlingStrategy = function (strategy, cMCParams) {
-  if (!strategy.needCharsetForcing) {
+  if (!strategy.forceCharsetChange) {
     if (BiDiMailUI.Display.checkForBotchedUTF8Decoding(cMCParams)) {
       if (!cMCParams.mustKeepCharset) {
-        strategy.needCharsetForcing = true;
+        strategy.forceCharsetChange = true;
         // let's be on the safe side
         strategy.charsetToForce = "windows-1252";
       }
