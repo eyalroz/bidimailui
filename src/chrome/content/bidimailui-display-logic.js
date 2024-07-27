@@ -39,7 +39,9 @@ BiDiMailUI.Display.ActionPhases.charsetMisdetectionCorrection = function (cMCPar
   cMCParams = { ...cMCParams, ...strategy };
 
   if (!strategy.forceCharsetChange) {
-    BiDiMailUI.performCorrectiveRecoding(document, cMCParams);
+    BiDiMailUI.performCorrectiveRecodingOnBody(cMCParams, strategy);
+    BiDiMailUI.performCorrectiveRecodingOnSubject(cMCParams, strategy);
+
     // it may be the case that the corrective recoding suggests we need to force
     // the charset even though we've already done so; currently this is only
     // possible in the situation of bug 18707

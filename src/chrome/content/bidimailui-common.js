@@ -149,54 +149,54 @@ BiDiMailUI.createTextWalker = function (element, filter) {
   return element.ownerDocument.createTreeWalker(element, NodeFilter.SHOW_TEXT, filter);
 };
 
-BiDiMailUI.performCorrectiveRecoding = function (document, recodingParams) {
-  let needAnyRecoding = recodingParams.recodePreferredCharset || recodingParams.recodeUTF8;
+BiDiMailUI.performCorrectiveRecodingOnSubject = function (cMCParams, strategy) {
+  if (!cMCParams.subjectSetter) return;
+  try {
+    let recodedSubject = BiDiMailUI.correctivelyRecodeText(
+      cMCParams.messageSubject, cMCParams.mailnewsDecodingType, cMCParams.preferredCharset, strategy);
+    cMCParams.subjectSetter(recodedSubject);
+  } catch (ex) { }
+};
+
+BiDiMailUI.performCorrectiveRecodingOnBody = function (cMCParams, strategy) {
+  let needAnyRecoding = strategy.recodePreferredCharset || strategy.recodeUTF8;
   if (!needAnyRecoding) return;
 
-  for (let child of recodingParams.body.childNodes) {
+  for (let child of cMCParams.body.childNodes) {
     if (!child?.className?.startsWith("moz-text-")) continue; // Note this will skip non-element nodes
     let textWalker = BiDiMailUI.createTextWalker(child);
     let node;
     while (node = textWalker.nextNode()) {
       if (node.data) {
-        node.data = BiDiMailUI.performCorrectiveRecodingOnText(node.data, recodingParams);
+        node.data = BiDiMailUI.correctivelyRecodeText(
+          node.data, cMCParams.mailnewsDecodingType, cMCParams.preferredCharset, strategy);
       }
     }
   }
-  if (recodingParams.recodeUTF8) {
-    recodingParams.body.setAttribute('bidimailui-recoded-utf8', true);
+  if (strategy.recodeUTF8) {
+    cMCParams.body.setAttribute('bidimailui-recoded-utf8', true);
   }
-  if (recodingParams.recodePreferredCharset) {
-    recodingParams.body.setAttribute(
-      'bidimailui-recoded-charset', recodingParams.preferredCharset);
-  }
-
-  if (recodingParams.subjectSetter) {
-    try {
-      let recodedSubject = BiDiMailUI.performCorrectiveRecodingOnText(recodingParams.messageSubject, recodingParams);
-      recodingParams.subjectSetter(recodedSubject);
-    } catch (ex) { }
+  if (strategy.recodePreferredCharset) {
+    cMCParams.body.setAttribute('bidimailui-recoded-charset', cMCParams.preferredCharset);
   }
 };
 
 BiDiMailUI.codepageMisdetectionExpression = new RegExp(BiDiMailUI.RegExpStrings.CODEPAGE_MISDETECTION_SEQUENCE);
 BiDiMailUI.utf8MisdetectionExpression = new RegExp(BiDiMailUI.RegExpStrings.MISDETECTED_UTF8_SEQUENCE);
 
-
-BiDiMailUI.performCorrectiveRecodingOnText = function (str, correctiveRecodingParams) {
+// Note: This may change the strategy as per MozDev issue 18707
+BiDiMailUI.correctivelyRecodeText = function (str, mailnewsDecodingType, preferredCharset, strategy) {
   if (!str || str.length == 0) return null;
-  if (!correctiveRecodingParams.recodeUTF8 && !correctiveRecodingParams.recodePreferredCharset) return null;
+  if (!strategy.recodeUTF8 && !strategy.recodePreferredCharset) return null;
   let lines = str.split('\n');
-  let encoderForUTF8Recoding = (correctiveRecodingParams.recodeUTF8) ? new TextEncoder(
-    (correctiveRecodingParams.mailnewsDecodingType === "latin-charset") ?
-      'windows-1252' : correctiveRecodingParams.preferredCharset) : null;
+  let encoderForUTF8Recoding = (strategy.recodeUTF8) ? new TextEncoder(
+    (mailnewsDecodingType === "latin-charset") ? 'windows-1252' : preferredCharset) : null;
   let utf8Decoder = new TextDecoder("UTF-8");
   for (let i = 0; i < lines.length; i++) {
     let workingStr;
     // Note: It's _important_ to check for UTF-8 first, because that has the
     // much more distinctive [D7-D9] blah [D7-D9] blah [D7-D9] blah pattern!
-    if (correctiveRecodingParams.recodeUTF8 &&
-      BiDiMailUI.utf8MisdetectionExpression.test(lines[i])) {
+    if (strategy.recodeUTF8 && BiDiMailUI.utf8MisdetectionExpression.test(lines[i])) {
       try {
         let encoded = encoderForUTF8Recoding.encode(lines[i]);
 
@@ -258,16 +258,16 @@ BiDiMailUI.performCorrectiveRecodingOnText = function (str, correctiveRecodingPa
         // then recoding if necessary; see
         // https://www.mozdev.org/bugs/show_bug.cgi?id=18707
         if (/(\x3F[20\x90-\xA8]){3,}/.test(workingStr)) {
-          correctiveRecodingParams.needCharsetForcing = true;
+          strategy.forceCharsetChange = true;
         }
       }
-    } else if (correctiveRecodingParams.recodePreferredCharset &&
+    } else if (strategy.recodePreferredCharset &&
       BiDiMailUI.codepageMisdetectionExpression.test(lines[i])) {
       try {
-        // at this point, correctiveRecodingParams.mailnewsDecodingType can only be latin or UTF-8
-        lines[i] = BiDiMailUI.decodeString(lines[i], correctiveRecodingParams.preferredCharset);
+        // at this point, strategy.mailnewsDecodingType can only be latin or UTF-8
+        lines[i] = BiDiMailUI.decodeString(lines[i], preferredCharset);
       } catch (ex) {
-        console.error(`Exception while trying to correct mis-decoded ${correctiveRecodingParams.preferredCharset} text `
+        console.error(`Exception while trying to correct mis-decoded ${preferredCharset} text `
           + `on line ${i}.Line contents:\n${lines[i]}\n\nException info:\n${ex}`);
       }
     }
