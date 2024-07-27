@@ -11,15 +11,7 @@ BiDiMailUI.Display = {};
 BiDiMailUI.Display.ActionPhases = {};
 
 BiDiMailUI.Display.ActionPhases.charsetMisdetectionCorrection = function (cMCParams) {
-  if (typeof cMCParams.preferredCharset == "undefined") {
-    BiDiMailUI.Display.populatePreferredCharset(cMCParams);
-    if (cMCParams.preferredCharset == null) {
-      if (!BiDiMailUI.Prefs.get("display.user_forgoes_preferred_single_byte_charset")) {
-        BiDiMailUI.MessageOverlay.promptAndSetPreferredSingleByteCharset();
-      }
-    }
-  }
-
+  cMCParams.preferredCharset ??= BiDiMailUI.Display.getPreferredCharset();
   if (!BiDiMailUI.Display.fixLoadedMessageCharsetIssues(cMCParams)) {
     // the message will be reloaded, let's not do anything else
     return;
@@ -106,12 +98,14 @@ BiDiMailUI.Display.canonicalizePreferredCharset = function (charset) {
   }
 };
 
-BiDiMailUI.Display.populatePreferredCharset = function (cMCParams) {
-  // TODO: Should I cache these pref values somehow?
+BiDiMailUI.Display.getPreferredCharset = function () {
   let charsetPrefValue = BiDiMailUI.Prefs.get("display.preferred_single_byte_charset", null);
-  cMCParams.preferredCharset = BiDiMailUI.Display.canonicalizePreferredCharset(charsetPrefValue);
+  let canonicalizedPrefValue = BiDiMailUI.Display.canonicalizePreferredCharset(charsetPrefValue);
+  return canonicalizedPrefValue ??
+    (BiDiMailUI.Prefs.get("display.user_forgoes_preferred_single_byte_charset") ?
+      null : BiDiMailUI.MessageOverlay.promptAndSetPreferredSingleByteCharset()
+    );
 };
-
 
 // split elements in the current message (we assume it's moz-text-plain)
 // so that \n\n in the message text means moving to another block element
@@ -467,12 +461,13 @@ BiDiMailUI.Display.resolveCharsetHandlingStrategy = function (
 //
 // Notes:
 //
-// 1. Beginning with TB 91, it is not possible to force a message' character set.
-// 2. The return value is false if  a reload is necessary. But - again, it can't
-//    be respected. So we'll have to do the best we can.
-//
-//   This function assumes the preferred charset is either windows-1255,
-//   windows-1256 or null; see populatePreferredCharset().
+// * Beginning with TB 91, it is not possible to force a message' character set.
+//   This cripples a lot of the logic here - and prevents us from correcting
+//   a lot of the character set mis-decoding
+// * The return value is false if  a reload is necessary. But - again, it can't
+//   be respected. So we'll have to do the best we can.
+// * This function assumes the preferred charset is either windows-1255,
+//   windows-1256 or null; see getPreferredCharset().
 //
 BiDiMailUI.Display.fixLoadedMessageCharsetIssues = function (cMCParams) {
   // This sets parameter no. 1 (and will be true for TB 91)
