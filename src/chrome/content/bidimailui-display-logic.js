@@ -12,14 +12,7 @@ BiDiMailUI.Display.ActionPhases = {};
 
 BiDiMailUI.Display.ActionPhases.charsetMisdetectionCorrection = function (cMCParams) {
   cMCParams.preferredCharset ??= BiDiMailUI.Display.getPreferredCharset();
-  if (!BiDiMailUI.Display.fixLoadedMessageCharsetIssues(cMCParams)) {
-    // the message will be reloaded, let's not do anything else
-    return;
-  }
-
-  if (cMCParams.charsetOverrideInEffect) {
-    cMCParams.body.setAttribute("bidimailui-charset-is-forced", "true");
-  }
+  BiDiMailUI.Display.fixLoadedMessageCharsetIssues(cMCParams);
 };
 
 BiDiMailUI.Display.ActionPhases.htmlNumericEntitiesDecoding = function (body) {
@@ -457,7 +450,9 @@ BiDiMailUI.Display.resolveCharsetHandlingStrategy = function (
   return strategies[stateCode];
 };
 
-// Detect and attempt to recode content of wholly or partially mis-decoded messages
+// Detect and attempt to recode content of wholly or partially mis-decoded messages;
+// mark DOM as appropriate; if the character set was not forced - indicate
+// the correction strategy via cMCParams.
 //
 // Notes:
 //
@@ -470,7 +465,12 @@ BiDiMailUI.Display.resolveCharsetHandlingStrategy = function (
 //   windows-1256 or null; see getPreferredCharset().
 //
 BiDiMailUI.Display.fixLoadedMessageCharsetIssues = function (cMCParams) {
-  // This sets parameter no. 1 (and will be true for TB 91)
+
+  if (cMCParams.charsetOverrideInEffect) {
+    cMCParams.body.setAttribute("bidimailui-charset-is-forced", "true");
+  }
+
+  // This sets parameter no. 1 (and will always be true for TB 91 and later)
   const mustKeepCharset = cMCParams.dontReload || cMCParams.charsetOverrideInEffect;
 
   // This sets parameter no. 2
