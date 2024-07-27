@@ -8,7 +8,7 @@
        }
     },
     "author": "The BiDi UI team",
-    "homepage_url": "https://github.com/eyalroz/bidiui",
+    "homepage_url": "https://github.com/eyalroz/bidimailui",
     "name": "BiDi Mail UI",
     "icons": {
         "64": "chrome/content/bidimailui.png"
