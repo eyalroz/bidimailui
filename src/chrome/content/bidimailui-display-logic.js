@@ -63,7 +63,7 @@ BiDiMailUI.Display.ActionPhases.charsetMisdetectionCorrection = function (cMCPar
 BiDiMailUI.Display.ActionPhases.htmlNumericEntitiesDecoding = function (body) {
   if (BiDiMailUI.Prefs.get("display.decode_numeric_html_entities", false)) {
     if (BiDiMailUI.Display.decodeNumericHTMLEntitiesInText(body)) {
-      body.setAttribute("bidimailui-found-numeric-entities", true);
+      body.setAttribute("bidimailui-found-numeric-entities", 'true');
     }
   }
 };
@@ -336,7 +336,7 @@ BiDiMailUI.Display.setDirections = function (body, forcedDirection) {
     } else {
       body.style.removeProperty('direction');
     }
-    body.setAttribute('bidimailui-use-detected-directions', true);
+    body.setAttribute('bidimailui-use-detected-directions', 'true');
   }
   }
 };

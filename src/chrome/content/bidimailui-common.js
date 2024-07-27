@@ -174,7 +174,7 @@ BiDiMailUI.performCorrectiveRecodingOnBody = function (cMCParams, strategy) {
     }
   }
   if (strategy.recodeUTF8) {
-    cMCParams.body.setAttribute('bidimailui-recoded-utf8', true);
+    cMCParams.body.setAttribute('bidimailui-recoded-utf8', 'true');
   }
   if (strategy.recodePreferredCharset) {
     cMCParams.body.setAttribute('bidimailui-recoded-charset', cMCParams.preferredCharset);
