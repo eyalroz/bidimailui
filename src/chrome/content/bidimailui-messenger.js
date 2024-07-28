@@ -29,29 +29,22 @@ BiDiMailUI.MessageOverlay.getActualMessageDocument = function (win) {
 };
 
 BiDiMailUI.MessageOverlay.cycleDirectionSettings = function (win) {
-  let body = BiDiMailUI.MessageOverlay.getActualMessageDocument(window).body;
-  if (body == null) {
-    console.warn(`cycleDirectionSettings: Could not determine body of displayed message`);
-    return;
-  }
-  let newForcedDirection;
-  switch (body.getAttribute('bidimailui-forced-direction')) {
-  case 'ltr':
-    newForcedDirection = 'rtl';
-    break;
-  case 'rtl':
-    newForcedDirection = null;
-    break;
-  default: // should be null
-    newForcedDirection = 'ltr';
-  }
-  BiDiMailUI.Display.setMessageDirectionForcing(body, newForcedDirection);
-  BiDiMailUI.MessageOverlay.updateDirectionMenuButton(newForcedDirection);
+  let document = BiDiMailUI.MessageOverlay.getActualMessageDocument(window);
+  let cycler = (attr) => {
+    switch (attr) {
+    case 'ltr': return 'rtl';
+    case 'rtl': return null;
+    default: return 'ltr';
+    }
+  };
+  let newDir = cycler(document.documentElement.getAttribute('bidimailui-forced-direction'));
+  BiDiMailUI.Display.setMessageDirectionForcing(document, newDir);
+  BiDiMailUI.MessageOverlay.updateDirectionMenuButton(newDir);
 };
 
 BiDiMailUI.MessageOverlay.forceDirection = function (ev, forcedDirection) {
-  let body = BiDiMailUI.MessageOverlay.getActualMessageDocument(window).body;
-  BiDiMailUI.Display.setMessageDirectionForcing(body, forcedDirection);
+  let messageDocument = BiDiMailUI.MessageOverlay.getActualMessageDocument(window);
+  BiDiMailUI.Display.setMessageDirectionForcing(messageDocument, forcedDirection);
   BiDiMailUI.MessageOverlay.updateDirectionMenuButton(forcedDirection);
   ev.stopPropagation();
 };

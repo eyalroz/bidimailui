@@ -79,7 +79,10 @@ BiDiMailUI.Display.ActionPhases.directionAutodetection = function (domDocument) 
   BiDiMailUI.Display.linkStylesheet(domDocument, 'bidimailui-direction-autodetection-css', 'direction-autodetection.css');
 
   const detectedOverallDirection = BiDiMailUI.directionCheck(body);
-  body.setAttribute('bidimailui-direction-uniformity', detectedOverallDirection);
+  domDocument.documentElement.setAttribute('bidimailui-direction-uniformity', detectedOverallDirection);
+  // Note that, for sub-body elements, we'll setting this property on the sub-body itself rather than on some parent;
+  // but the document body likes special treatment :-(
+
   if (detectedOverallDirection === "mixed") {
     // The message has both LTR and RTL content in the message,
     // so we'll break it up into smaller block elements whose direction
@@ -90,16 +93,16 @@ BiDiMailUI.Display.ActionPhases.directionAutodetection = function (domDocument) 
   // If the body isn't mixed, the message is either neutral in
   // direction, all-LTR or all-RTL, in all which cases it's enough
   // that we set the direction for the entire body
-  BiDiMailUI.Display.setDirections(body, null);
+  BiDiMailUI.Display.setDirections(domDocument, null);
 };
 
-BiDiMailUI.Display.setMessageDirectionForcing = function (body, forcedDirection) {
+BiDiMailUI.Display.setMessageDirectionForcing = function (document, forcedDirection) {
   // we assume forcedDirection is 'rtl', 'ltr' or null
-  BiDiMailUI.Display.setDirections(body, forcedDirection);
+  BiDiMailUI.Display.setDirections(document, forcedDirection);
   if (!forcedDirection) {
-    body.removeAttribute('bidimailui-forced-direction');
+    document.documentElement.removeAttribute('bidimailui-forced-direction');
   } else {
-    body.setAttribute('bidimailui-forced-direction', forcedDirection);
+    document.documentElement.setAttribute('bidimailui-forced-direction', forcedDirection);
   }
 };
 
@@ -301,44 +304,47 @@ BiDiMailUI.Display.detectAndMarkDirections = function (body) {
   });
 };
 
-BiDiMailUI.Display.setDirections = function (body, forcedDirection) {
+BiDiMailUI.Display.setDirections = function (document, forcedDirection) {
+  let docElement = document.documentElement;
   // Our logic is currently as follows:
   //
   // - Forcing LTR or RTL behaves the same way regardless of whether we have
-  //   autodetect preffed on or off: We set a style rule for the body element
+  //   autodetect preffed on or off: We set a style rule for the document element
   //   (so if other elements have specific definition we don't interfere; perhaps
   //   we should?)
   // - If autodetect is preffed off, forcedDirection null means using the original
-  //   directions, by restoring the body's original CSS direction property (usually
+  //   directions, by restoring the document's original CSS direction property (usually
   //   none).
-  // - If autodetect is preffed on, forcedDirection null means setting the body
-  //   parent's class so that all elements under it (including the body) behave
+  // - If autodetect is preffed on, forcedDirection null means setting the document
+  //   class so that all elements under it (including the body) behave
   //   according to the rules for the classes assigned to them by the autodetection.
   //
   //   Note that in all 3 cases, the document's own style rules may prevail
   //   over anything we have set. We consider this to be appropriate.
 
-
   switch (forcedDirection) {
   case 'ltr':
   case 'rtl':
-    body.removeAttribute('bidimailui-use-detected-directions');
-    if (!body.hasAttribute('bidimailui-original-direction')) {
-      body.setAttribute('bidimailui-original-direction', body.style.direction);
+    // if (!document.body.hasAttribute('bidimailui-original-direction')) {
+    //   document.setAttribute('bidimailui-original-direction', document.body.style.direction);
+    //   document.body.style.removeProperty('direction');
+    // }
+    docElement.removeAttribute('bidimailui-use-detected-directions');
+    if (!docElement.hasAttribute('bidimailui-original-direction')) {
+      docElement.setAttribute('bidimailui-original-direction', docElement.style.direction);
     }
-    body.style.direction = forcedDirection;
+    docElement.style.direction = forcedDirection;
     break;
   default: {
-    const originalBodyCSSDirectionProperty =
-      body.getAttribute('bidimailui-original-direction');
-    if (originalBodyCSSDirectionProperty?.length > 0) {
-      body.style.direction = originalBodyCSSDirectionProperty;
+    const originalDir = docElement.getAttribute('bidimailui-original-direction');
+    if (originalDir?.length > 0) {
+      docElement.style.direction = originalDir;
     } else {
-      body.style.removeProperty('direction');
+      docElement.style.removeProperty('direction');
     }
-    body.setAttribute('bidimailui-use-detected-directions', 'true');
+    docElement.setAttribute('bidimailui-use-detected-directions', 'true');
   }
-  }
+  } // switch
 };
 
 // The actions we need to take to fix character set misdecoding issues depends, among

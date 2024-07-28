@@ -218,7 +218,7 @@ BiDiMailUI.Composition.getCurrentSelectionDirection = function () {
 BiDiMailUI.Composition.setDocumentDirection = function (direction) {
   let messageEditor = BiDiMailUI.getMessageEditor(document);
   if (messageEditor) {
-    messageEditor.contentDocument.body.style.direction = direction;
+    messageEditor.contentDocument.documentElement.style.direction = direction;
   }
   document.getElementById("msgSubject").style.direction = direction;
   BiDiMailUI.Prefs.set("compose.last_used_direction", direction);
@@ -233,8 +233,8 @@ BiDiMailUI.Composition.insertControlCharacter = function (controlCharacter) {
 };
 
 BiDiMailUI.Composition.switchDocumentDirection = function () {
-  const body = BiDiMailUI.getMessageEditor(document).contentDocument.body;
-  const currentDir = window.getComputedStyle(body, null).direction;
+  const docElement = BiDiMailUI.getMessageEditor(document).contentDocument.documentElement;
+  const currentDir = window.getComputedStyle(docElement, null).direction;
 
   // Note: Null/empty value means LTR, so we check for RTL only
 
