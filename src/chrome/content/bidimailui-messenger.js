@@ -1,4 +1,3 @@
-var Services = globalThis.Services;
 var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
 
 // This file constains UI and glue code only, calling

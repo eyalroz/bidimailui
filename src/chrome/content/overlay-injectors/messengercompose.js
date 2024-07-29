@@ -1,4 +1,3 @@
-var Services = globalThis.Services;
 var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
 
 const debugInjection = false;

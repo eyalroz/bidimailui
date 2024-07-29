@@ -1,4 +1,3 @@
-var Services = globalThis.Services;
 var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
 
 // Note: There are some duplicates with injections from messenger.js, as those are not (easily) accessible
