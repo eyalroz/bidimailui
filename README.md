@@ -1,34 +1,36 @@
-# BiDI Mail UI: Improved bidirectional & Right-to-Left language support for Thunderbird
+# BiDI Mail UI: Improved Right-to-Left language support for Thunderbird
 
 <sub>([See it also on `addons.thunderbird.net`](https://addons.thunderbird.net/thunderbird/addon/bidi-mail-ui/))</sub>
+
+## The problem
 
 So, you use the Thunderbird mail client, and you send or receive email in a right-to-left (RTL) language, such as Arabic, Farsi or Hebrew. Thunderbird is based on Mozilla/Firefox, and Firefox supports webpages in those languages, right? So, surely Thunderbird must have bidirectional capabilities and support, right? Wrong :-(
 
 * The text emails you receive are always rendered in left-to-right (LTR) direction, regardless of their langauge
-* ... and so are the HTML messages, if they don't have explicit direction settings/
+* ... and so are the HTML messages, if they don't have explicit direction settings
 * When you compose messages, it's the same thing: The composition window assumes you're writing LTR content only.
 * And let's not even talk about setting directions on a paragraph-by-paragraph level! None of that.
 * Sometimes, you receive emails with Arabic/Farsi/Hebrew content, which show up as gibberish, because Thunderbird didn't correctly determine their character set encoding - and you have to set it manually.
 * ... and if you have a message with text in more than one character set encoding, you're out of luck, because you can only choose exactly one encoding for the whole message.
 
-If any of this has bothered you - then BiDi Mail UI is the (imperfect) solution to your problems!
+This has been the case for over 25 years (!)... although there is an [idea for potential crowdfunding](https://github.com/Betterbird/thunderbird-patches/issues/163) of work on changing this situation, which is worth checking out. In the mean time - BiDi Mail UI is the (imperfect) solution to your problems!
 
 ## Key features
 
-The BiDi Mail UI extension adds functionality both for reading and composing mail (and news) messages.
+BiDi Mail UI extension adds functionality both for reading and composing e-mail (and news/NNTP) messages.
 
 **Reading**:
 
-* Detects many cases in which Mozilla mis-decodes a message in one of the bidirectional language charsets, and chooses the proper encoding
-* Decodes Bidirectional language text in mixed-charset messages (UTF-8 and windows-1255/6)
-* Detects the intended directions of mail messages and displays them in this direction
-* Detects the intended directions of individual paragraphs within mail messages and lays out the message accordingly
+* Detects mis-decoded messages in common RTL languages (and corrects the decoding if Thunderbird allows it)
+* Decodes RTL text in mixed-character-set messages (UTF-8 and windows-1255/6)
+* Detects and applies intended direction of mail messages
+* Detects and applies intended directions of individual paragraphs within a mail message
 
 **Composition**:
 
 * Allows setting the direction of the entire message
-* Allows setting the direction of individual paragraphs in HTML mail
-* Allows insertion of LRM/RLM marks, via menus or using Ctrl+Shift+L/Ctrl+Shift+R
+* Allows setting the direction of individual paragraphs (in HTML mail)
+* Allows insertion of LRM/RLM marks, using Ctrl+Shift+L/Ctrl+Shift+R or the context menu
 
 ## The extension in action
 
