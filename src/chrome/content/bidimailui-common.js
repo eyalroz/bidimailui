@@ -1,5 +1,5 @@
 const EXPORTED_SYMBOLS = [ "BiDiMailUI" ];
-var     Services       = globalThis.Services || ChromeUtils.importESModule("resource://gre/modules/Services.sys.mjs").Services;
+var     Services       = globalThis.Services;
 const { XPCOMUtils   } = ChromeUtils.importESModule("resource://gre/modules/XPCOMUtils.sys.mjs");
 
 var BiDiMailUI = { };
