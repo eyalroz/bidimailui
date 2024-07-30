@@ -187,7 +187,7 @@ BiDiMailUI.utf8MisdetectionExpression = new RegExp(BiDiMailUI.RegExpStrings.MISD
 // Note: This may change the strategy as per MozDev issue 18707
 BiDiMailUI.correctivelyRecodeText = function (str, mailnewsDecodingType, preferredCharset, strategy) {
   if (!str || str.length == 0) return null;
-  if (!strategy.recodeUTF8 && !strategy.recodePreferredCharset) return null;
+  if (!strategy.recodeUTF8 && !strategy.recodePreferredCharset) return str;
   let lines = str.split('\n');
   let encoderForUTF8Recoding = (strategy.recodeUTF8) ? new TextEncoder(
     (mailnewsDecodingType === "latin-charset") ? 'windows-1252' : preferredCharset) : null;
