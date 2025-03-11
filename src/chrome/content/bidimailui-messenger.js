@@ -1,4 +1,4 @@
-var { BiDiMailUI } = ChromeUtils.import("chrome://bidimailui/content/bidimailui-common.js");
+var { BiDiMailUI } = ChromeUtils.importESModule("chrome://bidimailui/content/bidimailui-common.mjs");
 
 // This file constains UI and glue code only, calling
 // display logic code elsewhere actually act on the displayed message

@@ -6,7 +6,7 @@ bidimailui.jar:
 *   content/overlay-injectors/messengercompose.js  (src/chrome/content/overlay-injectors/messengercompose.js)
 *   content/overlay-injectors/customizeToolbar.js  (src/chrome/content/overlay-injectors/customizeToolbar.js)
     content/bidimailui.png                         (src/chrome/content/bidimailui.png)
-*   content/bidimailui-common.js                   (src/chrome/content/bidimailui-common.js)
+*   content/bidimailui-common.mjs                  (src/chrome/content/bidimailui-common.mjs)
 *   content/bidimailui-composer.js                 (src/chrome/content/bidimailui-composer.js)
 *   content/bidimailui-display-logic.js            (src/chrome/content/bidimailui-display-logic.js)
 *   content/bidimailui-messenger.js                (src/chrome/content/bidimailui-messenger.js)

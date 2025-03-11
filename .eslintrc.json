@@ -80,6 +80,7 @@
     "class-methods-use-this": "off",
     "eqeqeq": "off",
     "guard-for-in": "off",
+    "no-mutable-exports": "off",
     "max-classes-per-file": "off",
     "new-cap": "off",
     "no-bitwise": "off",
