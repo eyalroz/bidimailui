@@ -795,6 +795,12 @@ BiDiMailUI.Composition.onKeyPress = function (ev) {
   }
 };
 
+BiDiMailUI.Composition.onMsgSubjectFocus = function () {
+  let inMessage = false;
+  let inSubjectBox = true;
+  BiDiMailUI.Composition.directionSwitchController.setAllCasters(inMessage, inSubjectBox);
+};
+
 BiDiMailUI.Composition.getParagraphMarginFromPrefs = function () {
   const basePrefName = "compose.space_between_paragraphs";
   const marginScale = BiDiMailUI.Prefs.get(basePrefName + ".scale", "cm");
@@ -940,9 +946,9 @@ BiDiMailUI.Composition.directionSwitchController.setCasterGroup = function (cast
   oppositeCaster.setAttribute("disabled", !commandsAreEnabled);
 };
 
-BiDiMailUI.Composition.directionSwitchController.setAllCasters = function () {
-  const inMessage = (content == top.document.commandDispatcher.focusedWindow);
-  const inSubjectBox = this.inSubjectBox_();
+BiDiMailUI.Composition.directionSwitchController.setAllCasters = function (inMessage, inSubjectBox) {
+  inMessage ??= (content == top.document.commandDispatcher.focusedWindow);
+  inSubjectBox ??= this.inSubjectBox_();
   let retVal = false;
 
   this.setCasterGroup("document", inMessage, inSubjectBox);

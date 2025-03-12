@@ -179,6 +179,9 @@ function onLoad(activatedWhileWindowOpen) {
     document.addEventListener("keydown",           BiDiMailUI.Composition.onKeyDown,              capture);
     document.addEventListener("keyup",             BiDiMailUI.Composition.onKeyUp,                capture);
   }
+  let subjectInputField = document.getElementById("msgSubject");
+  subjectInputField.addEventListener("focus", BiDiMailUI.Composition.onMsgSubjectFocus, true);
+
   injectOtherElements();
   // We currently use a single CSS file for all of our style (not including the dynamically-injected
   // quote-bar CSS for message documents)
@@ -213,4 +216,6 @@ function onUnload(deactivatedWhileWindowOpen) {
     document.removeEventListener("keydown",           BiDiMailUI.Composition.onKeyDown,              capture);
     document.removeEventListener("keyup",             BiDiMailUI.Composition.onKeyUp,                capture);
   } catch (ex) { }
+  let subjectInputField = document.getElementById("msgSubject");
+  subjectInputField.removeEventListener("focus", BiDiMailUI.Composition.onMsgSubjectFocus, true);
 }
