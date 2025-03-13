@@ -702,16 +702,12 @@ BiDiMailUI.Composition.switchParagraphDirection = function () {
   );
 };
 
-BiDiMailUI.Composition.onKeyDown = function (ev) {
-  if (
-    // The content element isn't focused
-    top.document.commandDispatcher.focusedWindow != content || ev.defaultPrevented) return;
-
+BiDiMailUI.Composition.applyKeyDownLogic = function (ev) {
   // detect Ctrl+Shift key combination, and switch direction if it
   // is used
 
   if ((ev.keyCode == BiDiMailUI.Composition.CtrlShiftMachine.ShiftKeyCode) ||
-      (ev.keyCode == BiDiMailUI.Composition.CtrlShiftMachine.CtrlKeyCode)) {
+    (ev.keyCode == BiDiMailUI.Composition.CtrlShiftMachine.CtrlKeyCode)) {
     if (ev.keyCode == BiDiMailUI.Composition.CtrlShiftMachine.CtrlKeyCode) {
       // Ctrl going down begins the Ctrl+Shift press sequence
       BiDiMailUI.Composition.CtrlShiftMachine.ctrlShiftSequence1 = true;
@@ -733,21 +729,33 @@ BiDiMailUI.Composition.onKeyDown = function (ev) {
   }
 };
 
-BiDiMailUI.Composition.onKeyUp = function (ev) {
-  if (top.document.commandDispatcher.focusedWindow != content // The content element isn't focused
-    || ev.defaultPrevented) return;
+BiDiMailUI.Composition.onKeyDownDocument = function (ev) {
+  let messageContentElementIsFocused = (top.document.commandDispatcher.focusedWindow == content);
+  if (!messageContentElementIsFocused || ev.defaultPrevented) return;
 
+  BiDiMailUI.Composition.applyKeyDownLogic(ev);
+};
+
+BiDiMailUI.Composition.onKeyDownSubject = function (ev) {
+  BiDiMailUI.Composition.applyKeyDownLogic(ev);
+};
+
+BiDiMailUI.Composition.applyKeyUpLogic = function (ev, switchParagraphDirOnly) {
   // detect Ctrl+Shift key combination, and switch direction if it
   // is used
 
   if ((ev.keyCode == BiDiMailUI.Composition.CtrlShiftMachine.ShiftKeyCode) ||
-      (ev.keyCode == BiDiMailUI.Composition.CtrlShiftMachine.CtrlKeyCode)) {
+    (ev.keyCode == BiDiMailUI.Composition.CtrlShiftMachine.CtrlKeyCode)) {
     if (BiDiMailUI.Composition.CtrlShiftMachine.ctrlShiftSequence1 &&
-        BiDiMailUI.Composition.CtrlShiftMachine.ctrlShiftSequence2) {
-      if (IsHTMLEditor()) {
+      BiDiMailUI.Composition.CtrlShiftMachine.ctrlShiftSequence2) {
+      if (switchParagraphDirOnly) {
         BiDiMailUI.Composition.switchParagraphDirection();
       } else {
-        BiDiMailUI.Composition.switchDocumentDirection();
+        try {
+          // just to be on the safe side, since we're a bit adventurous
+          // our onKeyUp event listener on the subject box...
+          BiDiMailUI.Composition.switchDocumentDirection();
+        } catch(ex) { }
       }
       BiDiMailUI.Composition.directionSwitchController.setAllCasters();
       // if Shift has gone up, Ctrl is still down and the next
@@ -762,15 +770,22 @@ BiDiMailUI.Composition.onKeyUp = function (ev) {
   }
 };
 
+BiDiMailUI.Composition.onKeyUpDocument = function (ev) {
+  let messageContentElementIsFocused = (top.document.commandDispatcher.focusedWindow == content);
+  if (!messageContentElementIsFocused || ev.defaultPrevented) return;
+  BiDiMailUI.Composition.applyKeyUpLogic(ev, IsHTMLEditor());
+};
+
+BiDiMailUI.Composition.onKeyUpSubject = function (ev) {
+  const switchParagraphDir = false; // i.e. only switch document dir
+  BiDiMailUI.Composition.applyKeyUpLogic(ev, switchParagraphDir);
+};
+
 BiDiMailUI.Composition.onKeyPress = function (ev) {
   // TODO: Shouldn't we also check for focus here, like in keyup and keydown?
   // And if so - should we factor out the check?
 
-  if (ev.defaultPrevented) {
-    // The preventDefault flag is set on the event
-    // (see http://bugzilla.mozdev.org/show_bug.cgi?id=12748)
-    return;
-  }
+  if (ev.defaultPrevented) return;
 
   // detect Ctrl+Shift key combination, and switch direction if it
   // is used

@@ -171,16 +171,23 @@ the main toolbar buttons are whole-document direction controls. -->
   );
 }
 
+function addOrRemoveListeners(action) {
+  const capture = true;
+  action += 'EventListener';
+  let subjectInputField = document.getElementById("msgSubject");
+  window[action]("keypress", BiDiMailUI.Composition.onKeyPress, capture);
+  subjectInputField[action]("focus", BiDiMailUI.Composition.onMsgSubjectFocus, capture);
+  if (BiDiMailUI.Prefs.get("compose.ctrl_shift_switches_direction", true)) {
+    document[action]("keydown", BiDiMailUI.Composition.onKeyDownDocument, capture);
+    document[action]("keyup", BiDiMailUI.Composition.onKeyUpDocument, capture);
+    subjectInputField[action]("keydown", BiDiMailUI.Composition.onKeyDownSubject, capture);
+    subjectInputField[action]("keyup", BiDiMailUI.Composition.onKeyUpSubject, capture);
+  }
+}
+
 // called on window load or on add-on activation while window is already open
 function onLoad(activatedWhileWindowOpen) {
-  const capture = true;
-  window.addEventListener("keypress",              BiDiMailUI.Composition.onKeyPress,             capture);
-  if (BiDiMailUI.Prefs.get("compose.ctrl_shift_switches_direction", true)) {
-    document.addEventListener("keydown",           BiDiMailUI.Composition.onKeyDown,              capture);
-    document.addEventListener("keyup",             BiDiMailUI.Composition.onKeyUp,                capture);
-  }
-  let subjectInputField = document.getElementById("msgSubject");
-  subjectInputField.addEventListener("focus", BiDiMailUI.Composition.onMsgSubjectFocus, true);
+  addOrRemoveListeners('add');
 
   injectOtherElements();
   // We currently use a single CSS file for all of our style (not including the dynamically-injected
@@ -210,12 +217,7 @@ function onUnload(deactivatedWhileWindowOpen) {
 
   window.gMsgCompose.UnregisterStateListener(BiDiMailUI.Composition.msgComposeStateListener);
 
-  const capture = true;
-  window.removeEventListener("keypress",              BiDiMailUI.Composition.onKeyPress,             capture);
   try {
-    document.removeEventListener("keydown",           BiDiMailUI.Composition.onKeyDown,              capture);
-    document.removeEventListener("keyup",             BiDiMailUI.Composition.onKeyUp,                capture);
+    addOrRemoveListeners('remove');
   } catch (ex) { }
-  let subjectInputField = document.getElementById("msgSubject");
-  subjectInputField.removeEventListener("focus", BiDiMailUI.Composition.onMsgSubjectFocus, true);
 }
