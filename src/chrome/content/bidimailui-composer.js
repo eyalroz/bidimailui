@@ -702,23 +702,10 @@ BiDiMailUI.Composition.switchParagraphDirection = function () {
   );
 };
 
-BiDiMailUI.Composition.getDefaultPreventedWrapper = function (ev) {
-  try {
-    // This should be valid for Thunderbird 13.0 and later, see:
-    // https://bugzilla.mozilla.org/show_bug.cgi?id=708702
-    return ev.defaultPrevented;
-  } catch (ex) {
-    return ev.getPreventDefault();
-  }
-},
-
 BiDiMailUI.Composition.onKeyDown = function (ev) {
   if (
     // The content element isn't focused
-    top.document.commandDispatcher.focusedWindow != content ||
-    // The defaultPrevented flag is set on the event
-    // (see http://bugzilla.mozdev.org/show_bug.cgi?id=12748)
-    BiDiMailUI.Composition.getDefaultPreventedWrapper(ev)) return;
+    top.document.commandDispatcher.focusedWindow != content || ev.defaultPrevented) return;
 
   // detect Ctrl+Shift key combination, and switch direction if it
   // is used
@@ -748,7 +735,7 @@ BiDiMailUI.Composition.onKeyDown = function (ev) {
 
 BiDiMailUI.Composition.onKeyUp = function (ev) {
   if (top.document.commandDispatcher.focusedWindow != content // The content element isn't focused
-    || BiDiMailUI.Composition.getDefaultPreventedWrapper(ev)) return;
+    || ev.defaultPrevented) return;
 
   // detect Ctrl+Shift key combination, and switch direction if it
   // is used
@@ -779,7 +766,7 @@ BiDiMailUI.Composition.onKeyPress = function (ev) {
   // TODO: Shouldn't we also check for focus here, like in keyup and keydown?
   // And if so - should we factor out the check?
 
-  if (BiDiMailUI.Composition.getDefaultPreventedWrapper(ev)) {
+  if (ev.defaultPrevented) {
     // The preventDefault flag is set on the event
     // (see http://bugzilla.mozdev.org/show_bug.cgi?id=12748)
     return;
