@@ -101,5 +101,6 @@ bidimailui.jar:
     content/skin/classic/dark/single/rtl-main-bar-24x24-active.png   (src/chrome/skin/classic/dark/single/rtl-main-bar-24x24-active.png)
     content/skin/classic/dark/single/rtl-main-bar-24x24-disabled.png (src/chrome/skin/classic/dark/single/rtl-main-bar-24x24-disabled.png)
     content/skin/classic/format-buttons-rtl.png              (src/chrome/skin/classic/format-buttons-rtl.png)
+    content/bidimailui-prefs-dialog.xhtml               (src/chrome/content/bidimailui-prefs-dialog.xul)
     content/bidimailui-set-preference-types.js (src/chrome/content/bidimailui-set-preference-types.js)
     content/bidimailui-prefs-dialog.js                (src/chrome/content/bidimailui-prefs-dialog.js)
