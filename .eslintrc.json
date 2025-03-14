@@ -34,7 +34,8 @@
     "Cu": "readonly",
     "pref": "readonly",
     "IsHTMLEditor": "readonly",
-    "GetCurrentEditor": "readonly"
+    "GetCurrentEditor": "readonly",
+    "GetCurrentEditorElement": "readonly"
   },
   "parserOptions": {
     "ecmaVersion": 2022
@@ -60,9 +61,10 @@
       "off", "double"
     ],
     "operator-linebreak": [
-      2, "after", {
-        "overrides": { "?": "after", ":": "none" }
-      }
+      "error", "after", { "overrides": { ":": "ignore" } }
+//      2, "after", {
+//        "overrides": { "?": "after", ":": "none" }
+//      }
     ],
     "comma-dangle": ["error", {
         "arrays": "only-multiline",
@@ -105,12 +107,12 @@
     "no-return-assign": "off",
     "no-await-in-loop": "warn",
     "one-var": "off",
-    "operator-linebreak" : "warn",
     "vars-on-top": "off",
     "no-var": "off",
     "prefer-const": "off",
     "prefer-destructuring": "off",
     "function-paren-newline": "off",
+    "default-case": "off",
     "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1, "maxBOF": 1} ],
     "comment: will need to look at the following one-by-one": "off",
     "no-unused-vars": "off",
