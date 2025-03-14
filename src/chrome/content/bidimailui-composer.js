@@ -1,4 +1,3 @@
-var { MailServices } = ChromeUtils.importESModule("resource:///modules/MailServices.sys.mjs");
 var { BiDiMailUI } = ChromeUtils.importESModule("chrome://bidimailui/content/bidimailui-common.mjs");
 
 BiDiMailUI.Composition = {};

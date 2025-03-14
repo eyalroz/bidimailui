@@ -1,5 +1,5 @@
-var Services = globalThis.Services;
 var { BiDiMailUI } = ChromeUtils.importESModule("chrome://bidimailui/content/bidimailui-common.mjs");
+const Services = globalThis.Services;
 
 // Note: There are some duplicates with injections from 3pane.js, as those are not (easily) accessible
 // from within this window. Specifically: The accel key for cycling message direction forcing mode,

@@ -1,5 +1,3 @@
-var { BiDiMailUI } = ChromeUtils.importESModule("chrome://bidimailui/content/bidimailui-common.mjs");
-
 // Note: There are some duplicates with injections from messenger.js, as those are not (easily) accessible
 // from within this window. Specifically: The accel key for cycling message direction forcing mode,
 // and the two scripts
