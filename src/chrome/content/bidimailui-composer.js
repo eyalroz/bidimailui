@@ -302,7 +302,7 @@ BiDiMailUI.Composition.setParagraphMarginsRule = function () {
   const margin = BiDiMailUI.Composition.getParagraphMarginFromPrefs();
   BiDiMailUI.Composition.ensureMessageStyleRulesAdded(
     "bidiui-paragraph-margins",
-    "body p { margin-bottom: " + margin + "; margin-top: 0pt; } ");
+    `body p { margin-bottom: ${margin}; margin-top: 0pt; } `);
 };
 
 // Our extension likes "Paragraph Mode" rather than "Body Text" mode
@@ -377,7 +377,7 @@ BiDiMailUI.Composition.getDisplayedCopyParams = function (messageURI, messagePar
       try {
         displayedCopyBrowser = win.getMessageBrowser();
       } catch (ex) {
-        console.log("problem getting browser for a message displayed in window:\n" + ex);
+        console.log(`problem getting browser for a message displayed in window:\n${ex}`);
       }
     }
 
@@ -449,7 +449,8 @@ BiDiMailUI.Composition.setInitialDirection = function (messageParams) {
     }
     BiDiMailUI.Composition.setDocumentDirection(initialDirection);
     return;
-  } else if (messageParams.isReply && messageParams.originalDisplayDirection) {
+  }
+  if (messageParams.isReply && messageParams.originalDisplayDirection) {
     BiDiMailUI.Composition.setDocumentDirection(messageParams.originalDisplayDirection);
   } else {
     // We get here for drafts, for messages without URIs, and due to problems
@@ -547,7 +548,7 @@ BiDiMailUI.Composition.onEverythingLoadedAndReady = function () {
     if (typeof OutputFormatMenuSelect == "function") {
       OutputFormatMenuSelect(
         {
-          getAttribute: function () { return defaultOptionElementId; }
+          getAttribute() { return defaultOptionElementId; }
         });
     } else {
       // OutputFormatMenuSelect function has been removed in 102.
@@ -597,7 +598,7 @@ BiDiMailUI.Composition.onEverythingLoadedAndReady = function () {
 };
 
 BiDiMailUI.Composition.msgComposeStateListener = {
-  NotifyComposeBodyReady: function () {
+  NotifyComposeBodyReady() {
     BiDiMailUI.Composition.lastWindowToHaveFocus = null;
     BiDiMailUI.Composition.onEverythingLoadedAndReady();
   }
@@ -690,19 +691,19 @@ BiDiMailUI.Composition.applyDirectionSetterToSelectionBlockElements = function (
 
 BiDiMailUI.Composition.clearParagraphDirection = function () {
   BiDiMailUI.Composition.applyDirectionSetterToSelectionBlockElements(
-    function (oldDirection) { return null; }
+    (oldDirection) => null
   );
 };
 
 BiDiMailUI.Composition.setParagraphDirection = function (dir) {
   BiDiMailUI.Composition.applyDirectionSetterToSelectionBlockElements(
-    function (oldDirection) { return dir; }
+    (oldDirection) => dir
   );
-},
+};
 
 BiDiMailUI.Composition.switchParagraphDirection = function () {
   BiDiMailUI.Composition.applyDirectionSetterToSelectionBlockElements(
-    function (oldDirection) { return (oldDirection == "rtl" ? "ltr" : "rtl"); }
+    (oldDirection) => (oldDirection == "rtl" ? "ltr" : "rtl")
   );
 };
 
@@ -759,7 +760,7 @@ BiDiMailUI.Composition.applyKeyUpLogic = function (ev, switchParagraphDirOnly) {
           // just to be on the safe side, since we're a bit adventurous
           // our onKeyUp event listener on the subject box...
           BiDiMailUI.Composition.switchDocumentDirection();
-        } catch(ex) { }
+        } catch (ex) { }
       }
       BiDiMailUI.Composition.directionSwitchController.setAllCasters();
       // if Shift has gone up, Ctrl is still down and the next
@@ -807,12 +808,12 @@ BiDiMailUI.Composition.onMsgSubjectFocus = function () {
 
 BiDiMailUI.Composition.getParagraphMarginFromPrefs = function () {
   const basePrefName = "compose.space_between_paragraphs";
-  const marginScale = BiDiMailUI.Prefs.get(basePrefName + ".scale", "cm");
+  const marginScale = BiDiMailUI.Prefs.get(`${basePrefName}.scale`, "cm");
   let marginVal;
   if (marginScale != "px") {
-    marginVal = parseFloat(BiDiMailUI.Prefs.get(basePrefName + ".value", "0"), 10);
+    marginVal = parseFloat(BiDiMailUI.Prefs.get(`${basePrefName}.value`, "0"), 10);
   } else {
-    marginVal = parseInt(BiDiMailUI.Prefs.get(basePrefName + ".value", "0"), 10);
+    marginVal = parseInt(BiDiMailUI.Prefs.get(`${basePrefName}.value`, "0"), 10);
   }
   if (isNaN(marginVal)) {
     marginVal = "0";
@@ -1002,12 +1003,13 @@ BiDiMailUI.Composition.directionSwitchController.doCommand = function (command) 
     return false;
   }
   this.setAllCasters();
+  return true;
 };
 
 BiDiMailUI.Composition.directionButtonsPrefListener = {
   domain: "extensions.bidiui.mail.compose.show_direction_buttons",
-  observe: function (subject, topic, prefName) {
+  observe(subject, topic, prefName) {
     if (topic != "nsPref:changed") return;
     BiDiMailUI.Composition.handleDirectionButtons();
   }
-}
+};

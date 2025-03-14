@@ -251,8 +251,8 @@ BiDiMailUI.correctivelyRecodeText = function (str, mailnewsDecodingType, preferr
         });
         lines[i] = utf8Decoder.decode(encoded);
       } catch (ex) {
-        console.error(`Exception while trying to correct mis-decoded UTF-8 text `
-          + `on line ${i}. Line contents:\n${lines[i]}\n\nException info:\n${ex}`);
+        console.error(`Exception while trying to correct mis-decoded UTF-8 text ` +
+          `on line ${i}. Line contents:\n${lines[i]}\n\nException info:\n${ex}`);
 
         // in some cases we seem to get manged UTF-8 text
         // which can be fixed by re-applying the current character set to the message,
@@ -268,8 +268,8 @@ BiDiMailUI.correctivelyRecodeText = function (str, mailnewsDecodingType, preferr
         // at this point, strategy.mailnewsDecodingType can only be latin or UTF-8
         lines[i] = BiDiMailUI.decodeString(lines[i], preferredCharset);
       } catch (ex) {
-        console.error(`Exception while trying to correct mis-decoded ${preferredCharset} text `
-          + `on line ${i}.Line contents:\n${lines[i]}\n\nException info:\n${ex}`);
+        console.error(`Exception while trying to correct mis-decoded ${preferredCharset} text ` +
+          `on line ${i}.Line contents:\n${lines[i]}\n\nException info:\n${ex}`);
       }
     }
   }
