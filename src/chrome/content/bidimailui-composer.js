@@ -232,6 +232,10 @@ BiDiMailUI.Composition.insertControlCharacter = function (controlCharacter) {
 };
 
 BiDiMailUI.Composition.switchDocumentDirection = function () {
+  // unfortunately, we need to perform the equivalent of "isCommandEnabled" here,
+  // because isCommandEnabled for the direction switch controller is not getting
+  // triggered, apparently, when the subject box is first focused
+
   const docElement = BiDiMailUI.getMessageEditor(document).contentDocument.documentElement;
   const currentDir = window.getComputedStyle(docElement, null).direction;
 
@@ -785,8 +789,6 @@ BiDiMailUI.Composition.onKeyPress = function (ev) {
   // TODO: Shouldn't we also check for focus here, like in keyup and keydown?
   // And if so - should we factor out the check?
 
-  if (ev.defaultPrevented) return;
-
   // detect Ctrl+Shift key combination, and switch direction if it
   // is used
 
@@ -857,33 +859,34 @@ BiDiMailUI.Composition.directionSwitchController.inSubjectBox_ = function () {
 BiDiMailUI.Composition.directionSwitchController.isCommandEnabled = function (command) {
   const inMessage = (content == top.document.commandDispatcher.focusedWindow);
   const inSubjectBox = this.inSubjectBox_();
-  let retVal = false;
 
   // and now for what this function is actually supposed to do...
 
   // due to the ridiculous design of the controller interface,
-  // the isCommandEnabled function has side-effects! and we
+  // the isCommandEnabled function has side effects! and we
   // must use it to update button states because no other
   // method gets called to do that
 
   switch (command) {
   case "cmd_switch_paragraph":
   case "cmd_clear_paragraph_dir":
-    retVal = inMessage;
-    break;
+    return inMessage;
   case "cmd_switch_document":
   case "cmd_insert_lrm":
   case "cmd_insert_rlm":
-    retVal = inMessage || inSubjectBox;
-    break;
+    // retVal = inMessage || inSubjectBox;
+    // We're forced to return true, since isCommandEnabled is not called
+    // on certain actions where we need to make it enabled; we'll need to
+    // actually check whether the command is enabled in the functions which
+    // perform the command.
+    return true;
 
   case "cmd_ltr_document":
-    this.setCasterGroup("document", inMessage, inSubjectBox);
   case "cmd_rtl_document":
-    retVal = inMessage || inSubjectBox;
-    // necessary side-effects performed when
+    // necessary side effects performed when
     // isCommandEnabled is called for cmd_ltr_document
-    break;
+    this.setCasterGroup("document", inMessage, inSubjectBox);
+    return inMessage || inSubjectBox;
 
   case "cmd_ltr_paragraph":
     if (IsHTMLEditor()) {
@@ -891,12 +894,10 @@ BiDiMailUI.Composition.directionSwitchController.isCommandEnabled = function (co
     }
     // fallthrough
   case "cmd_rtl_paragraph":
-    retVal = inMessage;
-    // necessary side-effects performed when
-    // isCommandEnabled is called for cmd_ltr_paragraph
-    break;
+    return inMessage;
+  default:
+    return false;
   }
-  return retVal;
 };
 
 BiDiMailUI.Composition.directionSwitchController.setCasterGroup = function (casterPair, inMessage, inSubjectBox) {
@@ -957,6 +958,13 @@ BiDiMailUI.Composition.directionSwitchController.setAllCasters = function (inMes
   this.setCasterGroup("paragraph", inMessage, inSubjectBox);
 };
 
+BiDiMailUI.Composition.directionSwitchController.invokeIfInMessageOrSubject = function (f) {
+  let inMessage = (content == top.document.commandDispatcher.focusedWindow);
+  let inSubjectBox = this.inSubjectBox_();
+  if (!(inMessage || inSubjectBox)) return;
+  f();
+};
+
 BiDiMailUI.Composition.directionSwitchController.doCommand = function (command) {
   switch (command) {
   case "cmd_rtl_paragraph":
@@ -974,22 +982,23 @@ BiDiMailUI.Composition.directionSwitchController.doCommand = function (command) 
   case "cmd_switch_paragraph":
     BiDiMailUI.Composition.switchParagraphDirection();
     break;
-  case "cmd_switch_document":
-    BiDiMailUI.Composition.switchDocumentDirection();
+  case "cmd_switch_document": {
+    BiDiMailUI.Composition.directionSwitchController.invokeIfInMessageOrSubject(BiDiMailUI.Composition.switchDocumentDirection);
     break;
+  }
   case "cmd_clear_paragraph_dir":
     BiDiMailUI.Composition.clearParagraphDirection();
     break;
   case "cmd_insert_lrm":
-    BiDiMailUI.Composition.insertControlCharacter('\u200e');
+    BiDiMailUI.Composition.directionSwitchController.invokeIfInMessageOrSubject(
+      () => { BiDiMailUI.Composition.insertControlCharacter('\u200e'); });
     break;
   case "cmd_insert_rlm":
-    BiDiMailUI.Composition.insertControlCharacter('\u200f');
+    BiDiMailUI.Composition.directionSwitchController.invokeIfInMessageOrSubject(
+      () => { BiDiMailUI.Composition.insertControlCharacter('\u200f'); });
     break;
-
   default:
-    dump("The command \"" + command +
-      "\" isn't supported by the directionality controller\n");
+    dump(`The command ${command} isn't supported by the directionality controller\n`);
     return false;
   }
   this.setAllCasters();
