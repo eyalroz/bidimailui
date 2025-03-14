@@ -72,7 +72,7 @@ BiDiMailUI.Display.ActionPhases.quoteBarsCSSFix = function (domDocument) {
   BiDiMailUI.Display.linkStylesheet(domDocument, 'bidimailui-quotebar-css', 'quotebar.css');
 };
 
-BiDiMailUI.Display.ActionPhases.directionAutodetection = function (domDocument) {
+BiDiMailUI.Display.ActionPhases.directionAutoDetection = function (domDocument) {
   if (!BiDiMailUI.Prefs.get("display.autodetect_direction", true)) return;
 
   const body = domDocument.body;
@@ -80,7 +80,7 @@ BiDiMailUI.Display.ActionPhases.directionAutodetection = function (domDocument) 
 
   const detectedOverallDirection = BiDiMailUI.directionCheck(body);
   domDocument.documentElement.setAttribute('bidimailui-direction-uniformity', detectedOverallDirection);
-  // Note that, for sub-body elements, we'll setting this property on the sub-body itself rather than on some parent;
+  // Note that, for sub-body elements, we'll be setting this property on the sub-body itself rather than on some parent;
   // but the document body likes special treatment :-(
 
   if (detectedOverallDirection === "mixed") {
@@ -505,7 +505,7 @@ BiDiMailUI.Display.resolveCharsetHandlingStrategy = function (
 // regarding what kind of charset mis-detection correction action it needs;
 // also, make some DOM markings regarding this examination.
 //
-// Note Beginning with TB 91, it is not possible to force a message' character set.
+// Note Beginning with TB 91, it is not possible to force a message's character set.
 // This cripples a lot of the logic here - and prevents us from correcting
 // a lot of the character set mis-decoding
 BiDiMailUI.Display.examineMessageForCharsetCorrection = function (cMCParams) {

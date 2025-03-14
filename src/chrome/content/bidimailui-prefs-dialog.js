@@ -37,7 +37,7 @@ BiDiMailUI.PrefPane.getSpaceBetweenParagraphsValue = function () {
 
   if (this._getPrefElement("compose.space_between_paragraphs.scale")
           .value != "px") {
-    const floatVal = parseFloat(txtBoxValue, 10);
+    const floatVal = parseFloat(txtBoxValue);
     if (!isNaN(floatVal)) {
       rv = floatVal;
     }
@@ -51,7 +51,7 @@ BiDiMailUI.PrefPane.getSpaceBetweenParagraphsValue = function () {
   return rv;
 };
 
-BiDiMailUI.PrefPane.updateSpaceBetweenParagraphsValue =function () {
+BiDiMailUI.PrefPane.updateSpaceBetweenParagraphsValue = function () {
   this._getPrefElement("compose.space_between_paragraphs.value").value =
     this.getSpaceBetweenParagraphsValue();
 };

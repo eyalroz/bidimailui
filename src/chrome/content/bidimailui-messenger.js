@@ -1,6 +1,6 @@
 var { BiDiMailUI } = ChromeUtils.importESModule("chrome://bidimailui/content/bidimailui-common.mjs");
 
-// This file constains UI and glue code only, calling
+// This file contains UI and glue code only, calling
 // display logic code elsewhere actually act on the displayed message
 
 BiDiMailUI.MessageOverlay = {};
@@ -14,8 +14,8 @@ BiDiMailUI.MessageOverlay.dontReload = false;
 // the outer window with the menu and toolbars etc. Also, the first option will work for 3-pane (outer)
 // TB windows, and the second will work for single-message (outer) TB windows
 BiDiMailUI.MessageOverlay.getInnerMostMessageWindow = function (win) {
-  return win?.document.getElementById("tabmail")?.currentAboutMessage
-    ||   win?.document.getElementById("messageBrowser")?.contentWindow;
+  return win?.document.getElementById("tabmail")?.currentAboutMessage ||
+         win?.document.getElementById("messageBrowser")?.contentWindow;
 };
 
 BiDiMailUI.MessageOverlay.getActualMessageDocument = function (win) {
@@ -27,7 +27,7 @@ BiDiMailUI.MessageOverlay.getActualMessageDocument = function (win) {
   return messagePaneBrowser?.contentWindow.document;
 };
 
-BiDiMailUI.MessageOverlay.cycleDirectionSettings = function (win) {
+BiDiMailUI.MessageOverlay.cycleDirectionSettings = function () {
   let document = BiDiMailUI.MessageOverlay.getActualMessageDocument(window);
   let cycler = (attr) => {
     switch (attr) {
@@ -88,9 +88,10 @@ BiDiMailUI.MessageOverlay.gatherParameters = function (win) {
     return [null, null, null];
   }
 
-  let canActOnDocument = (domDocument?.baseURI && domDocument?.body)
-    && (domDocument.baseURI != "about:blank")
-    && !BiDiMailUI.MessageOverlay.isFillerStaticPage(domDocument);
+  let canActOnDocument =
+    (domDocument?.baseURI && domDocument?.body) &&
+    (domDocument.baseURI != "about:blank") &&
+    !BiDiMailUI.MessageOverlay.isFillerStaticPage(domDocument);
   if (!canActOnDocument) {
     console.warn(`BiDiMailUI can't act on DOM document ${domDocument.URL}`);
     return [null, null, null];
@@ -136,7 +137,7 @@ BiDiMailUI.MessageOverlay.onLoad = function (win) {
 
   BiDiMailUI.Display.ActionPhases.htmlNumericEntitiesDecoding(body);
   BiDiMailUI.Display.ActionPhases.quoteBarsCSSFix(domDocument);
-  BiDiMailUI.Display.ActionPhases.directionAutodetection(domDocument);
+  BiDiMailUI.Display.ActionPhases.directionAutoDetection(domDocument);
 
   BiDiMailUI.MessageOverlay.updateDirectionMenuButton(null);
 };
