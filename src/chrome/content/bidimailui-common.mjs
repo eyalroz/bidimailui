@@ -54,7 +54,7 @@ BiDiMailUI.RegExpStrings.TEXT_SPLIT_SEQUENCE =
 BiDiMailUI.RegExpStrings.MISDETECTED_RTL_CHARACTER =
   "[\\xBF-\\xD6\\xD8-\\xFF]";
 BiDiMailUI.RegExpStrings.MISDETECTED_RTL_SEQUENCE =
-  BiDiMailUI.RegExpStrings.MISDETECTED_RTL_CHARACTER + "{2,}";
+  `${BiDiMailUI.RegExpStrings.MISDETECTED_RTL_CHARACTER}{2,}`;
 
 // TODO: some of these are only relevant for UTF-8 misdecoded as windows-1252
 // (or iso-8859-1; mozilla cheats and uses windows-1252), while some of these
@@ -69,10 +69,8 @@ BiDiMailUI.RegExpStrings.MISDETECTED_RTL_SEQUENCE =
 // but for some reason if I use \b's, I don't match the strings EE E4 20 and
 // E7 E3 22 F9
 BiDiMailUI.RegExpStrings.CODEPAGE_MISDETECTION_SEQUENCE =
-  BiDiMailUI.RegExpStrings.MISDETECTED_RTL_CHARACTER +
-  "{3,}" + "|" +  "(" + "(?:\\s|\"|\W|^)" +
-  BiDiMailUI.RegExpStrings.MISDETECTED_RTL_CHARACTER +
-  "{2,}(?:\"|\\s|\W|$)" + ")";
+  `${BiDiMailUI.RegExpStrings.MISDETECTED_RTL_CHARACTER}{3,}|` +
+  `|((?:\\s|"|W|^)${BiDiMailUI.RegExpStrings.MISDETECTED_RTL_CHARACTER}{2,}(?:"|\\s|W|$))`;
 
 // TODO: maybe it's better to undecode first, then check whether it's UTF-8;
 // that will probably allow using a char range instead of so many individual
@@ -301,8 +299,7 @@ BiDiMailUI.determineTextMatchUniformity = function (element, expression) {
 };
 
 BiDiMailUI.neutralsOnly = function (str) {
-  const neutrals =
-    new RegExp("^[ \\f\\r\\n\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\{-\xA0\u2013\\u2014\\uFFFD]*$");
+  const neutrals = /^[ \f\r\n\t\v\u00A0\u2028\u2029!-@[-`{-\xA0\u2013\\u2014\uFFFD]*$/;
   return neutrals.test(str);
 };
 
@@ -312,18 +309,16 @@ BiDiMailUI.neutralsOnly = function (str) {
 BiDiMailUI.directionCheck = function (obj) {
   const RTL_CHARACTER_INNER =
    "\\u0590-\\u05FF\\uFB1D-\\uFB4F\\u0600-\\u06FF\\uFB50-\\uFDFF\\uFE70-\\uFEFC";
-  const RTL_CHARACTER = "[" + RTL_CHARACTER_INNER + "]";
-  const RTL_SEQUENCE = "(?:" +  RTL_CHARACTER + "{2,}|" + RTL_CHARACTER + "\"" +
-           RTL_CHARACTER + ")";
-  const LTR_SEQUENCE = "(?:" +  "\\w" + "[\\-@\\.']?" + ")" + "{2,}";
+  const RTL_CHARACTER = `[${RTL_CHARACTER_INNER}]`;
+  const RTL_SEQUENCE = `(?:${RTL_CHARACTER}{2,}|${RTL_CHARACTER}"${RTL_CHARACTER})`;
+  // eslint-disable-next-line no-useless-concat
+  const LTR_SEQUENCE = `(?:\\w[\\-@\\.']?){2,}`;
   const NEUTRAL_CHARACTER_INNER =
-    " \\f\\r\\t\\v\\u00A0\\u2028\\u2029!-@\[-`\{-\xA0\u2013\\u2014\\uFFFD";
-  const NEUTRAL_CHARACTER = "[" + NEUTRAL_CHARACTER_INNER + "]";
-  const NEUTRAL_CHARACTER_NEW_LINE = "[\\n" + NEUTRAL_CHARACTER_INNER + "]";
-  const IGNORABLE_CHARACTER = "[" + NEUTRAL_CHARACTER_INNER +
-    RTL_CHARACTER_INNER + "]";
-  const IGNORABLE_CHARACTER_NEW_LINE = "[" + NEUTRAL_CHARACTER_INNER +
-    RTL_CHARACTER_INNER + "\\n]";
+    " \\f\\r\\t\\v\\u00A0\\u2028\\u2029!-@[-`{-\xA0\u2013\\u2014\\uFFFD";
+  const NEUTRAL_CHARACTER = `[${NEUTRAL_CHARACTER_INNER}]`;
+  const NEUTRAL_CHARACTER_NEW_LINE = `[\\n${NEUTRAL_CHARACTER_INNER}]`;
+  const IGNORABLE_CHARACTER = `[${NEUTRAL_CHARACTER_INNER}${RTL_CHARACTER_INNER}]`;
+  const IGNORABLE_CHARACTER_NEW_LINE = `[${NEUTRAL_CHARACTER_INNER}${RTL_CHARACTER_INNER}\\n]`;
 
 
   // we check whether there exists a line which either begins
@@ -332,23 +327,22 @@ BiDiMailUI.directionCheck = function (obj) {
   // numbering at the beginnings and ends of lines)
 
   // note we're allowing sequences of initials, e.g W"ERBEH
-  const allNeutralExpression = new RegExp(
-    "^" + NEUTRAL_CHARACTER_NEW_LINE + "*" + "$");
+  const allNeutralExpression = new RegExp(`^${NEUTRAL_CHARACTER_NEW_LINE}*$`);
   const rtlLineExpression = new RegExp(
     // either the text has no non-RTL characters and some RTL characters
-    "(?:" + "^" + IGNORABLE_CHARACTER_NEW_LINE + "*" + RTL_CHARACTER + IGNORABLE_CHARACTER_NEW_LINE + "*" + "$" + ")" +
-    "|" +
+    `(?:^${IGNORABLE_CHARACTER_NEW_LINE}*${RTL_CHARACTER}${IGNORABLE_CHARACTER_NEW_LINE}*$)` +
+    `|` +
     // or it has only one non-RTL 'word', with an RTL 'word' before it
-    "(?:" + "^" + IGNORABLE_CHARACTER + "*" + RTL_SEQUENCE + IGNORABLE_CHARACTER + "+" + LTR_SEQUENCE + IGNORABLE_CHARACTER + "*" +  "$" + ")" +
-    "|" +
+    `(?:^${IGNORABLE_CHARACTER}*${RTL_SEQUENCE}${IGNORABLE_CHARACTER}+${LTR_SEQUENCE}${IGNORABLE_CHARACTER}*$)` +
+    `|` +
     // or it has only one non-RTL 'word', with an RTL 'word' after it
-    "(?:" + "^" + IGNORABLE_CHARACTER + "*" + LTR_SEQUENCE + IGNORABLE_CHARACTER + "+" + RTL_SEQUENCE + IGNORABLE_CHARACTER + "*" +  "$" + ")" +
-    "|" +
+    `(?:^${IGNORABLE_CHARACTER}*${LTR_SEQUENCE}${IGNORABLE_CHARACTER}+${RTL_SEQUENCE}${IGNORABLE_CHARACTER}*$)` +
+    `|` +
     // or it has a line with two RTL 'words' before any non-RTL characters
-    "(?:" + "(^|\\n)" + IGNORABLE_CHARACTER + "*" + RTL_SEQUENCE + NEUTRAL_CHARACTER + "+" + RTL_SEQUENCE + ")" +
-    "|" +
+    `(?:(^|\\n)${IGNORABLE_CHARACTER}*${RTL_SEQUENCE}${NEUTRAL_CHARACTER}+${RTL_SEQUENCE})` +
+    `|` +
     // or it has a line with two RTL 'words' after all non-RTL characters
-    "(?:" + RTL_SEQUENCE + NEUTRAL_CHARACTER + "+" + RTL_SEQUENCE + IGNORABLE_CHARACTER + "*" + "($|\\n)" + ")");
+    `(?:${RTL_SEQUENCE}${NEUTRAL_CHARACTER}+${RTL_SEQUENCE}${IGNORABLE_CHARACTER}*($|\\n))`);
 
   if (typeof obj == 'string') {
     if (allNeutralExpression.test(obj)) {
