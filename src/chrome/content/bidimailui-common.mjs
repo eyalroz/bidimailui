@@ -1,9 +1,6 @@
 export var BiDiMailUI;
 BiDiMailUI = {};
 
-const Services = globalThis.Services;
-
-
 //---------------------------------------------------------
 
 BiDiMailUI.Strings = {};
