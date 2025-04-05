@@ -14,6 +14,7 @@
     "appWindow": "writable",
     "gDBView": "readonly",
     "dump": "readonly",
+    "browser": "readonly",
     "content": "readonly",
     "msgWindow": "readonly",
     "GetSelectedMsgFolders": "readonly",
