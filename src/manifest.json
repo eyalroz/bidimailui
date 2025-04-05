@@ -2,7 +2,7 @@
    "manifest_version": 2,
    "applications": {
        "gecko": {
-#expand            "id": "__UUID__",
+                   "id": "{54e72d7b-ed31-4736-854f-f517358f21ee}",
                    "strict_min_version": "128.0",
                    "strict_max_version": "137.*"
        }

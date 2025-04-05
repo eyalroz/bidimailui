@@ -2,8 +2,7 @@
 
 SHORTNAME="bidimailui"
 TARGET="tbird" # We used to support multiple targets, but no longer
-UUID="{54e72d7b-ed31-4736-854f-f517358f21ee}"
-PREPROCESSOR_PARAMS=" -DUUID=$UUID -DSHORTNAME=$SHORTNAME"
+PREPROCESSOR_PARAMS=" -DSHORTNAME=$SHORTNAME"
 PREPROCESSOR_PARAMS+=" -DMOZ_THUNDERBIRD"
 
 function die {
