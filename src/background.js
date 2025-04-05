@@ -1,36 +1,70 @@
-// Loader / background script
-// for the BiDi Mail UI Thunderbird extension
-// by Eyal Rozenberg
+// Thunderbird regular extension loader script
+//
+// Note: All extension-specific information is passed through the manifest; avoid
+// modifying this file unless absolutely necessary
+
+function registerChromeUrls(locales) {
+  let manifest = browser.runtime.getManifest();
+  let shortname = manifest.short_name;
+  locales ??= manifest.locales;
+  if (!shortname || !locales) {
+    return false;
+  }
+  // I know this is weird, I don't understand this ja-JP-mac business myself; do we need it?
+  let localeToPath = (localeSpec) => `chrome/locale/${(localeSpec == "ja-JP-mac") ? "ja" : localeSpec}/`;
+  let localeToChromeUrl = (localeSpec) => ["locale", shortname, localeSpec, localeToPath(localeSpec)];
+  let chromeUrls = [
+    ["content", shortname, "chrome/content/"],
+    ["resource", shortname, "chrome/" ],
+    ...locales.map(localeToChromeUrl)
+  ];
+  messenger.WindowListener.registerChromeUrl(chromeUrls);
+  return true;
+}
+
+function registerDefaultPrefs(path) {
+  let manifest = browser.runtime.getManifest();
+  let shortname = manifest.short_name;
+  if (!(path || shortname || manifest.default_prefs)) {
+    return false;
+  }
+  path ??= manifest.default_prefs ?? `defaults/preferences/${shortname}.js`;
+  messenger.WindowListener.registerDefaultPrefs(path);
+  return true;
+}
+
+function registerOptionsPage(uri) {
+  let manifest = browser.runtime.getManifest();
+  let shortname = manifest.short_name;
+  if (!(uri || shortname || manifest.options_dialog)) {
+    return false;
+  }
+  uri ??= manifest.options_dialog ?? `chrome://${shortname}/content/${shortname}-prefs.xhtml`;
+  messenger.WindowListener.registerOptionsPage(uri);
+  return true;
+}
+
+// TODO: Instead of registering overlay injectors for windows,
+// we should generate overlay injectors ourselves
+function registerChromeInjectors(chromeInjectors) {
+  let manifest = browser.runtime.getManifest();
+  let shortname = manifest.short_name;
+  if (!shortname) {
+    return false;
+  }
+  chromeInjectors ??= manifest.chrome_injectors;
+  for (let [windowHref, rawInjectionUri] of chromeInjectors) {
+    let absoluteWindowHref = windowHref.startsWith('about:') ? windowHref : `chrome://messenger/content/${windowHref}`;
+    let injectionUri = rawInjectionUri.startsWith(`chrome://`) ? rawInjectionUri : `chrome://${shortname}/content/overlay-injectors/${rawInjectionUri}`;
+    messenger.WindowListener.registerWindow(absoluteWindowHref, injectionUri);
+  }
+  return true;
+}
 
 (async function () {
-  messenger.WindowListener.registerDefaultPrefs("defaults/preferences/bidimailui.js");
-  messenger.WindowListener.registerChromeUrl([
-    ["content",  "bidimailui",           "chrome/content/"      ],
-    ["resource", "bidimailui",           "chrome/"              ],
-    ["locale",   "bidimailui", "en-US",  "chrome/locale/en-US/" ],
-    ["locale",   "bidimailui", "he",     "chrome/locale/he/"    ],
-    ["locale",   "bidimailui", "ar",     "chrome/locale/ar/"    ],
-    ["locale",   "bidimailui", "fa",     "chrome/locale/fa/"    ],
-    ["locale",   "bidimailui", "ur",     "chrome/locale/ur/"    ]
-  ]);
-  let registerChromeInjectors = function (registrationInfo) {
-    for (let [windowHref, relativeInjectorPath] of registrationInfo) {
-      let absoluteWindowHref = (windowHref.startsWith('about:') || windowHref.startsWith("chrome://")) ?
-        windowHref : `chrome://messenger/content/${windowHref}`;
-      let jsFile = `chrome://bidimailui/content/overlay-injectors/${relativeInjectorPath}`;
-      messenger.WindowListener.registerWindow(absoluteWindowHref, jsFile);
-    }
-  };
-
-  registerChromeInjectors([
-    ["about:3pane",                                 "3pane.js"            ],
-    ["messenger.xhtml",                             "messenger.js"        ],
-    ["about:message",                               "3pane.js"            ],
-    ["messageWindow.xhtml",                         "messenger.js"        ],
-    ["messengercompose/messengercompose.xhtml",     "messengercompose.js" ],
-    ["customizeToolbar.xhtml",                      "customizeToolbar.js" ]
-  ]);
-
-  messenger.WindowListener.registerOptionsPage("chrome://bidimailui/content/bidimailui-prefs-dialog.xhtml");
+  registerChromeUrls();
+  registerChromeInjectors();
+  registerDefaultPrefs();
+  registerOptionsPage();
   messenger.WindowListener.startListening();
 })();

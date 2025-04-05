@@ -73,7 +73,7 @@ BiDiMailUI.Display.ActionPhases.quoteBarsCSSFix = function (domDocument) {
 };
 
 BiDiMailUI.Display.ActionPhases.directionAutoDetection = function (domDocument) {
-  if (!BiDiMailUI.Prefs.get("display.autodetect_direction", true)) return;
+  if (!BiDiMailUI.Prefs.get("display.autodetect_direction", true)) { return; }
 
   const body = domDocument.body;
   BiDiMailUI.Display.linkStylesheet(domDocument, 'bidimailui-direction-autodetection-css', 'direction-autodetection.css');
