@@ -10,14 +10,24 @@
     "author": "The BiDi UI team",
     "homepage_url": "https://github.com/eyalroz/bidimailui",
     "name": "BiDi Mail UI",
+    "short_name" : "bidimailui",
     "icons": {
         "64": "chrome/content/bidimailui.png"
     },
+    "locales": [ "en-US", "he", "ar", "fa", "ur" ],
     "description": "The BiDi Mail UI extension provides access to the inherent Bi-Directional capabilities in Mozilla Thunderbird - for message display and composition. It also detects and fixes cases of character encodung ",
 #expand    "version": "__VERSION__",
 #ifdef VERSION_NAME
 #expand    "version_name": "__VERSION_NAME__",
 #endif
+    "chrome_injectors": [
+        ["about:3pane",                                 "3pane.js"            ],
+        ["messenger.xhtml",                             "messenger.js"        ],
+        ["about:message",                               "3pane.js"            ],
+        ["messageWindow.xhtml",                         "messenger.js"        ],
+        ["messengercompose/messengercompose.xhtml",     "messengercompose.js" ],
+        ["customizeToolbar.xhtml",                      "customizeToolbar.js" ]
+    ],
     "experiment_apis": {
         "WindowListener": {
             "schema": "api/WindowListener/schema.json",
@@ -29,9 +39,7 @@
         }
     },
     "background": {
-        "scripts": [
-            "background.js"
-        ]
+        "page": "background.html"
     }
 }
 

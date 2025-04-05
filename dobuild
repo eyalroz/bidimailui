@@ -144,6 +144,7 @@ cp src/defaults/preferences/${SHORTNAME}.js $BUILD_DIR/defaults/preferences
 mv ${SHORTNAME} $BUILD_DIR/chrome
 
 cp src/background.js $BUILD_DIR/background.js
+cp src/background.html $BUILD_DIR/background.html
 mkdir -p $BUILD_DIR/api/WindowListener
 cp src/api/WindowListener/schema.json $BUILD_DIR/api/WindowListener
 cp src/api/WindowListener/implementation.js $BUILD_DIR/api/WindowListener
@@ -156,6 +157,7 @@ zip --quiet -r $XPI_NAME  \
 	defaults/ \
 	api \
 	background.js \
+	background.html \
 	LICENSE \
 	manifest.json || exit
 
