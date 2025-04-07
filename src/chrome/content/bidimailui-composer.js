@@ -217,6 +217,7 @@ BiDiMailUI.Composition.setDocumentDirection = function (direction) {
   let messageEditor = BiDiMailUI.getMessageEditor(document);
   if (messageEditor) {
     messageEditor.contentDocument.documentElement.style.direction = direction;
+    messageEditor.contentDocument.documentElement.body.style.direction = direction;
   }
   document.getElementById("msgSubject").style.direction = direction;
   BiDiMailUI.Prefs.set("compose.last_used_direction", direction);
