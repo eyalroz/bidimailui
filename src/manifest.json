@@ -4,7 +4,7 @@
        "gecko": {
                    "id": "{54e72d7b-ed31-4736-854f-f517358f21ee}",
                    "strict_min_version": "128.0",
-                   "strict_max_version": "138.*"
+                   "strict_max_version": "139.*"
        }
     },
     "author": "The BiDi UI team",
