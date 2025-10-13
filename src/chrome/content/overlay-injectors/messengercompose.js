@@ -76,23 +76,21 @@ the main toolbar buttons are whole-document direction controls. -->
 </toolbarpalette>
 
 <toolbar id="FormatToolbar">
-  <hbox id="directionality-formatting-toolbar-section"
-        insertafter="IncreaseFontSizeButton"
-        dir="ltr">
-    <toolbarbutton id="button-direction-ltr-formatting-bar"
-                   command="cmd_ltr_paragraph"
-                   observes="ltr-paragraph-direction-broadcaster"
-                   tooltiptext="&bidimail-ltr-button.tip;"
-                   checked="false"/>
-    <toolbarbutton id="button-direction-rtl-formatting-bar"
-                   command="cmd_rtl_paragraph"
-                   observes="rtl-paragraph-direction-broadcaster"
-                   tooltiptext="&bidimail-rtl-button.tip;"
-                   checked="false"/>
-  </hbox>
   <toolbarseparator id="directionality-separator-formatting-bar"
                     insertafter="IncreaseFontSizeButton"
                     class="toolbarseparator-standard"/>
+  <toolbarbutton id="button-direction-ltr-formatting-bar"
+                 command="cmd_ltr_paragraph"
+                 observes="ltr-paragraph-direction-broadcaster"
+                 tooltiptext="&bidimail-ltr-button.tip;"
+                 insertafter="directionality-separator-formatting-bar"
+                 checked="false"/>
+  <toolbarbutton id="button-direction-rtl-formatting-bar"
+                 command="cmd_rtl_paragraph"
+                 observes="rtl-paragraph-direction-broadcaster"
+                 insertafter="button-direction-ltr-formatting-bar"
+                 tooltiptext="&bidimail-rtl-button.tip;"
+                 checked="false"/>
 </toolbar>
 
 <keyset id="tasksKeys">
