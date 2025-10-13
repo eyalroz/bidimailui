@@ -283,16 +283,19 @@ BiDiMailUI.Composition.ensureMessageStyleRulesAdded = function (styleElementId, 
 };
 
 BiDiMailUI.Composition.handleDirectionButtons = function () {
-  const hiddenButtonsPref =
-    !BiDiMailUI.Prefs.get("compose.show_direction_buttons", true);
+  const hideButtons = !BiDiMailUI.Prefs.get("compose.show_direction_buttons", true);
 
-  // Note: In Thunderbird and Seamonkey 2.x, the main toolbar buttons are
-  // never hidden, since that toolbar is customizable
+  // Note: In the past, we had both directionality buttons and the separator in an hbox,
+  // and could set the box visibility; this is no longer supported - we need to set
+  // the visibility of all controls :-(
 
-  document.getElementById("directionality-formatting-toolbar-section")
-    .setAttribute("hidden", hiddenButtonsPref);
-  document.getElementById("directionality-separator-formatting-bar")
-    .hidden = hiddenButtonsPref;
+  let formattingBarElements = [
+    'button-direction-ltr-formatting-bar',
+    'button-direction-rtl-formatting-bar',
+    'directionality-separator-formatting-bar'];
+  for (const id of formattingBarElements) {
+    document.getElementById(id).setAttribute("hidden", hideButtons.toString());
+  }
 };
 
 BiDiMailUI.Composition.setParagraphMarginsRule = function () {
