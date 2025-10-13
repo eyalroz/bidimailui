@@ -9,23 +9,26 @@ BiDiMailUI.MessageOverlay = {};
 // character set mis-detection, to prevent repeated reloading
 BiDiMailUI.MessageOverlay.dontReload = false;
 
-
-// Get the innermost window containing the actual displayed message; it is not necessarily/not usually
-// the outer window with the menu and toolbars etc. Also, the first option will work for 3-pane (outer)
-// TB windows, and the second will work for single-message (outer) TB windows
-BiDiMailUI.MessageOverlay.getInnerMostMessageWindow = function (win) {
-  return win?.document.getElementById("tabmail")?.currentAboutMessage ||
-         win?.document.getElementById("messageBrowser")?.contentWindow;
-};
-
 BiDiMailUI.MessageOverlay.getActualMessageDocument = function (win) {
   if (typeof win == 'undefined') {
     win = window;
   }
-  let windowWithMessagePane = BiDiMailUI.MessageOverlay.getInnerMostMessageWindow(win) ?? win;
-  let messagePaneBrowser = windowWithMessagePane?.getMessagePaneBrowser?.();
-  return messagePaneBrowser?.contentWindow.document;
+  let aboutMessage = BiDiMailUI.MessageOverlay.getAboutMessage(win);
+  if (aboutMessage) {
+    return aboutMessage?.document?.getElementById("messagepane")?.contentDocument;
+  }
+  let tabmail = win?.document.getElementById("tabmail");
+  if (tabmail) {
+    let messagePaneBrowser =
+      tabmail?.currentAboutMessage?.getMessagePaneBrowser() ||
+      win?.document.getElementById("messageBrowser")?.contentWindow?.getMessagePaneBrowser();
+    if (messagePaneBrowser?.contentWindow?.document) {
+      return messagePaneBrowser?.contentWindow?.document;
+    }
+  }
+  return win?.document?.getElementById("messagepane")?.contentDocument;
 };
+
 
 BiDiMailUI.MessageOverlay.cycleDirectionSettings = function () {
   let document = BiDiMailUI.MessageOverlay.getActualMessageDocument(window);
@@ -73,12 +76,27 @@ BiDiMailUI.MessageOverlay.isFillerStaticPage = function (domDocument) {
   return /^http:\/\/.*www\.mozilla.*\/start\/$/.test(domDocument.baseURI);
 };
 
+BiDiMailUI.MessageOverlay.getAboutMessage = function (win) {
+  const doc = win?.document || document;
+  const tabmail = doc.getElementById("tabmail");
+  if (tabmail?.currentTabInfo.mode.name == "mailMessageTab") {
+    return tabmail.currentAboutMessage;
+  }
+  if (tabmail?.currentTabInfo.mode.name == "mail3PaneTab") {
+    // Not `currentAboutMessage`, we'll return a value even if it's hidden.
+    return tabmail.currentAbout3Pane.messageBrowser.contentWindow;
+  }
+  if (doc.documentElement.getAttribute("windowtype") == "mail:messageWindow") {
+    return doc.getElementById("messageBrowser").contentWindow;
+  }
+  return null;
+};
 
 BiDiMailUI.MessageOverlay.gatherParameters = function (win) {
   // Note: Unfortunately, the window here may be undefined :-(
   // we have some fallback for that in the definition of the two functions below, but it's
   // rather ugly.
-  let aboutMessage = BiDiMailUI.MessageOverlay.getInnerMostMessageWindow(win);
+  let aboutMessage = BiDiMailUI.MessageOverlay.getAboutMessage(win);
   let domDocument = BiDiMailUI.MessageOverlay.getActualMessageDocument(win);
 
   if (!domDocument) {
