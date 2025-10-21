@@ -80,12 +80,14 @@ the main toolbar buttons are whole-document direction controls. -->
                     insertafter="IncreaseFontSizeButton"
                     class="toolbarseparator-standard"/>
   <toolbarbutton id="button-direction-ltr-formatting-bar"
+                 class="formatting-button"
                  command="cmd_ltr_paragraph"
                  observes="ltr-paragraph-direction-broadcaster"
                  tooltiptext="&bidimail-ltr-button.tip;"
                  insertafter="directionality-separator-formatting-bar"
                  checked="false"/>
   <toolbarbutton id="button-direction-rtl-formatting-bar"
+                 class="formatting-button"
                  command="cmd_rtl_paragraph"
                  observes="rtl-paragraph-direction-broadcaster"
                  insertafter="button-direction-ltr-formatting-bar"
