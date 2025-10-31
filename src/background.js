@@ -39,7 +39,7 @@ function registerOptionsPage(uri) {
   if (!(uri || shortname || manifest.options_dialog)) {
     return false;
   }
-  uri ??= manifest.options_dialog ?? `chrome://${shortname}/content/${shortname}-prefs.xhtml`;
+  uri ??= manifest.options_dialog ?? `chrome://${shortname}/content/${shortname}-prefs-dialog.xhtml`;
   messenger.WindowListener.registerOptionsPage(uri);
   return true;
 }
