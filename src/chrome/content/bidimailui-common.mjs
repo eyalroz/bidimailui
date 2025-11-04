@@ -329,10 +329,10 @@ BiDiMailUI.directionCheck = function (obj) {
     // either the text has no non-RTL characters and some RTL characters
     `(?:^${IGNORABLE_CHARACTER_NEW_LINE}*${RTL_CHARACTER}${IGNORABLE_CHARACTER_NEW_LINE}*$)` +
     `|` +
-    // or it has only one non-RTL 'word', with an RTL 'word' before it
+    // or it has only one non-RTL 'word', with one RTL 'word' before it
     `(?:^${IGNORABLE_CHARACTER}*${RTL_SEQUENCE}${IGNORABLE_CHARACTER}+${LTR_SEQUENCE}${IGNORABLE_CHARACTER}*$)` +
     `|` +
-    // or it has only one non-RTL 'word', with an RTL 'word' after it
+    // or it has only one RTL 'word', with one an RTL 'word' after it
     `(?:^${IGNORABLE_CHARACTER}*${LTR_SEQUENCE}${IGNORABLE_CHARACTER}+${RTL_SEQUENCE}${IGNORABLE_CHARACTER}*$)` +
     `|` +
     // or it has a line with two RTL 'words' before any non-RTL characters
