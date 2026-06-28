@@ -286,11 +286,18 @@ BiDiMailUI.Composition.ensureMessageStyleRulesAdded = function (styleElementId, 
   editor.endTransaction();
 };
 
-BiDiMailUI.Composition.handleDirectionButtons = function () {
-  const hideButtons = !BiDiMailUI.Prefs.get("compose.show_direction_buttons", true);
-  let action = hideButtons ?
-    (elem) => elem.setAttribute('hidden', 'true') :
-    (elem) => elem.removeAttribute('hidden');
+BiDiMailUI.Composition.setOrRemoveAttribute = function (elementID, attribute, booleanValue) {
+  const element = document.getElementById(elementID);
+  if (booleanValue) {
+    element.setAttribute(attribute, "true");
+  } else {
+    element.removeAttribute(attribute);
+  }
+};
+
+BiDiMailUI.Composition.setDirectionButtonsVisibility = function () {
+  const shouldHideButtons = !BiDiMailUI.Prefs.get("compose.show_direction_buttons", true);
+  let setButtonVisibility = (id) => BiDiMailUI.Composition.setOrRemoveAttribute(id, "hidden", shouldHideButtons);
 
   // Note: In the past, we had both directionality buttons and the separator in an hbox,
   // and could set the box visibility; this is no longer supported - we need to set
@@ -300,7 +307,7 @@ BiDiMailUI.Composition.handleDirectionButtons = function () {
     'button-direction-ltr-formatting-bar',
     'button-direction-rtl-formatting-bar',
     'directionality-separator-formatting-bar'];
-  formattingBarElements.map((id) => action(document.getElementById(id)));
+  formattingBarElements.map((id) => setButtonVisibility(id));
 };
 
 BiDiMailUI.Composition.setParagraphMarginsRule = function () {
@@ -480,7 +487,7 @@ BiDiMailUI.Composition.onEverythingLoadedAndReady = function () {
     return; // Hopefully we should get called again
   }
 
-  BiDiMailUI.Composition.handleDirectionButtons();
+  BiDiMailUI.Composition.setDirectionButtonsVisibility();
   // Track "Show Direction Buttons" pref.
   Services.prefs.addObserver(
     BiDiMailUI.Composition.directionButtonsPrefListener.domain,
@@ -600,9 +607,21 @@ BiDiMailUI.Composition.onEverythingLoadedAndReady = function () {
     // Applying the alternative Enter behavior requires the editor to be
     // in paragraph mode; but we won't consider doing that until the body is
     // ready.
+
+    // This is a replacement for the XUL broadcaster-based mechanism we were
+    // using in earlier versions of Thunderbird (before 150); instead of having
+    // broadcasters updated through our controller object, we "manually" trigger
+    // button updated based on, well, somewhat-appropriate events firing.
+
+    const editorContentWindow = GetCurrentEditorElement()?.contentWindow;
+    if (editorContentWindow) {
+      const eventHandler = () => BiDiMailUI.Composition.setParagraphButtonsState();
+      editorContentWindow.addEventListener("focus", eventHandler, true);
+      editorContentWindow.addEventListener("blur", eventHandler, true);
+    } else { console.error('Could not obtain the editor content window'); }
   }
 
-  BiDiMailUI.Composition.directionSwitchController.setAllCasters();
+  BiDiMailUI.Composition.resolveAndSetAllButtonStates();
 };
 
 BiDiMailUI.Composition.msgComposeStateListener = {
@@ -770,7 +789,7 @@ BiDiMailUI.Composition.applyKeyUpLogic = function (ev, switchParagraphDirOnly) {
           BiDiMailUI.Composition.switchDocumentDirection();
         } catch (ex) { }
       }
-      BiDiMailUI.Composition.directionSwitchController.setAllCasters();
+      BiDiMailUI.Composition.resolveAndSetAllButtonStates();
       // if Shift has gone up, Ctrl is still down and the next
       // Ctrl+Shift does need releasing it
       BiDiMailUI.Composition.CtrlShiftMachine.ctrlShiftSequence1 =
@@ -811,7 +830,7 @@ BiDiMailUI.Composition.onKeyPress = function (ev) {
 BiDiMailUI.Composition.onMsgSubjectFocus = function () {
   let inMessage = false;
   let inSubjectBox = true;
-  BiDiMailUI.Composition.directionSwitchController.setAllCasters(inMessage, inSubjectBox);
+  BiDiMailUI.Composition.resolveAndSetAllButtonStates(inMessage, inSubjectBox);
 };
 
 BiDiMailUI.Composition.getParagraphMarginFromPrefs = function () {
@@ -837,9 +856,8 @@ BiDiMailUI.Composition.commandUpdate_MsgComposeDirection = function () {
   if (focusedWindow == BiDiMailUI.Composition.lastWindowToHaveFocus) return;
 
   BiDiMailUI.Composition.lastWindowToHaveFocus = focusedWindow;
-  BiDiMailUI.Composition.directionSwitchController.setAllCasters();
+  BiDiMailUI.Composition.resolveAndSetAllButtonStates();
 };
-
 
 BiDiMailUI.Composition.directionSwitchController = {};
 
@@ -860,14 +878,65 @@ BiDiMailUI.Composition.directionSwitchController.supportsCommand = function (com
   }
 };
 
-BiDiMailUI.Composition.directionSwitchController.inSubjectBox_ = function () {
+BiDiMailUI.Composition.inSubjectBox = function () {
   let subjectInputField = document.getElementById("msgSubject");
   return (document.commandDispatcher.focusedElement == subjectInputField);
 };
 
+
+BiDiMailUI.Composition.setButtonState = function (buttonId, checked, enabled) {
+  const button = document.getElementById(buttonId);
+  if (!button) return;
+  BiDiMailUI.Composition.setOrRemoveAttribute(buttonId, "checked", checked);
+  BiDiMailUI.Composition.setOrRemoveAttribute(buttonId, "disabled", !enabled);
+};
+
+BiDiMailUI.Composition.setButtonPairState = function (ltrButtonID, rtlButtonID, direction, enabled) {
+  const ltrChecked = (direction == 'ltr' || direction == 'complex');
+  const rtlChecked = (direction == 'rtl' || direction == 'complex');
+  BiDiMailUI.Composition.setButtonState(ltrButtonID, ltrChecked, enabled);
+  BiDiMailUI.Composition.setButtonState(rtlButtonID, rtlChecked, enabled);
+};
+
+BiDiMailUI.Composition.setDocumentButtonsState = function (inMessageBody, inSubjectBox) {
+  if (!gMsgCompose) return;
+
+  // window is not ready to run getComputedStyle before some point,
+  // and it would cause a crash if we were to continue (see MozDev bug 11712)
+
+  const direction = document.defaultView
+    .getComputedStyle(BiDiMailUI.getMessageEditor(document).contentDocument.body, "")
+    .getPropertyValue("direction");
+  const commandsAreEnabled = true;
+  BiDiMailUI.Composition.setButtonPairState(
+    "button-direction-ltr-main-bar",
+    "button-direction-rtl-main-bar",
+    direction, commandsAreEnabled);
+};
+
+BiDiMailUI.Composition.setParagraphButtonsState = function (inMessageBody, inSubjectBox) {
+  if (!gMsgCompose) return;
+  const direction = BiDiMailUI.Composition.getCurrentSelectionDirection();
+  const commandsAreEnabled = inMessageBody;
+  BiDiMailUI.Composition.setButtonPairState(
+    "button-direction-ltr-formatting-bar",
+    "button-direction-rtl-formatting-bar",
+    direction, commandsAreEnabled);
+  const otherButtonIDs = ["ulButton", "olButton", "outdentButton", "indentButton"];
+  otherButtonIDs.forEach(
+    (buttonID) => document.getElementById(buttonID).setAttribute("rtlmode", (direction == 'rtl')));
+};
+
+BiDiMailUI.Composition.resolveAndSetAllButtonStates = function (inMessageBody, inSubjectBox) {
+  inMessageBody ??= BiDiMailUI.Composition.messageBodyIsFocused();
+  inSubjectBox ??= BiDiMailUI.Composition.inSubjectBox();
+  BiDiMailUI.Composition.setDocumentButtonsState(inMessageBody, inSubjectBox);
+  BiDiMailUI.Composition.setParagraphButtonsState(inMessageBody, inSubjectBox);
+};
+
 BiDiMailUI.Composition.directionSwitchController.isCommandEnabled = function (command) {
-  const inMessage = BiDiMailUI.Composition.messageBodyIsFocused();
-  const inSubjectBox = this.inSubjectBox_();
+  const inMessageBody = BiDiMailUI.Composition.messageBodyIsFocused();
+  const inSubjectBox = BiDiMailUI.Composition.inSubjectBox();
 
   // and now for what this function is actually supposed to do...
 
@@ -879,11 +948,11 @@ BiDiMailUI.Composition.directionSwitchController.isCommandEnabled = function (co
   switch (command) {
   case "cmd_switch_paragraph":
   case "cmd_clear_paragraph_dir":
-    return inMessage;
+    return inMessageBody;
   case "cmd_switch_document":
   case "cmd_insert_lrm":
   case "cmd_insert_rlm":
-    // retVal = inMessage || inSubjectBox;
+    // retVal = inMessageBody || inSubjectBox;
     // We're forced to return true, since isCommandEnabled is not called
     // on certain actions where we need to make it enabled; we'll need to
     // actually check whether the command is enabled in the functions which
@@ -892,84 +961,24 @@ BiDiMailUI.Composition.directionSwitchController.isCommandEnabled = function (co
 
   case "cmd_ltr_document":
   case "cmd_rtl_document":
-    // necessary side effects performed when
-    // isCommandEnabled is called for cmd_ltr_document
-    this.setCasterGroup("document", inMessage, inSubjectBox);
-    return inMessage || inSubjectBox;
+    BiDiMailUI.Composition.setDocumentButtonsState(inMessageBody, inSubjectBox);
+    return true;
 
   case "cmd_ltr_paragraph":
     if (IsHTMLEditor()) {
-      this.setCasterGroup("paragraph", inMessage, inSubjectBox);
+      BiDiMailUI.Composition.setParagraphButtonsState(inMessageBody, inSubjectBox);
     }
     // fallthrough
   case "cmd_rtl_paragraph":
-    return inMessage;
+    return inMessageBody;
   default:
     return false;
   }
 };
 
-BiDiMailUI.Composition.directionSwitchController.setCasterGroup = function (casterPair, inMessage, inSubjectBox) {
-  let casterID, oppositeCasterID, command, direction, commandsAreEnabled, isRTL;
-
-  // window is not ready to run getComputedStyle before some point,
-  // and it would cause a crash if we were to continue (see bug 11712)
-  if (!gMsgCompose) return;
-
-  switch (casterPair) {
-  case "document":
-    command = "cmd_ltr_document";
-    casterID = "ltr-document-direction-broadcaster";
-    oppositeCasterID = "rtl-document-direction-broadcaster";
-
-    direction = document.defaultView
-        .getComputedStyle(BiDiMailUI.getMessageEditor(document).contentDocument.body, "")
-        .getPropertyValue("direction");
-    commandsAreEnabled = inMessage || inSubjectBox;
-    break;
-  case "paragraph":
-    command = "cmd_ltr_paragraph";
-    casterID = "ltr-paragraph-direction-broadcaster";
-    oppositeCasterID = "rtl-paragraph-direction-broadcaster";
-
-    direction = BiDiMailUI.Composition.getCurrentSelectionDirection();
-
-    isRTL = (direction == "rtl");
-    document.getElementById("ulButton").setAttribute("rtlmode", isRTL);
-    document.getElementById("olButton").setAttribute("rtlmode", isRTL);
-    document.getElementById("outdentButton").setAttribute("rtlmode", isRTL);
-    document.getElementById("indentButton").setAttribute("rtlmode", isRTL);
-    commandsAreEnabled = inMessage;
-    break;
-  default:
-    isRTL = document.getElementById("rtl-paragraph-direction-broadcaster").getAttribute("checked");
-    document.getElementById("ulButton").setAttribute("rtlmode", isRTL);
-    document.getElementById("olButton").setAttribute("rtlmode", isRTL);
-    document.getElementById("outdentButton").setAttribute("rtlmode", isRTL);
-    document.getElementById("indentButton").setAttribute("rtlmode", isRTL);
-    return;
-  }
-  const caster = document.getElementById(casterID);
-  const oppositeCaster = document.getElementById(oppositeCasterID);
-
-  caster.setAttribute("checked", direction == "ltr");
-  caster.setAttribute("disabled", !commandsAreEnabled);
-  oppositeCaster.setAttribute("checked", direction == "rtl");
-  oppositeCaster.setAttribute("disabled", !commandsAreEnabled);
-};
-
-BiDiMailUI.Composition.directionSwitchController.setAllCasters = function (inMessage, inSubjectBox) {
-  inMessage ??= BiDiMailUI.Composition.messageBodyIsFocused();
-  inSubjectBox ??= this.inSubjectBox_();
-  let retVal = false;
-
-  this.setCasterGroup("document", inMessage, inSubjectBox);
-  this.setCasterGroup("paragraph", inMessage, inSubjectBox);
-};
-
 BiDiMailUI.Composition.directionSwitchController.invokeIfInMessageOrSubject = function (f) {
-  let inMessage = BiDiMailUI.Composition.messageBodyIsFocused();
-  let inSubjectBox = this.inSubjectBox_();
+  const inMessage = BiDiMailUI.Composition.messageBodyIsFocused();
+  const inSubjectBox = BiDiMailUI.Composition.inSubjectBox();
   if (!(inMessage || inSubjectBox)) return;
   f();
 };
@@ -1010,7 +1019,7 @@ BiDiMailUI.Composition.directionSwitchController.doCommand = function (command) 
     dump(`The command ${command} isn't supported by the directionality controller\n`);
     return false;
   }
-  this.setAllCasters();
+  BiDiMailUI.Composition.resolveAndSetAllButtonStates();
   return true;
 };
 
@@ -1018,6 +1027,6 @@ BiDiMailUI.Composition.directionButtonsPrefListener = {
   domain: "extensions.bidiui.mail.compose.show_direction_buttons",
   observe(subject, topic, prefName) {
     if (topic != "nsPref:changed") return;
-    BiDiMailUI.Composition.handleDirectionButtons();
+    BiDiMailUI.Composition.setDirectionButtonsVisibility();
   }
 };

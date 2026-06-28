@@ -8,13 +8,6 @@ Services.scriptloader.loadSubScript("chrome://bidimailui/content/bidimailui-comp
 
 function injectOtherElements() {
   WL.injectElements(`
-<broadcasterset>
-  <broadcaster id="ltr-document-direction-broadcaster" checked="false"/>
-  <broadcaster id="rtl-document-direction-broadcaster" checked="false"/>
-  <broadcaster id="ltr-paragraph-direction-broadcaster" checked="false"/>
-  <broadcaster id="rtl-paragraph-direction-broadcaster" checked="false"/>
-</broadcasterset>
-
 <commandset id="composerStyleMenuItems">
   <command id="cmd_rtl_paragraph"
            oncommand="goDoCommand('cmd_rtl_paragraph');"
@@ -60,7 +53,7 @@ the main toolbar buttons are whole-document direction controls. -->
   <toolbarbutton id="button-direction-ltr-main-bar"
                  class="toolbarbutton-1"
                  command="cmd_ltr_document"
-                 observes="ltr-document-direction-broadcaster"
+                 not_observes="ltr-document-direction-broadcaster"
                  label="&bidimail-ltr-button.label;"
                  insertafter="directionality-separator-main-bar"
                  removable="true"
@@ -68,7 +61,7 @@ the main toolbar buttons are whole-document direction controls. -->
   <toolbarbutton id="button-direction-rtl-main-bar"
                  class="toolbarbutton-1"
                  command="cmd_rtl_document"
-                 observes="rtl-document-direction-broadcaster"
+                 not_observes="rtl-document-direction-broadcaster"
                  insertafter="button-direction-ltr-main-bar"
                  removable="true"
                  label="&bidimail-rtl-button.label;"
@@ -82,14 +75,14 @@ the main toolbar buttons are whole-document direction controls. -->
   <toolbarbutton id="button-direction-ltr-formatting-bar"
                  class="formatting-button"
                  command="cmd_ltr_paragraph"
-                 observes="ltr-paragraph-direction-broadcaster"
+                 not_observes="ltr-paragraph-direction-broadcaster"
                  tooltiptext="&bidimail-ltr-button.tip;"
                  insertafter="directionality-separator-formatting-bar"
                  checked="false"/>
   <toolbarbutton id="button-direction-rtl-formatting-bar"
                  class="formatting-button"
                  command="cmd_rtl_paragraph"
-                 observes="rtl-paragraph-direction-broadcaster"
+                 not_observes="rtl-paragraph-direction-broadcaster"
                  insertafter="button-direction-ltr-formatting-bar"
                  tooltiptext="&bidimail-rtl-button.tip;"
                  checked="false"/>
