@@ -12,6 +12,21 @@ BiDiMailUI.Composition.lastWindowToHaveFocus = null;
 // in Paragraph Mode)
 BiDiMailUI.Composition.alternativeEnterBehavior = null;
 
+// Determine whether the message body (the editor's content window) currently
+// has the focus. In older Thunderbird versions the editor was a "content-primary"
+// element, so the legacy global `content` referred to its content window; this is
+// no longer the case (the editor now has id="messageEditor"), so `content` no
+// longer points to it and we must obtain the editor's content window explicitly.
+BiDiMailUI.Composition.messageBodyIsFocused = function () {
+  const editorElement = GetCurrentEditorElement();
+  if (!editorElement || !editorElement.contentDocument) return false;
+  // Document.hasFocus() is the robust, modern way to tell whether the caret/focus
+  // is inside the editor body. The legacy global `content` no longer points to the
+  // editor content window in current Thunderbird, and commandDispatcher.focusedWindow
+  // is unreliable here, so we don't depend on either.
+  return editorElement.contentDocument.hasFocus();
+};
+
 BiDiMailUI.Composition.CtrlShiftMachine = {
   // We have implemented a Mealy automaton for implementing the Ctrl+Shift
   // detection hack; see bug 15075. The automaton has as input the sequence of
@@ -598,6 +613,27 @@ BiDiMailUI.Composition.onEverythingLoadedAndReady = function () {
     // ready.
   }
 
+  // Re-evaluate the direction buttons whenever focus enters the editor body or
+  // the caret/selection moves within it. In current Thunderbird the legacy XUL
+  // command-updater no longer reliably fires our oncommandupdate on focus, so the
+  // buttons would otherwise stay in their initial (disabled) state.
+  try {
+    const editorElement = GetCurrentEditorElement();
+    const editorWin = editorElement && editorElement.contentWindow;
+    const editorDoc = editorElement && editorElement.contentDocument;
+    const refresh = () => BiDiMailUI.Composition.directionSwitchController.setAllCasters();
+    if (editorWin) {
+      editorWin.addEventListener("focus", refresh, true);
+      editorWin.addEventListener("blur", refresh, true);
+    }
+    if (editorDoc) {
+      editorDoc.addEventListener("selectionchange", refresh, true);
+      editorDoc.addEventListener("mouseup", refresh, true);
+    }
+  } catch (ex) {
+    console.error("BiDiMailUI: failed to attach editor focus listeners", ex);
+  }
+
   BiDiMailUI.Composition.directionSwitchController.setAllCasters();
 };
 
@@ -739,7 +775,7 @@ BiDiMailUI.Composition.applyKeyDownLogic = function (ev) {
 };
 
 BiDiMailUI.Composition.onKeyDownDocument = function (ev) {
-  let messageContentElementIsFocused = (top.document.commandDispatcher.focusedWindow == content);
+  let messageContentElementIsFocused = BiDiMailUI.Composition.messageBodyIsFocused();
   if (!messageContentElementIsFocused || ev.defaultPrevented) return;
 
   BiDiMailUI.Composition.applyKeyDownLogic(ev);
@@ -780,7 +816,7 @@ BiDiMailUI.Composition.applyKeyUpLogic = function (ev, switchParagraphDirOnly) {
 };
 
 BiDiMailUI.Composition.onKeyUpDocument = function (ev) {
-  let messageContentElementIsFocused = (top.document.commandDispatcher.focusedWindow == content);
+  let messageContentElementIsFocused = BiDiMailUI.Composition.messageBodyIsFocused();
   if (!messageContentElementIsFocused || ev.defaultPrevented) return;
   BiDiMailUI.Composition.applyKeyUpLogic(ev, IsHTMLEditor());
 };
@@ -862,7 +898,7 @@ BiDiMailUI.Composition.directionSwitchController.inSubjectBox_ = function () {
 };
 
 BiDiMailUI.Composition.directionSwitchController.isCommandEnabled = function (command) {
-  const inMessage = (content == top.document.commandDispatcher.focusedWindow);
+  const inMessage = BiDiMailUI.Composition.messageBodyIsFocused();
   const inSubjectBox = this.inSubjectBox_();
 
   // and now for what this function is actually supposed to do...
@@ -952,10 +988,44 @@ BiDiMailUI.Composition.directionSwitchController.setCasterGroup = function (cast
   caster.setAttribute("disabled", !commandsAreEnabled);
   oppositeCaster.setAttribute("checked", direction == "rtl");
   oppositeCaster.setAttribute("disabled", !commandsAreEnabled);
+
+  // In current Thunderbird the legacy XUL broadcaster/observes mechanism no longer
+  // propagates these attribute changes to the toolbar buttons, so the buttons would
+  // stay in their stale (disabled) state. We therefore apply the state directly to
+  // the button elements as well.
+  BiDiMailUI.Composition.applyDirectionButtonState(
+    BiDiMailUI.Composition.buttonForBroadcaster[casterID], direction == "ltr", commandsAreEnabled);
+  BiDiMailUI.Composition.applyDirectionButtonState(
+    BiDiMailUI.Composition.buttonForBroadcaster[oppositeCasterID], direction == "rtl", commandsAreEnabled);
+};
+
+// Maps each direction broadcaster to the toolbar button that observes it.
+BiDiMailUI.Composition.buttonForBroadcaster = {
+  "ltr-document-direction-broadcaster": "button-direction-ltr-main-bar",
+  "rtl-document-direction-broadcaster": "button-direction-rtl-main-bar",
+  "ltr-paragraph-direction-broadcaster": "button-direction-ltr-formatting-bar",
+  "rtl-paragraph-direction-broadcaster": "button-direction-rtl-formatting-bar",
+};
+
+BiDiMailUI.Composition.applyDirectionButtonState = function (buttonId, isChecked, isEnabled) {
+  const button = document.getElementById(buttonId);
+  if (!button) return;
+  // Use removeAttribute for the "enabled" case rather than disabled="false", to be
+  // robust against both XUL and HTML boolean-attribute semantics.
+  if (isEnabled) {
+    button.removeAttribute("disabled");
+  } else {
+    button.setAttribute("disabled", "true");
+  }
+  if (isChecked) {
+    button.setAttribute("checked", "true");
+  } else {
+    button.removeAttribute("checked");
+  }
 };
 
 BiDiMailUI.Composition.directionSwitchController.setAllCasters = function (inMessage, inSubjectBox) {
-  inMessage ??= (content == top.document.commandDispatcher.focusedWindow);
+  inMessage ??= BiDiMailUI.Composition.messageBodyIsFocused();
   inSubjectBox ??= this.inSubjectBox_();
   let retVal = false;
 
@@ -964,7 +1034,7 @@ BiDiMailUI.Composition.directionSwitchController.setAllCasters = function (inMes
 };
 
 BiDiMailUI.Composition.directionSwitchController.invokeIfInMessageOrSubject = function (f) {
-  let inMessage = (content == top.document.commandDispatcher.focusedWindow);
+  let inMessage = BiDiMailUI.Composition.messageBodyIsFocused();
   let inSubjectBox = this.inSubjectBox_();
   if (!(inMessage || inSubjectBox)) return;
   f();
