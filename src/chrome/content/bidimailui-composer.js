@@ -12,6 +12,10 @@ BiDiMailUI.Composition.lastWindowToHaveFocus = null;
 // in Paragraph Mode)
 BiDiMailUI.Composition.alternativeEnterBehavior = null;
 
+BiDiMailUI.Composition.messageBodyIsFocused = function () {
+  return GetCurrentEditorElement()?.contentDocument?.hasFocus() ?? false;
+};
+
 BiDiMailUI.Composition.CtrlShiftMachine = {
   // We have implemented a Mealy automaton for implementing the Ctrl+Shift
   // detection hack; see bug 15075. The automaton has as input the sequence of
@@ -739,8 +743,8 @@ BiDiMailUI.Composition.applyKeyDownLogic = function (ev) {
 };
 
 BiDiMailUI.Composition.onKeyDownDocument = function (ev) {
-  let messageContentElementIsFocused = (top.document.commandDispatcher.focusedWindow == content);
-  if (!messageContentElementIsFocused || ev.defaultPrevented) return;
+  let messageBodyIsFocused = BiDiMailUI.Composition.messageBodyIsFocused();
+  if (!messageBodyIsFocused || ev.defaultPrevented) return;
 
   BiDiMailUI.Composition.applyKeyDownLogic(ev);
 };
@@ -780,8 +784,8 @@ BiDiMailUI.Composition.applyKeyUpLogic = function (ev, switchParagraphDirOnly) {
 };
 
 BiDiMailUI.Composition.onKeyUpDocument = function (ev) {
-  let messageContentElementIsFocused = (top.document.commandDispatcher.focusedWindow == content);
-  if (!messageContentElementIsFocused || ev.defaultPrevented) return;
+  let messageBodyIsFocused = BiDiMailUI.Composition.messageBodyIsFocused();
+  if (!messageBodyIsFocused || ev.defaultPrevented) return;
   BiDiMailUI.Composition.applyKeyUpLogic(ev, IsHTMLEditor());
 };
 
@@ -862,7 +866,7 @@ BiDiMailUI.Composition.directionSwitchController.inSubjectBox_ = function () {
 };
 
 BiDiMailUI.Composition.directionSwitchController.isCommandEnabled = function (command) {
-  const inMessage = (content == top.document.commandDispatcher.focusedWindow);
+  const inMessage = BiDiMailUI.Composition.messageBodyIsFocused();
   const inSubjectBox = this.inSubjectBox_();
 
   // and now for what this function is actually supposed to do...
@@ -955,7 +959,7 @@ BiDiMailUI.Composition.directionSwitchController.setCasterGroup = function (cast
 };
 
 BiDiMailUI.Composition.directionSwitchController.setAllCasters = function (inMessage, inSubjectBox) {
-  inMessage ??= (content == top.document.commandDispatcher.focusedWindow);
+  inMessage ??= BiDiMailUI.Composition.messageBodyIsFocused();
   inSubjectBox ??= this.inSubjectBox_();
   let retVal = false;
 
@@ -964,7 +968,7 @@ BiDiMailUI.Composition.directionSwitchController.setAllCasters = function (inMes
 };
 
 BiDiMailUI.Composition.directionSwitchController.invokeIfInMessageOrSubject = function (f) {
-  let inMessage = (content == top.document.commandDispatcher.focusedWindow);
+  let inMessage = BiDiMailUI.Composition.messageBodyIsFocused();
   let inSubjectBox = this.inSubjectBox_();
   if (!(inMessage || inSubjectBox)) return;
   f();
